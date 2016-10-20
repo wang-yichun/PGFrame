@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 using UniRx;
 
 [CustomEditor (typeof(FirstView))]
-public class FirstElementEditor : Editor
+public class FirstElementEditor : Editor, IElementEditor
 {
 	FirstView V;
 
@@ -101,7 +101,7 @@ public class FirstElementEditor : Editor
 		if (GUILayout.Button ("...", GUILayout.MaxWidth (20))) {
 			PopupWindow.Show (
 				new Rect (Event.current.mousePosition.x, Event.current.mousePosition.y, 0f, 0f), 
-				new ReactiveCollectionEditorPopupWindow<int> (V.VM.Numbers)
+				new ReactiveCollectionEditorPopupWindow<int> (this, V.VM.Numbers)
 			);
 		}
 		EditorGUILayout.EndHorizontal ();
@@ -121,14 +121,22 @@ public class FirstElementEditor : Editor
 		}
 		EditorGUILayout.EndHorizontal ();
 
-
 		EditorGUILayout.EndVertical ();
 		EditorGUI.indentLevel--;
 
 		if (EditorApplication.isPlaying == false) {
 			if (GUI.changed) {
-				V.ViewModelInitValueJson = JsonConvert.SerializeObject ((FirstViewModelBase)V.VM);
+				VMCopyToJson ();
 			}
 		}
 	}
+
+	#region IElementEditor implementation
+
+	public void VMCopyToJson ()
+	{
+		V.ViewModelInitValueJson = JsonConvert.SerializeObject ((FirstViewModelBase)V.VM);
+	}
+
+	#endregion
 }

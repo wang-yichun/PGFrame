@@ -18,6 +18,7 @@ public class FirstViewModelBase : ViewModelBase
 		MyDictionary = new ReactiveDictionary<string, string> ();
 
 		RC_AddNum = new ReactiveCommand<AddNumCommand> ();
+		RC_ButtonClick = new ReactiveCommand ();
 	}
 
 	public override void Attach ()
@@ -45,6 +46,7 @@ public class FirstViewModelBase : ViewModelBase
 
 	public ReactiveCommand<AddNumCommand> RC_AddNum;
 
+	public ReactiveCommand RC_ButtonClick;
 }
 
 public class AddNumCommand : ViewModelCommandBase

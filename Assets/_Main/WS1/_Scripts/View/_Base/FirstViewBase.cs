@@ -61,6 +61,7 @@ public class FirstViewBase : ViewBase
 		VM.MyDictionary.ObserveRemove ().Subscribe (OnRemove_MyDictionary);
 		VM.MyDictionary.ObserveReplace ().Subscribe (OnReplace_MyDictionary);
 		VM.RC_AddNum.Subscribe<AddNumCommand> (OnExecuted_AddNum);
+		VM.RC_ButtonClick.Subscribe (OnExecuted_ButonClick);
 	}
 
 	public override void AfterBind ()
@@ -97,6 +98,10 @@ public class FirstViewBase : ViewBase
 	}
 
 	public virtual void OnExecuted_AddNum (AddNumCommand command)
+	{
+	}
+
+	public virtual void OnExecuted_ButonClick (Unit unit)
 	{
 	}
 }

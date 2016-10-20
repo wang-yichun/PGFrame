@@ -3,9 +3,12 @@ using System.Collections;
 using UniRx;
 using Newtonsoft.Json;
 using PogoTools;
+using UnityEngine.UI;
 
 public class FirstView : FirstViewBase
 {
+	public Text text;
+	public Button button;
 
 	public override void Initialize (ViewModelBase viewModel)
 	{
@@ -16,6 +19,12 @@ public class FirstView : FirstViewBase
 	{
 		base.Bind ();
 		Debug.Log (string.Format ("FirstView in {0} Bind.", gameObject.name));
+
+		if (text != null)
+			VM.RP_LabelTextNum.SubscribeToText (text);
+
+		if (button != null)
+			VM.RC_ButtonClick.BindTo (button);
 	}
 
 	public override void AfterBind ()
