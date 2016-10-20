@@ -1,0 +1,3 @@
+[submodule "Submodules/PogoTools"]
+	path = Submodules/PogoTools
+	url = git@github.com:wang-yichun/PogoTools.git
