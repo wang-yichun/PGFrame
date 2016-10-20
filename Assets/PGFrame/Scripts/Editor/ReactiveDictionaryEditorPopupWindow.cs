@@ -4,6 +4,7 @@ using System.Collections;
 using Newtonsoft.Json;
 using UniRx;
 using System;
+using PogoTools;
 
 public class ReactiveDictionaryEditorPopupWindow<T,U> : PopupWindowContent
 {
@@ -85,6 +86,9 @@ public class ReactiveDictionaryEditorPopupWindow<T,U> : PopupWindowContent
 		
 
 		GUILayout.FlexibleSpace ();
+		if (GUILayout.Button ("Json")) {
+			PRDebug.TagLog ("ReactiveDictionary", new Color (.2f, .2f, 1f), JsonConvert.SerializeObject (rd, Formatting.Indented));
+		}
 		if (GUILayout.Button ("Close")) {
 			this.editorWindow.Close ();
 		}
