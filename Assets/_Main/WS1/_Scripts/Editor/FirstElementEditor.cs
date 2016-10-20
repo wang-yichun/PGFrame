@@ -14,11 +14,7 @@ public class FirstElementEditor : Editor
 		V = (FirstView)target;
 
 		if (EditorApplication.isPlaying == false) {
-			if (string.IsNullOrEmpty (V.ViewModelInitValueJson)) {
-				V.VM = new FirstViewModel ();
-			} else {
-				V.VM = JsonConvert.DeserializeObject<FirstViewModel> (V.ViewModelInitValueJson);
-			}
+			V.CreateViewModel ();
 		}
 
 		CommandParams = new Dictionary<string, string> ();
@@ -77,11 +73,11 @@ public class FirstElementEditor : Editor
 		}
 		if (GUILayout.Button ("Invoke")) {
 			if (CommandParams.ContainsKey (vmk) == false) {
-				V.VM.RC_AddNum.Execute (new AddNumCommand () { Sender = V.VM });
+				V.VM.RCMD_AddNum.Execute (new AddNumCommand () { Sender = V.VM });
 			} else {
 				AddNumCommand command = JsonConvert.DeserializeObject<AddNumCommand> (CommandParams [vmk]);
 				command.Sender = V.VM;
-				V.VM.RC_AddNum.Execute (command);
+				V.VM.RCMD_AddNum.Execute (command);
 			}
 		}
 		EditorGUILayout.EndHorizontal ();
@@ -89,6 +85,19 @@ public class FirstElementEditor : Editor
 			CommandParams [vmk] = EditorGUILayout.TextArea (CommandParams [vmk]);
 			EditorGUILayout.Space ();
 		}
+
+		vmk = "Numbers";
+		EditorGUILayout.BeginHorizontal ();
+		string numbersJson = JsonConvert.SerializeObject (V.VM.Numbers);
+		string tempNumbersJson = EditorGUILayout.DelayedTextField (vmk, numbersJson);
+		if (tempNumbersJson != numbersJson) {
+			if (string.IsNullOrEmpty (tempNumbersJson)) {
+				V.VM.Numbers = null;
+			} else {
+				V.VM.Numbers = JsonConvert.DeserializeObject<List<int>> (tempNumbersJson);
+			}
+		}
+		EditorGUILayout.EndHorizontal ();
 
 		EditorGUILayout.EndVertical ();
 		EditorGUI.indentLevel--;

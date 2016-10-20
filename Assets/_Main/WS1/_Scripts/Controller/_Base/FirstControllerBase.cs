@@ -20,6 +20,6 @@ public class FirstControllerBase<T> : ControllerBase<T>
 
 		FirstViewModel vm = (FirstViewModel)viewModel;
 
-		vm.RC_AddNum.Subscribe<AddNumCommand> (AddNumHandler);
+		vm.RCMD_AddNum.Subscribe<AddNumCommand> (AddNumHandler);
 	}
 }

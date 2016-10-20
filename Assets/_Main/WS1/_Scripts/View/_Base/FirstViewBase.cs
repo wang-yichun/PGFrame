@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using UniRx;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 public class FirstViewBase : ViewBase
 {
@@ -28,11 +32,7 @@ public class FirstViewBase : ViewBase
 		} else {
 			if (AutoCreateViewModel) {
 				if (VM == null) {
-					if (string.IsNullOrEmpty (ViewModelInitValueJson) == false) {
-						VM = JsonConvert.DeserializeObject<FirstViewModel> (ViewModelInitValueJson);
-					} else {
-						VM = new FirstViewModel ();
-					}
+					CreateViewModel ();
 				}
 			}
 		}
@@ -40,12 +40,27 @@ public class FirstViewBase : ViewBase
 		base.Initialize (null);
 	}
 
+	public void CreateViewModel ()
+	{
+		if (string.IsNullOrEmpty (ViewModelInitValueJson) == false) {
+			VM = JsonConvert.DeserializeObject<FirstViewModel> (ViewModelInitValueJson);
+
+			JObject jo = JObject.Parse (ViewModelInitValueJson);
+			VM.Numbers = jo ["Numbers"].Values<int> ().ToList ();
+
+		} else {
+			VM = new FirstViewModel ();
+		}
+	}
+
 	public override void Bind ()
 	{
 		base.Bind ();
 
 		VM.RP_LabelTextNum.Subscribe (OnChanged_LabelTextNum);
-		VM.RC_AddNum.Subscribe<AddNumCommand> (OnExecuted_AddNum);
+		VM.RC_Numbers.ObserveAdd ().Subscribe (OnAdd_Numbers);
+		VM.RC_Numbers.ObserveRemove ().Subscribe (OnRemove_Numbers);
+		VM.RCMD_AddNum.Subscribe<AddNumCommand> (OnExecuted_AddNum);
 	}
 
 	public override void AfterBind ()
@@ -54,6 +69,14 @@ public class FirstViewBase : ViewBase
 	}
 
 	public virtual void OnChanged_LabelTextNum (int value)
+	{
+	}
+
+	public virtual void OnAdd_Numbers (CollectionAddEvent<int> e)
+	{
+	}
+
+	public virtual void OnRemove_Numbers (CollectionRemoveEvent<int> e)
 	{
 	}
 
