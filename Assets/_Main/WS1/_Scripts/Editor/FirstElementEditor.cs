@@ -118,6 +118,10 @@ public class FirstElementEditor : Editor, IElementEditor
 			}
 		}
 		if (GUILayout.Button ("...", GUILayout.MaxWidth (20))) {
+			PopupWindow.Show (
+				new Rect (Event.current.mousePosition.x, Event.current.mousePosition.y, 0f, 0f), 
+				new ReactiveDictionaryEditorPopupWindow<string,string> (this, V.VM.MyDictionary)
+			);
 		}
 		EditorGUILayout.EndHorizontal ();
 
