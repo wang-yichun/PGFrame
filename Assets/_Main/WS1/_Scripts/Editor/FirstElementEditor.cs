@@ -54,6 +54,11 @@ public class FirstElementEditor : Editor, IElementEditor
 		EditorGUI.indentLevel++;
 		EditorGUILayout.BeginVertical ();
 
+		EditorGUILayout.BeginHorizontal ();
+		EditorGUILayout.PrefixLabel ("VMID");
+		EditorGUILayout.SelectableLabel (V.VM.VMID.ToString ());
+		EditorGUILayout.EndHorizontal ();
+
 		string vmk;
 
 		vmk = "LabelTextNum";

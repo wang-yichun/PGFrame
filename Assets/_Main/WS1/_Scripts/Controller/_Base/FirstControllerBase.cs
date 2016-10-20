@@ -9,19 +9,9 @@ public class FirstControllerBase<T> : ControllerBase<T>
 	{
 	}
 
-	public virtual void AddNumHandler (AddNumCommand command)
-	{
-		this.AddNum ((FirstViewModel)command.Sender, command);
-	}
-
 	public virtual void ButtonClick (FirstViewModel viewModel)
 	{
 		UnityEngine.Debug.Log ("FirstControllerBase ButtonClick");
-	}
-
-	public virtual void ButtonClickHandler (Unit unit)
-	{
-		this.ButtonClick (null);
 	}
 
 	public override void Attach (ViewModelBase viewModel)
@@ -30,7 +20,13 @@ public class FirstControllerBase<T> : ControllerBase<T>
 
 		FirstViewModel vm = (FirstViewModel)viewModel;
 
-		vm.RC_AddNum.Subscribe<AddNumCommand> (AddNumHandler);
-		vm.RC_ButtonClick.Subscribe (ButtonClickHandler);
+		vm.RC_AddNum.Subscribe<AddNumCommand> (command => {
+			command.Sender = viewModel;
+			AddNum ((FirstViewModel)viewModel, command);
+		});
+
+		vm.RC_ButtonClick.Subscribe (_ => {
+			ButtonClick ((FirstViewModel)viewModel);
+		});
 	}
 }

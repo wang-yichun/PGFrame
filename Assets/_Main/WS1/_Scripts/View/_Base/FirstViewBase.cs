@@ -52,7 +52,6 @@ public class FirstViewBase : ViewBase
 	public override void Bind ()
 	{
 		base.Bind ();
-
 		VM.RP_LabelTextNum.Subscribe (OnChanged_LabelTextNum);
 		VM.Numbers.ObserveAdd ().Subscribe (OnAdd_Numbers);
 		VM.Numbers.ObserveRemove ().Subscribe (OnRemove_Numbers);

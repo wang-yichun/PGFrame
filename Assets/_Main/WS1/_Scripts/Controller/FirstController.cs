@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using PogoTools;
 
 public class FirstController : FirstControllerBase<FirstController>
 {
@@ -13,5 +14,12 @@ public class FirstController : FirstControllerBase<FirstController>
 		Debug.Log ("FirstController: AddNum Invoked  " + command.value);
 
 		viewModel.MyDictionary ["default2"] = command.value.ToString ();
+	}
+
+	public override void ButtonClick (FirstViewModel viewModel)
+	{
+		base.ButtonClick (viewModel);
+
+		PRDebug.TagLog ("VMID", viewModel.VMID);
 	}
 }
