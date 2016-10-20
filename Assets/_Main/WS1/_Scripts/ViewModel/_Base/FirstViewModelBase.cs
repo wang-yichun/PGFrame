@@ -14,8 +14,10 @@ public class FirstViewModelBase : ViewModelBase
 	public override void Initialize ()
 	{
 		RP_LabelTextNum = new ReactiveProperty<int> ();
-		RC_Numbers = new ReactiveCollection<int> ();
-		RCMD_AddNum = new ReactiveCommand<AddNumCommand> ();
+		Numbers = new ReactiveCollection<int> ();
+		MyDictionary = new ReactiveDictionary<string, string> ();
+
+		RC_AddNum = new ReactiveCommand<AddNumCommand> ();
 	}
 
 	public override void Attach ()
@@ -35,27 +37,13 @@ public class FirstViewModelBase : ViewModelBase
 		}
 	}
 
-	public ReactiveCollection<int> RC_Numbers;
+	[JsonProperty]
+	public ReactiveCollection<int> Numbers;
 
 	[JsonProperty]
-	public List<int> Numbers {
-		get {
-			if (RC_Numbers != null) {
-				return RC_Numbers.ToList<int> ();
-			} else {
-				return null;
-			}
-		}
-		set {
-			if (value == null) {
-				RC_Numbers = null;
-			} else {
-				RC_Numbers = new ReactiveCollection<int> (value);
-			}
-		}
-	}
+	public ReactiveDictionary<string, string> MyDictionary;
 
-	public ReactiveCommand<AddNumCommand> RCMD_AddNum;
+	public ReactiveCommand<AddNumCommand> RC_AddNum;
 
 }
 

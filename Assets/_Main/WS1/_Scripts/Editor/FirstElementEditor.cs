@@ -3,6 +3,7 @@ using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using UniRx;
 
 [CustomEditor (typeof(FirstView))]
 public class FirstElementEditor : Editor
@@ -73,11 +74,11 @@ public class FirstElementEditor : Editor
 		}
 		if (GUILayout.Button ("Invoke")) {
 			if (CommandParams.ContainsKey (vmk) == false) {
-				V.VM.RCMD_AddNum.Execute (new AddNumCommand () { Sender = V.VM });
+				V.VM.RC_AddNum.Execute (new AddNumCommand () { Sender = V.VM });
 			} else {
 				AddNumCommand command = JsonConvert.DeserializeObject<AddNumCommand> (CommandParams [vmk]);
 				command.Sender = V.VM;
-				V.VM.RCMD_AddNum.Execute (command);
+				V.VM.RC_AddNum.Execute (command);
 			}
 		}
 		EditorGUILayout.EndHorizontal ();
@@ -94,7 +95,7 @@ public class FirstElementEditor : Editor
 			if (string.IsNullOrEmpty (tempNumbersJson)) {
 				V.VM.Numbers = null;
 			} else {
-				V.VM.Numbers = JsonConvert.DeserializeObject<List<int>> (tempNumbersJson);
+				V.VM.Numbers = JsonConvert.DeserializeObject<ReactiveCollection<int>> (tempNumbersJson);
 			}
 		}
 		EditorGUILayout.EndHorizontal ();

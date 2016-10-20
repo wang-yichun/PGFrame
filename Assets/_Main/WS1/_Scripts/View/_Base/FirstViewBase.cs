@@ -44,10 +44,6 @@ public class FirstViewBase : ViewBase
 	{
 		if (string.IsNullOrEmpty (ViewModelInitValueJson) == false) {
 			VM = JsonConvert.DeserializeObject<FirstViewModel> (ViewModelInitValueJson);
-
-			JObject jo = JObject.Parse (ViewModelInitValueJson);
-			VM.Numbers = jo ["Numbers"].Values<int> ().ToList ();
-
 		} else {
 			VM = new FirstViewModel ();
 		}
@@ -58,9 +54,13 @@ public class FirstViewBase : ViewBase
 		base.Bind ();
 
 		VM.RP_LabelTextNum.Subscribe (OnChanged_LabelTextNum);
-		VM.RC_Numbers.ObserveAdd ().Subscribe (OnAdd_Numbers);
-		VM.RC_Numbers.ObserveRemove ().Subscribe (OnRemove_Numbers);
-		VM.RCMD_AddNum.Subscribe<AddNumCommand> (OnExecuted_AddNum);
+		VM.Numbers.ObserveAdd ().Subscribe (OnAdd_Numbers);
+		VM.Numbers.ObserveRemove ().Subscribe (OnRemove_Numbers);
+		VM.Numbers.ObserveReplace ().Subscribe (OnReplace_Numbers);
+		VM.MyDictionary.ObserveAdd ().Subscribe (OnAdd_MyDictionary);
+		VM.MyDictionary.ObserveRemove ().Subscribe (OnRemove_MyDictionary);
+		VM.MyDictionary.ObserveReplace ().Subscribe (OnReplace_MyDictionary);
+		VM.RC_AddNum.Subscribe<AddNumCommand> (OnExecuted_AddNum);
 	}
 
 	public override void AfterBind ()
@@ -77,6 +77,22 @@ public class FirstViewBase : ViewBase
 	}
 
 	public virtual void OnRemove_Numbers (CollectionRemoveEvent<int> e)
+	{
+	}
+
+	public virtual void OnReplace_Numbers (CollectionReplaceEvent<int> e)
+	{
+	}
+
+	public virtual void OnAdd_MyDictionary (DictionaryAddEvent<string, string> e)
+	{
+	}
+
+	public virtual void OnRemove_MyDictionary (DictionaryRemoveEvent<string, string> e)
+	{
+	}
+
+	public virtual void OnReplace_MyDictionary (DictionaryReplaceEvent<string, string> e)
 	{
 	}
 
