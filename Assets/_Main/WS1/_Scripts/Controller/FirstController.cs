@@ -12,6 +12,6 @@ public class FirstController : FirstControllerBase<FirstController>
 		base.AddNum (viewModel, command);
 		Debug.Log ("FirstController: AddNum Invoked  " + command.value);
 
-		viewModel.MyDictionary ["default"] = command.value.ToString ();
+		viewModel.MyDictionary ["default2"] = command.value.ToString ();
 	}
 }

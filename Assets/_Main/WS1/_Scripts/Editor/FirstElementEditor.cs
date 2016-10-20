@@ -89,9 +89,9 @@ public class FirstElementEditor : Editor
 
 		vmk = "Numbers";
 		EditorGUILayout.BeginHorizontal ();
-		string numbersJson = JsonConvert.SerializeObject (V.VM.Numbers);
-		string tempNumbersJson = EditorGUILayout.DelayedTextField (vmk, numbersJson);
-		if (tempNumbersJson != numbersJson) {
+		string NumbersJson = JsonConvert.SerializeObject (V.VM.Numbers);
+		string tempNumbersJson = EditorGUILayout.DelayedTextField (vmk, NumbersJson);
+		if (tempNumbersJson != NumbersJson) {
 			if (string.IsNullOrEmpty (tempNumbersJson)) {
 				V.VM.Numbers = null;
 			} else {
@@ -99,6 +99,20 @@ public class FirstElementEditor : Editor
 			}
 		}
 		EditorGUILayout.EndHorizontal ();
+
+		vmk = "MyDictionary";
+		EditorGUILayout.BeginHorizontal ();
+		string MyDictionary = JsonConvert.SerializeObject (V.VM.MyDictionary);
+		string tempMyDictionary = EditorGUILayout.DelayedTextField (vmk, MyDictionary);
+		if (tempMyDictionary != MyDictionary) {
+			if (string.IsNullOrEmpty (tempMyDictionary)) {
+				V.VM.MyDictionary = null;
+			} else {
+				V.VM.MyDictionary = JsonConvert.DeserializeObject<ReactiveDictionary<string,string>> (tempMyDictionary);
+			}
+		}
+		EditorGUILayout.EndHorizontal ();
+
 
 		EditorGUILayout.EndVertical ();
 		EditorGUI.indentLevel--;
