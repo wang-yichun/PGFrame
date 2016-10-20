@@ -98,6 +98,12 @@ public class FirstElementEditor : Editor
 				V.VM.Numbers = JsonConvert.DeserializeObject<ReactiveCollection<int>> (tempNumbersJson);
 			}
 		}
+		if (GUILayout.Button ("...", GUILayout.MaxWidth (20))) {
+			PopupWindow.Show (
+				new Rect (Event.current.mousePosition.x, Event.current.mousePosition.y, 0f, 0f), 
+				new ReactiveCollectionEditorPopupWindow<int> (V.VM.Numbers)
+			);
+		}
 		EditorGUILayout.EndHorizontal ();
 
 		vmk = "MyDictionary";
@@ -110,6 +116,8 @@ public class FirstElementEditor : Editor
 			} else {
 				V.VM.MyDictionary = JsonConvert.DeserializeObject<ReactiveDictionary<string,string>> (tempMyDictionary);
 			}
+		}
+		if (GUILayout.Button ("...", GUILayout.MaxWidth (20))) {
 		}
 		EditorGUILayout.EndHorizontal ();
 

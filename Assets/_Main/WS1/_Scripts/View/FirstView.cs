@@ -42,6 +42,12 @@ public class FirstView : FirstViewBase
 		Debug.Log ("OnRemove_Numbers: " + e.Value + " idx: " + e.Index);
 	}
 
+	public override void OnReplace_Numbers (CollectionReplaceEvent<int> e)
+	{
+		base.OnReplace_Numbers (e);
+		Debug.Log (string.Format ("OnReplace_Numbers: {0} -> {1} idx: {2}", e.OldValue, e.NewValue, e.Index));
+	}
+
 	public override void OnExecuted_AddNum (AddNumCommand command)
 	{
 		base.OnExecuted_AddNum (command);
