@@ -33,6 +33,7 @@ public class PGFrameWindow : EditorWindow
 		}
 		DesignList ();
 
+		GUILayout.FlexibleSpace ();
 		if (GUILayout.Button ("发布代码")) {
 			Generator.GenerateCode ("WS1", "Second");
 			AssetDatabase.Refresh ();
@@ -67,17 +68,18 @@ public class PGFrameWindow : EditorWindow
 		}
 	}
 
+	Vector2 scrollViewPos;
+
 	void DesignList ()
 	{
-		GUILayout.BeginVertical ();
+		scrollViewPos = GUILayout.BeginScrollView (scrollViewPos);
 
 		if (xElements != null) {
 			for (int i = 0; i < xElements.Length; i++) {
-				GUILayout.BeginHorizontal ();
 				XLSXElement xe = xElements [i];
 
-				GUIStyle s = new GUIStyle ();
-				s.name = "box";
+				GUILayout.BeginHorizontal ();
+
 				if (GUILayout.Button (xe.toggleOpen ? "-" : "+", GUILayout.MaxWidth (20))) {
 					xe.toggleOpen = !xe.toggleOpen;
 				}
@@ -92,6 +94,7 @@ public class PGFrameWindow : EditorWindow
 					EditorGUI.indentLevel++;
 					for (int j = 0; j < xe.ds.Tables.Count; j++) {
 						GUILayout.BeginHorizontal ();
+						GUILayout.Label ("", GUILayout.MaxWidth (20));
 						DataTable dt = xe.ds.Tables [j];
 						EditorGUILayout.LabelField (dt.TableName);
 						if (GUILayout.Button ("Json", GUILayout.MaxWidth (80))) {
@@ -105,6 +108,6 @@ public class PGFrameWindow : EditorWindow
 			}
 		}
 
-		GUILayout.EndVertical ();
+		GUILayout.EndScrollView ();
 	}
 }
