@@ -1,0 +1,5 @@
+﻿using UniRx;
+
+public class __XXX__ViewModel : FirstViewModelBase
+{
+}

@@ -1,0 +1,15 @@
+﻿using UnityEngine;
+using System.Collections;
+using UniRx;
+
+public class __XXX__ControllerBase<T> : ControllerBase<T>
+	where T:new()
+{
+
+	public override void Attach (ViewModelBase viewModel)
+	{
+		UnityEngine.Debug.Log ("__XXX__ControllerBase.Attach");
+
+		__XXX__ViewModel vm = (__XXX__ViewModel)viewModel;
+	}
+}

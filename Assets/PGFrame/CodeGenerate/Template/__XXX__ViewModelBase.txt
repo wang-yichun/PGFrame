@@ -1,0 +1,22 @@
+﻿using System.Linq;
+using System.Collections;
+using System.Collections.Generic;
+using UniRx;
+using Newtonsoft.Json;
+
+[JsonObjectAttribute (MemberSerialization.OptIn)]
+public class __XXX__ViewModelBase : ViewModelBase
+{
+	public __XXX__ViewModelBase ()
+	{
+	}
+
+	public override void Initialize ()
+	{
+	}
+
+	public override void Attach ()
+	{
+		__XXX__Controller.Instance.Attach (this);
+	}
+}
