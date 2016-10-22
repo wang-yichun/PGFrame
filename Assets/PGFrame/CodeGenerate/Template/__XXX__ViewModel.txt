@@ -1,5 +1,5 @@
-﻿using UniRx;
+using UniRx;
 
-public class __XXX__ViewModel : FirstViewModelBase
+public class __XXX__ViewModel : __XXX__ViewModelBase
 {
 }

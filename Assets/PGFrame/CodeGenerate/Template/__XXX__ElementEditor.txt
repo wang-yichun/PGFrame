@@ -1,0 +1,81 @@
+﻿using UnityEngine;
+using UnityEditor;
+using System.Collections;
+using System.Collections.Generic;
+using Newtonsoft.Json;
+using UniRx;
+
+[CustomEditor (typeof(__XXX__View))]
+public class __XXX__ElementEditor : Editor, IElementEditor
+{
+	__XXX__View V;
+
+	void OnEnable ()
+	{
+		V = (__XXX__View)target;
+
+		if (EditorApplication.isPlaying == false) {
+			V.CreateViewModel ();
+		}
+
+		CommandParams = new Dictionary<string, string> ();
+	}
+
+	bool ToggleDefault = true;
+	bool ToggleViewModel = true;
+
+	Dictionary<string, string> CommandParams;
+
+	public override void OnInspectorGUI ()
+	{
+		EditorGUILayout.BeginVertical ();
+		if (ToggleDefault = EditorGUILayout.Foldout (ToggleDefault, "Default")) {
+			EditorGUI.indentLevel++;
+			base.OnInspectorGUI ();
+			EditorGUI.indentLevel--;
+			EditorGUILayout.Space ();
+		}
+		if (ToggleViewModel = EditorGUILayout.Foldout (ToggleViewModel, "ViewModel")) {
+
+			if (V.VM != null) {
+				InspectorGUI_ViewModel ();
+			} else {
+				EditorGUILayout.HelpBox ("没有绑定 ViewModel", MessageType.Warning);
+			}
+
+			EditorGUILayout.Space ();
+		}
+
+		EditorGUILayout.EndVertical ();
+	}
+
+	public void InspectorGUI_ViewModel ()
+	{
+		EditorGUI.indentLevel++;
+		EditorGUILayout.BeginVertical ();
+
+		EditorGUILayout.BeginHorizontal ();
+		EditorGUILayout.PrefixLabel ("VMID");
+		EditorGUILayout.SelectableLabel (V.VM.VMID.ToString ());
+		EditorGUILayout.EndHorizontal ();
+
+
+		EditorGUILayout.EndVertical ();
+		EditorGUI.indentLevel--;
+
+		if (EditorApplication.isPlaying == false) {
+			if (GUI.changed) {
+				VMCopyToJson ();
+			}
+		}
+	}
+
+	#region IElementEditor implementation
+
+	public void VMCopyToJson ()
+	{
+		V.ViewModelInitValueJson = JsonConvert.SerializeObject ((__XXX__ViewModelBase)V.VM);
+	}
+
+	#endregion
+}
