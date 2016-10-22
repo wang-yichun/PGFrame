@@ -9,17 +9,22 @@ using Newtonsoft.Json;
 public class PGFrameWindow : EditorWindow
 {
 	public static readonly string lt = "PGFrame";
-	public static readonly Color lc = new Color (.6f, .4f, 1f);
+	public static readonly Color lc = new Color32 (0, 162, 255, 255);
 
 	[MenuItem ("PogoRock/PGFrame...")]
 	static void Init ()
 	{
 		PGFrameWindow window = (PGFrameWindow)EditorWindow.GetWindow (typeof(PGFrameWindow));
+		window.titleContent = new GUIContent ("PGFrame", Resources.Load<Texture2D> ("pgf_icon"));
 		window.Show ();
 	}
 
 	void OnGUI ()
 	{
+		if (files == null)
+			RefreshFiles ();
+
+		GUILayout.BeginVertical ();
 		GUILayout.Label ("PGFrame", EditorStyles.boldLabel);
 		if (GUILayout.Button ("刷新")) {
 			RefreshFiles ();
@@ -35,15 +40,16 @@ public class PGFrameWindow : EditorWindow
 			Generator.DeleteCode ("WS1", "Second");
 			AssetDatabase.Refresh ();
 		}
+		GUILayout.EndVertical ();
 	}
 
 	FileInfo[] files;
 
-	PGCodeGenerater Generator;
+	PGCodeGenerator Generator;
 
 	void RefreshFiles ()
 	{
-		Generator = new PGCodeGenerater ();
+		Generator = new PGCodeGenerator ();
 		Generator.Init ();
 
 		string[] fileNames = Directory.GetFiles (Path.Combine (Application.dataPath, "PGFrameDesign"), "*.xlsx");
@@ -62,12 +68,8 @@ public class PGFrameWindow : EditorWindow
 				string fileName = files [i].Name;
 				EditorGUILayout.LabelField (fileName);
 			}
-		} else {
-			RefreshFiles ();
 		}
 
 		GUILayout.EndVertical ();
 	}
-
-
 }

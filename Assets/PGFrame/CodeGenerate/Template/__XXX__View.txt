@@ -1,0 +1,26 @@
+﻿using UnityEngine;
+using System.Collections;
+using UniRx;
+using Newtonsoft.Json;
+using PogoTools;
+using UnityEngine.UI;
+
+public class __XXX__View : __XXX__ViewBase
+{
+	public override void Initialize (ViewModelBase viewModel)
+	{
+		base.Initialize (viewModel);
+	}
+
+	public override void Bind ()
+	{
+		base.Bind ();
+		Debug.Log (string.Format ("__XXX__View in {0} Bind.", gameObject.name));
+	}
+
+	public override void AfterBind ()
+	{
+		base.AfterBind ();
+		Debug.Log (string.Format ("__XXX__View in {0} AfterBind.", gameObject.name));
+	}
+}

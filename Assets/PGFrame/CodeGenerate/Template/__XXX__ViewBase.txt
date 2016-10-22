@@ -1,0 +1,61 @@
+﻿using UnityEngine;
+using UniRx;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
+public class __XXX__ViewBase : ViewBase
+{
+	public __XXX__ViewModel VM;
+
+	public __XXX__ViewModel __XXX__ {
+		get {
+			return VM;
+		}
+	}
+
+	public override ViewModelBase GetViewModel ()
+	{
+		return VM;
+	}
+
+	public bool AutoCreateViewModel = false;
+
+	public string ViewModelInitValueJson;
+
+	public override void Initialize (ViewModelBase viewModel)
+	{
+		if (viewModel != null) {
+			VM = (__XXX__ViewModel)viewModel;
+		} else {
+			if (AutoCreateViewModel) {
+				if (VM == null) {
+					CreateViewModel ();
+				}
+			}
+		}
+
+		base.Initialize (null);
+	}
+
+	public void CreateViewModel ()
+	{
+		if (string.IsNullOrEmpty (ViewModelInitValueJson) == false) {
+			VM = JsonConvert.DeserializeObject<__XXX__ViewModel> (ViewModelInitValueJson);
+		} else {
+			VM = new __XXX__ViewModel ();
+		}
+	}
+
+	public override void Bind ()
+	{
+		base.Bind ();
+	}
+
+	public override void AfterBind ()
+	{
+		base.AfterBind ();
+	}
+}
