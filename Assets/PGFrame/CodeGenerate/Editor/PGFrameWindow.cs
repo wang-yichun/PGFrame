@@ -21,7 +21,7 @@ public class PGFrameWindow : EditorWindow
 
 	void OnGUI ()
 	{
-		if (files == null)
+		if (xElements == null)
 			RefreshFiles ();
 
 		GUILayout.BeginVertical ();
@@ -43,7 +43,7 @@ public class PGFrameWindow : EditorWindow
 		GUILayout.EndVertical ();
 	}
 
-	FileInfo[] files;
+	XLSXElement[] xElements;
 
 	PGCodeGenerator Generator;
 
@@ -53,9 +53,12 @@ public class PGFrameWindow : EditorWindow
 		Generator.Init ();
 
 		string[] fileNames = Directory.GetFiles (Path.Combine (Application.dataPath, "PGFrameDesign"), "*.xlsx");
-		files = new FileInfo[fileNames.Length];
+		xElements = new XLSXElement[fileNames.Length];
+
 		for (int i = 0; i < fileNames.Length; i++) {
-			files [i] = new FileInfo (fileNames [i]);
+			xElements [i] = new XLSXElement () {
+				fileInfo = new FileInfo (fileNames [i])
+			};
 		}
 	}
 
@@ -63,10 +66,10 @@ public class PGFrameWindow : EditorWindow
 	{
 		GUILayout.BeginVertical ();
 
-		if (files != null) {
-			for (int i = 0; i < files.Length; i++) {
-				string fileName = files [i].Name;
-				EditorGUILayout.LabelField (fileName);
+		if (xElements != null) {
+			for (int i = 0; i < xElements.Length; i++) {
+				XLSXElement xe = xElements [i];
+				EditorGUILayout.LabelField (xe.fileInfo.Name);
 			}
 		}
 
