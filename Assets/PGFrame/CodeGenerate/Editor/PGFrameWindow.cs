@@ -7,13 +7,14 @@ using System.Data;
 using Excel;
 using PogoTools;
 using Newtonsoft.Json;
+using System.Linq;
 
 public class PGFrameWindow : EditorWindow
 {
 	public static readonly string lt = "PGFrame";
 	public static readonly Color lc = new Color32 (0, 162, 255, 255);
 
-	[MenuItem ("PogoRock/PGFrame...")]
+	[MenuItem ("PogoRock/PGFrame... %`")]
 	static void Init ()
 	{
 		PGFrameWindow window = (PGFrameWindow)EditorWindow.GetWindow (typeof(PGFrameWindow));
@@ -58,7 +59,7 @@ public class PGFrameWindow : EditorWindow
 
 		Converter = new XLSXJsonConverter ();
 
-		string[] fileNames = Directory.GetFiles (Path.Combine (Application.dataPath, "PGFrameDesign"), "*.xlsx");
+		string[] fileNames = Directory.GetFiles (Path.Combine (Application.dataPath, "PGFrameDesign"), "*.xlsx").Where (_ => !_.Contains ("~$")).ToArray ();
 		xElements = new XLSXElement[fileNames.Length];
 
 		for (int i = 0; i < fileNames.Length; i++) {
