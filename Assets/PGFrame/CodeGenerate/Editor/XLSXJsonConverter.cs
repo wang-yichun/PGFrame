@@ -5,6 +5,7 @@ using Excel;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using PogoTools;
+using System.Linq;
 
 public class XLSXJsonConverter
 {
@@ -41,11 +42,18 @@ public class XLSXJsonConverter
 	{
 		cidx cidx = GetCIDX (dt);
 
-		JObject jo = new JObject ();
+		ElementJsonCreator creator = new ElementJsonCreator ();
 
-		for (int i = 1; i < 999; i++) {
+		for (int i = cidx.StartRowIdx + 1; i < dt.Rows.Count; i++) {
 			DataRow row = dt.Rows [i];
+			creator.RowCommand (row, cidx);
+
+			if (row [cidx.ClassType].ToString () == "#End") {
+				break;
+			}
 		}
+
+		Debug.Log (creator.jo.ToString ());
 
 		return null;
 	}
@@ -73,8 +81,8 @@ public class XLSXJsonConverter
 		cidx.StartRowIdx = -1;
 		cidx.StartColIdx = -1;
 
-		for (int ri = 0; ri < 99; ri++) {
-			for (int ci = 0; ci < 9; ci++) {
+		for (int ri = 0; ri < dt.Rows.Count; ri++) {
+			for (int ci = 0; ci < dt.Columns.Count; ci++) {
 				string c0 = dt.Rows [ri] [ci].ToString ();
 				if (c0 == "#Start") {
 					cidx.StartRowIdx = ri;
@@ -89,7 +97,7 @@ public class XLSXJsonConverter
 
 		DataRow r = dt.Rows [cidx.StartRowIdx];
 
-		for (int i = cidx.StartColIdx; i < cidx.StartColIdx + 99; i++) {
+		for (int i = cidx.StartColIdx; i < dt.Columns.Count; i++) {
 			var cell = r [i].ToString ();
 
 			if (string.IsNullOrEmpty (cell))
