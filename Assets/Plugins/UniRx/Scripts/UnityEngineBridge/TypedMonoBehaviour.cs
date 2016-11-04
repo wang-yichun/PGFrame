@@ -1,6 +1,4 @@
-﻿#if !UNITY_5_5_OR_NEWER
-
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace UniRx
 {
@@ -94,6 +92,9 @@ namespace UniRx
 
         /// <summary>Called when a joint attached to the same game object broke.</summary>
         public virtual void OnJointBreak(float breakForce) { }
+
+        /// <summary>This function is called after a new level was loaded.</summary>
+        public virtual void OnLevelWasLoaded(int level) { }
 
 #if !(UNITY_IPHONE || UNITY_ANDROID || UNITY_METRO)
 
@@ -201,5 +202,3 @@ namespace UniRx
 #endif
     }
 }
-
-#endif

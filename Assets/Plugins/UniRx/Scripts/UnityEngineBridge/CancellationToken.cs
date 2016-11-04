@@ -1,6 +1,4 @@
-﻿#if !(ENABLE_MONO_BLEEDING_EDGE_EDITOR || ENABLE_MONO_BLEEDING_EDGE_STANDALONE)
-
-using System;
+﻿using System;
 
 namespace UniRx
 {
@@ -9,9 +7,6 @@ namespace UniRx
         readonly ICancelable source;
 
         public static readonly CancellationToken Empty = new CancellationToken(null);
-        
-        /// <summary>Same as Empty.</summary>
-        public static readonly CancellationToken None = new CancellationToken(null);
 
         public CancellationToken(ICancelable source)
         {
@@ -35,6 +30,3 @@ namespace UniRx
         }
     }
 }
-
-#endif
-

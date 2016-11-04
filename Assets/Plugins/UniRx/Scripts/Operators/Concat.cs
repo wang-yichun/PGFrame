@@ -5,7 +5,7 @@ namespace UniRx.Operators
 {
     // needs to more improvement
 
-    internal class ConcatObservable<T> : OperatorObservableBase<T>
+    public class ConcatObservable<T> : OperatorObservableBase<T>
     {
         readonly IEnumerable<IObservable<T>> sources;
 

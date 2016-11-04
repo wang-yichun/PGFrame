@@ -95,7 +95,7 @@ namespace UniRx
     public interface IReadOnlyReactiveDictionary<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TValue>>
     {
         int Count { get; }
-        TValue this[TKey index] { get; }
+        TValue this[TKey index] { get; set; }
         bool ContainsKey(TKey key);
         bool TryGetValue(TKey key, out TValue value);
 
@@ -257,34 +257,18 @@ namespace UniRx
             }
         }
 
-        #region IDisposable Support
-
-        private bool disposedValue = false;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    DisposeSubject(ref countChanged);
-                    DisposeSubject(ref collectionReset);
-                    DisposeSubject(ref dictionaryAdd);
-                    DisposeSubject(ref dictionaryRemove);
-                    DisposeSubject(ref dictionaryReplace);
-                }
-
-                disposedValue = true;
-            }
-        }
 
         public void Dispose()
         {
-            Dispose(true);
+            if (isDisposed) return;
+            isDisposed = true;
+
+            DisposeSubject(ref countChanged);
+            DisposeSubject(ref collectionReset);
+            DisposeSubject(ref dictionaryAdd);
+            DisposeSubject(ref dictionaryRemove);
+            DisposeSubject(ref dictionaryReplace);
         }
-
-        #endregion
-
 
         #region Observe
 

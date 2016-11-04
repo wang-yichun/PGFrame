@@ -19,6 +19,7 @@ namespace UniRx.Diagnostics
 
         public void OnNext(LogEntry value)
         {
+            if (value == null) return;
             // avoid multithread exception.
             // (value.Context == null) can only be called from the main thread.
             var ctx = (System.Object)value.Context;

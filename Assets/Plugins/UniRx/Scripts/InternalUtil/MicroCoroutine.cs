@@ -13,15 +13,18 @@ namespace UniRx.InternalUtil
 
         readonly object runningAndQueueLock = new object();
         readonly object arrayLock = new object();
+        readonly Func<bool> refreshCycleStrategy;
         readonly Action<Exception> unhandledExceptionCallback;
 
         int tail = 0;
         bool running = false;
+        bool needsRefresh = false;
         IEnumerator[] coroutines = new IEnumerator[InitialSize];
         Queue<IEnumerator> waitQueue = new Queue<IEnumerator>();
 
-        public MicroCoroutine(Action<Exception> unhandledExceptionCallback)
+        public MicroCoroutine(Func<bool> refreshCycleStrategy, Action<Exception> unhandledExceptionCallback)
         {
+            this.refreshCycleStrategy = refreshCycleStrategy;
             this.unhandledExceptionCallback = unhandledExceptionCallback;
         }
 
@@ -57,12 +60,10 @@ namespace UniRx.InternalUtil
 
             lock (arrayLock)
             {
-                var j = tail - 1;
-
-                // eliminate array-bound check for i
-                for (int i = 0; i < coroutines.Length; i++)
+                for (int i = 0; i < tail; i++)
                 {
                     var coroutine = coroutines[i];
+
                     if (coroutine != null)
                     {
                         try
@@ -70,6 +71,7 @@ namespace UniRx.InternalUtil
                             if (!coroutine.MoveNext())
                             {
                                 coroutines[i] = null;
+                                needsRefresh = true;
                             }
                             else
                             {
@@ -80,8 +82,6 @@ namespace UniRx.InternalUtil
                                     UnityEngine.Debug.LogWarning("MicroCoroutine supports only yield return null. return value = " + coroutine.Current);
                                 }
 #endif
-
-                                continue; // next i 
                             }
                         }
                         catch (Exception ex)
@@ -94,63 +94,7 @@ namespace UniRx.InternalUtil
                             catch { }
                         }
                     }
-
-                    // find null, loop from tail
-                    while (i < j)
-                    {
-                        var fromTail = coroutines[j];
-                        if (fromTail != null)
-                        {
-                            try
-                            {
-                                if (!fromTail.MoveNext())
-                                {
-                                    coroutines[j] = null;
-                                    j--;
-                                    continue; // next j
-                                }
-                                else
-                                {
-#if UNITY_EDITOR
-                                    // validation only on Editor.
-                                    if (fromTail.Current != null)
-                                    {
-                                        UnityEngine.Debug.LogWarning("MicroCoroutine supports only yield return null. return value = " + coroutine.Current);
-                                    }
-#endif
-
-                                    // swap
-                                    coroutines[i] = fromTail;
-                                    coroutines[j] = null;
-                                    j--;
-                                    goto NEXT_LOOP; // next i
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                coroutines[j] = null;
-                                j--;
-                                try
-                                {
-                                    unhandledExceptionCallback(ex);
-                                }
-                                catch { }
-                                continue; // next j
-                            }
-                        }
-                        else
-                        {
-                            j--;
-                        }
-                    }
-
-                    tail = i; // loop end
-                    break; // LOOP END
-
-                    NEXT_LOOP:
-                    continue;
                 }
-
 
                 lock (runningAndQueueLock)
                 {
@@ -164,6 +108,42 @@ namespace UniRx.InternalUtil
                         coroutines[tail++] = waitQueue.Dequeue();
                     }
                 }
+
+                if (needsRefresh && refreshCycleStrategy())
+                {
+                    Refresh();
+                    needsRefresh = false;
+                }
+            }
+        }
+
+        void Refresh()
+        {
+            var j = tail - 1;
+
+            // eliminate array-bound check for i
+            for (int i = 0; i < coroutines.Length; i++)
+            {
+                if (coroutines[i] == null)
+                {
+                    while (i < j)
+                    {
+                        var fromTail = coroutines[j];
+                        if (fromTail != null)
+                        {
+                            coroutines[i] = fromTail;
+                            coroutines[j] = null;
+                            j--;
+                            goto NEXTLOOP;
+                        }
+                        j--;
+                    }
+
+                    tail = i; // loop end
+                    break;
+                }
+                NEXTLOOP:
+                continue;
             }
         }
     }

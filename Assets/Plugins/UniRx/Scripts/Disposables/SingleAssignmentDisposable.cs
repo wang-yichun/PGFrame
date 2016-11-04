@@ -8,7 +8,7 @@ namespace UniRx
     // AOT...
     // use lock instead
 
-    public sealed class SingleAssignmentDisposable : IDisposable, ICancelable
+    public class SingleAssignmentDisposable : IDisposable, ICancelable
     {
         readonly object gate = new object();
         IDisposable current;

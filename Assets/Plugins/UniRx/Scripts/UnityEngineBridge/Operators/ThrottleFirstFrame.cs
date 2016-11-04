@@ -42,10 +42,11 @@ namespace UniRx.Operators
 
             public IDisposable Run()
             {
-                tick = new ThrottleFirstFrameTick(this);
                 cancelable = new SerialDisposable();
-
                 var subscription = parent.source.Subscribe(this);
+
+                tick = new ThrottleFirstFrameTick(this);
+
                 return StableCompositeDisposable.Create(cancelable, subscription);
             }
 

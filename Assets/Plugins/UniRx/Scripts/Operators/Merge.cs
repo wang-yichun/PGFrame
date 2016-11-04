@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace UniRx.Operators
 {
-    internal class MergeObservable<T> : OperatorObservableBase<T>
+    public class MergeObservable<T> : OperatorObservableBase<T>
     {
         private readonly IObservable<IObservable<T>> sources;
         private readonly int maxConcurrent;

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Threading;
 
 namespace UniRx.Operators
 {
@@ -18,15 +17,9 @@ namespace UniRx.Operators
         {
             var fromCoroutineObserver = new FromCoroutine(observer, cancel);
 
-#if (ENABLE_MONO_BLEEDING_EDGE_EDITOR || ENABLE_MONO_BLEEDING_EDGE_STANDALONE)
-            var moreCancel = new CancellationDisposable();
-            var token = moreCancel.Token;
-#else
             var moreCancel = new BooleanDisposable();
-            var token = new CancellationToken(moreCancel);
-#endif
 
-            MainThreadDispatcher.SendStartCoroutine(coroutine(fromCoroutineObserver, token));
+            MainThreadDispatcher.SendStartCoroutine(coroutine(fromCoroutineObserver, new CancellationToken(moreCancel)));
 
             return moreCancel;
         }
@@ -80,24 +73,18 @@ namespace UniRx.Operators
         {
             var microCoroutineObserver = new FromMicroCoroutine(observer, cancel);
 
-#if (ENABLE_MONO_BLEEDING_EDGE_EDITOR || ENABLE_MONO_BLEEDING_EDGE_STANDALONE)
-            var moreCancel = new CancellationDisposable();
-            var token = moreCancel.Token;
-#else
             var moreCancel = new BooleanDisposable();
-            var token = new CancellationToken(moreCancel);
-#endif
 
             switch (frameCountType)
             {
                 case FrameCountType.Update:
-                    MainThreadDispatcher.StartUpdateMicroCoroutine(coroutine(microCoroutineObserver, token));
+                    MainThreadDispatcher.StartUpdateMicroCoroutine(coroutine(microCoroutineObserver, new CancellationToken(moreCancel)));
                     break;
                 case FrameCountType.FixedUpdate:
-                    MainThreadDispatcher.StartFixedUpdateMicroCoroutine(coroutine(microCoroutineObserver, token));
+                    MainThreadDispatcher.StartFixedUpdateMicroCoroutine(coroutine(microCoroutineObserver, new CancellationToken(moreCancel)));
                     break;
                 case FrameCountType.EndOfFrame:
-                    MainThreadDispatcher.StartEndOfFrameMicroCoroutine(coroutine(microCoroutineObserver, token));
+                    MainThreadDispatcher.StartEndOfFrameMicroCoroutine(coroutine(microCoroutineObserver, new CancellationToken(moreCancel)));
                     break;
                 default:
                     throw new ArgumentException("Invalid FrameCountType:" + frameCountType);

@@ -1,4 +1,6 @@
-﻿using System;
+﻿// from Rx Official, but convert struct to class(for iOS AOT issue)
+
+using System;
 
 namespace UniRx
 {

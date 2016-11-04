@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace UniRx.Operators
 {
-    internal class CatchObservable<T, TException> : OperatorObservableBase<T>
+    public class CatchObservable<T, TException> : OperatorObservableBase<T>
         where TException : Exception
     {
         readonly IObservable<T> source;
@@ -87,7 +87,7 @@ namespace UniRx.Operators
     }
 
 
-    internal class CatchObservable<T> : OperatorObservableBase<T>
+    public class CatchObservable<T> : OperatorObservableBase<T>
     {
         readonly IEnumerable<IObservable<T>> sources;
 
