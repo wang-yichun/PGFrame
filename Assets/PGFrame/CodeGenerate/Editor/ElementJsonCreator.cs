@@ -11,7 +11,7 @@ public class ElementJsonCreator
 	public ElementJsonCreator ()
 	{
 		jo = new JObject ();
-		jo.Add ("WorkSpace", null);
+		jo.Add ("Workspace", null);
 		jo.Add ("DocType", "Element");
 		jo.Add ("Common", JToken.FromObject (new {}));
 		jo.Add ("Member", new JArray ());
@@ -30,7 +30,7 @@ public class ElementJsonCreator
 
 		switch (rowTag) {
 		case "#WS":
-			jo ["WorkSpace"] = row [cidx.Name].ToString ();
+			jo ["Workspace"] = row [cidx.Name].ToString ();
 			break;
 		case "#Element":
 			jo ["Common"] ["Name"] = row [cidx.Name].ToString ();

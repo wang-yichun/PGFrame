@@ -88,6 +88,7 @@ public class PGFrameWindow : EditorWindow
 				if (GUILayout.Button ("Json", GUILayout.MaxWidth (80))) {
 					Converter.SetElement (xe);
 					Converter.Convert ();
+					AssetDatabase.Refresh ();
 				}
 				GUILayout.EndHorizontal ();
 
@@ -101,6 +102,7 @@ public class PGFrameWindow : EditorWindow
 						if (GUILayout.Button ("Json", GUILayout.MaxWidth (80))) {
 							Converter.SetDataTable (xe, dt);
 							Converter.Convert ();
+							AssetDatabase.Refresh ();
 						}
 						GUILayout.EndHorizontal ();
 					}

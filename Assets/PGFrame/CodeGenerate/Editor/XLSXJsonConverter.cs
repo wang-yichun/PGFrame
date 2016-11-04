@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using PogoTools;
 using System.Linq;
+using System.IO;
 
 public class XLSXJsonConverter
 {
@@ -34,7 +35,16 @@ public class XLSXJsonConverter
 		JArray ja = new JArray ();
 		if (Table != null) {
 			JObject jo = TableConvert (Table);
-			PRDebug.TagLog (lt, lc, JsonConvert.SerializeObject (jo, Formatting.Indented));
+			string fullPath = GenerateJsonFiles (jo);
+			PRDebug.TagLog (lt + ".GenerateJsonFile", lc, fullPath);
+//			PRDebug.TagLog (lt, lc, JsonConvert.SerializeObject (jo, Formatting.Indented));
+		} else if (Element != null) {
+			for (int j = 0; j < Element.ds.Tables.Count; j++) {
+				Table = Element.ds.Tables [j];
+				JObject jo = TableConvert (Table);
+				string fullPath = GenerateJsonFiles (jo);
+				PRDebug.TagLog (lt + ".GenerateJsonFile", lc, fullPath);
+			}
 		}
 	}
 
@@ -53,9 +63,20 @@ public class XLSXJsonConverter
 			}
 		}
 
-		Debug.Log (creator.jo.ToString ());
+		return creator.jo;
+	}
 
-		return null;
+	public string GenerateJsonFiles (JObject jo)
+	{
+		string fullPath = Path.Combine (Application.dataPath, "PGFrameDesign/JsonData");
+		fullPath = Path.Combine (fullPath, string.Format (
+			"{0}.{1}.{2}.json", 
+			jo ["Workspace"].Value<string> (), 
+			jo ["DocType"].Value<string> (), 
+			jo ["Common"] ["Name"].Value<string> ()
+		));
+		File.WriteAllText (fullPath, JsonConvert.SerializeObject (jo, Formatting.Indented));
+		return fullPath;
 	}
 
 	public class cidx
