@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using PogoTools;
 using System.Linq;
 using System.IO;
+using System;
 
 public class XLSXJsonConverter
 {
@@ -35,14 +36,14 @@ public class XLSXJsonConverter
 		JArray ja = new JArray ();
 		if (Table != null) {
 			JObject jo = TableConvert (Table);
-			string fullPath = GenerateJsonFiles (jo);
+			string fullPath = GenerateJsonFile (jo);
 			PRDebug.TagLog (lt + ".GenerateJsonFile", lc, fullPath);
 //			PRDebug.TagLog (lt, lc, JsonConvert.SerializeObject (jo, Formatting.Indented));
 		} else if (Element != null) {
 			for (int j = 0; j < Element.ds.Tables.Count; j++) {
 				Table = Element.ds.Tables [j];
 				JObject jo = TableConvert (Table);
-				string fullPath = GenerateJsonFiles (jo);
+				string fullPath = GenerateJsonFile (jo);
 				PRDebug.TagLog (lt + ".GenerateJsonFile", lc, fullPath);
 			}
 		}
@@ -63,10 +64,15 @@ public class XLSXJsonConverter
 			}
 		}
 
-		return creator.jo;
+		JObject jo = creator.jo;
+		jo.Add ("FilePath", Element.FileInfo.FullName);
+		jo.Add ("TableName", dt.TableName);
+		jo.Add ("CreateTime", DateTime.Now);
+
+		return jo;
 	}
 
-	public string GenerateJsonFiles (JObject jo)
+	public string GenerateJsonFile (JObject jo)
 	{
 		string fullPath = Path.Combine (Application.dataPath, "PGFrameDesign/JsonData");
 		fullPath = Path.Combine (fullPath, string.Format (
