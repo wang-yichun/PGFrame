@@ -31,19 +31,27 @@ public class XLSXJsonConverter
 		this.Table = table;
 	}
 
-	public void Convert ()
+	public PGCodeGenerator Generator;
+
+	public void Convert (PGCodeGenerator generator)
 	{
-		JArray ja = new JArray ();
+		this.Generator = generator;
+
 		if (Table != null) {
 			JObject jo = TableConvert (Table);
 			string fullPath = GenerateJsonFile (jo);
+			if (generator != null) {
+				generator.GenerateCode (jo);
+			}
 			PRDebug.TagLog (lt + ".GenerateJsonFile", lc, fullPath);
-//			PRDebug.TagLog (lt, lc, JsonConvert.SerializeObject (jo, Formatting.Indented));
 		} else if (Element != null) {
 			for (int j = 0; j < Element.ds.Tables.Count; j++) {
 				Table = Element.ds.Tables [j];
 				JObject jo = TableConvert (Table);
 				string fullPath = GenerateJsonFile (jo);
+				if (generator != null) {
+					generator.GenerateCode (jo);
+				}
 				PRDebug.TagLog (lt + ".GenerateJsonFile", lc, fullPath);
 			}
 		}

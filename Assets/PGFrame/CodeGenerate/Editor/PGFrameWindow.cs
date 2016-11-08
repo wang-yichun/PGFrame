@@ -36,12 +36,12 @@ public class PGFrameWindow : EditorWindow
 
 		GUILayout.FlexibleSpace ();
 		if (GUILayout.Button ("发布代码")) {
-			Generator.GenerateCode ("WS1", "Second");
+//			Generator.GenerateCode ("WS1", "Second");
 			AssetDatabase.Refresh ();
 		}
 
 		if (GUILayout.Button ("删除代码")) {
-			Generator.DeleteCode ("WS1", "Second");
+//			Generator.DeleteCode ("WS1", "Second");
 			AssetDatabase.Refresh ();
 		}
 		GUILayout.EndVertical ();
@@ -94,7 +94,7 @@ public class PGFrameWindow : EditorWindow
 				}
 				if (GUILayout.Button ("Json", GUILayout.MaxWidth (60))) {
 					Converter.SetElement (xe);
-					Converter.Convert ();
+					Converter.Convert (null);
 					AssetDatabase.Refresh ();
 				}
 				GUILayout.EndHorizontal ();
@@ -108,7 +108,12 @@ public class PGFrameWindow : EditorWindow
 						EditorGUILayout.LabelField (dt.TableName);
 						if (GUILayout.Button ("Json", GUILayout.MaxWidth (60))) {
 							Converter.SetDataTable (xe, dt);
-							Converter.Convert ();
+							Converter.Convert (null);
+							AssetDatabase.Refresh ();
+						}
+						if (GUILayout.Button ("Generate", GUILayout.MaxWidth (60))) {
+							Converter.SetDataTable (xe, dt);
+							Converter.Convert (Generator);
 							AssetDatabase.Refresh ();
 						}
 						GUILayout.EndHorizontal ();

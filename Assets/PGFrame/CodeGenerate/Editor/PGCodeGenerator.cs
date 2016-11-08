@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using PogoTools;
 
 /// <summary>
@@ -33,30 +34,33 @@ public class PGCodeGenerator
 		sg_ElementEditor = new PGCodeSubGenerator_ElementEditor (Path.Combine (Application.dataPath, "PGFrame/CodeGenerate/Template/__XXX__ElementEditor.txt"));
 	}
 
-	public void GenerateCode (string workspaceName, string elementName)
+	public void GenerateCode (JObject jo)
 	{
 		IList<string> filesGenerated = new List<string> ();
 
-		if (sg_ViewModelBase.CanGenerate (workspaceName, elementName))
-			sg_ViewModelBase.GenerateCode (workspaceName, elementName, filesGenerated);
-		if (sg_ViewModel.CanGenerate (workspaceName, elementName))
-			sg_ViewModel.GenerateCode (workspaceName, elementName, filesGenerated);
-		if (sg_ControllerBase.CanGenerate (workspaceName, elementName))
-			sg_ControllerBase.GenerateCode (workspaceName, elementName, filesGenerated);
-		if (sg_Controller.CanGenerate (workspaceName, elementName))
-			sg_Controller.GenerateCode (workspaceName, elementName, filesGenerated);
-		if (sg_ViewBase.CanGenerate (workspaceName, elementName))
-			sg_ViewBase.GenerateCode (workspaceName, elementName, filesGenerated);
-		if (sg_View.CanGenerate (workspaceName, elementName))
-			sg_View.GenerateCode (workspaceName, elementName, filesGenerated);
-		if (sg_ElementEditor.CanGenerate (workspaceName, elementName))
-			sg_ElementEditor.GenerateCode (workspaceName, elementName, filesGenerated);
+		if (sg_ViewModelBase.CanGenerate (jo))
+			sg_ViewModelBase.GenerateCode (jo, filesGenerated);
+		if (sg_ViewModel.CanGenerate (jo))
+			sg_ViewModel.GenerateCode (jo, filesGenerated);
+		if (sg_ControllerBase.CanGenerate (jo))
+			sg_ControllerBase.GenerateCode (jo, filesGenerated);
+		if (sg_Controller.CanGenerate (jo))
+			sg_Controller.GenerateCode (jo, filesGenerated);
+		if (sg_ViewBase.CanGenerate (jo))
+			sg_ViewBase.GenerateCode (jo, filesGenerated);
+		if (sg_View.CanGenerate (jo))
+			sg_View.GenerateCode (jo, filesGenerated);
+		if (sg_ElementEditor.CanGenerate (jo))
+			sg_ElementEditor.GenerateCode (jo, filesGenerated);
 
 		PRDebug.TagLog (lt + ".GenerateCode", lc, JsonConvert.SerializeObject (filesGenerated, Formatting.Indented));
 	}
 
-	public void DeleteCode (string workspaceName, string elementName)
+	public void DeleteCode (JObject jo)
 	{
+		string workspaceName = jo ["Workspace"].Value<string> ();
+		string elementName = jo ["Common"] ["Name"].Value<string> ();
+
 		string[] targetPaths = {
 			Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/Controller/" + string.Format ("{0}Controller.cs", elementName)),
 			Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/Controller/_Base/" + string.Format ("{0}ControllerBase.cs", elementName)),
