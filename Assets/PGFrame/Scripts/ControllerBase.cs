@@ -1,7 +1,7 @@
 ﻿using UniRx;
 
 public class ControllerBase<T> : Singleton<T>
-	where T:new()
+	where T: Singleton<T>, new()
 {
 
 	public virtual void Attach (ViewModelBase viewModel)

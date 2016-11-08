@@ -5,6 +5,9 @@ using System.IO;
 using Newtonsoft.Json;
 using PogoTools;
 
+/// <summary>
+/// 维护 ViewModel/Controller/View/ElementEditor 的生成器,并启动生成器的生成
+/// </summary>
 public class PGCodeGenerator
 {
 	public static readonly string lt = "PGFrame.PGCodeGenerator";

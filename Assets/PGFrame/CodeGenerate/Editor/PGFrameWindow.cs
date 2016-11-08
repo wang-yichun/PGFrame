@@ -71,6 +71,9 @@ public class PGFrameWindow : EditorWindow
 
 	Vector2 scrollViewPos;
 
+	/**
+	 * xlsx 文件/工作表列表部分
+	 */
 	void DesignList ()
 	{
 		scrollViewPos = GUILayout.BeginScrollView (scrollViewPos);

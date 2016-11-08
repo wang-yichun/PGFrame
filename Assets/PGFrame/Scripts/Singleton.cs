@@ -1,17 +1,27 @@
 ﻿
-public abstract class Singleton<T>
-	where T:new()
+public class Singleton<T>
+		where T: Singleton<T>, new()
 {
-	public static T _instance;
+	protected static T instance;
 
 	public static T Instance {
 		get {
-			if (_instance == null) {
-				_instance = new T ();
+			if (instance == null) {
+				CreateNewOne ();
 			}
-			return _instance;
+			return instance;
 		}
 	}
+
+	public static T CreateNewOne ()
+	{
+		instance = new T ();
+		instance.InitializeSingleton ();
+		return instance;
+	}
+
+	protected virtual void InitializeSingleton ()
+	{
+	}
+
 }
-
-

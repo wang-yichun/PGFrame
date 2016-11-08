@@ -3,7 +3,7 @@ using System.Collections;
 using UniRx;
 
 public class FirstControllerBase<T> : ControllerBase<T>
-	where T:new()
+	where T: Singleton<T>, new()
 {
 	public virtual void AddNum (FirstViewModel viewModel, AddNumCommand command)
 	{
