@@ -33,7 +33,7 @@ public class XLSXJsonConverter
 
 	public PGCodeGenerator Generator;
 
-	public void Convert (PGCodeGenerator generator)
+	public void Convert (PGCodeGenerator generator, bool delete)
 	{
 		this.Generator = generator;
 
@@ -41,18 +41,28 @@ public class XLSXJsonConverter
 			JObject jo = TableConvert (Table);
 			string fullPath = GenerateJsonFile (jo);
 			if (generator != null) {
-				generator.GenerateCode (jo);
+				if (delete) {
+					generator.DeleteCode (jo);
+				} else {
+					generator.GenerateCode (jo);
+				}
 			}
-			PRDebug.TagLog (lt + ".GenerateJsonFile", lc, fullPath);
+			if (!delete)
+				PRDebug.TagLog (lt + ".GenerateJsonFile", lc, fullPath);
 		} else if (Element != null) {
 			for (int j = 0; j < Element.ds.Tables.Count; j++) {
 				Table = Element.ds.Tables [j];
 				JObject jo = TableConvert (Table);
 				string fullPath = GenerateJsonFile (jo);
 				if (generator != null) {
-					generator.GenerateCode (jo);
+					if (delete) {
+						generator.DeleteCode (jo);
+					} else {
+						generator.GenerateCode (jo);
+					}
 				}
-				PRDebug.TagLog (lt + ".GenerateJsonFile", lc, fullPath);
+				if (!delete)
+					PRDebug.TagLog (lt + ".GenerateJsonFile", lc, fullPath);
 			}
 		}
 	}

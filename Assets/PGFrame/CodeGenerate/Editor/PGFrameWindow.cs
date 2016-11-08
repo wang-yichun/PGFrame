@@ -36,12 +36,20 @@ public class PGFrameWindow : EditorWindow
 
 		GUILayout.FlexibleSpace ();
 		if (GUILayout.Button ("发布代码")) {
-//			Generator.GenerateCode ("WS1", "Second");
+			for (int i = 0; i < xElements.Length; i++) {
+				XLSXElement xe = xElements [i];
+				Converter.SetElement (xe);
+				Converter.Convert (Generator, false);
+			}
 			AssetDatabase.Refresh ();
 		}
 
 		if (GUILayout.Button ("删除代码")) {
-//			Generator.DeleteCode ("WS1", "Second");
+			for (int i = 0; i < xElements.Length; i++) {
+				XLSXElement xe = xElements [i];
+				Converter.SetElement (xe);
+				Converter.Convert (Generator, true);
+			}
 			AssetDatabase.Refresh ();
 		}
 		GUILayout.EndVertical ();
@@ -94,7 +102,12 @@ public class PGFrameWindow : EditorWindow
 				}
 				if (GUILayout.Button ("Json", GUILayout.MaxWidth (60))) {
 					Converter.SetElement (xe);
-					Converter.Convert (null);
+					Converter.Convert (null, false);
+					AssetDatabase.Refresh ();
+				}
+				if (GUILayout.Button ("Generate", GUILayout.MaxWidth (60))) {
+					Converter.SetElement (xe);
+					Converter.Convert (Generator, false);
 					AssetDatabase.Refresh ();
 				}
 				GUILayout.EndHorizontal ();
@@ -108,12 +121,12 @@ public class PGFrameWindow : EditorWindow
 						EditorGUILayout.LabelField (dt.TableName);
 						if (GUILayout.Button ("Json", GUILayout.MaxWidth (60))) {
 							Converter.SetDataTable (xe, dt);
-							Converter.Convert (null);
+							Converter.Convert (null, false);
 							AssetDatabase.Refresh ();
 						}
 						if (GUILayout.Button ("Generate", GUILayout.MaxWidth (60))) {
 							Converter.SetDataTable (xe, dt);
-							Converter.Convert (Generator);
+							Converter.Convert (Generator, false);
 							AssetDatabase.Refresh ();
 						}
 						GUILayout.EndHorizontal ();

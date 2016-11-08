@@ -19,4 +19,6 @@ public class __XXX__ViewModelBase : ViewModelBase
 	{
 		__XXX__Controller.Instance.Attach (this);
 	}
+
+	/****reactive_members****/
 }

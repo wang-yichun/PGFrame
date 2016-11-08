@@ -3,7 +3,7 @@ using System.Collections;
 using UniRx;
 
 public class __XXX__ControllerBase<T> : ControllerBase<T>
-	where T:new()
+	where T: Singleton<T>, new()
 {
 
 	public override void Attach (ViewModelBase viewModel)

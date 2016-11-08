@@ -79,6 +79,6 @@ public class PGCodeGenerator
 			}
 		}
 
-		PRDebug.TagLog (lt + ".DeleteCode", lc_r, JsonConvert.SerializeObject (fileDeleted, Formatting.Indented));
+		PRDebug.TagLog (lt + ".DeleteCode", lc, JsonConvert.SerializeObject (fileDeleted, Formatting.Indented));
 	}
 }
