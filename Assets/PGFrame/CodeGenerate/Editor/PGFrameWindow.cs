@@ -71,9 +71,9 @@ public class PGFrameWindow : EditorWindow
 
 	Vector2 scrollViewPos;
 
-	/**
-	 * xlsx 文件/工作表列表部分
-	 */
+	/// <summary>
+	/// xlsx 文件/工作表列表部分
+	/// </summary>
 	void DesignList ()
 	{
 		scrollViewPos = GUILayout.BeginScrollView (scrollViewPos);
@@ -88,7 +88,11 @@ public class PGFrameWindow : EditorWindow
 					xe.toggleOpen = !xe.toggleOpen;
 				}
 				EditorGUILayout.LabelField (xe.FileInfo.Name);
-				if (GUILayout.Button ("Json", GUILayout.MaxWidth (80))) {
+				if (GUILayout.Button ("Open", GUILayout.MaxWidth (60))) {
+					var xlsxAsset = AssetDatabase.LoadAssetAtPath<Object> ("Assets/PGFrameDesign/" + xe.FileInfo.Name);
+					AssetDatabase.OpenAsset (xlsxAsset);
+				}
+				if (GUILayout.Button ("Json", GUILayout.MaxWidth (60))) {
 					Converter.SetElement (xe);
 					Converter.Convert ();
 					AssetDatabase.Refresh ();
@@ -102,7 +106,7 @@ public class PGFrameWindow : EditorWindow
 						GUILayout.Label ("", GUILayout.MaxWidth (20));
 						DataTable dt = xe.ds.Tables [j];
 						EditorGUILayout.LabelField (dt.TableName);
-						if (GUILayout.Button ("Json", GUILayout.MaxWidth (80))) {
+						if (GUILayout.Button ("Json", GUILayout.MaxWidth (60))) {
 							Converter.SetDataTable (xe, dt);
 							Converter.Convert ();
 							AssetDatabase.Refresh ();
