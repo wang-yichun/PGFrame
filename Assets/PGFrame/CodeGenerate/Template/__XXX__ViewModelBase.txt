@@ -13,6 +13,7 @@ public class __XXX__ViewModelBase : ViewModelBase
 
 	public override void Initialize ()
 	{
+		/****initialize_code****/
 	}
 
 	public override void Attach ()
