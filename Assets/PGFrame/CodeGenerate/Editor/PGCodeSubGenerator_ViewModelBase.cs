@@ -34,6 +34,7 @@ public class PGCodeSubGenerator_ViewModelBase: IPGCodeSubGenerator
 		string code = File.ReadAllText (templateFileInfo.FullName);
 		code = code.Replace ("__XXX__", elementName);
 		code = code.Replace (REACTIVE_MEMBERS, GetReactiveMembers (jo));
+		code = code.Replace (COMMAND_CLASS, GetCommandClass (jo));
 		string file = Path.Combine (targetPath, string.Format ("{0}ViewModelBase.cs", elementName));
 		File.WriteAllText (file, code);
 		filesGenerated.Add (file);
@@ -42,6 +43,8 @@ public class PGCodeSubGenerator_ViewModelBase: IPGCodeSubGenerator
 	#endregion
 
 	public static readonly string REACTIVE_MEMBERS = @"/****reactive_members****/";
+	public static readonly string COMMAND_CLASS = @"/****command_class****/";
+	public static readonly string COMMAND_MEMBER = @"/****command_member****/";
 
 	public string GetReactiveMembers (JObject jo)
 	{
@@ -52,6 +55,35 @@ public class PGCodeSubGenerator_ViewModelBase: IPGCodeSubGenerator
 			sb.Append ("\n");
 			sb.Append (jom.GenReactiveMemberCode ());
 			PogoTools.PRDebug.TagLog ("GetReactiveMembers", Color.white, JsonConvert.SerializeObject (jom));
+		}
+		return sb.ToString ();
+	}
+
+	public string GetCommandClass (JObject jo)
+	{
+		StringBuilder sb = new StringBuilder ();
+		JArray ja = (JArray)jo ["Member"];
+		for (int i = 0; i < ja.Count; i++) {
+			JObject jom = (JObject)ja [i];
+			if (jom ["RxType"].Value<string> () == "Command") {
+				string template = @"
+public class {NAME}Command : ViewModelCommandBase
+{
+/****command_member****/
+}
+";
+				template = template.Replace ("{NAME}", jom ["Name"].Value<string> ());
+
+				StringBuilder sbc = new StringBuilder ();
+				JArray jac = (JArray)jom ["Params"];
+				for (int i2 = 0; i2 < jac.Count; i2++) {
+					JObject jocm = (JObject)jac [i2];
+					sbc.Append (jocm.GenCommandMember ());
+				}
+
+				template = template.Replace (COMMAND_MEMBER, sbc.ToString ());
+				sb.Append (template);
+			}
 		}
 		return sb.ToString ();
 	}
@@ -139,7 +171,19 @@ public static class GenCode_ViewModelBase
 	";
 			template = template.Replace ("{NAME}", jom ["Name"].Value<string> ());
 		}
-
 		return template;
 	}
+
+	public static string GenCommandMember (this JObject jom)
+	{
+		string template = @"
+	/* {PARAMDESCRIPTION} */
+	public {PARAMTYPE} {PARAMNAME};
+	";
+		template = template.Replace ("{PARAMDESCRIPTION}", jom ["Desc"].Value<string> ());
+		template = template.Replace ("{PARAMTYPE}", jom ["Type"].Value<string> ());
+		template = template.Replace ("{PARAMNAME}", jom ["Name"].Value<string> ());
+		return template;
+	}
+
 }
