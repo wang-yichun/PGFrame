@@ -33,8 +33,7 @@ public class PGCodeSubGenerator_ControllerBase: IPGCodeSubGenerator
 		string code = File.ReadAllText (templateFileInfo.FullName);
 		code = code.Replace ("__XXX__", elementName);
 		code = code.Replace (ATTACH_CODE, GetAttachCode (jo));
-		string mf = GetMemberFunction (jo);
-		code = code.Replace (MEMBER_FUNCTION, mf);
+		code = code.Replace (MEMBER_FUNCTION, GetMemberFunction (jo));
 		string file = Path.Combine (targetPath, string.Format ("{0}ControllerBase.cs", elementName));
 		File.WriteAllText (file, code);
 		filesGenerated.Add (file);
