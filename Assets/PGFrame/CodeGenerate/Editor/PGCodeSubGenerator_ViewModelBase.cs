@@ -36,6 +36,7 @@ public class PGCodeSubGenerator_ViewModelBase: IPGCodeSubGenerator
 		code = code.Replace (REACTIVE_MEMBERS, GetReactiveMembers (jo));
 		code = code.Replace (COMMAND_CLASS, GetCommandClass (jo));
 		code = code.Replace (INITIALIZE_CODE, GetInitializeCode (jo));
+		code = code.Replace (CLASS_COMMENT, GetClassDescription (jo));
 		string file = Path.Combine (targetPath, string.Format ("{0}ViewModelBase.cs", elementName));
 		File.WriteAllText (file, code);
 		filesGenerated.Add (file);
@@ -47,6 +48,7 @@ public class PGCodeSubGenerator_ViewModelBase: IPGCodeSubGenerator
 	public static readonly string REACTIVE_MEMBERS = @"/****reactive_members****/";
 	public static readonly string COMMAND_CLASS = @"/****command_class****/";
 	public static readonly string COMMAND_MEMBER = @"/****command_member****/";
+	public static readonly string CLASS_COMMENT = @"/****class_comment****/";
 
 	public string GetReactiveMembers (JObject jo)
 	{
@@ -100,6 +102,11 @@ public class {NAME}Command : ViewModelCommandBase
 			PogoTools.PRDebug.TagLog ("GenInitializeCode", Color.white, JsonConvert.SerializeObject (jom));
 		}
 		return sb.ToString ();
+	}
+
+	public string GetClassDescription (JObject jo)
+	{
+		return jo ["Common"] ["Desc"].Value<string> ();
 	}
 }
 
