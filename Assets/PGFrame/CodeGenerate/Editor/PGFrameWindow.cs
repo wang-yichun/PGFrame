@@ -110,6 +110,11 @@ public class PGFrameWindow : EditorWindow
 					Converter.Convert (Generator, false);
 					AssetDatabase.Refresh ();
 				}
+				if (GUILayout.Button ("Delete", GUILayout.MaxWidth (60))) {
+					Converter.SetElement (xe);
+					Converter.Convert (Generator, true);
+					AssetDatabase.Refresh ();
+				}
 				GUILayout.EndHorizontal ();
 
 				if (xe.toggleOpen) {
@@ -127,6 +132,11 @@ public class PGFrameWindow : EditorWindow
 						if (GUILayout.Button ("Generate", GUILayout.MaxWidth (60))) {
 							Converter.SetDataTable (xe, dt);
 							Converter.Convert (Generator, false);
+							AssetDatabase.Refresh ();
+						}
+						if (GUILayout.Button ("Delete", GUILayout.MaxWidth (60))) {
+							Converter.SetDataTable (xe, dt);
+							Converter.Convert (Generator, true);
 							AssetDatabase.Refresh ();
 						}
 						GUILayout.EndHorizontal ();
