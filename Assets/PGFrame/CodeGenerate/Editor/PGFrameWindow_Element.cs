@@ -64,7 +64,11 @@ public partial class PGFrameWindow : EditorWindow
 			r.x = (rect.width - 25f) * split [split_idx] + 25f;
 			r.width = (rect.width - 25f) * (split [split_idx + 1] - split [split_idx]) - 2f;
 
-			GUI.Label (r, jo_member ["RxType"].Value<string> ());
+			if (!ShowDesc && jo_member ["Desc"].Value<string> ().Contains ("#")) {
+				GUI.Label (r, jo_member ["Desc"].Value<string> ().Split (new char[]{ '#' }) [0] + "(" + jo_member ["RxType"].Value<string> ().Substring (0, 3).ToUpper () + ")", GUIStyleTemplate.GreenDescStyle ());
+			} else {
+				GUI.Label (r, jo_member ["RxType"].Value<string> ());
+			}
 
 			split_idx++;
 			r.x = (rect.width - 25f) * split [split_idx] + 25f;
@@ -80,7 +84,7 @@ public partial class PGFrameWindow : EditorWindow
 				jo_member ["Type"] = GUI.TextField (r, jo_member ["Type"].Value<string> ());
 
 				if (ShowDesc) {
-					r.y = rect.y + singleRowHeight - 4f;
+					r.y = rect.y + singleRowHeight - 6f;
 					r.x = (rect.width - 25f) * split [1] + 25f;
 					r.width = (rect.width - 25f) * (split [3] - split [1]) - 2f;
 					jo_member ["Desc"] = GUI.TextField (r, jo_member ["Desc"].Value<string> (), GUIStyleTemplate.GreenDescStyle ());
@@ -88,7 +92,7 @@ public partial class PGFrameWindow : EditorWindow
 			} else {
 				
 				if (ShowDesc) {
-					r.y = rect.y + singleRowHeight - 4f;
+					r.y = rect.y + singleRowHeight - 6f;
 					r.x = (rect.width - 25f) * split [1] + 25f;
 					r.width = (rect.width - 25f) * (split [3] - split [1]) - 2f;
 					jo_member ["Desc"] = GUI.TextField (r, jo_member ["Desc"].Value<string> (), GUIStyleTemplate.GreenDescStyle ());
@@ -119,6 +123,13 @@ public partial class PGFrameWindow : EditorWindow
 						r.x = (rect.width - 25f) * split_c [split_c_idx] + 25f;
 						r.width = (rect.width - 25f) * (split_c [split_c_idx + 1] - split_c [split_c_idx]) - 2f;
 						jo_command_param ["Type"] = GUI.TextField (r, jo_command_param ["Type"].Value<string> ());
+
+						if (ShowDesc) {
+							r.y = rect.y + (singleRowHeight_c * (float)(i + 1)) * show_desc_height_amplify + singleRowHeight_c - 2f;
+							r.x = (rect.width - 25f) * split_c [1] + 25f;
+							r.width = (rect.width - 25f) * (split_c [3] - split_c [1]) - 2f;
+							jo_command_param ["Desc"] = GUI.TextField (r, jo_command_param ["Desc"].Value<string> (), GUIStyleTemplate.GreenDescStyle ());
+						}
 					}
 				}
 			}
