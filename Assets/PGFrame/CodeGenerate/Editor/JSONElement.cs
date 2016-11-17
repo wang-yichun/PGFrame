@@ -36,7 +36,7 @@ public class JSONElement
 		if (DocType == "Element") {
 			Name = jo ["Common"] ["Name"].Value<string> ();
 		}
-		Debug.Log (fileInfo.FullName + "\n" + jo ["Workspace"].Value<string> ());
+//		Debug.Log (fileInfo.FullName + "\n" + jo ["Workspace"].Value<string> ());
 	}
 
 	public void Save ()

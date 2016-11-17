@@ -84,7 +84,7 @@ public class PGFrameWindow : EditorWindow
 		if (SelectedWorkspace == null) {
 			DirectoryInfo di = new DirectoryInfo (JsonRootFull);
 			WorkspaceDirectoryInfos = di.GetDirectories ();
-			PRDebug.TagLog (lt, lc, JsonConvert.SerializeObject (WorkspaceDirectoryInfos.Select (_ => _.Name).ToList ()));
+//			PRDebug.TagLog (lt, lc, JsonConvert.SerializeObject (WorkspaceDirectoryInfos.Select (_ => _.Name).ToList ()));
 		} else {
 			string JsonWSFull = Path.Combine (JsonRootFull, SelectedWorkspace.Name);
 			DirectoryInfo di = new DirectoryInfo (JsonWSFull);
@@ -115,7 +115,7 @@ public class PGFrameWindow : EditorWindow
 		JArray ja_elements = SelectedWorkspaceCommon.jo ["ElementFiles"] as JArray;
 		WSJsonFilesList = new ReorderableList (ja_elements, typeof(JToken));
 		WSJsonFilesList.drawHeaderCallback += (Rect rect) => {
-			GUI.Label (rect, "Title");
+			GUI.Label (rect, "ElementFiles");
 		};
 		float[] split = new float[]{ 0f, 1f };
 		WSJsonFilesList.drawElementCallback += (Rect rect, int index, bool isActive, bool isFocused) => {
