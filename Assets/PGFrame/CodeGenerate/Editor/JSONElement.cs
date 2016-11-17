@@ -15,7 +15,7 @@ public class JSONElement
 		}
 		set {
 			fileInfo = value;
-			Read ();
+			Load ();
 		}
 	}
 
@@ -25,7 +25,7 @@ public class JSONElement
 	public string DocType;
 	public string Name;
 
-	public void Read ()
+	public void Load ()
 	{
 		string json = File.ReadAllText (fileInfo.FullName);
 		jo = JObject.Parse (json);

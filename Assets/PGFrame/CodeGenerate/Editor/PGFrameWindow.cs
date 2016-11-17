@@ -1,17 +1,16 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using UnityEditorInternal;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Data;
-using Excel;
+using System.Linq;
 using PogoTools;
 using Newtonsoft.Json;
-using System.Linq;
 using Newtonsoft.Json.Linq;
-using UnityEditorInternal;
 
-public class PGFrameWindow : EditorWindow
+public partial class PGFrameWindow : EditorWindow
 {
 	public static readonly string lt = "PGFrame";
 	public static readonly Color lc = new Color32 (0, 162, 255, 255);
@@ -40,7 +39,11 @@ public class PGFrameWindow : EditorWindow
 			PRDebug.TagLog (lt, lcr, manager.CreateWorkspace ("WS3"));
 			AssetDatabase.Refresh ();
 		}
-		DesignList ();
+		if (SelectedJsonElement == null) {
+			DesignList ();
+		} else {
+			DesignList_Element ();
+		}
 
 		GUILayout.FlexibleSpace ();
 		if (GUILayout.Button ("发布代码")) {
@@ -127,7 +130,7 @@ public class PGFrameWindow : EditorWindow
 			r.x = (rect.width - 25f) * split [split_idx] + 25f;
 			r.width = (rect.width - 25f) * (split [split_idx + 1] - split [split_idx]);
 			if (GUI.Button (r, (ja_elements [index] as JObject) ["File"].Value<string> ())) {
-				// PR_TODO:
+				SelectedJsonElement = jElements [index];
 			}
 		};
 
@@ -184,6 +187,7 @@ public class PGFrameWindow : EditorWindow
 
 		WSJsonFilesList.onReorderCallback += (ReorderableList list) => {
 			SaveCommonFile ();
+			NeedRefresh = true;
 		};
 	}
 
