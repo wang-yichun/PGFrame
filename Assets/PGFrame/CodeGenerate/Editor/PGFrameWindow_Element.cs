@@ -72,23 +72,43 @@ public partial class PGFrameWindow : EditorWindow
 
 			jo_member ["Name"] = GUI.TextField (r, jo_member ["Name"].Value<string> ());
 
+
 			if (jo_member ["RxType"].Value<string> () != "Command") {
 				split_idx++;
 				r.x = (rect.width - 25f) * split [split_idx] + 25f;
 				r.width = (rect.width - 25f) * (split [split_idx + 1] - split [split_idx]) - 2f;
 				jo_member ["Type"] = GUI.TextField (r, jo_member ["Type"].Value<string> ());
+
+				if (ShowDesc) {
+					r.y = rect.y + singleRowHeight - 4f;
+					r.x = (rect.width - 25f) * split [1] + 25f;
+					r.width = (rect.width - 25f) * (split [3] - split [1]) - 2f;
+					jo_member ["Desc"] = GUI.TextField (r, jo_member ["Desc"].Value<string> (), GUIStyleTemplate.GreenDescStyle ());
+				}
 			} else {
+				
+				if (ShowDesc) {
+					r.y = rect.y + singleRowHeight - 4f;
+					r.x = (rect.width - 25f) * split [1] + 25f;
+					r.width = (rect.width - 25f) * (split [3] - split [1]) - 2f;
+					jo_member ["Desc"] = GUI.TextField (r, jo_member ["Desc"].Value<string> (), GUIStyleTemplate.GreenDescStyle ());
+				}
+
+				float show_desc_height_amplify = 1f;
+				if (ShowDesc) {
+					show_desc_height_amplify = 2f;
+				}
 				JArray ja_command_params = jo_member ["Params"] as JArray;
 				if (ja_command_params != null) {
 					for (int i = 0; i < ja_command_params.Count; i++) {
 						int split_c_idx = 0;
-						r.y = rect.y + singleRowHeight_c * (float)(i + 1);
+						r.y = rect.y + (singleRowHeight_c * (float)(i + 1)) * show_desc_height_amplify;
 						JObject jo_command_param = ja_command_params [i] as JObject;
 
 						split_c_idx = 0;
 						r.x = (rect.width - 25f) * split_c [split_c_idx] + 25f;
 						r.width = (rect.width - 25f) * (split_c [split_c_idx + 1] - split_c [split_c_idx]) - 2f;
-						GUI.Label (r, "Command Params");
+						GUI.Label (r, "  - Command Params");
 
 						split_c_idx = 1;
 						r.x = (rect.width - 25f) * split_c [split_c_idx] + 25f;
@@ -105,13 +125,19 @@ public partial class PGFrameWindow : EditorWindow
 		};
 		ElementMembersList.elementHeightCallback += (int index) => {
 			JObject jo_member = ja_member [index] as JObject;
+
+			float show_desc_height_amplify = 1f;
+			if (ShowDesc) {
+				show_desc_height_amplify = 2f;
+			}
+
 			if (jo_member ["RxType"].Value<string> () == "Command") {
 				JArray jo_command_params = jo_member ["Params"] as JArray;
 				if (jo_command_params == null)
-					return singleRowHeight;
-				return (jo_command_params.Count + 1) * singleRowHeight_c + 4f;
+					return singleRowHeight * show_desc_height_amplify;
+				return ((jo_command_params.Count + 1) * singleRowHeight_c) * show_desc_height_amplify + 4f;
 			}
-			return singleRowHeight;
+			return singleRowHeight * show_desc_height_amplify;
 		};
 	}
 
