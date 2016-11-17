@@ -28,6 +28,9 @@ public partial class PGFrameWindow : EditorWindow
 			NeedRefresh = true;
 		}
 		ShowDesc = GUILayout.Toggle (ShowDesc, "显示描述注释");
+
+		SelectedJsonElement.jo ["Common"] ["Desc"] = GUILayout.TextArea (SelectedJsonElement.jo ["Common"] ["Desc"].Value<string> (), GUIStyleTemplate.GreenDescStyle2 ());
+
 		toolbar_index = GUILayout.Toolbar (toolbar_index, ToolbarHeaders, new GUILayoutOption[]{ GUILayout.Height (25f) });
 
 		switch (toolbar_index) {
