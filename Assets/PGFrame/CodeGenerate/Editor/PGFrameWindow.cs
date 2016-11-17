@@ -152,6 +152,9 @@ public class PGFrameWindow : EditorWindow
 						ja_elements.Add (jo);
 						SaveCommonFile ();
 
+						CreateElementJsonFile (jsonName, SelectedWorkspaceCommon.Workspace, ElementName);
+						NeedRefresh = true;
+
 						PRDebug.TagLog (lt, lc, "成功创建了 Element: " + ElementName);
 						ElementName = null;
 					} else {
@@ -167,10 +170,14 @@ public class PGFrameWindow : EditorWindow
 
 		WSJsonFilesList.onRemoveCallback += (ReorderableList list) => {
 			JObject jo = ja_elements [list.index] as JObject;
-
+			string jsonName = jo ["File"].Value<string> ();
+				
 			if (EditorUtility.DisplayDialog ("警告!", string.Format ("确定删除框架中的{0}文件?", jo ["File"].Value<string> ()), "Yes", "No")) {
 				ja_elements.RemoveAt (list.index);
 				SaveCommonFile ();
+
+				DeleteElementJsonFile (jsonName, SelectedWorkspaceCommon.Workspace);
+				NeedRefresh = true;
 				ElementName = null;
 			}
 		};
@@ -178,6 +185,42 @@ public class PGFrameWindow : EditorWindow
 		WSJsonFilesList.onReorderCallback += (ReorderableList list) => {
 			SaveCommonFile ();
 		};
+	}
+
+	void CreateElementJsonFile (string jsonFullName, string workspace, string elementName)
+	{
+		string targetFileFullPath = Path.Combine (Application.dataPath, JsonRoot);
+		targetFileFullPath = Path.Combine (targetFileFullPath, string.Format ("{0}/{1}", workspace, jsonFullName));
+
+		JObject jo = new JObject ();
+		jo.Add ("Workspace", workspace);
+		jo.Add ("DocType", "Element");
+
+		JObject jo_common = new JObject ();
+		jo_common.Add ("Name", elementName);
+		jo_common.Add ("Desc", string.Empty);
+
+		jo.Add ("Common", jo_common);
+		jo.Add ("Member", new JArray ());
+		jo.Add ("Views", new JArray ());
+
+		string json = JsonConvert.SerializeObject (jo, Formatting.Indented);
+		File.WriteAllText (targetFileFullPath, json);
+
+		AssetDatabase.Refresh ();
+
+		PRDebug.TagLog (lt, lc, targetFileFullPath + " (Created)");
+	}
+
+	void DeleteElementJsonFile (string jsonFullName, string workspace)
+	{
+		string targetFileFullPath = Path.Combine (Application.dataPath, JsonRoot);
+		targetFileFullPath = Path.Combine (targetFileFullPath, string.Format ("{0}/{1}", workspace, jsonFullName));
+
+		File.Delete (targetFileFullPath);
+		AssetDatabase.Refresh ();
+
+		PRDebug.TagLog (lt, lc, targetFileFullPath + " (Deleted)");
 	}
 
 	string ElementName = null;
@@ -224,108 +267,8 @@ public class PGFrameWindow : EditorWindow
 					ElementName = GUILayout.TextField (ElementName);
 				}
 				GUILayout.EndVertical ();
-//				JArray ja_elements = SelectedWorkspaceCommon ["ElementFiles"] as JArray;
-
-//				for (int i = 0; i < ja_elements.Count; i++) {
-//					JObject jo = ja_elements [i] as JObject;
-//					GUILayout.BeginHorizontal ();
-//					GUILayout.Label (jo ["File"].Value<string> ());
-//					GUILayout.EndHorizontal ();
-//				}
 
 			}
 		}
 	}
-
-	/*
-	void RefreshFiles ()
-	{
-		Generator = new PGCodeGenerator ();
-		Generator.Init ();
-
-		Converter = new XLSXJsonConverter ();
-
-		string[] fileNames = Directory.GetFiles (Path.Combine (Application.dataPath, "PGFrameDesign"), "*.xlsx").Where (_ => !_.Contains ("~$")).ToArray ();
-		xElements = new XLSXElement[fileNames.Length];
-
-		for (int i = 0; i < fileNames.Length; i++) {
-			XLSXElement e = new XLSXElement ();
-			e.FileInfo = new FileInfo (fileNames [i]);
-			xElements [i] = e;
-		}
-	}
-
-	Vector2 scrollViewPos;
-
-	/// <summary>
-	/// xlsx 文件/工作表列表部分
-	/// </summary>
-	void DesignList ()
-	{
-		scrollViewPos = GUILayout.BeginScrollView (scrollViewPos);
-
-		if (xElements != null) {
-			for (int i = 0; i < xElements.Length; i++) {
-				XLSXElement xe = xElements [i];
-
-				GUILayout.BeginHorizontal ();
-
-				if (GUILayout.Button (xe.toggleOpen ? "-" : "+", GUILayout.MaxWidth (20))) {
-					xe.toggleOpen = !xe.toggleOpen;
-				}
-				EditorGUILayout.LabelField (xe.FileInfo.Name);
-				if (GUILayout.Button ("Open", GUILayout.MaxWidth (60))) {
-					var xlsxAsset = AssetDatabase.LoadAssetAtPath<Object> ("Assets/PGFrameDesign/" + xe.FileInfo.Name);
-					AssetDatabase.OpenAsset (xlsxAsset);
-				}
-				if (GUILayout.Button ("Json", GUILayout.MaxWidth (60))) {
-					Converter.SetElement (xe);
-					Converter.Convert (null, false);
-					AssetDatabase.Refresh ();
-				}
-				if (GUILayout.Button ("Generate", GUILayout.MaxWidth (60))) {
-					Converter.SetElement (xe);
-					Converter.Convert (Generator, false);
-					AssetDatabase.Refresh ();
-				}
-				if (GUILayout.Button ("Delete", GUILayout.MaxWidth (60))) {
-					Converter.SetElement (xe);
-					Converter.Convert (Generator, true);
-					AssetDatabase.Refresh ();
-				}
-				GUILayout.EndHorizontal ();
-
-				if (xe.toggleOpen) {
-					EditorGUI.indentLevel++;
-					for (int j = 0; j < xe.ds.Tables.Count; j++) {
-						GUILayout.BeginHorizontal ();
-						GUILayout.Label ("", GUILayout.MaxWidth (20));
-						DataTable dt = xe.ds.Tables [j];
-						EditorGUILayout.LabelField (dt.TableName);
-						if (GUILayout.Button ("Json", GUILayout.MaxWidth (60))) {
-							Converter.SetDataTable (xe, dt);
-							Converter.Convert (null, false);
-							AssetDatabase.Refresh ();
-						}
-						if (GUILayout.Button ("Generate", GUILayout.MaxWidth (60))) {
-							Converter.SetDataTable (xe, dt);
-							Converter.Convert (Generator, false);
-							AssetDatabase.Refresh ();
-						}
-						if (GUILayout.Button ("Delete", GUILayout.MaxWidth (60))) {
-							Converter.SetDataTable (xe, dt);
-							Converter.Convert (Generator, true);
-							AssetDatabase.Refresh ();
-						}
-						GUILayout.EndHorizontal ();
-					}
-					EditorGUI.indentLevel--;
-				}
-			}
-		}
-
-		GUILayout.EndScrollView ();
-
-
-*/
 }
