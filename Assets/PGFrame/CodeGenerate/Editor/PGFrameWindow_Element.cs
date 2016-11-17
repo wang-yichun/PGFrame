@@ -9,6 +9,7 @@ using System.Linq;
 using PogoTools;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Linq.Expressions;
 
 public partial class PGFrameWindow : EditorWindow
 {
@@ -20,12 +21,16 @@ public partial class PGFrameWindow : EditorWindow
 
 	void DesignList_Element ()
 	{
+		if (SelectedJsonElement == null || SelectedJsonElement.jo ["Common"] ["Desc"] == null)
+			return;
+		
 		GUILayout.Label (string.Format ("Workspace:{0}, Element:{1}", SelectedJsonElement.Workspace, SelectedJsonElement.Name), EditorStyles.boldLabel);
 
 		if (GUILayout.Button ("<<")) {
 			SelectedJsonElement = null;
 			ElementMembersList = null;
 			NeedRefresh = true;
+			return;
 		}
 		ShowDesc = GUILayout.Toggle (ShowDesc, "显示描述注释");
 
@@ -47,6 +52,9 @@ public partial class PGFrameWindow : EditorWindow
 
 	ReorderableList ElementMembersList;
 
+	float singleRowHeight = 25f;
+	float singleRowHeight_c = 20f;
+
 	void ResetElementMembersList ()
 	{
 		JArray ja_member = SelectedJsonElement.jo ["Member"] as JArray;
@@ -56,12 +64,14 @@ public partial class PGFrameWindow : EditorWindow
 		};
 		float[] split = new float[]{ 0f, .2f, .7f, 1f };
 		float[] split_c = new float[]{ 0f, .3f, .7f, 1f };
-		float singleRowHeight = 25f;
-		float singleRowHeight_c = 20f;
+
 		ElementMembersList.drawElementCallback += (Rect rect, int index, bool isActive, bool isFocused) => {
+//			GUI.Box (new Rect (rect.x, rect.y, rect.width, CalcHeight (index) - 4f), "");
+
 			JObject jo_member = ja_member [index] as JObject;
 
 			Rect r = new Rect (rect);
+			r.y += 2;
 			r.height -= 4;
 			int split_idx = 0;
 			r.x = (rect.width - 25f) * split [split_idx] + 25f;
@@ -115,7 +125,13 @@ public partial class PGFrameWindow : EditorWindow
 						split_c_idx = 0;
 						r.x = (rect.width - 25f) * split_c [split_c_idx] + 25f;
 						r.width = (rect.width - 25f) * (split_c [split_c_idx + 1] - split_c [split_c_idx]) - 2f;
-						GUI.Label (r, "  - Command Params");
+
+						if (!ShowDesc && jo_command_param ["Desc"].Value<string> ().Contains ("#")) {
+							GUI.Label (r, "  - " + jo_command_param ["Desc"].Value<string> ().Split (new char[]{ '#' }) [0] + "(P" + i + ")", GUIStyleTemplate.GreenDescStyle ());
+
+						} else {
+							GUI.Label (r, "  - Command Params");
+						}
 
 						split_c_idx = 1;
 						r.x = (rect.width - 25f) * split_c [split_c_idx] + 25f;
@@ -138,21 +154,50 @@ public partial class PGFrameWindow : EditorWindow
 			}
 		};
 		ElementMembersList.elementHeightCallback += (int index) => {
-			JObject jo_member = ja_member [index] as JObject;
-
-			float show_desc_height_amplify = 1f;
-			if (ShowDesc) {
-				show_desc_height_amplify = 2f;
-			}
-
-			if (jo_member ["RxType"].Value<string> () == "Command") {
-				JArray jo_command_params = jo_member ["Params"] as JArray;
-				if (jo_command_params == null)
-					return singleRowHeight * show_desc_height_amplify;
-				return ((jo_command_params.Count + 1) * singleRowHeight_c) * show_desc_height_amplify + 4f;
-			}
-			return singleRowHeight * show_desc_height_amplify;
+			return CalcHeight (index);
 		};
+		ElementMembersList.showDefaultBackground = false;
+
+		ElementMembersList.drawElementBackgroundCallback += (Rect rect, int index, bool isActive, bool isFocused) => {
+			if (Event.current.type == EventType.Repaint) {
+				Color color = GUI.backgroundColor;
+				if (ShowDesc) {
+					if (isActive) {
+						GUI.backgroundColor = Color.yellow;
+					}
+					if (isFocused) {
+						GUI.backgroundColor = Color.cyan;
+					}
+					GUI.skin.box.Draw (new Rect (rect.x + 2f, rect.y, rect.width - 4f, CalcHeight (index) - 4f), false, isActive, isFocused, false);
+					GUI.backgroundColor = color;
+				} else {
+					if (isFocused) {
+						GUI.backgroundColor = Color.cyan;
+						GUI.skin.box.Draw (new Rect (rect.x + 2f, rect.y, rect.width - 4f, CalcHeight (index) - 4f), false, isActive, isFocused, false);
+						GUI.backgroundColor = color;
+					}
+				}
+			}
+		};
+	}
+
+	float CalcHeight (int index)
+	{
+		JArray ja_member = SelectedJsonElement.jo ["Member"] as JArray;
+		JObject jo_member = ja_member [index] as JObject;
+
+		float show_desc_height_amplify = 1f;
+		if (ShowDesc) {
+			show_desc_height_amplify = 2f;
+		}
+
+		if (jo_member ["RxType"].Value<string> () == "Command") {
+			JArray jo_command_params = jo_member ["Params"] as JArray;
+			if (jo_command_params == null)
+				return singleRowHeight * show_desc_height_amplify;
+			return ((jo_command_params.Count + 1) * singleRowHeight_c) * show_desc_height_amplify + 4f;
+		}
+		return singleRowHeight * show_desc_height_amplify;
 	}
 
 	Vector2 ElementMemberScrollPos;

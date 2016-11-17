@@ -17,4 +17,9 @@ public static class GUIStyleTemplate
 		s.focused.textColor = (Color)(new Color32 (50, 177, 108, 255));
 		return s;
 	}
+
+//	public static GUIStyle GoldBoxStyle ()
+//	{
+//		GUIStyle s = new GUIStyle ();
+//	}
 }
