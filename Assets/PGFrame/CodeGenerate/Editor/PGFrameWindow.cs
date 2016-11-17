@@ -90,7 +90,7 @@ public class PGFrameWindow : EditorWindow
 			DirectoryInfo di = new DirectoryInfo (JsonWSFull);
 			FileInfo[] fis = di.GetFiles ("*.json");
 
-			jElements = new JSONElement[fis.Length];
+			List<JSONElement> je = new List<JSONElement> (fis.Length - 1);
 			for (int i = 0; i < fis.Length; i++) {
 				FileInfo fi = fis [i];
 
@@ -99,10 +99,10 @@ public class PGFrameWindow : EditorWindow
 				if (fi.Name == "_Common.json") {
 					SelectedWorkspaceCommon = e;
 				} else {
-					jElements [i] = e;
+					je.Add (e);
 				}
-
 			}
+			jElements = je.ToArray ();
 		}
 	}
 
@@ -138,13 +138,13 @@ public class PGFrameWindow : EditorWindow
 			} else {
 				if (ElementName != string.Empty) { // todo
 					string jsonName = string.Format (
-						                 "{0}.{1}.{2}.json", 
-						                 SelectedWorkspaceCommon.Workspace, 
-						                 SelectedWorkspaceCommon.DocType,
-						                 ElementName
-					                 );
+						                  "{0}.{1}.{2}.json", 
+						                  SelectedWorkspaceCommon.Workspace, 
+						                  "Element",
+						                  ElementName
+					                  );
 
-					if (jElements.ToList ().Exists (_ => _.Name == SelectedWorkspaceCommon.Name) == false) {
+					if (jElements.FirstOrDefault (_ => _.Name == ElementName) == null) {
 
 						JObject jo = new JObject ();
 						jo.Add ("DocType", "Element");
@@ -158,16 +158,25 @@ public class PGFrameWindow : EditorWindow
 						PRDebug.TagLog (lt, lc, "该工作空间中已经含有名字: " + ElementName);
 					}
 				} else {
-					PRDebug.TagLog (lt, lc, "需要一个名字");
+					PRDebug.TagLog (lt, lc, "没有填入名字,取消创建");
+					ElementName = null;
+					SaveCommonFile ();
 				}
 			}
 		};
 
 		WSJsonFilesList.onRemoveCallback += (ReorderableList list) => {
-			ja_elements.RemoveAt (list.index);
-			SaveCommonFile ();
+			JObject jo = ja_elements [list.index] as JObject;
 
-			ElementName = null;
+			if (EditorUtility.DisplayDialog ("警告!", string.Format ("确定删除框架中的{0}文件?", jo ["File"].Value<string> ()), "Yes", "No")) {
+				ja_elements.RemoveAt (list.index);
+				SaveCommonFile ();
+				ElementName = null;
+			}
+		};
+
+		WSJsonFilesList.onReorderCallback += (ReorderableList list) => {
+			SaveCommonFile ();
 		};
 	}
 
