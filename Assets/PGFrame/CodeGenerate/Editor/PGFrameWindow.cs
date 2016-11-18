@@ -184,11 +184,6 @@ public partial class PGFrameWindow : EditorWindow
 				ElementName = null;
 			}
 		};
-
-		WSJsonFilesList.onReorderCallback += (ReorderableList list) => {
-			SaveCommonFile ();
-			NeedRefresh = true;
-		};
 	}
 
 	void CreateElementJsonFile (string jsonFullName, string workspace, string elementName)
@@ -234,6 +229,8 @@ public partial class PGFrameWindow : EditorWindow
 		SelectedWorkspaceCommon.Save ();
 	}
 
+	Vector2 JsonFilesScrollPos;
+
 	void DesignList ()
 	{
 		if (WorkspaceDirectoryInfos == null) {
@@ -255,22 +252,28 @@ public partial class PGFrameWindow : EditorWindow
 			GUILayout.EndScrollView ();
 		} else {
 			GUILayout.Label ("Workspace:" + SelectedWorkspace.Name, EditorStyles.boldLabel);
+
+			GUILayout.BeginHorizontal ();
 			if (GUILayout.Button ("<<")) {
 				SelectedWorkspace = null;
 				NeedRefresh = true;
 				WSJsonFilesList = null;
 				SelectedWorkspaceCommon = null;
 			}
+			if (GUILayout.Button ("Save")) {
+				SaveCommonFile ();
+			}
+			GUILayout.EndHorizontal ();
 			if (SelectedWorkspaceCommon != null) {
 //				PRDebug.TagLog ("PGFrameWindow.Debug", Color.yellow, JsonConvert.SerializeObject (SelectedWorkspaceCommon));
 				if (WSJsonFilesList == null)
 					ResetReorderableList ();
-				GUILayout.BeginVertical ();
+				JsonFilesScrollPos = GUILayout.BeginScrollView (JsonFilesScrollPos);
 				WSJsonFilesList.DoLayoutList ();
 				if (ElementName != null) {
 					ElementName = GUILayout.TextField (ElementName);
 				}
-				GUILayout.EndVertical ();
+				GUILayout.EndScrollView ();
 
 			}
 		}
