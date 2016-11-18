@@ -111,7 +111,20 @@ public partial class PGFrameWindow : EditorWindow
 				split_idx++;
 				r.x = (rect.width - 25f) * split [split_idx] + 25f;
 				r.width = (rect.width - 25f) * (split [split_idx + 1] - split [split_idx]) - 2f;
+
+				JArray ja_command_params = jo_member ["Params"] as JArray;
+
 				if (GUI.Button (r, "Add Params", GUIStyleTemplate.BlueCommandLink ())) {
+					if (ja_command_params == null) {
+						jo_member.Add ("Params", new JArray ());
+						ja_command_params = jo_member ["Params"] as JArray;
+					}
+					JObject jo_command_param = new JObject ();
+					jo_command_param.Add ("Name", string.Format ("Param{0}", ja_command_params.Count));
+					jo_command_param.Add ("Type", "object");
+					jo_command_param.Add ("Desc", "");
+					ja_command_params.Add (jo_command_param);
+					SaveElementJson ();
 				}
 
 				if (ShowDesc) {
@@ -125,7 +138,7 @@ public partial class PGFrameWindow : EditorWindow
 				if (ShowDesc) {
 					show_desc_height_amplify = 2f;
 				}
-				JArray ja_command_params = jo_member ["Params"] as JArray;
+//				JArray ja_command_params = jo_member ["Params"] as JArray;
 				if (ja_command_params != null) {
 					for (int i = 0; i < ja_command_params.Count; i++) {
 						int split_c_idx = 0;
