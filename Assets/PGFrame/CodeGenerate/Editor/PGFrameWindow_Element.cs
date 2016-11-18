@@ -66,7 +66,7 @@ public partial class PGFrameWindow : EditorWindow
 			GUI.Label (rect, "Members in Element");
 		};
 		float[] split = new float[]{ 0f, .2f, .7f, 1f };
-		float[] split_c = new float[]{ 0f, .3f, .7f, 1f };
+		float[] split_c = new float[]{ 0f, .3f, .7f, .9f, 1f };
 
 		ElementMembersList.drawElementCallback += (Rect rect, int index, bool isActive, bool isFocused) => {
 			JObject jo_member = ja_member [index] as JObject;
@@ -107,7 +107,13 @@ public partial class PGFrameWindow : EditorWindow
 					jo_member ["Desc"] = GUI.TextField (r, jo_member ["Desc"].Value<string> (), GUIStyleTemplate.GreenDescStyle ());
 				}
 			} else {
-				
+
+				split_idx++;
+				r.x = (rect.width - 25f) * split [split_idx] + 25f;
+				r.width = (rect.width - 25f) * (split [split_idx + 1] - split [split_idx]) - 2f;
+				if (GUI.Button (r, "Add Params", GUIStyleTemplate.BlueCommandLink ())) {
+				}
+
 				if (ShowDesc) {
 					r.y = rect.y + singleRowHeight - 6f;
 					r.x = (rect.width - 25f) * split [1] + 25f;
@@ -132,7 +138,6 @@ public partial class PGFrameWindow : EditorWindow
 
 						if (!ShowDesc && jo_command_param ["Desc"].Value<string> ().Contains ("#")) {
 							GUI.Label (r, "  - " + jo_command_param ["Desc"].Value<string> ().Split (new char[]{ '#' }) [0] + "(P" + i + ")", GUIStyleTemplate.GreenDescStyle ());
-
 						} else {
 							GUI.Label (r, "  - Command Params");
 						}
@@ -149,6 +154,12 @@ public partial class PGFrameWindow : EditorWindow
 						r.x = (rect.width - 25f) * split_c [split_c_idx] + 25f;
 						r.width = (rect.width - 25f) * (split_c [split_c_idx + 1] - split_c [split_c_idx]) - 2f;
 						jo_command_param ["Type"] = GUI.TextField (r, jo_command_param ["Type"].Value<string> ());
+
+						split_c_idx = 3;
+						r.x = (rect.width - 25f) * split_c [split_c_idx] + 25f;
+						r.width = (rect.width - 25f) * (split_c [split_c_idx + 1] - split_c [split_c_idx]) - 2f;
+						if (GUI.Button (r, "Del", GUIStyleTemplate.BlueCommandLink ())) {
+						}
 
 						if (ShowDesc) {
 							r.y = rect.y + (singleRowHeight_c * (float)(i + 1)) * show_desc_height_amplify + singleRowHeight_c - 2f;

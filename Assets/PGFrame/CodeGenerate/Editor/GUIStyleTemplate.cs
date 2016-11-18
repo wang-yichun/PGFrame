@@ -18,8 +18,10 @@ public static class GUIStyleTemplate
 		return s;
 	}
 
-//	public static GUIStyle GoldBoxStyle ()
-//	{
-//		GUIStyle s = new GUIStyle ();
-//	}
+	public static GUIStyle BlueCommandLink ()
+	{
+		GUIStyle s = new GUIStyle ();
+		s.normal.textColor = Color.black;
+		return s;
+	}
 }
