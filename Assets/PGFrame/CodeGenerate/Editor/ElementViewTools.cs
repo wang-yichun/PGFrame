@@ -27,6 +27,16 @@ public class ElementViewTools
 		}
 	}
 
+	public void DeleteMember (string member_name)
+	{
+		JArray ja_views = ElementJson ["Views"] as JArray;
+		for (int i = 0; i < ja_views.Count; i++) {
+			JObject jo_view = ja_views [i] as JObject;
+			JObject jo_view_members = jo_view ["Members"] as JObject;
+			jo_view_members.Remove (member_name);
+		}
+	}
+
 	public JObject CreateDefaultBindJObject (RxType rt)
 	{
 		JObject jo = new JObject ();

@@ -58,6 +58,8 @@ public partial class PGFrameWindow : EditorWindow
 
 	void ResetElementMembersList ()
 	{
+		ElementViewTools evtools = new ElementViewTools (SelectedJsonElement.jo);
+
 		JArray ja_member = SelectedJsonElement.jo ["Member"] as JArray;
 		ElementMembersList = new ReorderableList (ja_member, typeof(JToken));
 		ElementMembersList.drawHeaderCallback += (Rect rect) => {
@@ -188,8 +190,11 @@ public partial class PGFrameWindow : EditorWindow
 		};
 		ElementMembersList.onRemoveCallback += (ReorderableList list) => {
 			JObject jo_member = ja_member [list.index] as JObject;
-			if (EditorUtility.DisplayDialog ("警告!", string.Format ("确定删除Element中的一个{0}成员:{1}", jo_member ["RxType"].Value<string> (), jo_member ["Name"].Value<string> ()), "Yes", "No")) {
+			string element_rxtype = jo_member ["RxType"].Value<string> ();
+			string element_name = jo_member ["Name"].Value<string> ();
+			if (EditorUtility.DisplayDialog ("警告!", string.Format ("确定删除Element中的一个{0}成员:{1}", element_rxtype, element_name), "Yes", "No")) {
 				ja_member.RemoveAt (list.index);
+				evtools.DeleteMember (element_name);
 				SaveElementJson ();
 			}
 		};
