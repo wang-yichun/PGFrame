@@ -60,6 +60,16 @@ public partial class PGFrameWindow : EditorWindow
 		default:
 			break;
 		}
+
+		GUILayout.BeginHorizontal ();
+		if (GUILayout.Button ("Reset")) {
+			SelectedJsonElement.Load ();
+			ResetElementMembersList ();
+		}
+		if (GUILayout.Button ("Save")) {
+			SaveElementJson ();
+		}
+		GUILayout.EndHorizontal ();
 	}
 
 	ReorderableList ElementMembersList;
@@ -319,16 +329,6 @@ public partial class PGFrameWindow : EditorWindow
 		ElementMemberScrollPos = GUILayout.BeginScrollView (ElementMemberScrollPos);
 		ElementMembersList.DoLayoutList ();
 		GUILayout.EndScrollView ();
-
-		GUILayout.BeginHorizontal ();
-		if (GUILayout.Button ("Reset")) {
-			SelectedJsonElement.Load ();
-			ResetElementMembersList ();
-		}
-		if (GUILayout.Button ("Save")) {
-			SaveElementJson ();
-		}
-		GUILayout.EndHorizontal ();
 	}
 
 	void DesignList_Element_View ()
