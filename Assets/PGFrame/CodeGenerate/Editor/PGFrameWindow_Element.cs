@@ -135,7 +135,7 @@ public partial class PGFrameWindow : EditorWindow
 
 				JArray ja_command_params = jo_member ["Params"] as JArray;
 
-				if (GUI.Button (r, "+", GUIStyleTemplate.BlueCommandLink ())) {
+				if (GUI.Button (r, "+", GUIStyleTemplate.BlackCommandLink ())) {
 					if (ja_command_params == null) {
 						jo_member.Add ("Params", new JArray ());
 						ja_command_params = jo_member ["Params"] as JArray;
@@ -191,7 +191,7 @@ public partial class PGFrameWindow : EditorWindow
 						split_c_idx = 3;
 						r.x = (rect.width - 25f) * split_c [split_c_idx] + 25f;
 						r.width = (rect.width - 25f) * (split_c [split_c_idx + 1] - split_c [split_c_idx]) - 2f;
-						if (GUI.Button (r, "-", GUIStyleTemplate.BlueCommandLink ())) {
+						if (GUI.Button (r, "-", GUIStyleTemplate.BlackCommandLink ())) {
 							ja_command_params.RemoveAt (i);
 							return;
 						}
@@ -200,7 +200,7 @@ public partial class PGFrameWindow : EditorWindow
 							split_c_idx = 4;
 							r.x = (rect.width - 25f) * split_c [split_c_idx] + 25f;
 							r.width = (rect.width - 25f) * (split_c [split_c_idx + 1] - split_c [split_c_idx]) - 2f;
-							if (GUI.Button (r, "^", GUIStyleTemplate.BlueCommandLink ())) {
+							if (GUI.Button (r, "^", GUIStyleTemplate.BlackCommandLink ())) {
 								JObject jo0 = ja_command_params [i] as JObject;
 								JObject jo1 = ja_command_params [i - 1] as JObject;
 								ja_command_params [i] = jo1;
@@ -331,9 +331,73 @@ public partial class PGFrameWindow : EditorWindow
 		GUILayout.EndScrollView ();
 	}
 
+	Vector2 ElementViewScrollPos;
+
+	int SelectedViewIdx = -1;
+
 	void DesignList_Element_View ()
 	{
-		
+		if (SelectedJsonElement == null)
+			return;
+
+		JArray ja_member = SelectedJsonElement.jo ["Member"] as JArray;
+		JArray ja_view = SelectedJsonElement.jo ["Views"] as JArray;
+
+		ElementViewScrollPos = GUILayout.BeginScrollView (ElementViewScrollPos);
+		for (int i = 0; i < ja_view.Count; i++) {
+			JObject jo_view = ja_view [i] as JObject;
+			string viewName = jo_view ["Name"].Value<string> ();
+			JObject jo_view_members = jo_view ["Members"] as JObject;
+
+			EditorGUILayout.BeginVertical ("box");
+			EditorGUILayout.BeginHorizontal ();
+//			if (SelectedViewIdx == i)
+//				GUILayout.Label ("-", GUILayout.MaxWidth (20));
+//			else
+//				GUILayout.Label ("+", GUILayout.MaxWidth (20));
+			string fold_flag = SelectedViewIdx == i ? " - " : " + ";
+			if (GUILayout.Button (fold_flag + viewName, GUIStyleTemplate.LabelStyle ())) {
+				if (SelectedViewIdx != i) {
+					SelectedViewIdx = i;
+				} else {
+					SelectedViewIdx = -1;
+				}
+			}
+			EditorGUILayout.EndHorizontal ();
+
+			if (SelectedViewIdx == i) {
+				for (int j = 0; j < ja_member.Count; j++) {
+					JObject jo_member = ja_member [j] as JObject;
+					string memberName = jo_member ["Name"].Value<string> ();
+					string rxType = jo_member ["RxType"].Value<string> ();
+
+					GUILayout.Label (string.Format ("{1} | {0}", rxType, memberName), EditorStyles.helpBox);
+					JObject jo_view_bind = jo_view_members [memberName] ["Bind"] as JObject;
+					DesignViewBind (jo_view_bind);
+				}
+			}
+			EditorGUILayout.EndVertical ();
+		}
+		GUILayout.EndScrollView ();
+	}
+
+	void DesignViewBind (JObject jo_view_bind)
+	{
+		EditorGUI.indentLevel++;
+
+		int count = 0;
+		EditorGUILayout.BeginHorizontal ();
+		foreach (JProperty jt in jo_view_bind as JToken) {
+			JProperty jp = jt as JProperty;
+			EditorGUILayout.ToggleLeft (jp.Name, Convert.ToBoolean (jp.Value), GUILayout.MaxWidth (130f));
+			count++;
+			if (count % 3 == 0) {
+				EditorGUILayout.EndHorizontal ();
+				EditorGUILayout.BeginHorizontal ();
+			}
+		}
+		EditorGUILayout.EndHorizontal ();
+		EditorGUI.indentLevel--;
 	}
 
 	void SaveElementJson ()

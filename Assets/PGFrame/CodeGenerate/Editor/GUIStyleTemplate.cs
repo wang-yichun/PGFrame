@@ -18,10 +18,16 @@ public static class GUIStyleTemplate
 		return s;
 	}
 
-	public static GUIStyle BlueCommandLink ()
+	public static GUIStyle BlackCommandLink ()
 	{
 		GUIStyle s = new GUIStyle ();
 		s.normal.textColor = Color.black;
+		return s;
+	}
+
+	public static GUIStyle LabelStyle ()
+	{
+		GUIStyle s = new GUIStyle (GUI.skin.label);
 		return s;
 	}
 }
