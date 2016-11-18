@@ -66,7 +66,7 @@ public partial class PGFrameWindow : EditorWindow
 			GUI.Label (rect, "Members in Element");
 		};
 		float[] split = new float[]{ 0f, .2f, .7f, 1f };
-		float[] split_c = new float[]{ 0f, .3f, .7f, .9f, 1f };
+		float[] split_c = new float[]{ 0f, .3f, .7f, .9f, .95f, 1f };
 
 		ElementMembersList.drawElementCallback += (Rect rect, int index, bool isActive, bool isFocused) => {
 			JObject jo_member = ja_member [index] as JObject;
@@ -114,7 +114,7 @@ public partial class PGFrameWindow : EditorWindow
 
 				JArray ja_command_params = jo_member ["Params"] as JArray;
 
-				if (GUI.Button (r, "Add Params", GUIStyleTemplate.BlueCommandLink ())) {
+				if (GUI.Button (r, "+", GUIStyleTemplate.BlueCommandLink ())) {
 					if (ja_command_params == null) {
 						jo_member.Add ("Params", new JArray ());
 						ja_command_params = jo_member ["Params"] as JArray;
@@ -124,7 +124,6 @@ public partial class PGFrameWindow : EditorWindow
 					jo_command_param.Add ("Type", "object");
 					jo_command_param.Add ("Desc", "");
 					ja_command_params.Add (jo_command_param);
-					SaveElementJson ();
 				}
 
 				if (ShowDesc) {
@@ -138,7 +137,7 @@ public partial class PGFrameWindow : EditorWindow
 				if (ShowDesc) {
 					show_desc_height_amplify = 2f;
 				}
-//				JArray ja_command_params = jo_member ["Params"] as JArray;
+
 				if (ja_command_params != null) {
 					for (int i = 0; i < ja_command_params.Count; i++) {
 						int split_c_idx = 0;
@@ -171,7 +170,21 @@ public partial class PGFrameWindow : EditorWindow
 						split_c_idx = 3;
 						r.x = (rect.width - 25f) * split_c [split_c_idx] + 25f;
 						r.width = (rect.width - 25f) * (split_c [split_c_idx + 1] - split_c [split_c_idx]) - 2f;
-						if (GUI.Button (r, "Del", GUIStyleTemplate.BlueCommandLink ())) {
+						if (GUI.Button (r, "-", GUIStyleTemplate.BlueCommandLink ())) {
+							ja_command_params.RemoveAt (i);
+							return;
+						}
+
+						if (i != 0) {
+							split_c_idx = 4;
+							r.x = (rect.width - 25f) * split_c [split_c_idx] + 25f;
+							r.width = (rect.width - 25f) * (split_c [split_c_idx + 1] - split_c [split_c_idx]) - 2f;
+							if (GUI.Button (r, "^", GUIStyleTemplate.BlueCommandLink ())) {
+								JObject jo0 = ja_command_params [i] as JObject;
+								JObject jo1 = ja_command_params [i - 1] as JObject;
+								ja_command_params [i] = jo1;
+								ja_command_params [i - 1] = jo0;
+							}
 						}
 
 						if (ShowDesc) {
