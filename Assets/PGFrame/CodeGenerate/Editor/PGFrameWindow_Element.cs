@@ -88,8 +88,11 @@ public partial class PGFrameWindow : EditorWindow
 			r.x = (rect.width - 25f) * split [split_idx] + 25f;
 			r.width = (rect.width - 25f) * (split [split_idx + 1] - split [split_idx]) - 2f;
 
-			jo_member ["Name"] = GUI.TextField (r, jo_member ["Name"].Value<string> ());
-
+			string new_member_name = GUI.TextField (r, jo_member ["Name"].Value<string> ());
+			if (new_member_name != jo_member ["Name"].Value<string> ()) {
+				evtools.ChangeName (jo_member ["Name"].Value<string> (), new_member_name);
+				jo_member ["Name"] = new_member_name;
+			}
 
 			if (jo_member ["RxType"].Value<string> () != "Command") {
 				split_idx++;
@@ -137,7 +140,10 @@ public partial class PGFrameWindow : EditorWindow
 						split_c_idx = 1;
 						r.x = (rect.width - 25f) * split_c [split_c_idx] + 25f;
 						r.width = (rect.width - 25f) * (split_c [split_c_idx + 1] - split_c [split_c_idx]) - 2f;
-						jo_command_param ["Name"] = GUI.TextField (r, jo_command_param ["Name"].Value<string> ());
+						string new_name = GUI.TextField (r, jo_command_param ["Name"].Value<string> ());
+						if (new_name != jo_command_param ["Name"].Value<string> ()) {
+							jo_command_param ["Name"] = new_name;
+						}
 
 						split_c_idx = 2;
 						r.x = (rect.width - 25f) * split_c [split_c_idx] + 25f;

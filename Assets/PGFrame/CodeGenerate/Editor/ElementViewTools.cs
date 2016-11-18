@@ -37,6 +37,18 @@ public class ElementViewTools
 		}
 	}
 
+	public void ChangeName (string oldName, string newName)
+	{
+		JArray ja_views = ElementJson ["Views"] as JArray;
+		for (int i = 0; i < ja_views.Count; i++) {
+			JObject jo_view = ja_views [i] as JObject;
+			JObject jo_view_members = jo_view ["Members"] as JObject;
+			JProperty jp = jo_view_members.Property (oldName);
+			jp.AddAfterSelf (new JProperty (newName, jp.Value));
+			jp.Remove ();
+		}
+	}
+
 	public JObject CreateDefaultBindJObject (RxType rt)
 	{
 		JObject jo = new JObject ();
