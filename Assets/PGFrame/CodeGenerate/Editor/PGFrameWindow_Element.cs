@@ -67,8 +67,6 @@ public partial class PGFrameWindow : EditorWindow
 		float[] split_c = new float[]{ 0f, .3f, .7f, 1f };
 
 		ElementMembersList.drawElementCallback += (Rect rect, int index, bool isActive, bool isFocused) => {
-//			GUI.Box (new Rect (rect.x, rect.y, rect.width, CalcHeight (index) - 4f), "");
-
 			JObject jo_member = ja_member [index] as JObject;
 
 			Rect r = new Rect (rect);
@@ -187,6 +185,13 @@ public partial class PGFrameWindow : EditorWindow
 				menu.AddItem (new GUIContent (rt.ToString ()), false, GenericMenuOnAddCallback, rt);
 			}
 			menu.ShowAsContext ();
+		};
+		ElementMembersList.onRemoveCallback += (ReorderableList list) => {
+			JObject jo_member = ja_member [list.index] as JObject;
+			if (EditorUtility.DisplayDialog ("警告!", string.Format ("确定删除Element中的一个{0}成员:{1}", jo_member ["RxType"].Value<string> (), jo_member ["Name"].Value<string> ()), "Yes", "No")) {
+				ja_member.RemoveAt (list.index);
+				SaveElementJson ();
+			}
 		};
 	}
 

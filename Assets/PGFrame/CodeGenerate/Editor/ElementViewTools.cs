@@ -20,11 +20,10 @@ public class ElementViewTools
 
 		for (int i = 0; i < ja_views.Count; i++) {
 			JObject jo_view = ja_views [i] as JObject;
-			JArray ja_view_members = jo_view ["Members"] as JArray;
-			JObject jo_view_member = new JObject ();
-			jo_view_member.Add ("Name", member_name);
-			jo_view_member.Add ("Bind", CreateDefaultBindJObject (rt));
-			ja_view_members.Add (jo_view_member);
+			JObject jo_view_members = jo_view ["Members"] as JObject;
+			JObject jo_member = new JObject ();
+			jo_member.Add ("Bind", CreateDefaultBindJObject (rt));
+			jo_view_members.Add (member_name, jo_member);
 		}
 	}
 
