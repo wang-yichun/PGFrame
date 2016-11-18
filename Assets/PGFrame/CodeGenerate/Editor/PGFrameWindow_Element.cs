@@ -238,7 +238,6 @@ public partial class PGFrameWindow : EditorWindow
 			if (EditorUtility.DisplayDialog ("警告!", string.Format ("确定删除Element中的一个{0}成员:{1}", element_rxtype, element_name), "Yes", "No")) {
 				ja_member.RemoveAt (list.index);
 				evtools.DeleteMember (element_name);
-				SaveElementJson ();
 			}
 		};
 	}
@@ -253,6 +252,11 @@ public partial class PGFrameWindow : EditorWindow
 		RxType selected = (RxType)obj;
 
 		string default_name = string.Format ("Default{0}", selected.ToString ());
+
+		if (ja_members.FirstOrDefault (_ => (_ as JObject) ["Name"].Value<string> () == default_name) != null) {
+			PRDebug.TagLog (lt, lcr, string.Format ("已经存在{0},不能创建", default_name));
+			return;
+		}
 
 		JObject jo_member = new JObject ();
 		jo_member.Add ("RxType", selected.ToString ());
@@ -270,10 +274,6 @@ public partial class PGFrameWindow : EditorWindow
 		ja_members.Add (jo_member);
 
 		evtools.CreateDefaultMember (selected, default_name);
-
-		Debug.Log ("Selected: " + selected);
-
-		SaveElementJson ();
 	}
 
 	float CalcHeight (int index)
