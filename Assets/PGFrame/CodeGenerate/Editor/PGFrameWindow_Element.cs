@@ -10,6 +10,7 @@ using PogoTools;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Linq.Expressions;
+using System;
 
 public partial class PGFrameWindow : EditorWindow
 {
@@ -179,6 +180,47 @@ public partial class PGFrameWindow : EditorWindow
 				}
 			}
 		};
+
+		ElementMembersList.onAddCallback += (ReorderableList list) => {
+			GenericMenu menu = new GenericMenu ();
+			foreach (RxType rt in Enum.GetValues (typeof(RxType))) {  
+				menu.AddItem (new GUIContent (rt.ToString ()), false, GenericMenuOnAddCallback, rt);
+			}
+			menu.ShowAsContext ();
+		};
+	}
+
+	void GenericMenuOnAddCallback (object obj)
+	{
+		ElementViewTools evtools = new ElementViewTools (SelectedJsonElement.jo);
+
+		JArray ja_members = SelectedJsonElement.jo ["Member"] as JArray;
+		JArray ja_views = SelectedJsonElement.jo ["Views"] as JArray;
+
+		RxType selected = (RxType)obj;
+
+		string default_name = string.Format ("Default{0}", selected.ToString ());
+
+		JObject jo_member = new JObject ();
+		jo_member.Add ("RxType", selected.ToString ());
+		jo_member.Add ("Name", default_name);
+
+		if (selected != RxType.Command) {
+			if (selected == RxType.Dictionary) {
+				jo_member.Add ("Type", "object,object");
+			} else {
+				jo_member.Add ("Type", "object");
+			}
+		}
+
+		jo_member.Add ("Desc", "");
+		ja_members.Add (jo_member);
+
+		evtools.CreateDefaultMember (selected, default_name);
+
+		Debug.Log ("Selected: " + selected);
+
+		SaveElementJson ();
 	}
 
 	float CalcHeight (int index)
