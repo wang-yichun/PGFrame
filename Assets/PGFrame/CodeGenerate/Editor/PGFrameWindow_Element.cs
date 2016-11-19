@@ -339,46 +339,94 @@ public partial class PGFrameWindow : EditorWindow
 	{
 		if (SelectedJsonElement == null)
 			return;
-
+		
+		JObject jo_common = SelectedJsonElement.jo ["Common"] as JObject;
 		JArray ja_member = SelectedJsonElement.jo ["Member"] as JArray;
-		JArray ja_view = SelectedJsonElement.jo ["Views"] as JArray;
+		JArray ja_views = SelectedJsonElement.jo ["Views"] as JArray;
 
 		ElementViewScrollPos = GUILayout.BeginScrollView (ElementViewScrollPos);
-		for (int i = 0; i < ja_view.Count; i++) {
-			JObject jo_view = ja_view [i] as JObject;
+		for (int i = 0; i < ja_views.Count; i++) {
+			JObject jo_view = ja_views [i] as JObject;
 			string viewName = jo_view ["Name"].Value<string> ();
+			string viewType = jo_view ["Type"].Value<string> ();
 			JObject jo_view_members = jo_view ["Members"] as JObject;
 
-			EditorGUILayout.BeginVertical ("box");
-			EditorGUILayout.BeginHorizontal ();
-//			if (SelectedViewIdx == i)
-//				GUILayout.Label ("-", GUILayout.MaxWidth (20));
-//			else
-//				GUILayout.Label ("+", GUILayout.MaxWidth (20));
-			string fold_flag = SelectedViewIdx == i ? " - " : " + ";
-			if (GUILayout.Button (fold_flag + viewName, GUIStyleTemplate.LabelStyle ())) {
-				if (SelectedViewIdx != i) {
-					SelectedViewIdx = i;
+			VerticalBox:
+			{
+				Color color = GUI.backgroundColor;
+
+				if (SelectedViewIdx == i)
+					GUI.backgroundColor = Color.cyan;
+
+				EditorGUILayout.BeginVertical ("box");
+				GUI.backgroundColor = color;
+
+				EditorGUILayout.BeginHorizontal ();
+				string fold_flag = SelectedViewIdx == i ? "-" : "+";
+
+				if (SelectedViewIdx == i) {
+					if (GUILayout.Button (string.Format (" {0}", fold_flag), GUIStyleTemplate.LabelStyle (), GUILayout.MaxWidth (10))) {
+						SelectedViewIdx = SelectedViewIdx != i ? i : -1;
+					}
+					viewName = GUILayout.TextField (viewName);
+					if (viewName != jo_view ["Name"].Value<string> ()) {
+						jo_view ["Name"] = viewName;
+					}
+					GUILayout.Label (" : ", GUIStyleTemplate.LabelStyle (), GUILayout.MaxWidth (10));
+					viewType = GUILayout.TextField (viewType);
+					if (viewType != jo_view ["Type"].Value<string> ()) {
+						jo_view ["Type"] = viewType;
+					}
 				} else {
-					SelectedViewIdx = -1;
+					if (GUILayout.Button (string.Format (" {0} {1} : {2}", fold_flag, viewName, viewType), GUIStyleTemplate.LabelStyle ())) {
+						SelectedViewIdx = SelectedViewIdx != i ? i : -1;
+					}
 				}
-			}
-			EditorGUILayout.EndHorizontal ();
 
-			if (SelectedViewIdx == i) {
-				for (int j = 0; j < ja_member.Count; j++) {
-					JObject jo_member = ja_member [j] as JObject;
-					string memberName = jo_member ["Name"].Value<string> ();
-					string rxType = jo_member ["RxType"].Value<string> ();
-
-					GUILayout.Label (string.Format ("{1} | {0}", rxType, memberName), EditorStyles.helpBox);
-					JObject jo_view_bind = jo_view_members [memberName] ["Bind"] as JObject;
-					DesignViewBind (jo_view_bind);
+				if (GUILayout.Button ("-", GUIStyleTemplate.BlackCommandLink (), GUILayout.MaxWidth (10))) {
+					ElementViewTools evtools = new ElementViewTools (SelectedJsonElement.jo);
+					evtools.DeleteView (i);
 				}
+
+				if (i != 0) {
+					if (GUILayout.Button ("^", GUIStyleTemplate.BlackCommandLink (), GUILayout.MaxWidth (10))) {
+						JObject jo0 = ja_views [i] as JObject;
+						JObject jo1 = ja_views [i - 1] as JObject;
+						ja_views [i] = jo1;
+						ja_views [i - 1] = jo0;
+					}
+				}
+
+				EditorGUILayout.EndHorizontal ();
+
+				if (SelectedViewIdx == i) {
+					for (int j = 0; j < ja_member.Count; j++) {
+						JObject jo_member = ja_member [j] as JObject;
+						string memberName = jo_member ["Name"].Value<string> ();
+						string rxType = jo_member ["RxType"].Value<string> ();
+
+						GUILayout.Label (string.Format ("{1} | {0}", rxType, memberName), EditorStyles.helpBox);
+						JObject jo_view_bind = jo_view_members [memberName] ["Bind"] as JObject;
+						DesignViewBind (jo_view_bind);
+					}
+				}
+				EditorGUILayout.EndVertical ();
 			}
-			EditorGUILayout.EndVertical ();
 		}
 		GUILayout.EndScrollView ();
+
+		if (GUILayout.Button ("Create Default View")) {
+			string element_name = jo_common ["Name"].Value<string> ();
+			string ori_target_view_name = string.Format ("{0}View", element_name);
+			string target_view_name = ori_target_view_name;
+			int digital_suffix = 0;
+			while (ja_views.FirstOrDefault (_ => _ ["Name"].Value<string> () == target_view_name) != null) {
+				digital_suffix++;
+				target_view_name = string.Format ("{0}{1}", ori_target_view_name, digital_suffix);
+			}
+			ElementViewTools evtools = new ElementViewTools (SelectedJsonElement.jo);
+			evtools.CreateDefaultView (target_view_name);
+		}
 	}
 
 	void DesignViewBind (JObject jo_view_bind)
@@ -389,7 +437,7 @@ public partial class PGFrameWindow : EditorWindow
 		EditorGUILayout.BeginHorizontal ();
 		foreach (JProperty jt in jo_view_bind as JToken) {
 			JProperty jp = jt as JProperty;
-			EditorGUILayout.ToggleLeft (jp.Name, Convert.ToBoolean (jp.Value), GUILayout.MaxWidth (130f));
+			jp.Value = EditorGUILayout.ToggleLeft (jp.Name, Convert.ToBoolean (jp.Value), GUILayout.MaxWidth (130f));
 			count++;
 			if (count % 3 == 0) {
 				EditorGUILayout.EndHorizontal ();

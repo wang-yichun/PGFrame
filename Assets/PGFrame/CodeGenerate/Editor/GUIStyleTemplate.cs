@@ -20,7 +20,7 @@ public static class GUIStyleTemplate
 
 	public static GUIStyle BlackCommandLink ()
 	{
-		GUIStyle s = new GUIStyle ();
+		GUIStyle s = new GUIStyle (GUI.skin.label);
 		s.normal.textColor = Color.black;
 		return s;
 	}
