@@ -27,16 +27,14 @@ public partial class PGFrameWindow : EditorWindow
 	
 		JObject jo_common = SelectedJsonElement.jo ["Common"] as JObject;
 
-		GUILayout.Label (string.Format ("Workspace:{0}, Element:{1}", SelectedJsonElement.Workspace, SelectedJsonElement.Name), EditorStyles.boldLabel);
-
 		if (GUILayout.Button ("<<")) {
 			SelectedJsonElement = null;
 			ElementMembersList = null;
 			NeedRefresh = true;
 			return;
 		}
-		ShowDesc = GUILayout.Toggle (ShowDesc, "显示描述注释");
 
+		GUILayout.Label (string.Format ("Workspace:{0}, Element:{1}", SelectedJsonElement.Workspace, SelectedJsonElement.Name), EditorStyles.boldLabel);
 
 		jo_common ["Desc"] = GUILayout.TextArea (jo_common ["Desc"].Value<string> (), GUIStyleTemplate.GreenDescStyle2 ());
 
@@ -48,7 +46,7 @@ public partial class PGFrameWindow : EditorWindow
 		jo_common ["Type"] = EditorGUILayout.TextField ("Base", jo_common ["Type"].Value<string> ());
 		GUILayout.EndHorizontal ();
 
-		toolbar_index = GUILayout.Toolbar (toolbar_index, ToolbarHeaders, new GUILayoutOption[]{ GUILayout.Height (25f) });
+		toolbar_index = GUILayout.Toolbar (toolbar_index, ToolbarHeaders, new GUILayoutOption[] { GUILayout.Height (25f) });
 
 		switch (toolbar_index) {
 		case 0:
@@ -322,7 +320,9 @@ public partial class PGFrameWindow : EditorWindow
 	{
 		if (SelectedJsonElement == null)
 			return;
-		
+
+		ShowDesc = GUILayout.Toggle (ShowDesc, "显示描述注释");
+
 		if (ElementMembersList == null)
 			ResetElementMembersList ();
 		

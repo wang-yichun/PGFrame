@@ -251,8 +251,6 @@ public partial class PGFrameWindow : EditorWindow
 			}
 			GUILayout.EndScrollView ();
 		} else {
-			GUILayout.Label ("Workspace:" + SelectedWorkspace.Name, EditorStyles.boldLabel);
-
 			GUILayout.BeginHorizontal ();
 			if (GUILayout.Button ("<<")) {
 				SelectedWorkspace = null;
@@ -264,6 +262,9 @@ public partial class PGFrameWindow : EditorWindow
 				SaveCommonFile ();
 			}
 			GUILayout.EndHorizontal ();
+
+			GUILayout.Label ("Workspace:" + SelectedWorkspace.Name, EditorStyles.boldLabel);
+
 			if (SelectedWorkspaceCommon != null) {
 //				PRDebug.TagLog ("PGFrameWindow.Debug", Color.yellow, JsonConvert.SerializeObject (SelectedWorkspaceCommon));
 				if (WSJsonFilesList == null)
