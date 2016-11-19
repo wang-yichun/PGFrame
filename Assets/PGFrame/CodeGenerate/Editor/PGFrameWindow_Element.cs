@@ -396,10 +396,15 @@ public partial class PGFrameWindow : EditorWindow
 						ja_views [i - 1] = jo0;
 					}
 				}
-
 				EditorGUILayout.EndHorizontal ();
 
 				if (SelectedViewIdx == i) {
+
+					if (jo_view ["Desc"] == null) {
+						jo_view ["Desc"] = "";
+					}
+					jo_view ["Desc"] = GUILayout.TextArea (jo_view ["Desc"].Value<string> (), GUIStyleTemplate.GreenDescStyle2 ());
+
 					for (int j = 0; j < ja_member.Count; j++) {
 						JObject jo_member = ja_member [j] as JObject;
 						string memberName = jo_member ["Name"].Value<string> ();

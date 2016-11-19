@@ -21,6 +21,7 @@ public class ElementViewTools
 		JObject jo_view = new JObject ();
 		jo_view.Add ("Name", view_name);
 		jo_view.Add ("Type", "");
+		jo_view.Add ("Desc", "");
 
 		JObject jo_view_members = new JObject ();
 		JArray ja_members = ElementJson ["Member"] as JArray;
