@@ -6,7 +6,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-public class __XXX__ViewBase : ViewBase
+public class __YYY__Base : ViewBase
 {
 	public __XXX__ViewModel VM;
 
@@ -52,10 +52,14 @@ public class __XXX__ViewBase : ViewBase
 	public override void Bind ()
 	{
 		base.Bind ();
+		/****bind_code****/
 	}
 
 	public override void AfterBind ()
 	{
 		base.AfterBind ();
 	}
+
+	/****bind_func****/
+
 }

@@ -29,6 +29,11 @@ public partial class PGFrameWindow : EditorWindow
 		if (NeedRefresh)
 			RefreshFiles ();
 
+		if (Generator == null) {
+			Generator = new PGCodeGenerator ();
+			Generator.Init ();
+		}
+
 		GUILayout.BeginVertical ();
 		GUILayout.Label ("PGFrame", EditorStyles.boldLabel);
 		if (GUILayout.Button ("刷新")) {
@@ -70,7 +75,7 @@ public partial class PGFrameWindow : EditorWindow
 	JSONElement[] jElements;
 
 	PGCodeGenerator Generator;
-	XLSXJsonConverter Converter;
+	//	XLSXJsonConverter Converter;
 
 	public static readonly string JsonRoot = "PGFrameDesign/JsonData";
 

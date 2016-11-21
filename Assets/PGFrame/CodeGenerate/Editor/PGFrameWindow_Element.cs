@@ -67,6 +67,12 @@ public partial class PGFrameWindow : EditorWindow
 		if (GUILayout.Button ("Save")) {
 			SaveElementJson ();
 		}
+		if (GUILayout.Button ("Save&Generate")) {
+			SaveElementJson ();
+			// PR_TODO:
+			Generator.GenerateCode (SelectedJsonElement.jo);
+			AssetDatabase.Refresh ();
+		}
 		GUILayout.EndHorizontal ();
 	}
 

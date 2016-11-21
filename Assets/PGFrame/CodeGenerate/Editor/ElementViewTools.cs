@@ -91,7 +91,6 @@ public class ElementViewTools
 		case RxType.Collection:
 			jo.Add ("Add", false);
 			jo.Add ("CountChanged", false);
-			jo.Add ("EveryValueChanged", false);
 			jo.Add ("Move", false);
 			jo.Add ("Remove", false);
 			jo.Add ("Replace", false);
@@ -100,7 +99,6 @@ public class ElementViewTools
 		case RxType.Dictionary:
 			jo.Add ("Add", false);
 			jo.Add ("CountChanged", false);
-			jo.Add ("EveryValueChanged", false);
 			jo.Add ("Remove", false);
 			jo.Add ("Replace", false);
 			jo.Add ("Reset", false);
