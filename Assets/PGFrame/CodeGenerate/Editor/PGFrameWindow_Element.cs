@@ -271,15 +271,16 @@ public partial class PGFrameWindow : EditorWindow
 		RxType selected = (RxType)obj;
 
 		string default_name = string.Format ("Default{0}", selected.ToString ());
-
-		if (ja_members.FirstOrDefault (_ => (_ as JObject) ["Name"].Value<string> () == default_name) != null) {
-			PRDebug.TagLog (lt, lcr, string.Format ("已经存在{0},不能创建", default_name));
-			return;
+		string default_name_with_suffix = default_name;
+		int suffix_number = 0;
+		while (ja_members.FirstOrDefault (_ => (_ as JObject) ["Name"].Value<string> () == default_name_with_suffix) != null) {
+			suffix_number++;
+			default_name_with_suffix = default_name + suffix_number;
 		}
 
 		JObject jo_member = new JObject ();
 		jo_member.Add ("RxType", selected.ToString ());
-		jo_member.Add ("Name", default_name);
+		jo_member.Add ("Name", default_name_with_suffix);
 
 		if (selected != RxType.Command) {
 			if (selected == RxType.Dictionary) {
@@ -292,7 +293,7 @@ public partial class PGFrameWindow : EditorWindow
 		jo_member.Add ("Desc", "");
 		ja_members.Add (jo_member);
 
-		evtools.CreateDefaultMember (selected, default_name);
+		evtools.CreateDefaultMember (selected, default_name_with_suffix);
 	}
 
 	float CalcHeight (int index)
