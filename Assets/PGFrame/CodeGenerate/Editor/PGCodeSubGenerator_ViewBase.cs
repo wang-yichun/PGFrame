@@ -95,6 +95,8 @@ public static class GenCode_ViewBase
 			result [1] = GenFuncCodeReactiveMemberDictionary (jo_member, jo_view);
 			break;
 		case RxType.Command:
+			result [0] = GenBindCodeReactiveMemberCommand (jo_member, jo_view);
+			result [1] = GenFuncCodeReactiveMemberCommand (jo_member, jo_view);
 			break;
 		default:
 			break;
@@ -290,6 +292,54 @@ public static class GenCode_ViewBase
 	public virtual void OnReset_{0} (Unit u)
 	{{
 	}}", member_name);
+		}
+
+		return sb.ToString ();
+	}
+
+	public static string GenBindCodeReactiveMemberCommand (JObject jo_member, JObject jo_view)
+	{
+		string member_name = jo_member ["Name"].Value<string> ();
+		JObject jo_bind = jo_view ["Members"] [member_name] ["Bind"] as JObject;
+		StringBuilder sb = new StringBuilder ();
+
+		if (jo_member ["Params"] == null || (jo_member ["Params"] as JArray).Count == 0) {
+			if (jo_bind ["Executed"].Value<bool> ()) {
+				sb.AppendFormat (@"
+		VM.RC_{0}.Subscribe (OnExecuted_{0});", member_name);
+			}
+		} else {
+			if (jo_bind ["Executed"].Value<bool> ()) {
+				sb.AppendFormat (@"
+		VM.RC_{0}.Subscribe<{0}Command> (OnExecuted_{0});", member_name);
+			}
+		}
+
+		return sb.ToString ();
+	}
+
+	public static string GenFuncCodeReactiveMemberCommand (JObject jo_member, JObject jo_view)
+	{
+		string member_name = jo_member ["Name"].Value<string> ();
+		JObject jo_bind = jo_view ["Members"] [member_name] ["Bind"] as JObject;
+		StringBuilder sb = new StringBuilder ();
+
+		if (jo_member ["Params"] == null || (jo_member ["Params"] as JArray).Count == 0) {
+			if (jo_bind ["Executed"].Value<bool> ()) {
+				sb.AppendFormat (@"
+
+	public virtual void OnExecuted_{0} (Unit unit)
+	{{
+	}}", member_name);
+			}
+		} else {
+			if (jo_bind ["Executed"].Value<bool> ()) {
+				sb.AppendFormat (@"
+
+	public virtual void OnExecuted_{0} ({0}Command command)
+	{{
+	}}", member_name);
+			}
 		}
 
 		return sb.ToString ();
