@@ -47,7 +47,28 @@ public class SecondElementEditor : Editor, IElementEditor
 		EditorGUILayout.SelectableLabel (VM.VMID.ToString ());
 		EditorGUILayout.EndHorizontal ();
 
-		/****VIEWMODEL_GUI****/
+		string vmk;
+
+		vmk = "IntValue";
+		int tempIntValue = EditorGUILayout.DelayedIntField (vmk, VM.IntValue);
+		if (tempIntValue != VM.IntValue) {
+			VM.IntValue = tempIntValue;
+		}
+		vmk = "LongValue";
+		int tempLongValue = EditorGUILayout.DelayedIntField (vmk, (int)VM.LongValue);
+		if ((long)tempLongValue != VM.LongValue) {
+			VM.LongValue = (long)tempLongValue;
+		}
+		vmk = "FloatValue";
+		float tempFloatValue = EditorGUILayout.DelayedFloatField (vmk, VM.FloatValue);
+		if (tempFloatValue != VM.FloatValue) {
+			VM.FloatValue = tempFloatValue;
+		}
+		vmk = "DoubleValue";
+		double tempDoubleValue = EditorGUILayout.DelayedDoubleField (vmk, VM.DoubleValue);
+		if (tempDoubleValue != VM.DoubleValue) {
+			VM.DoubleValue = tempDoubleValue;
+		}
 
 		EditorGUILayout.EndVertical ();
 		EditorGUI.indentLevel--;

@@ -17,7 +17,10 @@ public class SecondViewModelBase : ViewModelBase
 	public override void Initialize ()
 	{
 		
-		RP_LabelTextNum = new ReactiveProperty<int> ();
+		RP_IntValue = new ReactiveProperty<int> ();
+		RP_LongValue = new ReactiveProperty<long> ();
+		RP_FloatValue = new ReactiveProperty<float> ();
+		RP_DoubleValue = new ReactiveProperty<double> ();
 		Numbers = new ReactiveCollection<int> ();
 		MyDictionary = new ReactiveDictionary<string, string> ();
 		RP_DefaultProperty1 = new ReactiveProperty<object> ();
@@ -31,15 +34,54 @@ public class SecondViewModelBase : ViewModelBase
 	
 
 	/* Label上的文字 */
-	public ReactiveProperty<int> RP_LabelTextNum;
+	public ReactiveProperty<int> RP_IntValue;
 
 	[JsonProperty]
-	public int LabelTextNum {
+	public int IntValue {
 		get {
-			return RP_LabelTextNum.Value;
+			return RP_IntValue.Value;
 		}
 		set {
-			RP_LabelTextNum.Value = value;
+			RP_IntValue.Value = value;
+		}
+	}
+
+	/*  */
+	public ReactiveProperty<long> RP_LongValue;
+
+	[JsonProperty]
+	public long LongValue {
+		get {
+			return RP_LongValue.Value;
+		}
+		set {
+			RP_LongValue.Value = value;
+		}
+	}
+
+	/*  */
+	public ReactiveProperty<float> RP_FloatValue;
+
+	[JsonProperty]
+	public float FloatValue {
+		get {
+			return RP_FloatValue.Value;
+		}
+		set {
+			RP_FloatValue.Value = value;
+		}
+	}
+
+	/*  */
+	public ReactiveProperty<double> RP_DoubleValue;
+
+	[JsonProperty]
+	public double DoubleValue {
+		get {
+			return RP_DoubleValue.Value;
+		}
+		set {
+			RP_DoubleValue.Value = value;
 		}
 	}
 

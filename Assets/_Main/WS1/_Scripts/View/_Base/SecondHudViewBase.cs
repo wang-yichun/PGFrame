@@ -53,7 +53,7 @@ public class SecondHudViewBase : ViewBase
 	{
 		base.Bind ();
 		
-		VM.RP_LabelTextNum.Subscribe (OnChanged_LabelTextNum);
+		VM.RP_IntValue.Subscribe (OnChanged_IntValue);
 		VM.Numbers.ObserveAdd ().Subscribe (OnAdd_Numbers);
 		VM.Numbers.ObserveRemove ().Subscribe (OnRemove_Numbers);
 		VM.MyDictionary.ObserveAdd ().Subscribe (OnAdd_MyDictionary);
@@ -67,7 +67,7 @@ public class SecondHudViewBase : ViewBase
 
 	
 
-	public virtual void OnChanged_LabelTextNum (int value)
+	public virtual void OnChanged_IntValue (int value)
 	{
 	}
 
