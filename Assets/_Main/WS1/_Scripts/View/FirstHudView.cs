@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 using PogoTools;
 using UnityEngine.UI;
 
-public class FirstView : FirstViewBase, IFirstView
+public class FirstHudView : FirstHudViewBase
 {
 	public override void Initialize (ViewModelBase viewModel)
 	{
@@ -15,12 +15,12 @@ public class FirstView : FirstViewBase, IFirstView
 	public override void Bind ()
 	{
 		base.Bind ();
-		Debug.Log (string.Format ("FirstView in {0} Bind.", gameObject.name));
+		Debug.Log (string.Format ("FirstHudView in {0} Bind.", gameObject.name));
 	}
 
 	public override void AfterBind ()
 	{
 		base.AfterBind ();
-		Debug.Log (string.Format ("FirstView in {0} AfterBind.", gameObject.name));
+		Debug.Log (string.Format ("FirstHudView in {0} AfterBind.", gameObject.name));
 	}
 }

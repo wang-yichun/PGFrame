@@ -56,7 +56,7 @@ public class PGCodeSubGenerator_Controller: IPGCodeSubGenerator
 			if (jom ["RxType"].Value<string> () == "Command") {
 				string template;
 				JArray jap = (JArray)jom ["Params"];
-				if (jap.Count > 0) {
+				if (jap != null && jap.Count > 0) {
 					template = @"
 	/* {DESC} */
 	public virtual void {NAME} ({ELEMENTNAME}ViewModel viewModel, {NAME}Command command)

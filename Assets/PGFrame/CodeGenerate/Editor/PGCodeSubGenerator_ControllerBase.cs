@@ -54,7 +54,7 @@ public class PGCodeSubGenerator_ControllerBase: IPGCodeSubGenerator
 			if (jom ["RxType"].Value<string> () == "Command") {
 				string template;
 				JArray jap = (JArray)jom ["Params"];
-				if (jap.Count > 0) {
+				if (jap != null && jap.Count > 0) {
 					template = @"
 		vm.RC_{NAME}.Subscribe<{NAME}Command> (command => {
 			command.Sender = viewModel;
@@ -84,7 +84,7 @@ public class PGCodeSubGenerator_ControllerBase: IPGCodeSubGenerator
 			if (jom ["RxType"].Value<string> () == "Command") {
 				string template;
 				JArray jap = (JArray)jom ["Params"];
-				if (jap.Count > 0) {
+				if (jap != null && jap.Count > 0) {
 					template = "\n\t/* {DESC} */\n\tpublic virtual void {NAME} ({ELEMENTNAME}ViewModel viewModel, {NAME}Command command)\n\t{\n\t}";
 				} else {
 					template = "\n\t/* {DESC} */\n\tpublic virtual void {NAME} ({ELEMENTNAME}ViewModel viewModel)\n\t{\n\t}";

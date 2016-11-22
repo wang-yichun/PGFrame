@@ -20,8 +20,6 @@ public class SecondViewModelBase : ViewModelBase
 		RP_LabelTextNum = new ReactiveProperty<int> ();
 		Numbers = new ReactiveCollection<int> ();
 		MyDictionary = new ReactiveDictionary<string, string> ();
-		RC_AddNum2 = new ReactiveCommand<AddNum2Command> ();
-		RC_ButtonClick = new ReactiveCommand ();
 		RP_DefaultProperty1 = new ReactiveProperty<object> ();
 	}
 
@@ -51,14 +49,6 @@ public class SecondViewModelBase : ViewModelBase
 	/* 我的字典 */
 	[JsonProperty] public ReactiveDictionary<string, string> MyDictionary;
 
-	/* 增加一个数 */
-	public ReactiveCommand<AddNum2Command> RC_AddNum2;
-	
-
-	/*  */
-	public ReactiveCommand RC_ButtonClick;
-	
-
 	/*  */
 	public ReactiveProperty<object> RP_DefaultProperty1;
 
@@ -73,19 +63,3 @@ public class SecondViewModelBase : ViewModelBase
 	}
 }
 
-
-public class AddNum2Command : ViewModelCommandBase
-{
-
-	/* 第一个参数 */
-	public int value;
-	
-	/* 第二个参数 */
-	public int value2;
-	
-}
-
-public class ButtonClickCommand : ViewModelCommandBase
-{
-
-}

@@ -6,11 +6,11 @@ using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-public class FirstViewBase : ViewBase
+public class SecondHudViewBase : ViewBase
 {
-	public FirstViewModel VM;
+	public SecondViewModel VM;
 
-	public FirstViewModel First {
+	public SecondViewModel Second {
 		get {
 			return VM;
 		}
@@ -28,7 +28,7 @@ public class FirstViewBase : ViewBase
 	public override void Initialize (ViewModelBase viewModel)
 	{
 		if (viewModel != null) {
-			VM = (FirstViewModel)viewModel;
+			VM = (SecondViewModel)viewModel;
 		} else {
 			if (AutoCreateViewModel) {
 				if (VM == null) {
@@ -43,9 +43,9 @@ public class FirstViewBase : ViewBase
 	public void CreateViewModel ()
 	{
 		if (string.IsNullOrEmpty (ViewModelInitValueJson) == false) {
-			VM = JsonConvert.DeserializeObject<FirstViewModel> (ViewModelInitValueJson);
+			VM = JsonConvert.DeserializeObject<SecondViewModel> (ViewModelInitValueJson);
 		} else {
-			VM = new FirstViewModel ();
+			VM = new SecondViewModel ();
 		}
 	}
 
@@ -58,7 +58,6 @@ public class FirstViewBase : ViewBase
 		VM.Numbers.ObserveRemove ().Subscribe (OnRemove_Numbers);
 		VM.MyDictionary.ObserveAdd ().Subscribe (OnAdd_MyDictionary);
 		VM.MyDictionary.ObserveRemove ().Subscribe (OnRemove_MyDictionary);
-		VM.RC_DefaultCommand.Subscribe (OnExecuted_DefaultCommand);
 	}
 
 	public override void AfterBind ()
@@ -85,10 +84,6 @@ public class FirstViewBase : ViewBase
 	}
 
 	public virtual void OnRemove_MyDictionary (DictionaryRemoveEvent<string, string> e)
-	{
-	}
-
-	public virtual void OnExecuted_DefaultCommand (Unit unit)
 	{
 	}
 

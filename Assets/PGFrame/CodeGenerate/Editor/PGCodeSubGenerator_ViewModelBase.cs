@@ -80,9 +80,11 @@ public class {NAME}Command : ViewModelCommandBase
 
 				StringBuilder sbc = new StringBuilder ();
 				JArray jac = (JArray)jom ["Params"];
-				for (int i2 = 0; i2 < jac.Count; i2++) {
-					JObject jocm = (JObject)jac [i2];
-					sbc.Append (jocm.GenCommandMember ());
+				if (jac != null) {
+					for (int i2 = 0; i2 < jac.Count; i2++) {
+						JObject jocm = (JObject)jac [i2];
+						sbc.Append (jocm.GenCommandMember ());
+					}
 				}
 
 				template = template.Replace (COMMAND_MEMBER, sbc.ToString ());
@@ -185,7 +187,7 @@ public static class GenCode_ViewModelBase
 	{
 		JArray ja = (JArray)jom ["Params"];
 		string template = string.Empty;
-		if (ja.Count > 0) {
+		if (ja != null && ja.Count > 0) {
 			template = @"
 	/* {DESC} */
 	public ReactiveCommand<{NAME}Command> RC_{NAME};
@@ -273,7 +275,7 @@ public static class GenCode_ViewModelBase
 	{
 		JArray ja = (JArray)jom ["Params"];
 		string template = string.Empty;
-		if (ja.Count > 0) {
+		if (ja != null && ja.Count > 0) {
 			template = @"
 		RC_{NAME} = new ReactiveCommand<{NAME}Command> ();";
 			template = template.Replace ("{NAME}", jom ["Name"].Value<string> ());

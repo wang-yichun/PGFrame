@@ -6,11 +6,11 @@ using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-public class SecondViewBase : ViewBase
+public class FirstHudViewBase : ViewBase, IFirstView
 {
-	public SecondViewModel VM;
+	public FirstViewModel VM;
 
-	public SecondViewModel Second {
+	public FirstViewModel First {
 		get {
 			return VM;
 		}
@@ -28,7 +28,7 @@ public class SecondViewBase : ViewBase
 	public override void Initialize (ViewModelBase viewModel)
 	{
 		if (viewModel != null) {
-			VM = (SecondViewModel)viewModel;
+			VM = (FirstViewModel)viewModel;
 		} else {
 			if (AutoCreateViewModel) {
 				if (VM == null) {
@@ -43,9 +43,9 @@ public class SecondViewBase : ViewBase
 	public void CreateViewModel ()
 	{
 		if (string.IsNullOrEmpty (ViewModelInitValueJson) == false) {
-			VM = JsonConvert.DeserializeObject<SecondViewModel> (ViewModelInitValueJson);
+			VM = JsonConvert.DeserializeObject<FirstViewModel> (ViewModelInitValueJson);
 		} else {
-			VM = new SecondViewModel ();
+			VM = new FirstViewModel ();
 		}
 	}
 
@@ -55,16 +55,9 @@ public class SecondViewBase : ViewBase
 		
 		VM.RP_LabelTextNum.Subscribe (OnChanged_LabelTextNum);
 		VM.Numbers.ObserveAdd ().Subscribe (OnAdd_Numbers);
-		VM.Numbers.ObserveCountChanged ().Subscribe (OnCountChanged_Numbers);
-		VM.Numbers.ObserveMove ().Subscribe (OnMove_Numbers);
 		VM.Numbers.ObserveRemove ().Subscribe (OnRemove_Numbers);
-		VM.Numbers.ObserveReplace ().Subscribe (OnReplace_Numbers);
-		VM.Numbers.ObserveReset ().Subscribe (OnReset_Numbers);
 		VM.MyDictionary.ObserveAdd ().Subscribe (OnAdd_MyDictionary);
-		VM.MyDictionary.ObserveCountChanged ().Subscribe (OnCountChanged_MyDictionary);
 		VM.MyDictionary.ObserveRemove ().Subscribe (OnRemove_MyDictionary);
-		VM.MyDictionary.ObserveReplace ().Subscribe (OnReplace_MyDictionary);
-		VM.MyDictionary.ObserveReset ().Subscribe (OnReset_MyDictionary);
 	}
 
 	public override void AfterBind ()
@@ -82,23 +75,7 @@ public class SecondViewBase : ViewBase
 	{
 	}
 
-	public virtual void OnCountChanged_Numbers (int count)
-	{
-	}
-
-	public virtual void OnMove_Numbers (CollectionMoveEvent<int> e)
-	{
-	}
-
 	public virtual void OnRemove_Numbers (CollectionRemoveEvent<int> e)
-	{
-	}
-
-	public virtual void OnReplace_Numbers (CollectionReplaceEvent<int> e)
-	{
-	}
-
-	public virtual void OnReset_Numbers (Unit u)
 	{
 	}
 
@@ -106,19 +83,7 @@ public class SecondViewBase : ViewBase
 	{
 	}
 
-	public virtual void OnCountChanged_MyDictionary (int count)
-	{
-	}
-
 	public virtual void OnRemove_MyDictionary (DictionaryRemoveEvent<string, string> e)
-	{
-	}
-
-	public virtual void OnReplace_MyDictionary (DictionaryReplaceEvent<string, string> e)
-	{
-	}
-
-	public virtual void OnReset_MyDictionary (Unit u)
 	{
 	}
 

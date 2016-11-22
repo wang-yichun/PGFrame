@@ -13,22 +13,7 @@ public class SecondControllerBase<T> : ControllerBase<T>
 		SecondViewModel vm = (SecondViewModel)viewModel;
 
 		
-		vm.RC_AddNum2.Subscribe<AddNum2Command> (command => {
-			command.Sender = viewModel;
-			AddNum2 ((SecondViewModel)viewModel, command);
-		});
-		vm.RC_ButtonClick.Subscribe (_ => {
-			ButtonClick ((SecondViewModel)viewModel);
-		});
 	}
 
 	
-	/* 增加一个数 */
-	public virtual void AddNum2 (SecondViewModel viewModel, AddNum2Command command)
-	{
-	}
-	/*  */
-	public virtual void ButtonClick (SecondViewModel viewModel)
-	{
-	}
 }

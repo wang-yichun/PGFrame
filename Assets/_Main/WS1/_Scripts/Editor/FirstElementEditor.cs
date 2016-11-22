@@ -5,26 +5,15 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using UniRx;
 
-[CustomEditor (typeof(FirstView))]
+//[CustomEditor (typeof(ViewBase), true)]
 public class FirstElementEditor : Editor, IElementEditor
 {
-	FirstView V;
-
-	void OnEnable ()
-	{
-		V = (FirstView)target;
-
-		if (EditorApplication.isPlaying == false) {
-			V.CreateViewModel ();
-		}
-
-		CommandParams = new Dictionary<string, string> ();
-	}
+	public FirstViewModel VM { get; set; }
 
 	bool ToggleDefault = true;
 	bool ToggleViewModel = true;
 
-	Dictionary<string, string> CommandParams;
+	public Dictionary<string, string> CommandParams { get; set; }
 
 	public override void OnInspectorGUI ()
 	{
@@ -37,7 +26,7 @@ public class FirstElementEditor : Editor, IElementEditor
 		}
 		if (ToggleViewModel = EditorGUILayout.Foldout (ToggleViewModel, "ViewModel")) {
 
-			if (V.VM != null) {
+			if (VM != null) {
 				InspectorGUI_ViewModel ();
 			} else {
 				EditorGUILayout.HelpBox ("没有绑定 ViewModel", MessageType.Warning);
@@ -56,15 +45,15 @@ public class FirstElementEditor : Editor, IElementEditor
 
 		EditorGUILayout.BeginHorizontal ();
 		EditorGUILayout.PrefixLabel ("VMID");
-		EditorGUILayout.SelectableLabel (V.VM.VMID.ToString ());
+		EditorGUILayout.SelectableLabel (VM.VMID.ToString ());
 		EditorGUILayout.EndHorizontal ();
 
 		string vmk;
 
 		vmk = "LabelTextNum";
-		int tempLabelTextNum = EditorGUILayout.DelayedIntField (vmk, V.VM.LabelTextNum);
-		if (tempLabelTextNum != V.VM.LabelTextNum) {
-			V.VM.LabelTextNum = tempLabelTextNum;
+		int tempLabelTextNum = EditorGUILayout.DelayedIntField (vmk, VM.LabelTextNum);
+		if (tempLabelTextNum != VM.LabelTextNum) {
+			VM.LabelTextNum = tempLabelTextNum;
 		}
 
 		vmk = "AddNum";
@@ -79,11 +68,11 @@ public class FirstElementEditor : Editor, IElementEditor
 		}
 		if (GUILayout.Button ("Invoke")) {
 			if (CommandParams.ContainsKey (vmk) == false) {
-				V.VM.RC_AddNum.Execute (new AddNumCommand () { Sender = V.VM });
+				VM.RC_AddNum.Execute (new AddNumCommand () { Sender = VM });
 			} else {
 				AddNumCommand command = JsonConvert.DeserializeObject<AddNumCommand> (CommandParams [vmk]);
-				command.Sender = V.VM;
-				V.VM.RC_AddNum.Execute (command);
+				command.Sender = VM;
+				VM.RC_AddNum.Execute (command);
 			}
 		}
 		EditorGUILayout.EndHorizontal ();
@@ -94,38 +83,38 @@ public class FirstElementEditor : Editor, IElementEditor
 
 		vmk = "Numbers";
 		EditorGUILayout.BeginHorizontal ();
-		string NumbersJson = JsonConvert.SerializeObject (V.VM.Numbers);
+		string NumbersJson = JsonConvert.SerializeObject (VM.Numbers);
 		string tempNumbersJson = EditorGUILayout.DelayedTextField (vmk, NumbersJson);
 		if (tempNumbersJson != NumbersJson) {
 			if (string.IsNullOrEmpty (tempNumbersJson)) {
-				V.VM.Numbers = null;
+				VM.Numbers = null;
 			} else {
-				V.VM.Numbers = JsonConvert.DeserializeObject<ReactiveCollection<int>> (tempNumbersJson);
+				VM.Numbers = JsonConvert.DeserializeObject<ReactiveCollection<int>> (tempNumbersJson);
 			}
 		}
 		if (GUILayout.Button ("...", GUILayout.MaxWidth (20))) {
 			PopupWindow.Show (
 				new Rect (Event.current.mousePosition.x, Event.current.mousePosition.y, 0f, 0f), 
-				new ReactiveCollectionEditorPopupWindow<int> (this, V.VM.Numbers)
+				new ReactiveCollectionEditorPopupWindow<int> (this, VM.Numbers)
 			);
 		}
 		EditorGUILayout.EndHorizontal ();
 
 		vmk = "MyDictionary";
 		EditorGUILayout.BeginHorizontal ();
-		string MyDictionary = JsonConvert.SerializeObject (V.VM.MyDictionary);
+		string MyDictionary = JsonConvert.SerializeObject (VM.MyDictionary);
 		string tempMyDictionary = EditorGUILayout.DelayedTextField (vmk, MyDictionary);
 		if (tempMyDictionary != MyDictionary) {
 			if (string.IsNullOrEmpty (tempMyDictionary)) {
-				V.VM.MyDictionary = null;
+				VM.MyDictionary = null;
 			} else {
-				V.VM.MyDictionary = JsonConvert.DeserializeObject<ReactiveDictionary<string,string>> (tempMyDictionary);
+				VM.MyDictionary = JsonConvert.DeserializeObject<ReactiveDictionary<string,string>> (tempMyDictionary);
 			}
 		}
 		if (GUILayout.Button ("...", GUILayout.MaxWidth (20))) {
 			PopupWindow.Show (
 				new Rect (Event.current.mousePosition.x, Event.current.mousePosition.y, 0f, 0f), 
-				new ReactiveDictionaryEditorPopupWindow<string,string> (this, V.VM.MyDictionary)
+				new ReactiveDictionaryEditorPopupWindow<string,string> (this, VM.MyDictionary)
 			);
 		}
 		EditorGUILayout.EndHorizontal ();
@@ -140,12 +129,8 @@ public class FirstElementEditor : Editor, IElementEditor
 		}
 	}
 
-	#region IElementEditor implementation
-
-	public void VMCopyToJson ()
+	public virtual void VMCopyToJson ()
 	{
-		V.ViewModelInitValueJson = JsonConvert.SerializeObject ((FirstViewModelBase)V.VM);
 	}
 
-	#endregion
 }
