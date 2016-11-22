@@ -6,7 +6,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-public class FirstHudViewBase : ViewBase, IFirstView
+public class FirstHudViewBase : ViewBase
 {
 	public FirstViewModel VM;
 

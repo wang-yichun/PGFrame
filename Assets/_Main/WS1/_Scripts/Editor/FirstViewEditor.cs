@@ -16,11 +16,10 @@ public class FirstViewEditor : FirstElementEditor
 
 		if (EditorApplication.isPlaying == false) {
 			V.CreateViewModel ();
-			VM = V.VM;
 		}
+		VM = V.VM;
 
 		CommandParams = new Dictionary<string, string> ();
-
 	}
 
 	public override void VMCopyToJson ()
@@ -40,11 +39,10 @@ public class FirstHudViewEditor : FirstElementEditor
 
 		if (EditorApplication.isPlaying == false) {
 			V.CreateViewModel ();
-			VM = V.VM;
 		}
+		VM = V.VM;
 
 		CommandParams = new Dictionary<string, string> ();
-
 	}
 
 	public override void VMCopyToJson ()

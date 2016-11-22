@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 using PogoTools;
 using UnityEngine.UI;
 
-public class FirstView : FirstViewBase, IFirstView
+public class FirstView : FirstViewBase
 {
 	public override void Initialize (ViewModelBase viewModel)
 	{

@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using UniRx;
 
-//[CustomEditor (typeof(ViewBase), true)]
 public class FirstElementEditor : Editor, IElementEditor
 {
 	public FirstViewModel VM { get; set; }
