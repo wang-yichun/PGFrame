@@ -21,11 +21,7 @@ public class PGCodeSubGenerator_ElementEditor: IPGCodeSubGenerator
 
 	public bool CanGenerate (JObject jo)
 	{
-		string workspaceName = jo ["Workspace"].Value<string> ();
-		string elementName = jo ["Common"] ["Name"].Value<string> ();
-		string targetPath = Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/Editor");
-		string file = Path.Combine (targetPath, string.Format ("{0}ElementEditor.cs", elementName));
-		return !File.Exists (file);
+		return true;
 	}
 
 	public void GenerateCode (JObject jo, IList<string> filesGenerated)

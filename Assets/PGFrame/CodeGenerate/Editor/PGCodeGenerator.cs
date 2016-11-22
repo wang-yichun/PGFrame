@@ -22,6 +22,7 @@ public class PGCodeGenerator
 	IPGCodeSubGenerator sg_ViewBase;
 	IPGCodeSubGenerator sg_View;
 	IPGCodeSubGenerator sg_ElementEditor;
+	IPGCodeSubGenerator sg_ElementViewEditor;
 
 	public void Init ()
 	{
@@ -32,6 +33,7 @@ public class PGCodeGenerator
 		sg_ViewBase = new PGCodeSubGenerator_ViewBase (Path.Combine (Application.dataPath, "PGFrame/CodeGenerate/Template/__XXX__ViewBase.txt"));
 		sg_View = new PGCodeSubGenerator_View (Path.Combine (Application.dataPath, "PGFrame/CodeGenerate/Template/__XXX__View.txt"));
 		sg_ElementEditor = new PGCodeSubGenerator_ElementEditor (Path.Combine (Application.dataPath, "PGFrame/CodeGenerate/Template/__XXX__ElementEditor.txt"));
+		sg_ElementViewEditor = new PGCodeSubGenerator_ElementViewEditor (Path.Combine (Application.dataPath, "PGFrame/CodeGenerate/Template/__XXX__ElementViewEditor.txt"));
 	}
 
 	public void GenerateCode (JObject jo)
@@ -52,6 +54,8 @@ public class PGCodeGenerator
 			sg_View.GenerateCode (jo, filesGenerated);
 		if (sg_ElementEditor.CanGenerate (jo))
 			sg_ElementEditor.GenerateCode (jo, filesGenerated);
+		if (sg_ElementViewEditor.CanGenerate (jo))
+			sg_ElementViewEditor.GenerateCode (jo, filesGenerated);
 
 		PRDebug.TagLog (lt + ".GenerateCode", lc, JsonConvert.SerializeObject (filesGenerated, Formatting.Indented));
 	}
@@ -68,7 +72,7 @@ public class PGCodeGenerator
 			Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/ViewModel/_Base/" + string.Format ("{0}ViewModelBase.cs", elementName)),
 			Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/View/" + string.Format ("{0}View.cs", elementName)),
 			Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/View/_Base/" + string.Format ("{0}ViewBase.cs", elementName)),
-			Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/Editor/" + string.Format ("{0}ElementEditor.cs", elementName)),
+			Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/Editor/" + string.Format ("{0}ElementEditor.cs", elementName))
 		};
 		List<string> fileDeleted = new List<string> ();
 

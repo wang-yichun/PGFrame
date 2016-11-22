@@ -5,14 +5,14 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using UniRx;
 
-[CustomEditor (typeof(FirstView), true)]
-public class FirstViewEditor : FirstElementEditor
+[CustomEditor (typeof(FirstHudView), true)]
+public class FirstHudViewEditor : FirstElementEditor
 {
-	public FirstView V { get; set; }
+	public FirstHudView V { get; set; }
 
 	void OnEnable ()
 	{
-		V = (FirstView)target;
+		V = (FirstHudView)target;
 
 		if (EditorApplication.isPlaying == false) {
 			V.CreateViewModel ();

@@ -1,13 +1,13 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using UniRx;
 
-public class __XXX__ElementEditor : Editor, IElementEditor
+public class SecondElementEditor : Editor, IElementEditor
 {
-	public __XXX__ViewModel VM { get; set; }
+	public SecondViewModel VM { get; set; }
 
 	bool ToggleDefault = true;
 	bool ToggleViewModel = true;

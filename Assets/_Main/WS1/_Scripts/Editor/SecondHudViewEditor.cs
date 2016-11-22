@@ -1,18 +1,18 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using UniRx;
 
-[CustomEditor (typeof(FirstView), true)]
-public class FirstViewEditor : FirstElementEditor
+[CustomEditor (typeof(SecondHudView))]
+public class SecondHudViewElementViewEditor : SecondElementEditor
 {
-	public FirstView V { get; set; }
+	public SecondHudView V { get; set; }
 
 	void OnEnable ()
 	{
-		V = (FirstView)target;
+		V = (SecondHudView)target;
 
 		if (EditorApplication.isPlaying == false) {
 			V.CreateViewModel ();
@@ -24,6 +24,6 @@ public class FirstViewEditor : FirstElementEditor
 
 	public override void VMCopyToJson ()
 	{
-		V.ViewModelInitValueJson = JsonConvert.SerializeObject ((FirstViewModelBase)VM);
+		V.ViewModelInitValueJson = JsonConvert.SerializeObject ((SecondViewModelBase)VM);
 	}
 }

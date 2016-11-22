@@ -5,14 +5,14 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using UniRx;
 
-[CustomEditor (typeof(FirstView), true)]
-public class FirstViewEditor : FirstElementEditor
+[CustomEditor (typeof(__YYY__))]
+public class __YYY__ElementViewEditor : __XXX__ElementEditor
 {
-	public FirstView V { get; set; }
+	public __YYY__ V { get; set; }
 
 	void OnEnable ()
 	{
-		V = (FirstView)target;
+		V = (__YYY__)target;
 
 		if (EditorApplication.isPlaying == false) {
 			V.CreateViewModel ();
@@ -24,6 +24,6 @@ public class FirstViewEditor : FirstElementEditor
 
 	public override void VMCopyToJson ()
 	{
-		V.ViewModelInitValueJson = JsonConvert.SerializeObject ((FirstViewModelBase)VM);
+		V.ViewModelInitValueJson = JsonConvert.SerializeObject ((__XXX__ViewModelBase)VM);
 	}
 }
