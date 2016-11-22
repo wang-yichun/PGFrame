@@ -73,7 +73,7 @@ public static class GenCode_ElementEditor
 			result = jom.GenEditorGUIDictionary ();
 			break;
 		case "Command":
-//			result = jom.GenReactiveMemberCommand ();
+			result = jom.GenEditorGUICommand ();
 			break;
 		default:
 			break;
@@ -199,6 +199,55 @@ public static class GenCode_ElementEditor
 			);
 		}}
 		EditorGUILayout.EndHorizontal ();", name, types [0], types [1]);
+
+		return result;
+	}
+
+	public static string GenEditorGUICommand (this JObject jom)
+	{
+		string name = jom ["Name"].Value<string> ();
+		JArray para = jom ["Params"] as JArray;
+
+		string result;
+
+		if (para != null && para.Count > 0) {
+			result = string.Format (@"
+
+		vmk = ""{0}"";
+		EditorGUILayout.BeginHorizontal ();
+		EditorGUILayout.PrefixLabel (vmk);
+		if (GUILayout.Button (""Params"")) {{
+			if (CommandParams.ContainsKey (vmk)) {{
+				CommandParams.Remove (vmk);
+			}} else {{
+				CommandParams [vmk] = JsonConvert.SerializeObject (new {0}Command (), Formatting.Indented);
+			}}
+		}}
+		if (GUILayout.Button (""Invoke"")) {{
+			if (CommandParams.ContainsKey (vmk) == false) {{
+				VM.RC_{0}.Execute (new {0}Command () {{ Sender = VM }});
+			}} else {{
+				{0}Command command = JsonConvert.DeserializeObject<{0}Command> (CommandParams [vmk]);
+				command.Sender = VM;
+				VM.RC_{0}.Execute (command);
+			}}
+		}}
+		EditorGUILayout.EndHorizontal ();
+		if (CommandParams.ContainsKey (vmk)) {{
+			CommandParams [vmk] = EditorGUILayout.TextArea (CommandParams [vmk]);
+			EditorGUILayout.Space ();
+		}}", name);
+		} else {
+			result = string.Format (@"
+
+		vmk = ""{0}"";
+		EditorGUILayout.BeginHorizontal ();
+		EditorGUILayout.PrefixLabel (vmk);
+		if (GUILayout.Button (""Invoke"")) {{
+			VM.RC_{0}.Execute ();
+		}}
+		EditorGUILayout.EndHorizontal ();", name);
+		}
 
 		return result;
 	}

@@ -26,8 +26,11 @@ public class SecondViewModelBase : ViewModelBase
 		FloatList = new ReactiveCollection<float> ();
 		DoubleList = new ReactiveCollection<double> ();
 		StringList = new ReactiveCollection<string> ();
-		MyDictionary = new ReactiveDictionary<string, string> ();
-		RP_DefaultProperty1 = new ReactiveProperty<object> ();
+		IntDictionary = new ReactiveDictionary<string, int> ();
+		StringDictionary = new ReactiveDictionary<int, string> ();
+		RC_StringCommand = new ReactiveCommand<StringCommandCommand> ();
+		RC_IntCommand = new ReactiveCommand<IntCommandCommand> ();
+		RC_SimpleCommand = new ReactiveCommand ();
 	}
 
 	public override void Attach ()
@@ -105,19 +108,42 @@ public class SecondViewModelBase : ViewModelBase
 	[JsonProperty] public ReactiveCollection<string> StringList;
 
 	/* 我的字典 */
-	[JsonProperty] public ReactiveDictionary<string, string> MyDictionary;
+	[JsonProperty] public ReactiveDictionary<string, int> IntDictionary;
 
 	/*  */
-	public ReactiveProperty<object> RP_DefaultProperty1;
+	[JsonProperty] public ReactiveDictionary<int, string> StringDictionary;
 
-	[JsonProperty]
-	public object DefaultProperty1 {
-		get {
-			return RP_DefaultProperty1.Value;
-		}
-		set {
-			RP_DefaultProperty1.Value = value;
-		}
-	}
+	/*  */
+	public ReactiveCommand<StringCommandCommand> RC_StringCommand;
+	
+
+	/*  */
+	public ReactiveCommand<IntCommandCommand> RC_IntCommand;
+	
+
+	/*  */
+	public ReactiveCommand RC_SimpleCommand;
+	
 }
 
+
+public class StringCommandCommand : ViewModelCommandBase
+{
+
+	/*  */
+	public string Param0;
+	
+}
+
+public class IntCommandCommand : ViewModelCommandBase
+{
+
+	/*  */
+	public int Param0;
+	
+}
+
+public class SimpleCommandCommand : ViewModelCommandBase
+{
+
+}

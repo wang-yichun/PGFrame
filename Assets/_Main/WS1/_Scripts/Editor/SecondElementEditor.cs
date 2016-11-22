@@ -169,22 +169,99 @@ public class SecondElementEditor : Editor, IElementEditor
 		}
 		EditorGUILayout.EndHorizontal ();
 
-		vmk = "MyDictionary";
+		vmk = "IntDictionary";
 		EditorGUILayout.BeginHorizontal ();
-		string MyDictionary = JsonConvert.SerializeObject (VM.MyDictionary);
-		string tempMyDictionary = EditorGUILayout.DelayedTextField (vmk, MyDictionary);
-		if (tempMyDictionary != MyDictionary) {
-			if (string.IsNullOrEmpty (tempMyDictionary)) {
-				VM.MyDictionary = null;
+		string IntDictionary = JsonConvert.SerializeObject (VM.IntDictionary);
+		string tempIntDictionary = EditorGUILayout.DelayedTextField (vmk, IntDictionary);
+		if (tempIntDictionary != IntDictionary) {
+			if (string.IsNullOrEmpty (tempIntDictionary)) {
+				VM.IntDictionary = null;
 			} else {
-				VM.MyDictionary = JsonConvert.DeserializeObject<ReactiveDictionary<string,string>> (tempMyDictionary);
+				VM.IntDictionary = JsonConvert.DeserializeObject<ReactiveDictionary<string,int>> (tempIntDictionary);
 			}
 		}
 		if (GUILayout.Button ("...", GUILayout.MaxWidth (20))) {
 			PopupWindow.Show (
 				new Rect (Event.current.mousePosition.x, Event.current.mousePosition.y, 0f, 0f), 
-				new ReactiveDictionaryEditorPopupWindow<string,string> (this, VM.MyDictionary)
+				new ReactiveDictionaryEditorPopupWindow<string,int> (this, VM.IntDictionary)
 			);
+		}
+		EditorGUILayout.EndHorizontal ();
+
+		vmk = "StringDictionary";
+		EditorGUILayout.BeginHorizontal ();
+		string StringDictionary = JsonConvert.SerializeObject (VM.StringDictionary);
+		string tempStringDictionary = EditorGUILayout.DelayedTextField (vmk, StringDictionary);
+		if (tempStringDictionary != StringDictionary) {
+			if (string.IsNullOrEmpty (tempStringDictionary)) {
+				VM.StringDictionary = null;
+			} else {
+				VM.StringDictionary = JsonConvert.DeserializeObject<ReactiveDictionary<int,string>> (tempStringDictionary);
+			}
+		}
+		if (GUILayout.Button ("...", GUILayout.MaxWidth (20))) {
+			PopupWindow.Show (
+				new Rect (Event.current.mousePosition.x, Event.current.mousePosition.y, 0f, 0f), 
+				new ReactiveDictionaryEditorPopupWindow<int,string> (this, VM.StringDictionary)
+			);
+		}
+		EditorGUILayout.EndHorizontal ();
+
+		vmk = "StringCommand";
+		EditorGUILayout.BeginHorizontal ();
+		EditorGUILayout.PrefixLabel (vmk);
+		if (GUILayout.Button ("Params")) {
+			if (CommandParams.ContainsKey (vmk)) {
+				CommandParams.Remove (vmk);
+			} else {
+				CommandParams [vmk] = JsonConvert.SerializeObject (new StringCommandCommand (), Formatting.Indented);
+			}
+		}
+		if (GUILayout.Button ("Invoke")) {
+			if (CommandParams.ContainsKey (vmk) == false) {
+				VM.RC_StringCommand.Execute (new StringCommandCommand () { Sender = VM });
+			} else {
+				StringCommandCommand command = JsonConvert.DeserializeObject<StringCommandCommand> (CommandParams [vmk]);
+				command.Sender = VM;
+				VM.RC_StringCommand.Execute (command);
+			}
+		}
+		EditorGUILayout.EndHorizontal ();
+		if (CommandParams.ContainsKey (vmk)) {
+			CommandParams [vmk] = EditorGUILayout.TextArea (CommandParams [vmk]);
+			EditorGUILayout.Space ();
+		}
+
+		vmk = "IntCommand";
+		EditorGUILayout.BeginHorizontal ();
+		EditorGUILayout.PrefixLabel (vmk);
+		if (GUILayout.Button ("Params")) {
+			if (CommandParams.ContainsKey (vmk)) {
+				CommandParams.Remove (vmk);
+			} else {
+				CommandParams [vmk] = JsonConvert.SerializeObject (new IntCommandCommand (), Formatting.Indented);
+			}
+		}
+		if (GUILayout.Button ("Invoke")) {
+			if (CommandParams.ContainsKey (vmk) == false) {
+				VM.RC_IntCommand.Execute (new IntCommandCommand () { Sender = VM });
+			} else {
+				IntCommandCommand command = JsonConvert.DeserializeObject<IntCommandCommand> (CommandParams [vmk]);
+				command.Sender = VM;
+				VM.RC_IntCommand.Execute (command);
+			}
+		}
+		EditorGUILayout.EndHorizontal ();
+		if (CommandParams.ContainsKey (vmk)) {
+			CommandParams [vmk] = EditorGUILayout.TextArea (CommandParams [vmk]);
+			EditorGUILayout.Space ();
+		}
+
+		vmk = "SimpleCommand";
+		EditorGUILayout.BeginHorizontal ();
+		EditorGUILayout.PrefixLabel (vmk);
+		if (GUILayout.Button ("Invoke")) {
+			VM.RC_SimpleCommand.Execute ();
 		}
 		EditorGUILayout.EndHorizontal ();
 
