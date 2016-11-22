@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
@@ -49,35 +49,11 @@ public class FirstElementEditor : Editor, IElementEditor
 
 		string vmk;
 
+
 		vmk = "LabelTextNum";
 		int tempLabelTextNum = EditorGUILayout.DelayedIntField (vmk, VM.LabelTextNum);
 		if (tempLabelTextNum != VM.LabelTextNum) {
 			VM.LabelTextNum = tempLabelTextNum;
-		}
-
-		vmk = "AddNum";
-		EditorGUILayout.BeginHorizontal ();
-		EditorGUILayout.PrefixLabel (vmk);
-		if (GUILayout.Button ("Params")) {
-			if (CommandParams.ContainsKey (vmk)) {
-				CommandParams.Remove (vmk);
-			} else {
-				CommandParams [vmk] = JsonConvert.SerializeObject (new AddNumCommand (), Formatting.Indented);
-			}
-		}
-		if (GUILayout.Button ("Invoke")) {
-			if (CommandParams.ContainsKey (vmk) == false) {
-				VM.RC_AddNum.Execute (new AddNumCommand () { Sender = VM });
-			} else {
-				AddNumCommand command = JsonConvert.DeserializeObject<AddNumCommand> (CommandParams [vmk]);
-				command.Sender = VM;
-				VM.RC_AddNum.Execute (command);
-			}
-		}
-		EditorGUILayout.EndHorizontal ();
-		if (CommandParams.ContainsKey (vmk)) {
-			CommandParams [vmk] = EditorGUILayout.TextArea (CommandParams [vmk]);
-			EditorGUILayout.Space ();
 		}
 
 		vmk = "Numbers";
@@ -118,6 +94,58 @@ public class FirstElementEditor : Editor, IElementEditor
 		}
 		EditorGUILayout.EndHorizontal ();
 
+		vmk = "DefaultCommand";
+		EditorGUILayout.BeginHorizontal ();
+		EditorGUILayout.PrefixLabel (vmk);
+		if (GUILayout.Button ("Invoke")) {
+			VM.RC_DefaultCommand.Execute ();
+		}
+		EditorGUILayout.EndHorizontal ();
+
+		vmk = "DefaultCollection";
+		EditorGUILayout.BeginHorizontal ();
+		string DefaultCollectionJson = JsonConvert.SerializeObject (VM.DefaultCollection);
+		string tempDefaultCollectionJson = EditorGUILayout.DelayedTextField (vmk, DefaultCollectionJson);
+		if (tempDefaultCollectionJson != DefaultCollectionJson) {
+			if (string.IsNullOrEmpty (tempDefaultCollectionJson)) {
+				VM.DefaultCollection = null;
+			} else {
+				VM.DefaultCollection = JsonConvert.DeserializeObject<ReactiveCollection<object>> (tempDefaultCollectionJson);
+			}
+		}
+		if (GUILayout.Button ("...", GUILayout.MaxWidth (20))) {
+			PopupWindow.Show (
+				new Rect (Event.current.mousePosition.x, Event.current.mousePosition.y, 0f, 0f), 
+				new ReactiveCollectionEditorPopupWindow<object> (this, VM.DefaultCollection)
+			);
+		}
+		EditorGUILayout.EndHorizontal ();
+
+		vmk = "AddNum";
+		EditorGUILayout.BeginHorizontal ();
+		EditorGUILayout.PrefixLabel (vmk);
+		if (GUILayout.Button ("Params")) {
+			if (CommandParams.ContainsKey (vmk)) {
+				CommandParams.Remove (vmk);
+			} else {
+				CommandParams [vmk] = JsonConvert.SerializeObject (new AddNumCommand (), Formatting.Indented);
+			}
+		}
+		if (GUILayout.Button ("Invoke")) {
+			if (CommandParams.ContainsKey (vmk) == false) {
+				VM.RC_AddNum.Execute (new AddNumCommand () { Sender = VM });
+			} else {
+				AddNumCommand command = JsonConvert.DeserializeObject<AddNumCommand> (CommandParams [vmk]);
+				command.Sender = VM;
+				VM.RC_AddNum.Execute (command);
+			}
+		}
+		EditorGUILayout.EndHorizontal ();
+		if (CommandParams.ContainsKey (vmk)) {
+			CommandParams [vmk] = EditorGUILayout.TextArea (CommandParams [vmk]);
+			EditorGUILayout.Space ();
+		}
+
 		EditorGUILayout.EndVertical ();
 		EditorGUI.indentLevel--;
 
@@ -128,8 +156,11 @@ public class FirstElementEditor : Editor, IElementEditor
 		}
 	}
 
+	#region IElementEditor implementation
+
 	public virtual void VMCopyToJson ()
 	{
 	}
 
+	#endregion
 }

@@ -1,12 +1,12 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using UniRx;
 
-[CustomEditor (typeof(FirstHudView), true)]
-public class FirstHudViewEditor : FirstElementEditor
+[CustomEditor (typeof(FirstHudView))]
+public class FirstHudViewElementViewEditor : FirstElementEditor
 {
 	public FirstHudView V { get; set; }
 
