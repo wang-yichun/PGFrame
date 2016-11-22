@@ -262,6 +262,7 @@ public partial class PGFrameWindow : EditorWindow
 				NeedRefresh = true;
 				WSJsonFilesList = null;
 				SelectedWorkspaceCommon = null;
+				return;
 			}
 			if (GUILayout.Button ("Save")) {
 				SaveCommonFile ();
