@@ -60,6 +60,11 @@ public class SecondViewBase : ViewBase
 		VM.Numbers.ObserveRemove ().Subscribe (OnRemove_Numbers);
 		VM.Numbers.ObserveReplace ().Subscribe (OnReplace_Numbers);
 		VM.Numbers.ObserveReset ().Subscribe (OnReset_Numbers);
+		VM.MyDictionary.ObserveAdd ().Subscribe (OnAdd_MyDictionary);
+		VM.MyDictionary.ObserveCountChanged ().Subscribe (OnCountChanged_MyDictionary);
+		VM.MyDictionary.ObserveRemove ().Subscribe (OnRemove_MyDictionary);
+		VM.MyDictionary.ObserveReplace ().Subscribe (OnReplace_MyDictionary);
+		VM.MyDictionary.ObserveReset ().Subscribe (OnReset_MyDictionary);
 	}
 
 	public override void AfterBind ()
@@ -94,6 +99,26 @@ public class SecondViewBase : ViewBase
 	}
 
 	public virtual void OnReset_Numbers (Unit u)
+	{
+	}
+
+	public virtual void OnAdd_MyDictionary (DictionaryAddEvent<string, string> e)
+	{
+	}
+
+	public virtual void OnCountChanged_MyDictionary (int count)
+	{
+	}
+
+	public virtual void OnRemove_MyDictionary (DictionaryRemoveEvent<string, string> e)
+	{
+	}
+
+	public virtual void OnReplace_MyDictionary (DictionaryReplaceEvent<string, string> e)
+	{
+	}
+
+	public virtual void OnReset_MyDictionary (Unit u)
 	{
 	}
 

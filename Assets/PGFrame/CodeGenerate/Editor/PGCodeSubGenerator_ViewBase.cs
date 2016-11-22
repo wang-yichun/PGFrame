@@ -91,6 +91,8 @@ public static class GenCode_ViewBase
 			result [1] = GenFuncCodeReactiveMemberCollection (jo_member, jo_view);
 			break;
 		case RxType.Dictionary:
+			result [0] = GenBindCodeReactiveMemberDictionary (jo_member, jo_view);
+			result [1] = GenFuncCodeReactiveMemberDictionary (jo_member, jo_view);
 			break;
 		case RxType.Command:
 			break;
@@ -178,9 +180,9 @@ public static class GenCode_ViewBase
 		if (jo_bind ["CountChanged"].Value<bool> ()) {
 			sb.AppendFormat (@"
 
-	public virtual void OnCountChanged_{0} ({1} count)
+	public virtual void OnCountChanged_{0} (int count)
 	{{
-	}}", member_name, member_type);
+	}}", member_name);
 		}
 
 		if (jo_bind ["Move"].Value<bool> ()) {
@@ -209,7 +211,85 @@ public static class GenCode_ViewBase
 
 	public virtual void OnReset_{0} (Unit u)
 	{{
-	}}", member_name, member_type);
+	}}", member_name);
+		}
+
+		return sb.ToString ();
+	}
+
+	public static string GenBindCodeReactiveMemberDictionary (JObject jo_member, JObject jo_view)
+	{
+		string member_name = jo_member ["Name"].Value<string> ();
+		JObject jo_bind = jo_view ["Members"] [member_name] ["Bind"] as JObject;
+		StringBuilder sb = new StringBuilder ();
+
+		if (jo_bind ["Add"].Value<bool> ()) {
+			sb.AppendFormat (@"
+		VM.{0}.ObserveAdd ().Subscribe (OnAdd_{0});", member_name);
+		}
+		if (jo_bind ["CountChanged"].Value<bool> ()) {
+			sb.AppendFormat (@"
+		VM.{0}.ObserveCountChanged ().Subscribe (OnCountChanged_{0});", member_name);
+		}
+		if (jo_bind ["Remove"].Value<bool> ()) {
+			sb.AppendFormat (@"
+		VM.{0}.ObserveRemove ().Subscribe (OnRemove_{0});", member_name);
+		}
+		if (jo_bind ["Replace"].Value<bool> ()) {
+			sb.AppendFormat (@"
+		VM.{0}.ObserveReplace ().Subscribe (OnReplace_{0});", member_name);
+		}
+		if (jo_bind ["Reset"].Value<bool> ()) {
+			sb.AppendFormat (@"
+		VM.{0}.ObserveReset ().Subscribe (OnReset_{0});", member_name);
+		}
+
+		return sb.ToString ();
+	}
+
+	public static string GenFuncCodeReactiveMemberDictionary (JObject jo_member, JObject jo_view)
+	{
+		string member_name = jo_member ["Name"].Value<string> ();
+		string member_type = jo_member ["Type"].Value<string> ();
+		string[] member_types = member_type.Split (new char[]{ ',' });
+		JObject jo_bind = jo_view ["Members"] [member_name] ["Bind"] as JObject;
+		StringBuilder sb = new StringBuilder ();
+
+		if (jo_bind ["Add"].Value<bool> ()) {
+			sb.AppendFormat (@"
+
+	public virtual void OnAdd_{0} (DictionaryAddEvent<{1}, {2}> e)
+	{{
+	}}", member_name, member_types [0], member_types [1]);
+		}
+		if (jo_bind ["CountChanged"].Value<bool> ()) {
+			sb.AppendFormat (@"
+
+	public virtual void OnCountChanged_{0} (int count)
+	{{
+	}}", member_name);
+		}
+			
+		if (jo_bind ["Remove"].Value<bool> ()) {
+			sb.AppendFormat (@"
+
+	public virtual void OnRemove_{0} (DictionaryRemoveEvent<{1}, {2}> e)
+	{{
+	}}", member_name, member_types [0], member_types [1]);
+		}
+		if (jo_bind ["Replace"].Value<bool> ()) {
+			sb.AppendFormat (@"
+
+	public virtual void OnReplace_{0} (DictionaryReplaceEvent<{1}, {2}> e)
+	{{
+	}}", member_name, member_types [0], member_types [1]);
+		}
+		if (jo_bind ["Reset"].Value<bool> ()) {
+			sb.AppendFormat (@"
+
+	public virtual void OnReset_{0} (Unit u)
+	{{
+	}}", member_name);
 		}
 
 		return sb.ToString ();
