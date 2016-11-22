@@ -67,10 +67,10 @@ public static class GenCode_ElementEditor
 			result = jom.GenEditorGUIProperty ();
 			break;
 		case "Collection":
-//			result = jom.GenReactiveMemberCollection ();
+			result = jom.GenEditorGUICollection ();
 			break;
 		case "Dictionary":
-//			result = jom.GenReactiveMemberDictionary ();
+			result = jom.GenEditorGUIDictionary ();
 			break;
 		case "Command":
 //			result = jom.GenReactiveMemberCommand ();
@@ -90,6 +90,7 @@ public static class GenCode_ElementEditor
 		switch (type) {
 		case "int":
 			result = string.Format (@"
+
 		vmk = ""{0}"";
 		int temp{0} = EditorGUILayout.DelayedIntField (vmk, VM.{0});
 		if (temp{0} != VM.{0}) {{
@@ -98,6 +99,7 @@ public static class GenCode_ElementEditor
 			break;
 		case "long":
 			result = string.Format (@"
+
 		vmk = ""{0}"";
 		int temp{0} = EditorGUILayout.DelayedIntField (vmk, (int)VM.{0});
 		if ((long)temp{0} != VM.{0}) {{
@@ -106,6 +108,7 @@ public static class GenCode_ElementEditor
 			break;
 		case "float":
 			result = string.Format (@"
+
 		vmk = ""{0}"";
 		float temp{0} = EditorGUILayout.DelayedFloatField (vmk, VM.{0});
 		if (temp{0} != VM.{0}) {{
@@ -114,6 +117,7 @@ public static class GenCode_ElementEditor
 			break;
 		case "double":
 			result = string.Format (@"
+
 		vmk = ""{0}"";
 		double temp{0} = EditorGUILayout.DelayedDoubleField (vmk, VM.{0});
 		if (temp{0} != VM.{0}) {{
@@ -122,6 +126,7 @@ public static class GenCode_ElementEditor
 			break;
 		case "string":
 			result = string.Format (@"
+
 		vmk = ""{0}"";
 		int temp{0} = EditorGUILayout.DelayedTextField (vmk, VM.{0});
 		if (temp{0} != VM.{0}) {{
@@ -135,6 +140,65 @@ public static class GenCode_ElementEditor
 		default:
 			break;
 		}
+
+		return result;
+	}
+
+	public static string GenEditorGUICollection (this JObject jom)
+	{
+		string name = jom ["Name"].Value<string> ();
+		string type = jom ["Type"].Value<string> ();
+
+		string result = string.Format (@"
+
+		vmk = ""{0}"";
+		EditorGUILayout.BeginHorizontal ();
+		string {0}Json = JsonConvert.SerializeObject (VM.{0});
+		string temp{0}Json = EditorGUILayout.DelayedTextField (vmk, {0}Json);
+		if (temp{0}Json != {0}Json) {{
+			if (string.IsNullOrEmpty (temp{0}Json)) {{
+				VM.{0} = null;
+			}} else {{
+				VM.{0} = JsonConvert.DeserializeObject<ReactiveCollection<{1}>> (temp{0}Json);
+			}}
+		}}
+		if (GUILayout.Button (""..."", GUILayout.MaxWidth (20))) {{
+			PopupWindow.Show (
+				new Rect (Event.current.mousePosition.x, Event.current.mousePosition.y, 0f, 0f), 
+				new ReactiveCollectionEditorPopupWindow<{1}> (this, VM.{0})
+			);
+		}}
+		EditorGUILayout.EndHorizontal ();", name, type);
+
+		return result;
+	}
+
+	public static string GenEditorGUIDictionary (this JObject jom)
+	{
+		string name = jom ["Name"].Value<string> ();
+		string type = jom ["Type"].Value<string> ();
+		string[] types = type.Split (new char[]{ ',' });
+
+		string result = string.Format (@"
+
+		vmk = ""{0}"";
+		EditorGUILayout.BeginHorizontal ();
+		string {0} = JsonConvert.SerializeObject (VM.{0});
+		string temp{0} = EditorGUILayout.DelayedTextField (vmk, {0});
+		if (temp{0} != {0}) {{
+			if (string.IsNullOrEmpty (temp{0})) {{
+				VM.{0} = null;
+			}} else {{
+				VM.{0} = JsonConvert.DeserializeObject<ReactiveDictionary<{1},{2}>> (temp{0});
+			}}
+		}}
+		if (GUILayout.Button (""..."", GUILayout.MaxWidth (20))) {{
+			PopupWindow.Show (
+				new Rect (Event.current.mousePosition.x, Event.current.mousePosition.y, 0f, 0f), 
+				new ReactiveDictionaryEditorPopupWindow<{1},{2}> (this, VM.{0})
+			);
+		}}
+		EditorGUILayout.EndHorizontal ();", name, types [0], types [1]);
 
 		return result;
 	}

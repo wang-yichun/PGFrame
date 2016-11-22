@@ -54,8 +54,8 @@ public class SecondHudViewBase : ViewBase
 		base.Bind ();
 		
 		VM.RP_IntValue.Subscribe (OnChanged_IntValue);
-		VM.Numbers.ObserveAdd ().Subscribe (OnAdd_Numbers);
-		VM.Numbers.ObserveRemove ().Subscribe (OnRemove_Numbers);
+		VM.IntList.ObserveAdd ().Subscribe (OnAdd_IntList);
+		VM.IntList.ObserveRemove ().Subscribe (OnRemove_IntList);
 		VM.MyDictionary.ObserveAdd ().Subscribe (OnAdd_MyDictionary);
 		VM.MyDictionary.ObserveRemove ().Subscribe (OnRemove_MyDictionary);
 	}
@@ -71,11 +71,11 @@ public class SecondHudViewBase : ViewBase
 	{
 	}
 
-	public virtual void OnAdd_Numbers (CollectionAddEvent<int> e)
+	public virtual void OnAdd_IntList (CollectionAddEvent<int> e)
 	{
 	}
 
-	public virtual void OnRemove_Numbers (CollectionRemoveEvent<int> e)
+	public virtual void OnRemove_IntList (CollectionRemoveEvent<int> e)
 	{
 	}
 

@@ -21,7 +21,11 @@ public class SecondViewModelBase : ViewModelBase
 		RP_LongValue = new ReactiveProperty<long> ();
 		RP_FloatValue = new ReactiveProperty<float> ();
 		RP_DoubleValue = new ReactiveProperty<double> ();
-		Numbers = new ReactiveCollection<int> ();
+		IntList = new ReactiveCollection<int> ();
+		LongList = new ReactiveCollection<long> ();
+		FloatList = new ReactiveCollection<float> ();
+		DoubleList = new ReactiveCollection<double> ();
+		StringList = new ReactiveCollection<string> ();
 		MyDictionary = new ReactiveDictionary<string, string> ();
 		RP_DefaultProperty1 = new ReactiveProperty<object> ();
 	}
@@ -86,7 +90,19 @@ public class SecondViewModelBase : ViewModelBase
 	}
 
 	/* 一个整形数组 */
-	[JsonProperty] public ReactiveCollection<int> Numbers;
+	[JsonProperty] public ReactiveCollection<int> IntList;
+
+	/*  */
+	[JsonProperty] public ReactiveCollection<long> LongList;
+
+	/*  */
+	[JsonProperty] public ReactiveCollection<float> FloatList;
+
+	/*  */
+	[JsonProperty] public ReactiveCollection<double> DoubleList;
+
+	/*  */
+	[JsonProperty] public ReactiveCollection<string> StringList;
 
 	/* 我的字典 */
 	[JsonProperty] public ReactiveDictionary<string, string> MyDictionary;
