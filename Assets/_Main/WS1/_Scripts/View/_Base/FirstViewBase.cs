@@ -8,7 +8,7 @@ using Newtonsoft.Json.Linq;
 
 public class FirstViewBase : FBView
 {
-	public new FirstViewModel VM;
+	public FirstViewModel VM;
 
 	public FirstViewModel First {
 		get {

@@ -33,7 +33,7 @@ public class FirstHudViewBase : ViewBase
 			}
 		}
 
-		base.Initialize (null);
+		base.Initialize (VM);
 	}
 
 	public override void CreateViewModel ()

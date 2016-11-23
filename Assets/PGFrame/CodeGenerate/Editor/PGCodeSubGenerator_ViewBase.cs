@@ -34,11 +34,13 @@ public class PGCodeSubGenerator_ViewBase: IPGCodeSubGenerator
 		for (int i = 0; i < ja_views.Count; i++) {
 			JObject jo_view = ja_views [i] as JObject;
 			string viewName = jo_view ["Name"].Value<string> ();
+			string baseViewName = jo_view ["Type"].Value<string> ();
 			GetBindCodeAndFunc (jo, i);
 			string targetPath = Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/View/_Base");
 			string code = File.ReadAllText (templateFileInfo.FullName);
 			code = code.Replace ("__YYY__", viewName);
 			code = code.Replace ("__XXX__", elementName);
+			code = code.Replace ("__ZZZ__", string.IsNullOrEmpty (baseViewName) ? "ViewBase" : baseViewName);
 			code = code.Replace (BIND_CODE, bind_code);
 			code = code.Replace (BIND_FUNC, bind_func);
 			string file = Path.Combine (targetPath, string.Format ("{0}Base.cs", viewName));

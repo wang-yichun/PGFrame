@@ -6,7 +6,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-public class __YYY__Base : ViewBase
+public class __YYY__Base : __ZZZ__
 {
 	public __XXX__ViewModel VM;
 
@@ -33,7 +33,7 @@ public class __YYY__Base : ViewBase
 			}
 		}
 
-		base.Initialize (null);
+		base.Initialize (VM);
 	}
 
 	public override void CreateViewModel ()
