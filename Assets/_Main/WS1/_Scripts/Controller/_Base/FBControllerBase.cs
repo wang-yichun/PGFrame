@@ -13,7 +13,14 @@ public class FBControllerBase<T> : ControllerBase<T>
 		FBViewModel vm = (FBViewModel)viewModel;
 
 		
+		vm.RC_FBTestCMD.Subscribe (_ => {
+			FBTestCMD ((FBViewModel)viewModel);
+		});
 	}
 
 	
+	/*  */
+	public virtual void FBTestCMD (FBViewModel viewModel)
+	{
+	}
 }

@@ -16,12 +16,15 @@ public class FBViewModelBase : ViewModelBase
 
 	public override void Initialize ()
 	{
+		base.Initialize ();
 		
 		RP_Count = new ReactiveProperty<int> ();
+		RC_FBTestCMD = new ReactiveCommand ();
 	}
 
 	public override void Attach ()
 	{
+		base.Attach ();
 		FBController.Instance.Attach (this);
 	}
 
@@ -39,5 +42,14 @@ public class FBViewModelBase : ViewModelBase
 			RP_Count.Value = value;
 		}
 	}
+
+	/*  */
+	public ReactiveCommand RC_FBTestCMD;
+	
 }
 
+
+public class FBTestCMDCommand : ViewModelCommandBase
+{
+
+}

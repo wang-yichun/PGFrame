@@ -49,12 +49,19 @@ public class FBElementEditor : Editor, IElementEditor
 
 		string vmk;
 
-
 		vmk = "Count";
 		int tempCount = EditorGUILayout.DelayedIntField (vmk, VM.Count);
 		if (tempCount != VM.Count) {
 			VM.Count = tempCount;
 		}
+
+		vmk = "FBTestCMD";
+		EditorGUILayout.BeginHorizontal ();
+		EditorGUILayout.PrefixLabel (vmk);
+		if (GUILayout.Button ("Invoke")) {
+			VM.RC_FBTestCMD.Execute ();
+		}
+		EditorGUILayout.EndHorizontal ();
 
 		EditorGUILayout.EndVertical ();
 		EditorGUI.indentLevel--;
