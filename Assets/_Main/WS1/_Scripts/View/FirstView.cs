@@ -23,4 +23,10 @@ public class FirstView : FirstViewBase
 		base.AfterBind ();
 		Debug.Log (string.Format ("FirstView in {0} AfterBind.", gameObject.name));
 	}
+
+	public override void OnExecuted_FBTestCMD (Unit unit)
+	{
+		base.OnExecuted_FBTestCMD (unit);
+		Debug.Log (string.Format ("FirstView: OnExecuted_FBTestCMD."));
+	}
 }

@@ -33,6 +33,6 @@ public class FBView : FBViewBase
 	public override void OnExecuted_FBTestCMD (Unit unit)
 	{
 		base.OnExecuted_FBTestCMD (unit);
-		Debug.Log (string.Format ("OnExecuted_FBTestCMD. {0}"));
+		Debug.Log (string.Format ("OnExecuted_FBTestCMD."));
 	}
 }

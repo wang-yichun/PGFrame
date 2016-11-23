@@ -57,7 +57,7 @@ public class PGCodeSubGenerator_ElementEditor: IPGCodeSubGenerator
 		EditorGUILayout.EndVertical ();", baseType));
 		}
 
-		sb.Append ("string vmk;");
+		sb.Append ("\n\n\t\tstring vmk;");
 
 		JArray ja = (JArray)jo ["Member"];
 		for (int i = 0; i < ja.Count; i++) {
