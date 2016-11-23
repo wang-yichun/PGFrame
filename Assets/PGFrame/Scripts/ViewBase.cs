@@ -2,9 +2,18 @@
 
 public class ViewBase : MonoBehaviour
 {
+
+	public bool AutoCreateViewModel = false;
+
+	public string ViewModelInitValueJson;
+
 	void Awake ()
 	{
 		Initialize (null);
+	}
+
+	public virtual void CreateViewModel ()
+	{
 	}
 
 	public virtual ViewModelBase GetViewModel ()

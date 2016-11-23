@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UniRx;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,11 +6,11 @@ using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-public class __YYY__Base : ViewBase
+public class FBViewBase : ViewBase
 {
-	public __XXX__ViewModel VM;
+	public FBViewModel VM;
 
-	public __XXX__ViewModel __XXX__ {
+	public FBViewModel FB {
 		get {
 			return VM;
 		}
@@ -24,7 +24,7 @@ public class __YYY__Base : ViewBase
 	public override void Initialize (ViewModelBase viewModel)
 	{
 		if (viewModel != null) {
-			VM = (__XXX__ViewModel)viewModel;
+			VM = (FBViewModel)viewModel;
 		} else {
 			if (AutoCreateViewModel) {
 				if (VM == null) {
@@ -33,22 +33,24 @@ public class __YYY__Base : ViewBase
 			}
 		}
 
-		base.Initialize (null);
+		base.Initialize (VM);
 	}
 
 	public override void CreateViewModel ()
 	{
 		if (string.IsNullOrEmpty (ViewModelInitValueJson) == false) {
-			VM = JsonConvert.DeserializeObject<__XXX__ViewModel> (ViewModelInitValueJson);
+			VM = JsonConvert.DeserializeObject<FBViewModel> (ViewModelInitValueJson);
 		} else {
-			VM = new __XXX__ViewModel ();
+			VM = new FBViewModel ();
 		}
 	}
 
 	public override void Bind ()
 	{
 		base.Bind ();
-		/****bind_code****/
+		
+		VM.RP_Count.Subscribe (OnChanged_Count);
+		VM.RC_FBTestCMD.Subscribe (OnExecuted_FBTestCMD);
 	}
 
 	public override void AfterBind ()
@@ -56,6 +58,14 @@ public class __YYY__Base : ViewBase
 		base.AfterBind ();
 	}
 
-	/****bind_func****/
+	
+
+	public virtual void OnChanged_Count (int value)
+	{
+	}
+
+	public virtual void OnExecuted_FBTestCMD (Unit unit)
+	{
+	}
 
 }

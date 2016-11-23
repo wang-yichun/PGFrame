@@ -21,10 +21,6 @@ public class FirstHudViewBase : ViewBase
 		return VM;
 	}
 
-	public bool AutoCreateViewModel = false;
-
-	public string ViewModelInitValueJson;
-
 	public override void Initialize (ViewModelBase viewModel)
 	{
 		if (viewModel != null) {
@@ -40,7 +36,7 @@ public class FirstHudViewBase : ViewBase
 		base.Initialize (null);
 	}
 
-	public void CreateViewModel ()
+	public override void CreateViewModel ()
 	{
 		if (string.IsNullOrEmpty (ViewModelInitValueJson) == false) {
 			VM = JsonConvert.DeserializeObject<FirstViewModel> (ViewModelInitValueJson);

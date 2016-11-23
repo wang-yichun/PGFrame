@@ -6,9 +6,9 @@ using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-public class FirstViewBase : ViewBase
+public class FirstViewBase : FBView
 {
-	public FirstViewModel VM;
+	public new FirstViewModel VM;
 
 	public FirstViewModel First {
 		get {
@@ -20,10 +20,6 @@ public class FirstViewBase : ViewBase
 	{
 		return VM;
 	}
-
-	public bool AutoCreateViewModel = false;
-
-	public string ViewModelInitValueJson;
 
 	public override void Initialize (ViewModelBase viewModel)
 	{
@@ -37,10 +33,10 @@ public class FirstViewBase : ViewBase
 			}
 		}
 
-		base.Initialize (null);
+		base.Initialize (VM);
 	}
 
-	public void CreateViewModel ()
+	public override void CreateViewModel ()
 	{
 		if (string.IsNullOrEmpty (ViewModelInitValueJson) == false) {
 			VM = JsonConvert.DeserializeObject<FirstViewModel> (ViewModelInitValueJson);
