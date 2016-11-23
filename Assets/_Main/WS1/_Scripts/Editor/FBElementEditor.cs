@@ -17,13 +17,13 @@ public class FBElementEditor : Editor, IElementEditor
 	public override void OnInspectorGUI ()
 	{
 		EditorGUILayout.BeginVertical ();
-		if (ToggleDefault = EditorGUILayout.Foldout (ToggleDefault, "Default")) {
+		if (ToggleDefault = EditorGUILayout.Foldout (ToggleDefault, "View")) {
 			EditorGUI.indentLevel++;
 			base.OnInspectorGUI ();
 			EditorGUI.indentLevel--;
 			EditorGUILayout.Space ();
 		}
-		if (ToggleViewModel = EditorGUILayout.Foldout (ToggleViewModel, "ViewModel")) {
+		if (ToggleViewModel = EditorGUILayout.Foldout (ToggleViewModel, "ViewModel - FB")) {
 
 			if (VM != null) {
 				InspectorGUI_ViewModel ();
@@ -43,9 +43,11 @@ public class FBElementEditor : Editor, IElementEditor
 		EditorGUILayout.BeginVertical ();
 
 		EditorGUILayout.BeginHorizontal ();
-		EditorGUILayout.PrefixLabel ("VMID");
-		EditorGUILayout.SelectableLabel (VM.VMID.ToString ());
+		EditorGUILayout.PrefixLabel ("Name & ID");
+		EditorGUILayout.TextField (string.Format ("{0} ({1})", "FBViewModel", VM.VMID.ToString ().Substring (0, 8)));
 		EditorGUILayout.EndHorizontal ();
+
+		
 
 		string vmk;
 
