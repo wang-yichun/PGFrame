@@ -15,7 +15,11 @@ public abstract class ViewModelBase
 		Attach ();
 	}
 
-	public abstract void Initialize ();
+	public virtual void Initialize ()
+	{
+	}
 
-	public abstract void Attach ();
+	public virtual void Attach ()
+	{
+	}
 }

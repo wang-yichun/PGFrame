@@ -44,8 +44,20 @@ public class PGCodeSubGenerator_ElementEditor: IPGCodeSubGenerator
 
 	public string GetViewModelGUICode (JObject jo)
 	{
+		string baseType = jo ["Common"] ["Type"].Value<string> ();
+
 		StringBuilder sb = new StringBuilder ();
-		sb.Append ("string vmk;\n");
+
+		if (string.IsNullOrEmpty (baseType) == false) {
+			sb.Append (string.Format (@"
+		EditorGUILayout.BeginVertical (""box"");
+		{0}ElementEditor baseElementEditor = new {0}ElementEditor ();
+		baseElementEditor.VM = VM as {0}ViewModel;
+		baseElementEditor.InspectorGUI_ViewModel ();
+		EditorGUILayout.EndVertical ();", baseType));
+		}
+
+		sb.Append ("string vmk;");
 
 		JArray ja = (JArray)jo ["Member"];
 		for (int i = 0; i < ja.Count; i++) {

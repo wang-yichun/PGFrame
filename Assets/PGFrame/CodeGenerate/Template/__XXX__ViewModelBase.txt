@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 // /****class_comment****/ 
 ////////////////////////////////////////////////////////////////////////////////
 [JsonObjectAttribute (MemberSerialization.OptIn)]
-public class __XXX__ViewModelBase : ViewModelBase
+public class __XXX__ViewModelBase : __YYY__
 {
 	public __XXX__ViewModelBase ()
 	{
@@ -16,11 +16,13 @@ public class __XXX__ViewModelBase : ViewModelBase
 
 	public override void Initialize ()
 	{
+		base.Initialize ();
 		/****initialize_code****/
 	}
 
 	public override void Attach ()
 	{
+		base.Attach ();
 		__XXX__Controller.Instance.Attach (this);
 	}
 

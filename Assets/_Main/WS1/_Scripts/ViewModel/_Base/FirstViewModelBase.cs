@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 // 一个 element 的定义 
 ////////////////////////////////////////////////////////////////////////////////
 [JsonObjectAttribute (MemberSerialization.OptIn)]
-public class FirstViewModelBase : ViewModelBase
+public class FirstViewModelBase : FBViewModel
 {
 	public FirstViewModelBase ()
 	{
@@ -16,6 +16,7 @@ public class FirstViewModelBase : ViewModelBase
 
 	public override void Initialize ()
 	{
+		base.Initialize ();
 		
 		RP_LabelTextNum = new ReactiveProperty<int> ();
 		Numbers = new ReactiveCollection<int> ();
@@ -29,6 +30,7 @@ public class FirstViewModelBase : ViewModelBase
 
 	public override void Attach ()
 	{
+		base.Attach ();
 		FirstController.Instance.Attach (this);
 	}
 

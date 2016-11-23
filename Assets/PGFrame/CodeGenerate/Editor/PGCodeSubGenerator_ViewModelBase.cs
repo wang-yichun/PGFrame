@@ -30,9 +30,11 @@ public class PGCodeSubGenerator_ViewModelBase: IPGCodeSubGenerator
 	{
 		string workspaceName = jo ["Workspace"].Value<string> ();
 		string elementName = jo ["Common"] ["Name"].Value<string> ();
+		string baseName = jo ["Common"] ["Type"].Value<string> ();
 		string targetPath = Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/ViewModel/_Base");
 		string code = File.ReadAllText (templateFileInfo.FullName);
 		code = code.Replace ("__XXX__", elementName);
+		code = code.Replace ("__YYY__", string.IsNullOrEmpty (baseName) ? "ViewModelBase" : baseName + "ViewModel");
 		code = code.Replace (REACTIVE_MEMBERS, GetReactiveMembers (jo));
 		code = code.Replace (COMMAND_CLASS, GetCommandClass (jo));
 		code = code.Replace (INITIALIZE_CODE, GetInitializeCode (jo));
