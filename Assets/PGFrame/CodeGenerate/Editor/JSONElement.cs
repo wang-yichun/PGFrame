@@ -24,6 +24,7 @@ public class JSONElement
 	public string Workspace;
 	public string DocType;
 	public string Name;
+	public string FileName;
 
 	public void Load ()
 	{
@@ -32,7 +33,8 @@ public class JSONElement
 
 		Workspace = jo ["Workspace"].Value<string> ();
 		DocType = jo ["DocType"].Value<string> ();
-
+		FileName = fileInfo.Name;
+			
 		if (DocType == "Element") {
 			Name = jo ["Common"] ["Name"].Value<string> ();
 		}

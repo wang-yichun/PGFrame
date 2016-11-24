@@ -134,8 +134,9 @@ public partial class PGFrameWindow : EditorWindow
 			int split_idx = 0;
 			r.x = (rect.width - 25f) * split [split_idx] + 25f;
 			r.width = (rect.width - 25f) * (split [split_idx + 1] - split [split_idx]);
-			if (GUI.Button (r, (ja_elements [index] as JObject) ["File"].Value<string> ())) {
-				SelectedJsonElement = jElements [index];
+			JObject jo_element = ja_elements [index] as JObject;
+			if (GUI.Button (r, jo_element ["File"].Value<string> ())) {
+				SelectedJsonElement = jElements.Single (je => je.FileName == jo_element ["File"].Value<string> ());
 			}
 		};
 
