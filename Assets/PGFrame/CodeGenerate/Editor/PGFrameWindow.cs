@@ -158,13 +158,15 @@ public partial class PGFrameWindow : EditorWindow
 						jo.Add ("DocType", "Element");
 						jo.Add ("File", jsonName);
 						ja_elements.Add (jo);
-						SaveCommonFile ();
+//						SaveCommonFile ();
 
 						CreateElementJsonFile (jsonName, SelectedWorkspaceCommon.Workspace, ElementName);
 						NeedRefresh = true;
 
 						PRDebug.TagLog (lt, lc, "成功创建了 Element: " + ElementName);
 						ElementName = null;
+
+						SaveCommonFile ();
 					} else {
 						PRDebug.TagLog (lt, lc, "该工作空间中已经含有名字: " + ElementName);
 					}
