@@ -140,7 +140,7 @@ public static class GenCode_ElementEditor
 			result = string.Format (@"
 
 		vmk = ""{0}"";
-		int temp{0} = EditorGUILayout.DelayedTextField (vmk, VM.{0});
+		string temp{0} = EditorGUILayout.DelayedTextField (vmk, VM.{0});
 		if (temp{0} != VM.{0}) {{
 			VM.{0} = temp{0};
 		}}", name);
