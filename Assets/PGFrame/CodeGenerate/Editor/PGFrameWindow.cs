@@ -24,6 +24,8 @@ public partial class PGFrameWindow : EditorWindow
 		window.Show ();
 	}
 
+	Rect buttonRect;
+
 	void OnGUI ()
 	{
 		if (NeedRefresh)
@@ -39,11 +41,19 @@ public partial class PGFrameWindow : EditorWindow
 		if (GUILayout.Button ("刷新")) {
 			RefreshFiles ();
 		}
+
 		if (GUILayout.Button ("添加 Workspace")) {
-			JsonWorkspaceManager manager = new JsonWorkspaceManager (Path.Combine (Application.dataPath, JsonRoot));
-			PRDebug.TagLog (lt, lcr, manager.CreateWorkspace ("WS3"));
-			AssetDatabase.Refresh ();
+
+			PopupWindow.Show (buttonRect, new TextFieldPopupDialog ("请输入 Workspace 的名字:", (string value) => {
+				JsonWorkspaceManager manager = new JsonWorkspaceManager (Path.Combine (Application.dataPath, JsonRoot));
+				manager.CreateWorkspace (value);
+				AssetDatabase.Refresh ();
+				NeedRefresh = true;
+			}));
 		}
+		if (Event.current.type == EventType.Repaint)
+			buttonRect = GUILayoutUtility.GetLastRect ();
+		
 		if (SelectedJsonElement == null) {
 			DesignList ();
 		} else {
