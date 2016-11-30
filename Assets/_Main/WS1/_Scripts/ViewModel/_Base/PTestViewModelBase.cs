@@ -46,6 +46,7 @@ public class PTestViewModelBase : ViewModelBase
 		RC_DefaultCommand18 = new ReactiveCommand ();
 		RC_DefaultCommand19 = new ReactiveCommand ();
 		RC_DefaultCommand20 = new ReactiveCommand ();
+		RP_CurrentFB = new ReactiveProperty<FBViewModel> ();
 	}
 
 	public override void Attach ()
@@ -199,6 +200,19 @@ public class PTestViewModelBase : ViewModelBase
 	/*  */
 	public ReactiveCommand RC_DefaultCommand20;
 	
+
+	/*  */
+	public ReactiveProperty<FBViewModel> RP_CurrentFB;
+
+	[JsonProperty]
+	public FBViewModel CurrentFB {
+		get {
+			return RP_CurrentFB.Value;
+		}
+		set {
+			RP_CurrentFB.Value = value;
+		}
+	}
 }
 
 

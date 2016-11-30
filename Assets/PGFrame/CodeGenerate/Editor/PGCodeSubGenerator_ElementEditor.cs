@@ -145,11 +145,14 @@ public static class GenCode_ElementEditor
 			VM.{0} = temp{0};
 		}}", name);
 			break;
-		case "DateTime":
-		case "JObject":
-		case "JArray":
-			break;
+//		case "DateTime":
+//		case "JObject":
+//		case "JArray":
+//			break;
 		default:
+			result = string.Format (@"
+		vmk = ""{0}"";
+		EditorGUILayout.DelayedTextField (vmk, ""({1})"");", name, type);
 			break;
 		}
 

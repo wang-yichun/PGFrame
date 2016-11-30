@@ -344,6 +344,8 @@ public class PTestElementEditor : Editor, IElementEditor
 			VM.RC_DefaultCommand20.Execute ();
 		}
 		EditorGUILayout.EndHorizontal ();
+		vmk = "CurrentFB";
+		EditorGUILayout.DelayedTextField (vmk, "(FBViewModel)");
 
 		EditorGUILayout.EndVertical ();
 		EditorGUI.indentLevel--;

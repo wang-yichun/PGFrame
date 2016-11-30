@@ -65,5 +65,7 @@ public class PerformanceTestDriver : MonoBehaviour
 		print (sw.ElapsedMilliseconds);
 
 		sw.Stop ();
+
+		Destroy (go);
 	}
 }
