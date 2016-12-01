@@ -199,6 +199,30 @@ public static class GenCode_ElementEditor
 		VM.{0} = EditorGUILayout.ColorField (vmk, VM.{0});", name);
 			break;
 
+		case "DateTime":
+			result = string.Format (@"
+
+		vmk = ""{0}"";
+		DateTime temp{0};
+		if (DateTime.TryParse (EditorGUILayout.DelayedTextField (vmk, VM.{0}.ToString ()), out temp{0})) {{
+			if (VM.{0} != temp{0}) {{
+				VM.{0} = temp{0};
+			}}
+		}}", name);
+			break;
+
+		case "TimeSpan":
+			result = string.Format (@"
+
+		vmk = ""{0}"";
+		TimeSpan temp{0};
+		if (TimeSpan.TryParse (EditorGUILayout.DelayedTextField (vmk, VM.{0}.ToString ()), out temp{0})) {{
+			if (VM.{0} != temp{0}) {{
+				VM.{0} = temp{0};
+			}}
+		}}", name);
+			break;
+
 		default:
 			result = string.Format (@"
 

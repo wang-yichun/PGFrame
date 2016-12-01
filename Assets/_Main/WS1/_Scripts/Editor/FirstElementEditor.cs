@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEditor;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
@@ -182,7 +183,20 @@ public class FirstElementEditor : Editor, IElementEditor
 		VM.CurrentColor = EditorGUILayout.ColorField (vmk, VM.CurrentColor);
 
 		vmk = "CurrentDateTime";
-		EditorGUILayout.DelayedTextField (vmk, VM.CurrentDateTime != null ? VM.CurrentDateTime.ToString () : "null (DateTime)");
+		DateTime tempCurrentDateTime;
+		if (DateTime.TryParse (EditorGUILayout.DelayedTextField (vmk, VM.CurrentDateTime.ToString ()), out tempCurrentDateTime)) {
+			if (VM.CurrentDateTime != tempCurrentDateTime) {
+				VM.CurrentDateTime = tempCurrentDateTime;
+			}
+		}
+
+		vmk = "CurrentTimeSpan";
+		TimeSpan tempCurrentTimeSpan;
+		if (TimeSpan.TryParse (EditorGUILayout.DelayedTextField (vmk, VM.CurrentTimeSpan.ToString ()), out tempCurrentTimeSpan)) {
+			if (VM.CurrentTimeSpan != tempCurrentTimeSpan) {
+				VM.CurrentTimeSpan = tempCurrentTimeSpan;
+			}
+		}
 
 		EditorGUILayout.EndVertical ();
 		EditorGUI.indentLevel--;

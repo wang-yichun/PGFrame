@@ -36,6 +36,7 @@ public class FirstViewModelBase : FBViewModel
 		RP_CurrentBounds = new ReactiveProperty<UnityEngine.Bounds> ();
 		RP_CurrentColor = new ReactiveProperty<UnityEngine.Color> ();
 		RP_CurrentDateTime = new ReactiveProperty<DateTime> ();
+		RP_CurrentTimeSpan = new ReactiveProperty<TimeSpan> ();
 	}
 
 	public override void Attach ()
@@ -207,6 +208,19 @@ public class FirstViewModelBase : FBViewModel
 		}
 		set {
 			RP_CurrentDateTime.Value = value;
+		}
+	}
+
+	/*  */
+	public ReactiveProperty<TimeSpan> RP_CurrentTimeSpan;
+
+	[JsonProperty]
+	public TimeSpan CurrentTimeSpan {
+		get {
+			return RP_CurrentTimeSpan.Value;
+		}
+		set {
+			RP_CurrentTimeSpan.Value = value;
 		}
 	}
 }
