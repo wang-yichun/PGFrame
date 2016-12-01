@@ -108,6 +108,9 @@ public class FirstElementEditor : Editor, IElementEditor
 		}
 		EditorGUILayout.EndHorizontal ();
 
+		vmk = "MyNewProperty";
+		EditorGUILayout.DelayedTextField (vmk, VM.MyNewProperty != null ? VM.MyNewProperty.ToString () : "null (object)");
+
 		vmk = "DefaultCollection";
 		EditorGUILayout.BeginHorizontal ();
 		string DefaultCollectionJson = JsonConvert.SerializeObject (VM.DefaultCollection);
@@ -126,6 +129,9 @@ public class FirstElementEditor : Editor, IElementEditor
 			);
 		}
 		EditorGUILayout.EndHorizontal ();
+
+		vmk = "DefaultProperty";
+		EditorGUILayout.DelayedTextField (vmk, VM.DefaultProperty != null ? VM.DefaultProperty.ToString () : "null (object)");
 
 		vmk = "AddNum";
 		EditorGUILayout.BeginHorizontal ();
@@ -151,6 +157,26 @@ public class FirstElementEditor : Editor, IElementEditor
 			CommandParams [vmk] = EditorGUILayout.TextArea (CommandParams [vmk]);
 			EditorGUILayout.Space ();
 		}
+
+		vmk = "CurrentVector2";
+		VM.CurrentVector2 = EditorGUILayout.Vector2Field (vmk, VM.CurrentVector2);
+
+		vmk = "CurrentVector3";
+		VM.CurrentVector3 = EditorGUILayout.Vector3Field (vmk, VM.CurrentVector3);
+
+		vmk = "CurrentVector4";
+		VM.CurrentVector4 = EditorGUILayout.Vector4Field (vmk, VM.CurrentVector4);
+
+		vmk = "CurrentQuaternion";
+		Vector3 tempCurrentQuaternionVector3 = VM.CurrentQuaternion.eulerAngles;
+		tempCurrentQuaternionVector3 = EditorGUILayout.Vector3Field (vmk, tempCurrentQuaternionVector3);
+		VM.CurrentQuaternion = Quaternion.Euler (tempCurrentQuaternionVector3);
+
+		vmk = "CurrentRect";
+		EditorGUILayout.DelayedTextField (vmk, VM.CurrentRect != null ? VM.CurrentRect.ToString () : "null (UnityEngine.Rect)");
+
+		vmk = "CurrentBounds";
+		EditorGUILayout.DelayedTextField (vmk, VM.CurrentBounds != null ? VM.CurrentBounds.ToString () : "null (UnityEngine.Bounds)");
 
 		EditorGUILayout.EndVertical ();
 		EditorGUI.indentLevel--;

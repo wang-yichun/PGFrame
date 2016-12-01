@@ -149,12 +149,41 @@ public static class GenCode_ElementEditor
 //		case "JObject":
 //		case "JArray":
 //			break;
+
+		case "UnityEngine.Vector2":
+			result = string.Format (@"
+
+		vmk = ""{0}"";
+		VM.{0} = EditorGUILayout.Vector2Field (vmk, VM.{0});", name);
+			break;
+		case "UnityEngine.Vector3":
+			result = string.Format (@"
+
+		vmk = ""{0}"";
+		VM.{0} = EditorGUILayout.Vector3Field (vmk, VM.{0});", name);
+			break;
+		case "UnityEngine.Vector4":
+			result = string.Format (@"
+
+		vmk = ""{0}"";
+		VM.{0} = EditorGUILayout.Vector4Field (vmk, VM.{0});", name);
+			break;
+		case "UnityEngine.Quaternion":
+			result = string.Format (@"
+
+		vmk = ""{0}"";
+		Vector3 temp{0}Vector3 = VM.{0}.eulerAngles;
+		temp{0}Vector3 = EditorGUILayout.Vector3Field (vmk, temp{0}Vector3);
+		VM.{0} = Quaternion.Euler (temp{0}Vector3);", name);
+			break;
 		default:
 			result = string.Format (@"
+
 		vmk = ""{0}"";
-		EditorGUILayout.DelayedTextField (vmk, ""({1})"");", name, type);
+		EditorGUILayout.DelayedTextField (vmk, VM.{0} != null ? VM.{0}.ToString () : ""null ({1})"");", name, type);
 			break;
 		}
+
 
 		return result;
 	}

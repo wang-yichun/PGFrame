@@ -27,6 +27,12 @@ public class FirstViewModelBase : FBViewModel
 		DefaultCollection = new ReactiveCollection<object> ();
 		RP_DefaultProperty = new ReactiveProperty<object> ();
 		RC_AddNum = new ReactiveCommand<AddNumCommand> ();
+		RP_CurrentVector2 = new ReactiveProperty<UnityEngine.Vector2> ();
+		RP_CurrentVector3 = new ReactiveProperty<UnityEngine.Vector3> ();
+		RP_CurrentVector4 = new ReactiveProperty<UnityEngine.Vector4> ();
+		RP_CurrentQuaternion = new ReactiveProperty<UnityEngine.Quaternion> ();
+		RP_CurrentRect = new ReactiveProperty<UnityEngine.Rect> ();
+		RP_CurrentBounds = new ReactiveProperty<UnityEngine.Bounds> ();
 	}
 
 	public override void Attach ()
@@ -92,6 +98,84 @@ public class FirstViewModelBase : FBViewModel
 	/*  */
 	public ReactiveCommand<AddNumCommand> RC_AddNum;
 	
+
+	/*  */
+	public ReactiveProperty<UnityEngine.Vector2> RP_CurrentVector2;
+
+	[JsonProperty]
+	public UnityEngine.Vector2 CurrentVector2 {
+		get {
+			return RP_CurrentVector2.Value;
+		}
+		set {
+			RP_CurrentVector2.Value = value;
+		}
+	}
+
+	/*  */
+	public ReactiveProperty<UnityEngine.Vector3> RP_CurrentVector3;
+
+	[JsonProperty]
+	public UnityEngine.Vector3 CurrentVector3 {
+		get {
+			return RP_CurrentVector3.Value;
+		}
+		set {
+			RP_CurrentVector3.Value = value;
+		}
+	}
+
+	/*  */
+	public ReactiveProperty<UnityEngine.Vector4> RP_CurrentVector4;
+
+	[JsonProperty]
+	public UnityEngine.Vector4 CurrentVector4 {
+		get {
+			return RP_CurrentVector4.Value;
+		}
+		set {
+			RP_CurrentVector4.Value = value;
+		}
+	}
+
+	/*  */
+	public ReactiveProperty<UnityEngine.Quaternion> RP_CurrentQuaternion;
+
+	[JsonProperty]
+	public UnityEngine.Quaternion CurrentQuaternion {
+		get {
+			return RP_CurrentQuaternion.Value;
+		}
+		set {
+			RP_CurrentQuaternion.Value = value;
+		}
+	}
+
+	/*  */
+	public ReactiveProperty<UnityEngine.Rect> RP_CurrentRect;
+
+	[JsonProperty]
+	public UnityEngine.Rect CurrentRect {
+		get {
+			return RP_CurrentRect.Value;
+		}
+		set {
+			RP_CurrentRect.Value = value;
+		}
+	}
+
+	/*  */
+	public ReactiveProperty<UnityEngine.Bounds> RP_CurrentBounds;
+
+	[JsonProperty]
+	public UnityEngine.Bounds CurrentBounds {
+		get {
+			return RP_CurrentBounds.Value;
+		}
+		set {
+			RP_CurrentBounds.Value = value;
+		}
+	}
 }
 
 
