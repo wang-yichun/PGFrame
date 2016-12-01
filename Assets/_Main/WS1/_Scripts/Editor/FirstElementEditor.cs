@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UniRx;
 
 public class FirstElementEditor : Editor, IElementEditor
@@ -195,6 +196,28 @@ public class FirstElementEditor : Editor, IElementEditor
 		if (TimeSpan.TryParse (EditorGUILayout.DelayedTextField (vmk, VM.CurrentTimeSpan.ToString ()), out tempCurrentTimeSpan)) {
 			if (VM.CurrentTimeSpan != tempCurrentTimeSpan) {
 				VM.CurrentTimeSpan = tempCurrentTimeSpan;
+			}
+		}
+
+		vmk = "CurrentJObject";
+		string tempCurrentJObjectString = JsonConvert.SerializeObject (VM.CurrentJObject);
+		string temp2CurrentJObjectString = EditorGUILayout.DelayedTextField (vmk, tempCurrentJObjectString);
+		if (tempCurrentJObjectString != temp2CurrentJObjectString) {
+			try {
+				VM.CurrentJObject = JsonConvert.DeserializeObject<JObject> (temp2CurrentJObjectString);
+			} catch {
+				VM.CurrentJObject = JsonConvert.DeserializeObject<JObject> (tempCurrentJObjectString);
+			}
+		}
+
+		vmk = "CurrentJArray";
+		string tempCurrentJArrayString = JsonConvert.SerializeObject (VM.CurrentJArray);
+		string temp2CurrentJArrayString = EditorGUILayout.DelayedTextField (vmk, tempCurrentJArrayString);
+		if (tempCurrentJArrayString != temp2CurrentJArrayString) {
+			try {
+				VM.CurrentJArray = JsonConvert.DeserializeObject<JArray> (temp2CurrentJArrayString);
+			} catch {
+				VM.CurrentJArray = JsonConvert.DeserializeObject<JArray> (tempCurrentJArrayString);
 			}
 		}
 

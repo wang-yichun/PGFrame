@@ -1,6 +1,8 @@
 using UnityEngine;
 using System;
 using System.Collections;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UniRx;
 
 public class FirstControllerBase<T> : ControllerBase<T>

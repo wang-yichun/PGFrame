@@ -223,6 +223,36 @@ public static class GenCode_ElementEditor
 		}}", name);
 			break;
 
+		case "JObject":
+			result = string.Format (@"
+
+		vmk = ""{0}"";
+		string temp{0}String = JsonConvert.SerializeObject (VM.{0});
+		string temp2{0}String = EditorGUILayout.DelayedTextField (vmk, temp{0}String);
+		if (temp{0}String != temp2{0}String) {{
+			try {{
+				VM.{0} = JsonConvert.DeserializeObject<JObject> (temp2{0}String);
+			}} catch {{
+				VM.{0} = JsonConvert.DeserializeObject<JObject> (temp{0}String);
+			}}
+		}}", name);
+			break;
+
+		case "JArray":
+			result = string.Format (@"
+
+		vmk = ""{0}"";
+		string temp{0}String = JsonConvert.SerializeObject (VM.{0});
+		string temp2{0}String = EditorGUILayout.DelayedTextField (vmk, temp{0}String);
+		if (temp{0}String != temp2{0}String) {{
+			try {{
+				VM.{0} = JsonConvert.DeserializeObject<JArray> (temp2{0}String);
+			}} catch {{
+				VM.{0} = JsonConvert.DeserializeObject<JArray> (temp{0}String);
+			}}
+		}}", name);
+			break;
+
 		default:
 			result = string.Format (@"
 

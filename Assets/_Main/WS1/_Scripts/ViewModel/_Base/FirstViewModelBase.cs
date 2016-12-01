@@ -2,8 +2,9 @@ using System.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UniRx;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using UniRx;
 
 /*//////////////////////////////////////////////////////////////////////////////
  一个 element 的定义
@@ -37,6 +38,8 @@ public class FirstViewModelBase : FBViewModel
 		RP_CurrentColor = new ReactiveProperty<UnityEngine.Color> ();
 		RP_CurrentDateTime = new ReactiveProperty<DateTime> ();
 		RP_CurrentTimeSpan = new ReactiveProperty<TimeSpan> ();
+		RP_CurrentJObject = new ReactiveProperty<JObject> ();
+		RP_CurrentJArray = new ReactiveProperty<JArray> ();
 	}
 
 	public override void Attach ()
@@ -221,6 +224,32 @@ public class FirstViewModelBase : FBViewModel
 		}
 		set {
 			RP_CurrentTimeSpan.Value = value;
+		}
+	}
+
+	/*  */
+	public ReactiveProperty<JObject> RP_CurrentJObject;
+
+	[JsonProperty]
+	public JObject CurrentJObject {
+		get {
+			return RP_CurrentJObject.Value;
+		}
+		set {
+			RP_CurrentJObject.Value = value;
+		}
+	}
+
+	/*  */
+	public ReactiveProperty<JArray> RP_CurrentJArray;
+
+	[JsonProperty]
+	public JArray CurrentJArray {
+		get {
+			return RP_CurrentJArray.Value;
+		}
+		set {
+			RP_CurrentJArray.Value = value;
 		}
 	}
 }
