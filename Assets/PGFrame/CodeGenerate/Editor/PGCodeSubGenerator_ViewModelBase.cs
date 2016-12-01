@@ -170,6 +170,15 @@ public static class GenCode_ViewModelBase
 		case "UnityEngine.Color":
 			code = "\n\t[JsonConverter (typeof(ColorJsonConverter))]";
 			break;
+		case "UnityEngine.Rect":
+			code = "\n\t[JsonConverter (typeof(RectJsonConverter))]";
+			break;
+		case "UnityEngine.Bounds":
+			code = "\n\t[JsonConverter (typeof(BoundsJsonConverter))]";
+			break;
+		case "UnityEngine.Quaternion":
+			code = "\n\t[JsonConverter (typeof(QuaternionJsonConverter))]";
+			break;
 		default:
 			break;
 		}

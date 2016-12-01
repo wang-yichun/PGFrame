@@ -143,6 +143,7 @@ public class FirstViewModelBase : FBViewModel
 	public ReactiveProperty<UnityEngine.Quaternion> RP_CurrentQuaternion;
 
 	[JsonProperty]
+	[JsonConverter (typeof(QuaternionJsonConverter))]
 	public UnityEngine.Quaternion CurrentQuaternion {
 		get {
 			return RP_CurrentQuaternion.Value;
@@ -156,6 +157,7 @@ public class FirstViewModelBase : FBViewModel
 	public ReactiveProperty<UnityEngine.Rect> RP_CurrentRect;
 
 	[JsonProperty]
+	[JsonConverter (typeof(RectJsonConverter))]
 	public UnityEngine.Rect CurrentRect {
 		get {
 			return RP_CurrentRect.Value;
@@ -169,6 +171,7 @@ public class FirstViewModelBase : FBViewModel
 	public ReactiveProperty<UnityEngine.Bounds> RP_CurrentBounds;
 
 	[JsonProperty]
+	[JsonConverter (typeof(BoundsJsonConverter))]
 	public UnityEngine.Bounds CurrentBounds {
 		get {
 			return RP_CurrentBounds.Value;
