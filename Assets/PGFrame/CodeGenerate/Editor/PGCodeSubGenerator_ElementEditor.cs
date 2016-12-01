@@ -168,6 +168,7 @@ public static class GenCode_ElementEditor
 		vmk = ""{0}"";
 		VM.{0} = EditorGUILayout.Vector4Field (vmk, VM.{0});", name);
 			break;
+
 		case "UnityEngine.Quaternion":
 			result = string.Format (@"
 
@@ -176,6 +177,28 @@ public static class GenCode_ElementEditor
 		temp{0}Vector3 = EditorGUILayout.Vector3Field (vmk, temp{0}Vector3);
 		VM.{0} = Quaternion.Euler (temp{0}Vector3);", name);
 			break;
+
+		case "UnityEngine.Rect":
+			result = string.Format (@"
+
+		vmk = ""{0}"";
+		VM.{0} = EditorGUILayout.RectField (vmk, VM.{0});", name);
+			break;
+
+		case "UnityEngine.Bounds":
+			result = string.Format (@"
+
+		vmk = ""{0}"";
+		VM.{0} = EditorGUILayout.BoundsField (vmk, VM.{0});", name);
+			break;
+
+		case "UnityEngine.Color":
+			result = string.Format (@"
+
+		vmk = ""{0}"";
+		VM.{0} = EditorGUILayout.ColorField (vmk, VM.{0});", name);
+			break;
+
 		default:
 			result = string.Format (@"
 

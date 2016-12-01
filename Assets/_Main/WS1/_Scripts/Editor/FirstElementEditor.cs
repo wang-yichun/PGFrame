@@ -173,10 +173,13 @@ public class FirstElementEditor : Editor, IElementEditor
 		VM.CurrentQuaternion = Quaternion.Euler (tempCurrentQuaternionVector3);
 
 		vmk = "CurrentRect";
-		EditorGUILayout.DelayedTextField (vmk, VM.CurrentRect != null ? VM.CurrentRect.ToString () : "null (UnityEngine.Rect)");
+		VM.CurrentRect = EditorGUILayout.RectField (vmk, VM.CurrentRect);
 
 		vmk = "CurrentBounds";
-		EditorGUILayout.DelayedTextField (vmk, VM.CurrentBounds != null ? VM.CurrentBounds.ToString () : "null (UnityEngine.Bounds)");
+		VM.CurrentBounds = EditorGUILayout.BoundsField (vmk, VM.CurrentBounds);
+
+		vmk = "CurrentColor";
+		VM.CurrentColor = EditorGUILayout.ColorField (vmk, VM.CurrentColor);
 
 		EditorGUILayout.EndVertical ();
 		EditorGUI.indentLevel--;

@@ -33,6 +33,7 @@ public class FirstViewModelBase : FBViewModel
 		RP_CurrentQuaternion = new ReactiveProperty<UnityEngine.Quaternion> ();
 		RP_CurrentRect = new ReactiveProperty<UnityEngine.Rect> ();
 		RP_CurrentBounds = new ReactiveProperty<UnityEngine.Bounds> ();
+		RP_CurrentColor = new ReactiveProperty<UnityEngine.Color> ();
 	}
 
 	public override void Attach ()
@@ -174,6 +175,20 @@ public class FirstViewModelBase : FBViewModel
 		}
 		set {
 			RP_CurrentBounds.Value = value;
+		}
+	}
+
+	/*  */
+	public ReactiveProperty<UnityEngine.Color> RP_CurrentColor;
+
+	[JsonProperty]
+	[JsonConverter (typeof(ColorJsonConverter))]
+	public UnityEngine.Color CurrentColor {
+		get {
+			return RP_CurrentColor.Value;
+		}
+		set {
+			RP_CurrentColor.Value = value;
 		}
 	}
 }

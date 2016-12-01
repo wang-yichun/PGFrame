@@ -24,6 +24,9 @@ public class FirstViewElementViewEditor : FirstElementEditor
 
 	public override void VMCopyToJson ()
 	{
-		V.ViewModelInitValueJson = JsonConvert.SerializeObject ((FirstViewModelBase)VM);
+		JsonSerializerSettings settings = new JsonSerializerSettings () {
+			ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+		};
+		V.ViewModelInitValueJson = JsonConvert.SerializeObject ((FirstViewModelBase)VM, settings);
 	}
 }

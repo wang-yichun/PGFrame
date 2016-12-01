@@ -24,6 +24,9 @@ public class __YYY__ElementViewEditor : __XXX__ElementEditor
 
 	public override void VMCopyToJson ()
 	{
-		V.ViewModelInitValueJson = JsonConvert.SerializeObject ((__XXX__ViewModelBase)VM);
+		JsonSerializerSettings settings = new JsonSerializerSettings () {
+			ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+		};
+		V.ViewModelInitValueJson = JsonConvert.SerializeObject ((FirstViewModelBase)VM, settings);
 	}
 }

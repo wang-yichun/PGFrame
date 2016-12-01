@@ -144,7 +144,7 @@ public static class GenCode_ViewModelBase
 	/* {DESC} */
 	public ReactiveProperty<{TYPE}> RP_{NAME};
 
-	[JsonProperty]
+	[JsonProperty]{JSONCONVERTER}
 	public {TYPE} {NAME} {
 		get {
 			return RP_{NAME}.Value;
@@ -157,7 +157,23 @@ public static class GenCode_ViewModelBase
 		template = template.Replace ("{NAME}", jom ["Name"].Value<string> ());
 		template = template.Replace ("{TYPE}", jom ["Type"].Value<string> ());
 		template = template.Replace ("{DESC}", jom ["Desc"].Value<string> ());
+		template = template.Replace ("{JSONCONVERTER}", GetAttributeCode (jom ["Type"].Value<string> ()));
+
+
 		return template;
+	}
+
+	public static string GetAttributeCode (string type)
+	{
+		string code = "";
+		switch (type) {
+		case "UnityEngine.Color":
+			code = "\n\t[JsonConverter (typeof(ColorJsonConverter))]";
+			break;
+		default:
+			break;
+		}
+		return code;
 	}
 
 	public static string GenReactiveMemberCollection (this JObject jom)
