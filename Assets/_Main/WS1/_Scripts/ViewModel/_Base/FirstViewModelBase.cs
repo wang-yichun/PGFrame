@@ -1,4 +1,5 @@
 using System.Linq;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UniRx;
@@ -34,6 +35,7 @@ public class FirstViewModelBase : FBViewModel
 		RP_CurrentRect = new ReactiveProperty<UnityEngine.Rect> ();
 		RP_CurrentBounds = new ReactiveProperty<UnityEngine.Bounds> ();
 		RP_CurrentColor = new ReactiveProperty<UnityEngine.Color> ();
+		RP_CurrentDateTime = new ReactiveProperty<DateTime> ();
 	}
 
 	public override void Attach ()
@@ -192,6 +194,19 @@ public class FirstViewModelBase : FBViewModel
 		}
 		set {
 			RP_CurrentColor.Value = value;
+		}
+	}
+
+	/*  */
+	public ReactiveProperty<DateTime> RP_CurrentDateTime;
+
+	[JsonProperty]
+	public DateTime CurrentDateTime {
+		get {
+			return RP_CurrentDateTime.Value;
+		}
+		set {
+			RP_CurrentDateTime.Value = value;
 		}
 	}
 }

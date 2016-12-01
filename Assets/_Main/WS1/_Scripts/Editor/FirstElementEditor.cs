@@ -181,6 +181,9 @@ public class FirstElementEditor : Editor, IElementEditor
 		vmk = "CurrentColor";
 		VM.CurrentColor = EditorGUILayout.ColorField (vmk, VM.CurrentColor);
 
+		vmk = "CurrentDateTime";
+		EditorGUILayout.DelayedTextField (vmk, VM.CurrentDateTime != null ? VM.CurrentDateTime.ToString () : "null (DateTime)");
+
 		EditorGUILayout.EndVertical ();
 		EditorGUI.indentLevel--;
 

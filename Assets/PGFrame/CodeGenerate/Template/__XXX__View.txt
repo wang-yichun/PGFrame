@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using UniRx;
 using Newtonsoft.Json;
 using PogoTools;

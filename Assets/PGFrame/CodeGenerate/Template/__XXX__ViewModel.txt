@@ -1,4 +1,7 @@
 using UniRx;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 
 public class __XXX__ViewModel : __XXX__ViewModelBase
 {
