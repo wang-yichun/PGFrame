@@ -199,6 +199,25 @@ public static class GenCode_ElementEditor
 		VM.{0} = EditorGUILayout.ColorField (vmk, VM.{0});", name);
 			break;
 
+		case "UnityEngine.AnimationCurve":
+			result = string.Format (@"
+			
+		vmk = ""{0}"";
+		EditorGUILayout.BeginHorizontal ();
+		if (VM.{0} == null) {{
+			EditorGUILayout.PrefixLabel (vmk);
+			if (GUILayout.Button (""Create"")) {{
+				VM.{0} = AnimationCurve.Linear (0f, 0f, 1f, 1f);
+			}}
+		}} else {{
+			VM.{0} = EditorGUILayout.CurveField (vmk, VM.{0});
+			if (GUILayout.Button (""-"", GUILayout.MaxWidth (20f))) {{
+				VM.{0} = null;
+			}}
+		}}
+		EditorGUILayout.EndHorizontal ();", name);
+			break;
+
 		case "DateTime":
 			result = string.Format (@"
 

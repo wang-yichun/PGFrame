@@ -36,6 +36,7 @@ public class FirstViewModelBase : FBViewModel
 		RP_CurrentRect = new ReactiveProperty<UnityEngine.Rect> ();
 		RP_CurrentBounds = new ReactiveProperty<UnityEngine.Bounds> ();
 		RP_CurrentColor = new ReactiveProperty<UnityEngine.Color> ();
+		RP_CurrentAC = new ReactiveProperty<UnityEngine.AnimationCurve> ();
 		RP_CurrentDateTime = new ReactiveProperty<DateTime> ();
 		RP_CurrentTimeSpan = new ReactiveProperty<TimeSpan> ();
 		RP_CurrentJObject = new ReactiveProperty<JObject> ();
@@ -198,6 +199,19 @@ public class FirstViewModelBase : FBViewModel
 		}
 		set {
 			RP_CurrentColor.Value = value;
+		}
+	}
+
+	/*  */
+	public ReactiveProperty<UnityEngine.AnimationCurve> RP_CurrentAC;
+
+	[JsonProperty]
+	public UnityEngine.AnimationCurve CurrentAC {
+		get {
+			return RP_CurrentAC.Value;
+		}
+		set {
+			RP_CurrentAC.Value = value;
 		}
 	}
 

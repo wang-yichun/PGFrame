@@ -182,6 +182,21 @@ public class FirstElementEditor : Editor, IElementEditor
 
 		vmk = "CurrentColor";
 		VM.CurrentColor = EditorGUILayout.ColorField (vmk, VM.CurrentColor);
+			
+		vmk = "CurrentAC";
+		EditorGUILayout.BeginHorizontal ();
+		if (VM.CurrentAC == null) {
+			EditorGUILayout.PrefixLabel (vmk);
+			if (GUILayout.Button ("Create")) {
+				VM.CurrentAC = AnimationCurve.Linear (0f, 0f, 1f, 1f);
+			}
+		} else {
+			VM.CurrentAC = EditorGUILayout.CurveField (vmk, VM.CurrentAC);
+			if (GUILayout.Button ("-", GUILayout.MaxWidth (20f))) {
+				VM.CurrentAC = null;
+			}
+		}
+		EditorGUILayout.EndHorizontal ();
 
 		vmk = "CurrentDateTime";
 		DateTime tempCurrentDateTime;
