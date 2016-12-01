@@ -236,6 +236,44 @@ public class FirstElementEditor : Editor, IElementEditor
 			}
 		}
 
+		vmk = "V3List";
+		EditorGUILayout.BeginHorizontal ();
+		string V3ListJson = JsonConvert.SerializeObject (VM.V3List);
+		string tempV3ListJson = EditorGUILayout.DelayedTextField (vmk, V3ListJson);
+		if (tempV3ListJson != V3ListJson) {
+			if (string.IsNullOrEmpty (tempV3ListJson)) {
+				VM.V3List = null;
+			} else {
+				VM.V3List = JsonConvert.DeserializeObject<ReactiveCollection<UnityEngine.Vector3>> (tempV3ListJson);
+			}
+		}
+		if (GUILayout.Button ("...", GUILayout.MaxWidth (20))) {
+			PopupWindow.Show (
+				new Rect (Event.current.mousePosition.x, Event.current.mousePosition.y, 0f, 0f), 
+				new ReactiveCollectionEditorPopupWindow<UnityEngine.Vector3> (this, VM.V3List)
+			);
+		}
+		EditorGUILayout.EndHorizontal ();
+
+		vmk = "RectList";
+		EditorGUILayout.BeginHorizontal ();
+		string RectListJson = JsonConvert.SerializeObject (VM.RectList);
+		string tempRectListJson = EditorGUILayout.DelayedTextField (vmk, RectListJson);
+		if (tempRectListJson != RectListJson) {
+			if (string.IsNullOrEmpty (tempRectListJson)) {
+				VM.RectList = null;
+			} else {
+				VM.RectList = JsonConvert.DeserializeObject<ReactiveCollection<UnityEngine.Rect>> (tempRectListJson);
+			}
+		}
+		if (GUILayout.Button ("...", GUILayout.MaxWidth (20))) {
+			PopupWindow.Show (
+				new Rect (Event.current.mousePosition.x, Event.current.mousePosition.y, 0f, 0f), 
+				new ReactiveCollectionEditorPopupWindow<UnityEngine.Rect> (this, VM.RectList)
+			);
+		}
+		EditorGUILayout.EndHorizontal ();
+
 		EditorGUILayout.EndVertical ();
 		EditorGUI.indentLevel--;
 

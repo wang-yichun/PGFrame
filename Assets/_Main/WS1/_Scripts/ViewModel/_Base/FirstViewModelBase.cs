@@ -41,6 +41,8 @@ public class FirstViewModelBase : FBViewModel
 		RP_CurrentTimeSpan = new ReactiveProperty<TimeSpan> ();
 		RP_CurrentJObject = new ReactiveProperty<JObject> ();
 		RP_CurrentJArray = new ReactiveProperty<JArray> ();
+		V3List = new ReactiveCollection<UnityEngine.Vector3> ();
+		RectList = new ReactiveCollection<UnityEngine.Rect> ();
 	}
 
 	public override void Attach ()
@@ -266,6 +268,12 @@ public class FirstViewModelBase : FBViewModel
 			RP_CurrentJArray.Value = value;
 		}
 	}
+
+	/*  */
+	[JsonProperty] public ReactiveCollection<UnityEngine.Vector3> V3List;
+
+	/*  */
+	[JsonProperty] public ReactiveCollection<UnityEngine.Rect> RectList;
 }
 
 
