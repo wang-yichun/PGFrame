@@ -15,11 +15,8 @@ using UniRx;
 
 public partial class PGFrameWindow : EditorWindow
 {
-	public JSONElement SelectedJsonElement;
-
 	static string[] ToolbarHeaders = new string[] { "Member", "View" };
 	int toolbar_index = 0;
-	bool ShowDesc = false;
 
 	void DesignList_Element ()
 	{

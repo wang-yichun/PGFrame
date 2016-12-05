@@ -10,6 +10,7 @@ using PogoTools;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UniRx;
+using System;
 
 public partial class PGFrameWindow : EditorWindow
 {
@@ -63,7 +64,18 @@ public partial class PGFrameWindow : EditorWindow
 			if (SelectedJsonElement == null) {
 				DesignList ();
 			} else {
-				DesignList_Element ();
+				switch ((DocType)Enum.Parse (typeof(DocType), SelectedJsonElement.DocType)) {
+				case DocType.Element:
+					DesignList_Element ();
+					break;
+				case DocType.SimpleClass:
+					DesignList_SimpleClass ();
+					break;
+				case DocType.Enum:
+					break;
+				default:
+					throw new ArgumentOutOfRangeException ();
+				}
 			}
 		} else {
 			this.Repaint ();
@@ -101,6 +113,9 @@ public partial class PGFrameWindow : EditorWindow
 	public DirectoryInfo SelectedWorkspace;
 	public JSONElement SelectedWorkspaceCommon;
 	public DirectoryInfo[] WorkspaceDirectoryInfos;
+	public JSONElement SelectedJsonElement;
+
+	bool ShowDesc = false;
 
 	public bool NeedRefresh = true;
 
