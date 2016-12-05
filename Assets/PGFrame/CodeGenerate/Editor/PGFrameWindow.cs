@@ -9,6 +9,7 @@ using System.Linq;
 using PogoTools;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using UniRx;
 
 public partial class PGFrameWindow : EditorWindow
 {
@@ -28,7 +29,7 @@ public partial class PGFrameWindow : EditorWindow
 
 	void OnGUI ()
 	{
-		if (NeedRefresh)
+		if (Event.current.type == EventType.Layout && NeedRefresh)
 			RefreshFiles ();
 
 		if (Generator == null) {
@@ -44,20 +45,28 @@ public partial class PGFrameWindow : EditorWindow
 
 		if (GUILayout.Button ("添加 Workspace")) {
 
+			
 			PopupWindow.Show (buttonRect, new TextFieldPopupDialog ("请输入 Workspace 的名字:", (string value) => {
 				JsonWorkspaceManager manager = new JsonWorkspaceManager (Path.Combine (Application.dataPath, JsonRoot));
 				manager.CreateWorkspace (value);
 				AssetDatabase.Refresh ();
 				NeedRefresh = true;
 			}));
+
+			if (Event.current.type == EventType.Repaint)
+				buttonRect = GUILayoutUtility.GetLastRect ();
 		}
-		if (Event.current.type == EventType.Repaint)
-			buttonRect = GUILayoutUtility.GetLastRect ();
-		
-		if (SelectedJsonElement == null) {
-			DesignList ();
+
+		ApplySelected ();
+
+		if (NeedRefresh == false) {
+			if (SelectedJsonElement == null) {
+				DesignList ();
+			} else {
+				DesignList_Element ();
+			}
 		} else {
-			DesignList_Element ();
+			this.Repaint ();
 		}
 
 		GUILayout.FlexibleSpace ();
@@ -145,8 +154,18 @@ public partial class PGFrameWindow : EditorWindow
 			r.x = (rect.width - 25f) * split [split_idx] + 25f;
 			r.width = (rect.width - 25f) * (split [split_idx + 1] - split [split_idx]);
 			JObject jo_element = ja_elements [index] as JObject;
-			if (GUI.Button (r, jo_element ["File"].Value<string> ())) {
-				SelectedJsonElement = jElements.Single (je => je.FileName == jo_element ["File"].Value<string> ());
+
+			string jo_element_filename = jo_element ["File"].Value<string> ();
+
+//			if (Event.current.type == EventType.Layout && AutoSelected.SelectedJsonFileName == jo_element_filename) {
+//				SelectedJsonElement = jElements.SingleOrDefault (je => je.FileName == jo_element_filename);
+//			}
+
+			if (GUI.Button (r, jo_element_filename)) {
+				SelectedJsonElement = jElements.Single (je => je.FileName == jo_element_filename);
+
+				AutoSelected.SelectedJsonFileName = jo_element_filename;
+				AutoSelected.Save ();
 			}
 		};
 
@@ -262,12 +281,16 @@ public partial class PGFrameWindow : EditorWindow
 			scrollViewPos = GUILayout.BeginScrollView (scrollViewPos);
 			for (int i = 0; i < WorkspaceDirectoryInfos.Length; i++) {
 				DirectoryInfo wdi = WorkspaceDirectoryInfos [i];
+					
 				if (GUILayout.Button (wdi.Name)) {
+					AutoSelected.SelectedWorkspaceName = wdi.Name;
+					AutoSelected.Save ();
 					SelectedWorkspace = wdi;
 					NeedRefresh = true;
 				}
 			}
 			GUILayout.EndScrollView ();
+
 		} else {
 			GUILayout.BeginHorizontal ();
 			if (GUILayout.Button ("<<")) {
@@ -275,6 +298,10 @@ public partial class PGFrameWindow : EditorWindow
 				NeedRefresh = true;
 				WSJsonFilesList = null;
 				SelectedWorkspaceCommon = null;
+
+				AutoSelected.SelectedWorkspaceName = string.Empty;
+				AutoSelected.Save ();
+
 				return;
 			}
 			if (GUILayout.Button ("Save")) {
@@ -288,6 +315,7 @@ public partial class PGFrameWindow : EditorWindow
 //				PRDebug.TagLog ("PGFrameWindow.Debug", Color.yellow, JsonConvert.SerializeObject (SelectedWorkspaceCommon));
 				if (WSJsonFilesList == null)
 					ResetReorderableList ();
+
 				JsonFilesScrollPos = GUILayout.BeginScrollView (JsonFilesScrollPos);
 				WSJsonFilesList.DoLayoutList ();
 				if (ElementName != null) {
@@ -296,6 +324,7 @@ public partial class PGFrameWindow : EditorWindow
 				GUILayout.EndScrollView ();
 
 			}
+
 		}
 	}
 }

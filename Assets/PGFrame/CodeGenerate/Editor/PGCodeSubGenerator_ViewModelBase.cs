@@ -60,7 +60,7 @@ public class PGCodeSubGenerator_ViewModelBase: IPGCodeSubGenerator
 			JObject jom = (JObject)ja [i];
 			sb.Append ("\n");
 			sb.Append (jom.GenReactiveMemberCode ());
-			PogoTools.PRDebug.TagLog ("GetReactiveMembers", Color.white, JsonConvert.SerializeObject (jom));
+//			PogoTools.PRDebug.TagLog ("GetReactiveMembers", Color.white, JsonConvert.SerializeObject (jom));
 		}
 		return sb.ToString ();
 	}
@@ -103,7 +103,7 @@ public class {NAME}Command : ViewModelCommandBase
 		for (int i = 0; i < ja.Count; i++) {
 			JObject jom = (JObject)ja [i];
 			sb.Append (jom.GenInitializeCode ());
-			PogoTools.PRDebug.TagLog ("GenInitializeCode", Color.white, JsonConvert.SerializeObject (jom));
+//			PogoTools.PRDebug.TagLog ("GenInitializeCode", Color.white, JsonConvert.SerializeObject (jom));
 		}
 		return sb.ToString ();
 	}

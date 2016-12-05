@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Linq.Expressions;
 using System;
+using UniRx;
 
 public partial class PGFrameWindow : EditorWindow
 {
@@ -31,6 +32,10 @@ public partial class PGFrameWindow : EditorWindow
 			SelectedJsonElement = null;
 			ElementMembersList = null;
 			NeedRefresh = true;
+
+			AutoSelected.SelectedJsonFileName = string.Empty;
+			AutoSelected.Save ();
+
 			return;
 		}
 
@@ -69,9 +74,14 @@ public partial class PGFrameWindow : EditorWindow
 		}
 		if (GUILayout.Button ("Save&Generate")) {
 			SaveElementJson ();
-			// PR_TODO:
+
 			Generator.GenerateCode (SelectedJsonElement.jo);
+
 			AssetDatabase.Refresh ();
+
+			NeedRefresh = true;
+
+			this.Repaint ();
 		}
 		GUILayout.EndHorizontal ();
 	}
@@ -90,8 +100,8 @@ public partial class PGFrameWindow : EditorWindow
 		ElementMembersList.drawHeaderCallback += (Rect rect) => {
 			GUI.Label (rect, "Members in Element");
 		};
-		float[] split = new float[]{ 0f, .2f, .7f, 1f };
-		float[] split_c = new float[]{ 0f, .3f, .7f, .9f, .95f, 1f };
+		float[] split = new float[]{ 0f, .2f, .6f, 1f };
+		float[] split_c = new float[]{ 0f, .3f, .6f, .9f, .95f, 1f };
 
 		ElementMembersList.drawElementCallback += (Rect rect, int index, bool isActive, bool isFocused) => {
 			JObject jo_member = ja_member [index] as JObject;
