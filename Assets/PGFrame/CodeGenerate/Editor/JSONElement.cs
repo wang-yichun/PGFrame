@@ -35,7 +35,7 @@ public class JSONElement
 		DocType = jo ["DocType"].Value<string> ();
 		FileName = fileInfo.Name;
 			
-		if (DocType == "Element") {
+		if (DocType == "Element" || DocType == "SimpleClass" || DocType == "Enum") {
 			Name = jo ["Common"] ["Name"].Value<string> ();
 		}
 //		Debug.Log (fileInfo.FullName + "\n" + jo ["Workspace"].Value<string> ());

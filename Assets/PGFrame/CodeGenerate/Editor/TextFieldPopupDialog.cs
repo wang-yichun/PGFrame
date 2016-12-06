@@ -23,9 +23,12 @@ public class TextFieldPopupDialog : PopupWindowContent
 	public override void OnGUI (Rect rect)
 	{
 		GUILayout.Label (this.Title, EditorStyles.boldLabel);
-		Value = EditorGUILayout.DelayedTextField (Value);
+		Value = EditorGUILayout.TextField (Value);
 		if (GUILayout.Button ("OK")) {
 			ConfirmAction.Invoke (Value);
+			this.editorWindow.Close ();
+		}
+		if (GUILayout.Button ("Cancel")) {
 			this.editorWindow.Close ();
 		}
 	}

@@ -27,6 +27,7 @@ public partial class PGFrameWindow : EditorWindow
 	}
 
 	Rect buttonRect;
+	Rect buttonRect2;
 
 	void OnGUI ()
 	{
@@ -102,8 +103,8 @@ public partial class PGFrameWindow : EditorWindow
 		GUILayout.EndVertical ();
 	}
 
-	XLSXElement[] xElements;
-	JSONElement[] jElements;
+	public XLSXElement[] xElements;
+	public JSONElement[] jElements;
 
 	PGCodeGenerator Generator;
 	//	XLSXJsonConverter Converter;
@@ -152,6 +153,8 @@ public partial class PGFrameWindow : EditorWindow
 
 	ReorderableList WSJsonFilesList;
 
+	DocType? NeedShowPopupWindowDocType;
+
 	void ResetReorderableList ()
 	{
 		JArray ja_elements = SelectedWorkspaceCommon.jo ["ElementFiles"] as JArray;
@@ -186,41 +189,13 @@ public partial class PGFrameWindow : EditorWindow
 
 		WSJsonFilesList.onAddCallback += (ReorderableList list) => {
 
-			if (ElementName == null) {
-				ElementName = string.Empty;
-			} else {
-				if (ElementName != string.Empty) { // todo
-					string jsonName = string.Format (
-						                  "{0}.{1}.{2}.json", 
-						                  SelectedWorkspaceCommon.Workspace, 
-						                  "Element",
-						                  ElementName
-					                  );
-
-					if (jElements.FirstOrDefault (_ => _.Name == ElementName) == null) {
-
-						JObject jo = new JObject ();
-						jo.Add ("DocType", "Element");
-						jo.Add ("File", jsonName);
-						ja_elements.Add (jo);
-//						SaveCommonFile ();
-
-						CreateElementJsonFile (jsonName, SelectedWorkspaceCommon.Workspace, ElementName);
-						NeedRefresh = true;
-
-						PRDebug.TagLog (lt, lc, "成功创建了 Element: " + ElementName);
-						ElementName = null;
-
-						SaveCommonFile ();
-					} else {
-						PRDebug.TagLog (lt, lc, "该工作空间中已经含有名字: " + ElementName);
-					}
-				} else {
-					PRDebug.TagLog (lt, lc, "没有填入名字,取消创建");
-					ElementName = null;
-					SaveCommonFile ();
-				}
+			GenericMenu menu = new GenericMenu ();
+			foreach (DocType dt in Enum.GetValues (typeof(DocType))) {  
+				menu.AddItem (new GUIContent (dt.ToString ()), false, (object userData) => {
+					NeedShowPopupWindowDocType = (DocType)userData;
+				}, dt);
 			}
+			menu.ShowAsContext ();
 		};
 
 		WSJsonFilesList.onRemoveCallback += (ReorderableList list) => {
@@ -233,34 +208,8 @@ public partial class PGFrameWindow : EditorWindow
 
 				DeleteElementJsonFile (jsonName, SelectedWorkspaceCommon.Workspace);
 				NeedRefresh = true;
-				ElementName = null;
 			}
 		};
-	}
-
-	void CreateElementJsonFile (string jsonFullName, string workspace, string elementName)
-	{
-		string targetFileFullPath = Path.Combine (Application.dataPath, JsonRoot);
-		targetFileFullPath = Path.Combine (targetFileFullPath, string.Format ("{0}/{1}", workspace, jsonFullName));
-
-		JObject jo = new JObject ();
-		jo.Add ("Workspace", workspace);
-		jo.Add ("DocType", "Element");
-
-		JObject jo_common = new JObject ();
-		jo_common.Add ("Name", elementName);
-		jo_common.Add ("Desc", string.Empty);
-
-		jo.Add ("Common", jo_common);
-		jo.Add ("Member", new JArray ());
-		jo.Add ("Views", new JArray ());
-
-		string json = JsonConvert.SerializeObject (jo, Formatting.Indented);
-		File.WriteAllText (targetFileFullPath, json);
-
-		AssetDatabase.Refresh ();
-
-		PRDebug.TagLog (lt, lc, targetFileFullPath + " (Created)");
 	}
 
 	void DeleteElementJsonFile (string jsonFullName, string workspace)
@@ -274,9 +223,7 @@ public partial class PGFrameWindow : EditorWindow
 		PRDebug.TagLog (lt, lc, targetFileFullPath + " (Deleted)");
 	}
 
-	string ElementName = null;
-
-	void SaveCommonFile ()
+	public void SaveCommonFile ()
 	{
 		SelectedWorkspaceCommon.Save ();
 	}
@@ -333,13 +280,51 @@ public partial class PGFrameWindow : EditorWindow
 
 				JsonFilesScrollPos = GUILayout.BeginScrollView (JsonFilesScrollPos);
 				WSJsonFilesList.DoLayoutList ();
-				if (ElementName != null) {
-					ElementName = GUILayout.TextField (ElementName);
-				}
+
 				GUILayout.EndScrollView ();
+				
+				TryShowPopupWindowDoc ();
 
 			}
 
+		}
+	}
+
+	void TryShowPopupWindowDoc ()
+	{
+		if (Event.current.type == EventType.Repaint && NeedShowPopupWindowDocType != null) {
+			DocType selected = NeedShowPopupWindowDocType.Value;
+
+			string tip = string.Format ("请输入 {0} 的名字:", selected.ToString ());
+
+			NeedShowPopupWindowDocType = null;
+
+			PopupWindow.Show (buttonRect, new TextFieldPopupDialog (tip, (string value) => {
+
+				if (string.IsNullOrEmpty (value) == false) {
+					JsonFileCreater cjf = null;
+					switch (selected) {
+					case DocType.Element:
+						cjf = new ElementJsonFileCreater (this, value);
+						break;
+					case DocType.SimpleClass:
+						break;
+					case DocType.Enum:
+						break;
+					default:
+						throw new ArgumentOutOfRangeException ();
+					}
+					if (cjf != null)
+						cjf.Create ();
+				} else {
+					PRDebug.TagLog (lt, lcr, "请输入名字!");
+				}
+			}));
+
+			if (Event.current.type == EventType.Repaint)
+				buttonRect = GUILayoutUtility.GetLastRect ();
+
+			GUI.changed = false;
 		}
 	}
 }
