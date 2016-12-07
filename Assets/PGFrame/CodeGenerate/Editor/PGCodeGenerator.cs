@@ -5,6 +5,7 @@ using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using PogoTools;
+using System;
 
 /// <summary>
 /// 维护 ViewModel/Controller/View/ElementEditor 的生成器,并启动生成器的生成
@@ -23,6 +24,8 @@ public class PGCodeGenerator
 	IPGCodeSubGenerator sg_View;
 	IPGCodeSubGenerator sg_ElementEditor;
 	IPGCodeSubGenerator sg_ElementViewEditor;
+	IPGCodeSubGenerator sg_SimpleClassBase;
+	IPGCodeSubGenerator sg_SimpleClass;
 
 	public void Init ()
 	{
@@ -34,28 +37,47 @@ public class PGCodeGenerator
 		sg_View = new PGCodeSubGenerator_View (Path.Combine (Application.dataPath, "PGFrame/CodeGenerate/Template/__XXX__View.txt"));
 		sg_ElementEditor = new PGCodeSubGenerator_ElementEditor (Path.Combine (Application.dataPath, "PGFrame/CodeGenerate/Template/__XXX__ElementEditor.txt"));
 		sg_ElementViewEditor = new PGCodeSubGenerator_ElementViewEditor (Path.Combine (Application.dataPath, "PGFrame/CodeGenerate/Template/__XXX__ElementViewEditor.txt"));
+		sg_SimpleClassBase = new PGCodeSubGenerator_SimpleClassBase (Path.Combine (Application.dataPath, "PGFrame/CodeGenerate/Template/__XXX__SimpleClassBase.txt"));
+		sg_SimpleClass = new PGCodeSubGenerator_SimpleClass (Path.Combine (Application.dataPath, "PGFrame/CodeGenerate/Template/__XXX__SimpleClass.txt"));
 	}
 
 	public void GenerateCode (JObject jo)
 	{
 		IList<string> filesGenerated = new List<string> ();
 
-		if (sg_ViewModelBase.CanGenerate (jo))
-			sg_ViewModelBase.GenerateCode (jo, filesGenerated);
-		if (sg_ViewModel.CanGenerate (jo))
-			sg_ViewModel.GenerateCode (jo, filesGenerated);
-		if (sg_ControllerBase.CanGenerate (jo))
-			sg_ControllerBase.GenerateCode (jo, filesGenerated);
-		if (sg_Controller.CanGenerate (jo))
-			sg_Controller.GenerateCode (jo, filesGenerated);
-		if (sg_ViewBase.CanGenerate (jo))
-			sg_ViewBase.GenerateCode (jo, filesGenerated);
-		if (sg_View.CanGenerate (jo))
-			sg_View.GenerateCode (jo, filesGenerated);
-		if (sg_ElementEditor.CanGenerate (jo))
-			sg_ElementEditor.GenerateCode (jo, filesGenerated);
-		if (sg_ElementViewEditor.CanGenerate (jo))
-			sg_ElementViewEditor.GenerateCode (jo, filesGenerated);
+		DocType dt = (DocType)Enum.Parse (typeof(DocType), jo ["DocType"].Value<string> ());
+
+		switch (dt) {
+		case DocType.Element:
+			if (sg_ViewModelBase.CanGenerate (jo))
+				sg_ViewModelBase.GenerateCode (jo, filesGenerated);
+			if (sg_ViewModel.CanGenerate (jo))
+				sg_ViewModel.GenerateCode (jo, filesGenerated);
+			if (sg_ControllerBase.CanGenerate (jo))
+				sg_ControllerBase.GenerateCode (jo, filesGenerated);
+			if (sg_Controller.CanGenerate (jo))
+				sg_Controller.GenerateCode (jo, filesGenerated);
+			if (sg_ViewBase.CanGenerate (jo))
+				sg_ViewBase.GenerateCode (jo, filesGenerated);
+			if (sg_View.CanGenerate (jo))
+				sg_View.GenerateCode (jo, filesGenerated);
+			if (sg_ElementEditor.CanGenerate (jo))
+				sg_ElementEditor.GenerateCode (jo, filesGenerated);
+			if (sg_ElementViewEditor.CanGenerate (jo))
+				sg_ElementViewEditor.GenerateCode (jo, filesGenerated);
+			break;
+		case DocType.SimpleClass:
+			if (sg_SimpleClassBase.CanGenerate (jo))
+				sg_SimpleClassBase.GenerateCode (jo, filesGenerated);
+			if (sg_SimpleClass.CanGenerate (jo))
+				sg_SimpleClass.GenerateCode (jo, filesGenerated);
+			break;
+		case DocType.Enum:
+			break;
+		default:
+			throw new ArgumentOutOfRangeException ();
+		}
+
 
 		PRDebug.TagLog (lt + ".GenerateCode", lc, JsonConvert.SerializeObject (filesGenerated, Formatting.Indented));
 	}
@@ -72,7 +94,9 @@ public class PGCodeGenerator
 			Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/ViewModel/_Base/" + string.Format ("{0}ViewModelBase.cs", elementName)),
 			Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/View/" + string.Format ("{0}View.cs", elementName)),
 			Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/View/_Base/" + string.Format ("{0}ViewBase.cs", elementName)),
-			Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/Editor/" + string.Format ("{0}ElementEditor.cs", elementName))
+			Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/Editor/" + string.Format ("{0}ElementEditor.cs", elementName)),
+			Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/SimpleClass/" + string.Format ("{0}.cs", elementName)),
+			Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/SimpleClass/_Base/" + string.Format ("{0}Base.cs", elementName))
 		};
 		List<string> fileDeleted = new List<string> ();
 
