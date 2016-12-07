@@ -103,7 +103,6 @@ public partial class PGFrameWindow : EditorWindow
 		GUILayout.EndVertical ();
 	}
 
-	public XLSXElement[] xElements;
 	public JSONElement[] jElements;
 
 	PGCodeGenerator Generator;
@@ -309,6 +308,7 @@ public partial class PGFrameWindow : EditorWindow
 						cjf = new ElementJsonFileCreater (this, value);
 						break;
 					case DocType.SimpleClass:
+//						cjf = new 
 						break;
 					case DocType.Enum:
 						break;
