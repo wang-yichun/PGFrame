@@ -204,6 +204,7 @@ public partial class PGFrameWindow : EditorWindow
 				
 			if (EditorUtility.DisplayDialog ("警告!", string.Format ("确定删除框架中的{0}文件?", jo ["File"].Value<string> ()), "Yes", "No")) {
 				ja_elements.RemoveAt (list.index);
+				SelectedWorkspaceCommon.jo ["ElementFiles"] = ja_elements;
 				SaveCommonFile ();
 
 				DeleteElementJsonFile (jsonName, SelectedWorkspaceCommon.Workspace);
@@ -314,8 +315,10 @@ public partial class PGFrameWindow : EditorWindow
 					default:
 						throw new ArgumentOutOfRangeException ();
 					}
-					if (cjf != null)
+					if (cjf != null) {
 						cjf.Create ();
+						WSJsonFilesList = null;
+					}
 				} else {
 					PRDebug.TagLog (lt, lcr, "请输入名字!");
 				}
@@ -323,8 +326,6 @@ public partial class PGFrameWindow : EditorWindow
 
 			if (Event.current.type == EventType.Repaint)
 				buttonRect = GUILayoutUtility.GetLastRect ();
-
-			GUI.changed = false;
 		}
 	}
 }

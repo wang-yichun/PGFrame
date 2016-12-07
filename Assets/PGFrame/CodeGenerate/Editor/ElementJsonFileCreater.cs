@@ -32,11 +32,11 @@ public class ElementJsonFileCreater : JsonFileCreater
 			jo.Add ("File", jsonName);
 			ja_elements.Add (jo);
 
+			FrameWindow.SaveCommonFile ();
+
 			CreateJson (MakeJsonName (), FrameWindow.SelectedWorkspaceCommon.Workspace, Name);
 
 			FrameWindow.NeedRefresh = true;
-//			FrameWindow.ElementName = null;
-			FrameWindow.SaveCommonFile ();
 		} else {
 			PRDebug.TagLog (PGFrameWindow.lt, PGFrameWindow.lc, "该工作空间中已经含有名字: " + Name);
 		}
