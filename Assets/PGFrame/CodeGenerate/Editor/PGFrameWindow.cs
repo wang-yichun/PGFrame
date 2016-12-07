@@ -308,7 +308,7 @@ public partial class PGFrameWindow : EditorWindow
 						cjf = new ElementJsonFileCreater (this, value);
 						break;
 					case DocType.SimpleClass:
-//						cjf = new 
+						cjf = new SimpleClassJsonFileCreater (this, value);
 						break;
 					case DocType.Enum:
 						break;
