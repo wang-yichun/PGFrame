@@ -328,4 +328,9 @@ public partial class PGFrameWindow : EditorWindow
 				buttonRect = GUILayoutUtility.GetLastRect ();
 		}
 	}
+		
+	void SaveJson ()
+	{
+		SelectedJsonElement.Save ();
+	}
 }

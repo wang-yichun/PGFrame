@@ -67,10 +67,10 @@ public partial class PGFrameWindow : EditorWindow
 			ResetElementMembersList ();
 		}
 		if (GUILayout.Button ("Save")) {
-			SaveElementJson ();
+			SaveJson ();
 		}
 		if (GUILayout.Button ("Save&Generate")) {
-			SaveElementJson ();
+			SaveJson ();
 
 			Generator.GenerateCode (SelectedJsonElement.jo);
 
@@ -259,7 +259,7 @@ public partial class PGFrameWindow : EditorWindow
 		ElementMembersList.onAddCallback += (ReorderableList list) => {
 			GenericMenu menu = new GenericMenu ();
 			foreach (RxType rt in Enum.GetValues (typeof(RxType))) {  
-				menu.AddItem (new GUIContent (rt.ToString ()), false, GenericMenuOnAddCallback, rt);
+				menu.AddItem (new GUIContent (rt.ToString ()), false, GenericElementMenuOnAddCallback, rt);
 			}
 			menu.ShowAsContext ();
 		};
@@ -274,7 +274,7 @@ public partial class PGFrameWindow : EditorWindow
 		};
 	}
 
-	void GenericMenuOnAddCallback (object obj)
+	void GenericElementMenuOnAddCallback (object obj)
 	{
 		ElementViewTools evtools = new ElementViewTools (SelectedJsonElement.jo);
 
@@ -467,8 +467,4 @@ public partial class PGFrameWindow : EditorWindow
 		EditorGUI.indentLevel--;
 	}
 
-	void SaveElementJson ()
-	{
-		SelectedJsonElement.Save ();
-	}
 }
