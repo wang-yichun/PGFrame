@@ -30,4 +30,11 @@ public static class GUIStyleTemplate
 		GUIStyle s = new GUIStyle (GUI.skin.label);
 		return s;
 	}
+
+	public static GUIStyle ButtonStyleAlignmentLeft ()
+	{
+		GUIStyle s = new GUIStyle (GUI.skin.button);
+		s.alignment = TextAnchor.MiddleLeft;
+		return s;
+	}
 }

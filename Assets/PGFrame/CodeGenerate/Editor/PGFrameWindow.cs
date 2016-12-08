@@ -20,11 +20,20 @@ public partial class PGFrameWindow : EditorWindow
 
 	public static PGFrameWindow Current;
 
+	public Texture2D pgf_window_title_icon;
+	public Texture2D pgf_element_icon;
+	public Texture2D pgf_simple_class_icon;
+	public Texture2D pgf_enum_icon;
+
 	[MenuItem ("PogoRock/PGFrame/PGFrame... %`")]
 	static void Init ()
 	{
 		PGFrameWindow window = (PGFrameWindow)EditorWindow.GetWindow (typeof(PGFrameWindow));
-		window.titleContent = new GUIContent ("PGFrame", Resources.Load<Texture2D> ("pgf_icon"));
+		window.pgf_window_title_icon = Resources.Load<Texture2D> ("pgf_window_title_icon");
+		window.pgf_element_icon = Resources.Load<Texture2D> ("pgf_element_icon");
+		window.pgf_simple_class_icon = Resources.Load<Texture2D> ("pgf_simple_class_icon");
+		window.pgf_enum_icon = Resources.Load<Texture2D> ("pgf_enum_icon");
+		window.titleContent = new GUIContent (window.pgf_window_title_icon);
 		window.Show ();
 		Current = window;
 	}
@@ -198,11 +207,24 @@ public partial class PGFrameWindow : EditorWindow
 
 			string jo_element_filename = jo_element ["File"].Value<string> ();
 
-//			if (Event.current.type == EventType.Layout && AutoSelected.SelectedJsonFileName == jo_element_filename) {
-//				SelectedJsonElement = jElements.SingleOrDefault (je => je.FileName == jo_element_filename);
-//			}
+			DocType dt = (DocType)Enum.Parse (typeof(DocType), jo_element ["DocType"].Value<string> ());
+			Texture2D icon = null;
+			switch (dt) {
+			case DocType.Element:
+				icon = pgf_element_icon;
+				break;
+			case DocType.SimpleClass:
+				icon = pgf_simple_class_icon;
+				break;
+			case DocType.Enum:
+				icon = pgf_enum_icon;
+				break;
+			default:
+				throw new ArgumentOutOfRangeException ();
+			}
 
-			if (GUI.Button (r, jo_element_filename)) {
+			GUIContent content = new GUIContent (jo_element_filename, icon);
+			if (GUI.Button (r, content, GUIStyleTemplate.ButtonStyleAlignmentLeft ())) {
 				SelectedJsonElement = jElements.Single (je => je.FileName == jo_element_filename);
 
 				AutoSelected.SelectedJsonFileName = jo_element_filename;
