@@ -144,9 +144,9 @@ public partial class PGFrameWindow : EditorWindow
 		EnumMembersList.onAddCallback += (ReorderableList list) => {
 			GenericEnumMenuOnAddCallback ();
 		};
-		EnumMembersList.onRemoveCallback += (ReorderableList list) => {
-			// PR_TODO:
-		};
+//		EnumMembersList.onRemoveCallback += (ReorderableList list) => {
+//			// PR_TODO:
+//		};
 	}
 
 	void GenericEnumMenuOnAddCallback ()
@@ -161,9 +161,15 @@ public partial class PGFrameWindow : EditorWindow
 			default_name_with_suffix = default_name + suffix_number;
 		}
 
+
 		int default_int = 0;
-		while (ja_members.FirstOrDefault (_ => (_ as JObject) ["Int"].Value<int> () == default_int) != null) {
-			default_int++;
+		if (ja_members.FirstOrDefault (_ => (_ as JObject) ["Int"].Value<int> () < 0) != null) {
+			default_int = -1;
+		} else {
+			default_int = 0;
+			while (ja_members.FirstOrDefault (_ => (_ as JObject) ["Int"].Value<int> () == default_int) != null) {
+				default_int++;
+			}
 		}
 
 		JObject jo_member = new JObject ();

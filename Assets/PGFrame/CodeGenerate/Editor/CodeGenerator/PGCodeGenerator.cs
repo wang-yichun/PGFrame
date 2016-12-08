@@ -26,6 +26,7 @@ public class PGCodeGenerator
 	IPGCodeSubGenerator sg_ElementViewEditor;
 	IPGCodeSubGenerator sg_SimpleClassBase;
 	IPGCodeSubGenerator sg_SimpleClass;
+	IPGCodeSubGenerator sg_Enum;
 
 	public void Init ()
 	{
@@ -39,6 +40,7 @@ public class PGCodeGenerator
 		sg_ElementViewEditor = new PGCodeSubGenerator_ElementViewEditor (Path.Combine (Application.dataPath, "PGFrame/CodeGenerate/Template/__XXX__ElementViewEditor.txt"));
 		sg_SimpleClassBase = new PGCodeSubGenerator_SimpleClassBase (Path.Combine (Application.dataPath, "PGFrame/CodeGenerate/Template/__XXX__SimpleClassBase.txt"));
 		sg_SimpleClass = new PGCodeSubGenerator_SimpleClass (Path.Combine (Application.dataPath, "PGFrame/CodeGenerate/Template/__XXX__SimpleClass.txt"));
+		sg_Enum = new PGCodeSubGenerator_Enum (Path.Combine (Application.dataPath, "PGFrame/CodeGenerate/Template/__XXX__Enum.txt"));
 	}
 
 	public void GenerateCode (JObject jo)
@@ -73,6 +75,8 @@ public class PGCodeGenerator
 				sg_SimpleClass.GenerateCode (jo, filesGenerated);
 			break;
 		case DocType.Enum:
+			if (sg_Enum.CanGenerate (jo))
+				sg_Enum.GenerateCode (jo, filesGenerated);
 			break;
 		default:
 			throw new ArgumentOutOfRangeException ();

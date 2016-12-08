@@ -32,7 +32,6 @@ public class PGCodeSubGenerator_SimpleClass: IPGCodeSubGenerator
 	{
 		string workspaceName = jo ["Workspace"].Value<string> ();
 		string elementName = jo ["Common"] ["Name"].Value<string> ();
-		string baseName = jo ["Common"] ["Type"].Value<string> ();
 		string targetPath = Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/SimpleClass");
 		string code = File.ReadAllText (templateFileInfo.FullName);
 		code = code.Replace ("__XXX__", elementName);
