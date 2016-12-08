@@ -29,4 +29,6 @@ public class FirstView : FirstViewBase
 		base.OnExecuted_FBTestCMD (unit);
 		Debug.Log (string.Format ("FirstView: OnExecuted_FBTestCMD."));
 	}
+
+	public SCA msca;
 }
