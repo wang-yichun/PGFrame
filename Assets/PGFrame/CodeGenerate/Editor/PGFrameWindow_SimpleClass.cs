@@ -154,9 +154,6 @@ public partial class PGFrameWindow : EditorWindow
 		SimpleClassMembersList.onAddCallback += (ReorderableList list) => {
 			GenericSimpleClassMenuOnAddCallback ();
 		};
-		SimpleClassMembersList.onRemoveCallback += (ReorderableList list) => {
-			// PR_TODO:
-		};
 	}
 
 	void GenericSimpleClassMenuOnAddCallback ()
