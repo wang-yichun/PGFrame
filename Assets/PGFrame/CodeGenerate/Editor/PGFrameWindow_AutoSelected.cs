@@ -34,6 +34,14 @@ public partial class PGFrameWindow : EditorWindow
 			SelectedWorkspaceName = EditorPrefs.GetString ("PGF_SelectedWorkspaceName", string.Empty);
 			SelectedJsonFileName = EditorPrefs.GetString ("PGF_SelectedJsonFileName", string.Empty);
 		}
+
+		public static void Reset ()
+		{
+			SelectedWorkspaceName = string.Empty;
+			SelectedJsonFileName = string.Empty;
+			EditorPrefs.DeleteKey ("PGF_SelectedWorkspaceName");
+			EditorPrefs.DeleteKey ("PGF_SelectedJsonFileName");
+		}
 	}
 
 	public void ApplySelected ()

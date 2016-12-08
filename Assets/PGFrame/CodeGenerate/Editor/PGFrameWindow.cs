@@ -18,12 +18,34 @@ public partial class PGFrameWindow : EditorWindow
 	public static readonly Color lc = new Color32 (0, 162, 255, 255);
 	public static readonly Color lcr = new Color32 (255, 162, 162, 255);
 
-	[MenuItem ("PogoRock/PGFrame... %`")]
+	public static PGFrameWindow Current;
+
+	[MenuItem ("PogoRock/PGFrame/PGFrame... %`")]
 	static void Init ()
 	{
 		PGFrameWindow window = (PGFrameWindow)EditorWindow.GetWindow (typeof(PGFrameWindow));
 		window.titleContent = new GUIContent ("PGFrame", Resources.Load<Texture2D> ("pgf_icon"));
 		window.Show ();
+		Current = window;
+	}
+
+	[MenuItem ("PogoRock/PGFrame/Clear Editor Settings")]
+	static void ClearEditorSettings ()
+	{
+		if (Current != null) {
+			Current.SelectedJsonElement = null;
+
+			Current.WSJsonFilesList = null;
+			Current.ElementMembersList = null;
+			Current.SimpleClassMembersList = null;
+
+			Current.SelectedWorkspace = null;
+			Current.SelectedWorkspaceCommon = null;
+
+			Current.NeedRefresh = true;
+		}
+
+		AutoSelected.Reset ();
 	}
 
 	Rect buttonRect;
@@ -311,6 +333,7 @@ public partial class PGFrameWindow : EditorWindow
 						cjf = new SimpleClassJsonFileCreater (this, value);
 						break;
 					case DocType.Enum:
+						cjf = new EnumJsonFileCreater (this, value);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException ();
@@ -328,7 +351,7 @@ public partial class PGFrameWindow : EditorWindow
 				buttonRect = GUILayoutUtility.GetLastRect ();
 		}
 	}
-		
+
 	void SaveJson ()
 	{
 		SelectedJsonElement.Save ();
