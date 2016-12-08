@@ -31,4 +31,5 @@ public class FirstView : FirstViewBase
 	}
 
 	public SCA msca;
+	public SCB mscb;
 }

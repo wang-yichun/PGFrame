@@ -6,6 +6,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
+[System.Serializable]
 public class __XXX__ : __XXX__Base
 {
 
