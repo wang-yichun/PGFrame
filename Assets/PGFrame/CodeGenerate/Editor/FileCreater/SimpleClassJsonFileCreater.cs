@@ -29,6 +29,7 @@ public class SimpleClassJsonFileCreater : JsonFileCreater
 
 			JObject jo = new JObject ();
 			jo.Add ("DocType", "SimpleClass");
+			jo.Add ("Name", Name);
 			jo.Add ("File", jsonName);
 			ja_elements.Add (jo);
 

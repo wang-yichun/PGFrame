@@ -29,6 +29,7 @@ public class ElementJsonFileCreater : JsonFileCreater
 
 			JObject jo = new JObject ();
 			jo.Add ("DocType", "Element");
+			jo.Add ("Name", Name);
 			jo.Add ("File", jsonName);
 			ja_elements.Add (jo);
 

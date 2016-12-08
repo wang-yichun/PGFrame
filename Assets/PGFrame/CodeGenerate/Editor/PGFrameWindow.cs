@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UniRx;
 using System;
+using System.Text;
 
 public partial class PGFrameWindow : EditorWindow
 {
@@ -24,6 +25,7 @@ public partial class PGFrameWindow : EditorWindow
 	public Texture2D pgf_element_icon;
 	public Texture2D pgf_simple_class_icon;
 	public Texture2D pgf_enum_icon;
+	public Texture2D pgf_workspace_icon;
 
 	[MenuItem ("PogoRock/PGFrame/PGFrame... %`")]
 	static void Init ()
@@ -33,6 +35,7 @@ public partial class PGFrameWindow : EditorWindow
 		window.pgf_element_icon = Resources.Load<Texture2D> ("pgf_element_icon");
 		window.pgf_simple_class_icon = Resources.Load<Texture2D> ("pgf_simple_class_icon");
 		window.pgf_enum_icon = Resources.Load<Texture2D> ("pgf_enum_icon");
+		window.pgf_workspace_icon = Resources.Load<Texture2D> ("pgf_workspace_icon");
 		window.titleContent = new GUIContent (window.pgf_window_title_icon);
 		window.Show ();
 		Current = window;
@@ -74,6 +77,8 @@ public partial class PGFrameWindow : EditorWindow
 		GUILayout.BeginVertical ();
 		GUILayout.Label ("PGFrame", EditorStyles.boldLabel);
 		if (GUILayout.Button ("刷新")) {
+			NeedRefresh = true;
+			NeedRefreshCommon = true;
 			RefreshFiles ();
 		}
 
@@ -139,7 +144,7 @@ public partial class PGFrameWindow : EditorWindow
 	public JSONElement[] jElements;
 
 	PGCodeGenerator Generator;
-	//	XLSXJsonConverter Converter;
+	PGFrameCommonManager CommonManager;
 
 	public static readonly string JsonRoot = "PGFrameDesign/JsonData";
 
@@ -151,6 +156,7 @@ public partial class PGFrameWindow : EditorWindow
 	bool ShowDesc = false;
 
 	public bool NeedRefresh = true;
+	public bool NeedRefreshCommon = true;
 
 	void RefreshFiles ()
 	{
@@ -178,6 +184,16 @@ public partial class PGFrameWindow : EditorWindow
 				}
 			}
 			jElements = je.ToArray ();
+		}
+
+		// Common Manager
+		if (CommonManager == null) {
+			CommonManager = new PGFrameCommonManager (this);
+		}
+
+		if (NeedRefreshCommon) {
+			NeedRefreshCommon = false;
+			CommonManager.Load ();
 		}
 	}
 
@@ -289,9 +305,19 @@ public partial class PGFrameWindow : EditorWindow
 			scrollViewPos = GUILayout.BeginScrollView (scrollViewPos);
 			for (int i = 0; i < WorkspaceDirectoryInfos.Length; i++) {
 				DirectoryInfo wdi = WorkspaceDirectoryInfos [i];
-					
-				if (GUILayout.Button (wdi.Name)) {
-					AutoSelected.SelectedWorkspaceName = wdi.Name;
+				string ws_name = wdi.Name;
+				StringBuilder sb_content = new StringBuilder (wdi.Name);
+
+				if (CommonManager != null) {
+					int file_count = CommonManager.CommonObjectDic [ws_name].ElementFiles.Length;
+					sb_content.AppendFormat (" ({0} file{1})", file_count, file_count > 1 ? "s" : "");
+//					button_content += " (" + CommonManager.CommonObjectDic [ws_name].ElementFiles.Count + " file)";
+				}
+
+				GUIContent button_content = new GUIContent (sb_content.ToString (), pgf_workspace_icon);
+
+				if (GUILayout.Button (button_content, GUIStyleTemplate.ButtonStyleAlignmentLeft ())) {
+					AutoSelected.SelectedWorkspaceName = ws_name;
 					AutoSelected.Save ();
 					SelectedWorkspace = wdi;
 					NeedRefresh = true;

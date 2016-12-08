@@ -22,4 +22,10 @@ public class SCABase : SimpleClassBase
 	private UnityEngine.Vector3 _DefaultSimpleClass2;
 
 	public UnityEngine.Vector3 DefaultSimpleClass2 { get { return _DefaultSimpleClass2; } set { _DefaultSimpleClass2 = value; } }
+
+	/*  */
+	[UnityEngine.SerializeField, UnityEngine.Tooltip("")]
+	private EA _myEA;
+
+	public EA myEA { get { return _myEA; } set { _myEA = value; } }
 }

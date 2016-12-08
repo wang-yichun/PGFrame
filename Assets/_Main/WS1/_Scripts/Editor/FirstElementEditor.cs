@@ -274,6 +274,10 @@ public class FirstElementEditor : Editor, IElementEditor
 		}
 		EditorGUILayout.EndHorizontal ();
 
+		vmk = "MyEA";
+//		EditorGUILayout.DelayedTextField (vmk, VM.MyEA != null ? VM.MyEA.ToString () : "null (EA)");
+		EditorGUILayout.EnumPopup (vmk, VM.MyEA);
+
 		EditorGUILayout.EndVertical ();
 		EditorGUI.indentLevel--;
 

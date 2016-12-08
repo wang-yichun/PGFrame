@@ -43,6 +43,7 @@ public class FirstViewModelBase : FBViewModel
 		RP_CurrentJArray = new ReactiveProperty<JArray> ();
 		V3List = new ReactiveCollection<UnityEngine.Vector3> ();
 		RectList = new ReactiveCollection<UnityEngine.Rect> ();
+		RP_MyEA = new ReactiveProperty<EA> ();
 	}
 
 	public override void Attach ()
@@ -274,6 +275,19 @@ public class FirstViewModelBase : FBViewModel
 
 	/*  */
 	[JsonProperty] public ReactiveCollection<UnityEngine.Rect> RectList;
+
+	/*  */
+	public ReactiveProperty<EA> RP_MyEA;
+
+	[JsonProperty]
+	public EA MyEA {
+		get {
+			return RP_MyEA.Value;
+		}
+		set {
+			RP_MyEA.Value = value;
+		}
+	}
 }
 
 

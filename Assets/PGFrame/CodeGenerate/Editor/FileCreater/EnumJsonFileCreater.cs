@@ -29,6 +29,7 @@ public class EnumJsonFileCreater : JsonFileCreater
 
 			JObject jo = new JObject ();
 			jo.Add ("DocType", "Enum");
+			jo.Add ("Name", Name);
 			jo.Add ("File", jsonName);
 			ja_elements.Add (jo);
 

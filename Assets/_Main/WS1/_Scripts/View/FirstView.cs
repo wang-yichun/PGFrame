@@ -32,4 +32,5 @@ public class FirstView : FirstViewBase
 
 	public SCA msca;
 	public SCB mscb;
+	public EA my_pri_ea;
 }
