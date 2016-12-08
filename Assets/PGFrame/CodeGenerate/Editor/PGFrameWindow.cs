@@ -38,6 +38,7 @@ public partial class PGFrameWindow : EditorWindow
 			Current.WSJsonFilesList = null;
 			Current.ElementMembersList = null;
 			Current.SimpleClassMembersList = null;
+			Current.EnumMembersList = null;
 
 			Current.SelectedWorkspace = null;
 			Current.SelectedWorkspaceCommon = null;
@@ -95,6 +96,7 @@ public partial class PGFrameWindow : EditorWindow
 					DesignList_SimpleClass ();
 					break;
 				case DocType.Enum:
+					DesignList_Enum ();
 					break;
 				default:
 					throw new ArgumentOutOfRangeException ();

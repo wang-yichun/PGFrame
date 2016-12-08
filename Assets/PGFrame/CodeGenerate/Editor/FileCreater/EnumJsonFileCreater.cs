@@ -63,7 +63,6 @@ public class EnumJsonFileCreater : JsonFileCreater
 
 		JObject jo_common = new JObject ();
 		jo_common.Add ("Name", elementName);
-		jo_common.Add ("Type", string.Empty);
 		jo_common.Add ("Desc", string.Empty);
 
 		jo.Add ("Common", jo_common);
