@@ -25,7 +25,7 @@ public class PGFrameCommonManager
 
 		public string Workspace;
 		public string DocType;
-		public ElementFilesModel[] ElementFiles;
+		public List<ElementFilesModel> ElementFiles;
 	}
 
 	public PGFrameWindow FrameWindow;
@@ -62,14 +62,17 @@ public class PGFrameCommonManager
 		}
 	}
 
-	//	public DocType? GetTheDocTypeByName (string workspace, string name)
-	//	{
-	//		DocType? dt = null;
-	//		if (CommonObjectDic != null) {
-	//			CommonObjectDic [workspace].ElementFiles.Exists (_efm => {
-	//				_efm.Name == name;
-	//			});
-	//		}
-	//		return dt;
-	//	}
+	public DocType? GetTheDocTypeByName (string workspace, string name)
+	{
+		DocType? dt = null;
+		if (CommonObjectDic != null) {
+			if (CommonObjectDic.ContainsKey (workspace)) {
+				CommonModel.ElementFilesModel m = CommonObjectDic [workspace].ElementFiles.FirstOrDefault (_efm => _efm.Name == name);
+				if (m != null) {
+					dt = m.DocType;
+				}
+			}
+		}
+		return dt;
+	}
 }

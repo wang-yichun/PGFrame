@@ -66,7 +66,13 @@ public partial class PGFrameWindow : EditorWindow
 
 	void OnGUI ()
 	{
-		if (Event.current.type == EventType.Layout && NeedRefresh)
+		if (Current == null) {
+			Current = this;
+			Current.NeedRefresh = true;
+			Current.NeedRefreshCommon = true;
+		}
+
+		if (Event.current.type == EventType.Layout && (NeedRefresh || NeedRefreshCommon))
 			RefreshFiles ();
 
 		if (Generator == null) {
@@ -143,8 +149,8 @@ public partial class PGFrameWindow : EditorWindow
 
 	public JSONElement[] jElements;
 
-	PGCodeGenerator Generator;
-	PGFrameCommonManager CommonManager;
+	public PGCodeGenerator Generator;
+	public PGFrameCommonManager CommonManager;
 
 	public static readonly string JsonRoot = "PGFrameDesign/JsonData";
 
@@ -294,7 +300,7 @@ public partial class PGFrameWindow : EditorWindow
 
 	void DesignList ()
 	{
-		if (WorkspaceDirectoryInfos == null) {
+		if (WorkspaceDirectoryInfos == null || CommonManager.CommonObjectDic == null) {
 			NeedRefresh = true;
 			return;
 		}
@@ -309,7 +315,7 @@ public partial class PGFrameWindow : EditorWindow
 				StringBuilder sb_content = new StringBuilder (wdi.Name);
 
 				if (CommonManager != null) {
-					int file_count = CommonManager.CommonObjectDic [ws_name].ElementFiles.Length;
+					int file_count = CommonManager.CommonObjectDic [ws_name].ElementFiles.Count;
 					sb_content.AppendFormat (" ({0} file{1})", file_count, file_count > 1 ? "s" : "");
 //					button_content += " (" + CommonManager.CommonObjectDic [ws_name].ElementFiles.Count + " file)";
 				}

@@ -20,6 +20,11 @@ public class FirstElementEditor : Editor, IElementEditor
 	{
 		EditorGUILayout.BeginVertical ();
 		if (ToggleDefault = EditorGUILayout.Foldout (ToggleDefault, "View")) {
+			if (GUILayout.Button ("Clear VM & InitValueJson")) {
+				VM = null;
+				ViewBase V = target as ViewBase;
+				V.ViewModelInitValueJson = string.Empty;
+			}
 			EditorGUI.indentLevel++;
 			base.OnInspectorGUI ();
 			EditorGUI.indentLevel--;
@@ -275,8 +280,26 @@ public class FirstElementEditor : Editor, IElementEditor
 		EditorGUILayout.EndHorizontal ();
 
 		vmk = "MyEA";
-//		EditorGUILayout.DelayedTextField (vmk, VM.MyEA != null ? VM.MyEA.ToString () : "null (EA)");
 		EditorGUILayout.EnumPopup (vmk, VM.MyEA);
+						
+		vmk = "SCA_a";
+		EditorGUILayout.BeginHorizontal ();
+		string SCA_a = JsonConvert.SerializeObject (VM.SCA_a);
+		string tempSCA_a = EditorGUILayout.DelayedTextField (vmk, SCA_a);
+		if (tempSCA_a != SCA_a) {
+			if (string.IsNullOrEmpty (tempSCA_a)) {
+				VM.SCA_a = null;
+			} else {
+				VM.SCA_a = JsonConvert.DeserializeObject<SCA> (SCA_a);
+			}
+		}
+		if (GUILayout.Button ("...", GUILayout.MaxWidth (20))) {
+			PopupWindow.Show (
+				new Rect (Event.current.mousePosition.x, Event.current.mousePosition.y, 0f, 0f), 
+				new SimpleClassPropertyEditorPopupWindow<SCA> (this, VM.RP_SCA_a)
+			);
+		}
+		EditorGUILayout.EndHorizontal ();
 
 		EditorGUILayout.EndVertical ();
 		EditorGUI.indentLevel--;

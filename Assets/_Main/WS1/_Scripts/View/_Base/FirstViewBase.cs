@@ -56,6 +56,7 @@ public class FirstViewBase : FBView
 		VM.MyDictionary.ObserveAdd ().Subscribe (OnAdd_MyDictionary);
 		VM.MyDictionary.ObserveRemove ().Subscribe (OnRemove_MyDictionary);
 		VM.RC_DefaultCommand.Subscribe (OnExecuted_DefaultCommand);
+		VM.RP_SCA_a.Subscribe (OnChanged_SCA_a);
 	}
 
 	public override void AfterBind ()
@@ -86,6 +87,10 @@ public class FirstViewBase : FBView
 	}
 
 	public virtual void OnExecuted_DefaultCommand (Unit unit)
+	{
+	}
+
+	public virtual void OnChanged_SCA_a (SCA value)
 	{
 	}
 

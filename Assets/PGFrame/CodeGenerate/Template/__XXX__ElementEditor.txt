@@ -20,6 +20,11 @@ public class __XXX__ElementEditor : Editor, IElementEditor
 	{
 		EditorGUILayout.BeginVertical ();
 		if (ToggleDefault = EditorGUILayout.Foldout (ToggleDefault, "View")) {
+			if (GUILayout.Button ("Clear VM & InitValueJson")) {
+				VM = null;
+				ViewBase V = target as ViewBase;
+				V.ViewModelInitValueJson = string.Empty;
+			}
 			EditorGUI.indentLevel++;
 			base.OnInspectorGUI ();
 			EditorGUI.indentLevel--;

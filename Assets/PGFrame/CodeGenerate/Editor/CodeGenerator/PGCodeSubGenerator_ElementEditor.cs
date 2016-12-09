@@ -99,108 +99,160 @@ public static class GenCode_ElementEditor
 		string type = jom ["Type"].Value<string> ();
 		string result = "";
 
-		switch (type) {
-		case "int":
-			result = string.Format (@"
+		string[] ts = type.Split (new char[]{ '.' });
+		string workspace = "";
+		string single_name = "";
+		if (ts.Length == 1) {
+			workspace = PGFrameWindow.Current.SelectedWorkspace.Name;
+			single_name = ts [0];
+		} else if (ts.Length == 2) {
+			workspace = ts [0];
+			single_name = ts [1];
+		}
+
+		bool is_ese = false;
+		if (string.IsNullOrEmpty (workspace) == false && string.IsNullOrEmpty (single_name) == false) {
+			if (PGFrameWindow.Current != null) {
+				DocType? dt = PGFrameWindow.Current.CommonManager.GetTheDocTypeByName (workspace, single_name);
+				if (dt != null) {
+					switch (dt.Value) {
+					case DocType.Element:
+						break;
+					case DocType.SimpleClass:
+						result = string.Format (@"
+						
+		vmk = ""{0}"";
+		EditorGUILayout.BeginHorizontal ();
+		string {0} = JsonConvert.SerializeObject (VM.{0});
+		string temp{0} = EditorGUILayout.DelayedTextField (vmk, {0});
+		if (temp{0} != {0}) {{
+			if (string.IsNullOrEmpty (temp{0})) {{
+				VM.{0} = null;
+			}} else {{
+				VM.{0} = JsonConvert.DeserializeObject<{1}> ({0});
+			}}
+		}}
+		if (GUILayout.Button (""..."", GUILayout.MaxWidth (20))) {{
+			PopupWindow.Show (
+				new Rect (Event.current.mousePosition.x, Event.current.mousePosition.y, 0f, 0f), 
+				new SimpleClassPropertyEditorPopupWindow<{1}> (this, VM.RP_{0})
+			);
+		}}
+		EditorGUILayout.EndHorizontal ();", name, type);
+						is_ese = true;
+						break;
+					case DocType.Enum:
+						result = string.Format (@"
+
+		vmk = ""{0}"";
+		EditorGUILayout.EnumPopup (vmk, VM.{0});", name);
+						is_ese = true;
+						break;
+					default:
+						throw new System.ArgumentOutOfRangeException ();
+					}
+				}
+			}
+		} 
+
+		if (is_ese == false) {
+			switch (type) {
+			case "int":
+				result = string.Format (@"
 
 		vmk = ""{0}"";
 		int temp{0} = EditorGUILayout.DelayedIntField (vmk, VM.{0});
 		if (temp{0} != VM.{0}) {{
 			VM.{0} = temp{0};
 		}}", name);
-			break;
-		case "long":
-			result = string.Format (@"
+				break;
+			case "long":
+				result = string.Format (@"
 
 		vmk = ""{0}"";
 		int temp{0} = EditorGUILayout.DelayedIntField (vmk, (int)VM.{0});
 		if ((long)temp{0} != VM.{0}) {{
 			VM.{0} = (long)temp{0};
 		}}", name);
-			break;
-		case "float":
-			result = string.Format (@"
+				break;
+			case "float":
+				result = string.Format (@"
 
 		vmk = ""{0}"";
 		float temp{0} = EditorGUILayout.DelayedFloatField (vmk, VM.{0});
 		if (temp{0} != VM.{0}) {{
 			VM.{0} = temp{0};
 		}}", name);
-			break;
-		case "double":
-			result = string.Format (@"
+				break;
+			case "double":
+				result = string.Format (@"
 
 		vmk = ""{0}"";
 		double temp{0} = EditorGUILayout.DelayedDoubleField (vmk, VM.{0});
 		if (temp{0} != VM.{0}) {{
 			VM.{0} = temp{0};
 		}}", name);
-			break;
-		case "string":
-			result = string.Format (@"
+				break;
+			case "string":
+				result = string.Format (@"
 
 		vmk = ""{0}"";
 		string temp{0} = EditorGUILayout.DelayedTextField (vmk, VM.{0});
 		if (temp{0} != VM.{0}) {{
 			VM.{0} = temp{0};
 		}}", name);
-			break;
-//		case "DateTime":
-//		case "JObject":
-//		case "JArray":
-//			break;
-
-		case "UnityEngine.Vector2":
-			result = string.Format (@"
+				break;
+			case "UnityEngine.Vector2":
+				result = string.Format (@"
 
 		vmk = ""{0}"";
 		VM.{0} = EditorGUILayout.Vector2Field (vmk, VM.{0});", name);
-			break;
-		case "UnityEngine.Vector3":
-			result = string.Format (@"
+				break;
+			case "UnityEngine.Vector3":
+				result = string.Format (@"
 
 		vmk = ""{0}"";
 		VM.{0} = EditorGUILayout.Vector3Field (vmk, VM.{0});", name);
-			break;
-		case "UnityEngine.Vector4":
-			result = string.Format (@"
+				break;
+			case "UnityEngine.Vector4":
+				result = string.Format (@"
 
 		vmk = ""{0}"";
 		VM.{0} = EditorGUILayout.Vector4Field (vmk, VM.{0});", name);
-			break;
+				break;
 
-		case "UnityEngine.Quaternion":
-			result = string.Format (@"
+			case "UnityEngine.Quaternion":
+				result = string.Format (@"
 
 		vmk = ""{0}"";
 		Vector3 temp{0}Vector3 = VM.{0}.eulerAngles;
 		temp{0}Vector3 = EditorGUILayout.Vector3Field (vmk, temp{0}Vector3);
 		VM.{0} = Quaternion.Euler (temp{0}Vector3);", name);
-			break;
+				break;
 
-		case "UnityEngine.Rect":
-			result = string.Format (@"
+			case "UnityEngine.Rect":
+				result = string.Format (@"
 
 		vmk = ""{0}"";
 		VM.{0} = EditorGUILayout.RectField (vmk, VM.{0});", name);
-			break;
+				break;
 
-		case "UnityEngine.Bounds":
-			result = string.Format (@"
+			case "UnityEngine.Bounds":
+				result = string.Format (@"
 
 		vmk = ""{0}"";
 		VM.{0} = EditorGUILayout.BoundsField (vmk, VM.{0});", name);
-			break;
+				break;
 
-		case "UnityEngine.Color":
-			result = string.Format (@"
+			case "UnityEngine.Color":
+				result = string.Format (@"
 
 		vmk = ""{0}"";
 		VM.{0} = EditorGUILayout.ColorField (vmk, VM.{0});", name);
-			break;
+				break;
 
-		case "UnityEngine.AnimationCurve":
-			result = string.Format (@"
+			case "UnityEngine.AnimationCurve":
+				result = string.Format (@"
 			
 		vmk = ""{0}"";
 		EditorGUILayout.BeginHorizontal ();
@@ -216,10 +268,10 @@ public static class GenCode_ElementEditor
 			}}
 		}}
 		EditorGUILayout.EndHorizontal ();", name);
-			break;
+				break;
 
-		case "DateTime":
-			result = string.Format (@"
+			case "DateTime":
+				result = string.Format (@"
 
 		vmk = ""{0}"";
 		DateTime temp{0};
@@ -228,10 +280,10 @@ public static class GenCode_ElementEditor
 				VM.{0} = temp{0};
 			}}
 		}}", name);
-			break;
+				break;
 
-		case "TimeSpan":
-			result = string.Format (@"
+			case "TimeSpan":
+				result = string.Format (@"
 
 		vmk = ""{0}"";
 		TimeSpan temp{0};
@@ -240,10 +292,10 @@ public static class GenCode_ElementEditor
 				VM.{0} = temp{0};
 			}}
 		}}", name);
-			break;
+				break;
 
-		case "JObject":
-			result = string.Format (@"
+			case "JObject":
+				result = string.Format (@"
 
 		vmk = ""{0}"";
 		string temp{0}String = JsonConvert.SerializeObject (VM.{0});
@@ -255,10 +307,10 @@ public static class GenCode_ElementEditor
 				VM.{0} = JsonConvert.DeserializeObject<JObject> (temp{0}String);
 			}}
 		}}", name);
-			break;
+				break;
 
-		case "JArray":
-			result = string.Format (@"
+			case "JArray":
+				result = string.Format (@"
 
 		vmk = ""{0}"";
 		string temp{0}String = JsonConvert.SerializeObject (VM.{0});
@@ -270,17 +322,16 @@ public static class GenCode_ElementEditor
 				VM.{0} = JsonConvert.DeserializeObject<JArray> (temp{0}String);
 			}}
 		}}", name);
-			break;
+				break;
 
-		default:
-			result = string.Format (@"
+			default:
+				result = string.Format (@"
 
 		vmk = ""{0}"";
 		EditorGUILayout.DelayedTextField (vmk, VM.{0} != null ? VM.{0}.ToString () : ""null ({1})"");", name, type);
-			break;
+				break;
+			}
 		}
-
-
 		return result;
 	}
 
