@@ -118,16 +118,16 @@ public static class GenCode_ElementEditor
 					switch (dt.Value) {
 					case DocType.Element:
 						// PR_TODO:
-						/*
-						 * 		vmk = "MyInfo";
-		ViewBase myInfoView = (target as GameCoreView).MyInfoView;
-		ViewBase tempMyInfoView = (ViewBase)EditorGUILayout.ObjectField (vmk, myInfoView, typeof(PlayerInfoView), true);
-		if (myInfoView != tempMyInfoView) {
-			(target as GameCoreView).MyInfoView = tempMyInfoView;
-			VM.MyInfo = ((PlayerInfoView)tempMyInfoView).VM;
-		}
-
-						 */
+//						result = string.Format (@"
+//
+//		vmk = ""{0}"";
+//		ViewBase {0}View = (target as GameCoreView).{0}View;
+//		ViewBase temp{0}View = (ViewBase)EditorGUILayout.ObjectField (vmk, {0}View, typeof(PlayerInfoView), true);
+//		if ({0}View != temp{0}View) {{
+//			(target as GameCoreView).{0}View = tempMyInfoView;
+//			VM.MyInfo = ((PlayerInfoView)tempMyInfoView).VM;
+//						}}", name, type);
+//						is_ese = true;
 						break;
 					case DocType.SimpleClass:
 						result = string.Format (@"

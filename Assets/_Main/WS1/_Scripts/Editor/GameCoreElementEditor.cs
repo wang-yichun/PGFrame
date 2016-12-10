@@ -81,7 +81,12 @@ public class GameCoreElementEditor : Editor, IElementEditor
 		}
 
 		vmk = "MyInfo";
-		EditorGUILayout.DelayedTextField (vmk, VM.MyInfo != null ? VM.MyInfo.ToString () : "null (PlayerInfoViewModel)");
+		ViewBase myInfoView = (target as GameCoreView).MyInfoView;
+		ViewBase tempMyInfoView = (ViewBase)EditorGUILayout.ObjectField (vmk, myInfoView, typeof(PlayerInfoView), true);
+		if (myInfoView != tempMyInfoView) {
+			(target as GameCoreView).MyInfoView = tempMyInfoView;
+			VM.MyInfo = ((PlayerInfoView)tempMyInfoView).VM;
+		}
 
 		EditorGUILayout.EndVertical ();
 		EditorGUI.indentLevel--;
