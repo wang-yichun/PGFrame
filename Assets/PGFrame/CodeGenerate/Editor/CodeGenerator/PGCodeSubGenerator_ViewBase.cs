@@ -43,6 +43,7 @@ public class PGCodeSubGenerator_ViewBase: IPGCodeSubGenerator
 			code = code.Replace ("__ZZZ__", string.IsNullOrEmpty (baseViewName) ? "ViewBase" : baseViewName);
 			code = code.Replace (BIND_CODE, bind_code);
 			code = code.Replace (BIND_FUNC, bind_func);
+			code = code.Replace (VM_PROPERTY_VIEW, GetVMPropertyViewCode (jo, i));
 			string file = Path.Combine (targetPath, string.Format ("{0}Base.cs", viewName));
 			File.WriteAllText (file, code);
 			filesGenerated.Add (file);
@@ -53,6 +54,29 @@ public class PGCodeSubGenerator_ViewBase: IPGCodeSubGenerator
 
 	public static readonly string BIND_CODE = @"/****bind_code****/";
 	public static readonly string BIND_FUNC = @"/****bind_func****/";
+	public static readonly string VM_PROPERTY_VIEW = @"/****vm_property_view****/";
+
+	public string GetVMPropertyViewCode (JObject jo, int view_idx)
+	{
+		StringBuilder sb = new StringBuilder ();
+
+		string ws_name = jo ["Workspace"].Value<string> ();
+		JArray ja_members = jo ["Member"] as JArray;
+		for (int i = 0; i < ja_members.Count; i++) {
+			JObject jo_member = ja_members [i] as JObject;
+			string member_name = jo_member ["Name"].Value<string> ();
+			string member_type = jo_member ["Type"].Value<string> ();
+			DocType? dt = PGFrameTools.GetDocTypeByWorkspaceAndType (ws_name, member_type);
+			if (dt.HasValue && dt.Value == DocType.Element) {
+				sb.AppendFormat (@"
+	
+	[HideInInspector]
+	public ViewBase {0}View;", member_name);
+			}
+		}
+
+		return sb.ToString ();
+	}
 
 	string bind_code;
 	string bind_func;

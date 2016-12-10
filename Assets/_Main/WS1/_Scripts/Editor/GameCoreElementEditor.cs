@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEditor;
 using System;
 using System.Collections;
@@ -7,9 +7,9 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UniRx;
 
-public class __XXX__ElementEditor : Editor, IElementEditor
+public class GameCoreElementEditor : Editor, IElementEditor
 {
-	public __XXX__ViewModel VM { get; set; }
+	public GameCoreViewModel VM { get; set; }
 
 	bool ToggleSettings = true;
 	bool ToggleVMJsonOn = false;
@@ -36,7 +36,7 @@ public class __XXX__ElementEditor : Editor, IElementEditor
 			EditorGUILayout.EndHorizontal ();
 			V.AutoCreateViewModel = EditorGUILayout.ToggleLeft ("Auto Create ViewModel", V.AutoCreateViewModel);
 			if (ToggleVMJsonOn = EditorGUILayout.ToggleLeft (string.Format ("Show VM Json (Length:{0})", V.VMJsonSize), ToggleVMJsonOn)) {
-				EditorGUILayout.TextArea (JsonConvert.SerializeObject ((__XXX__ViewModelBase)VM, Formatting.Indented));
+				EditorGUILayout.TextArea (JsonConvert.SerializeObject ((GameCoreViewModelBase)VM, Formatting.Indented));
 			}
 			EditorGUILayout.Space ();
 		}
@@ -46,7 +46,7 @@ public class __XXX__ElementEditor : Editor, IElementEditor
 			EditorGUILayout.Space ();
 		}
 
-		if (ToggleViewModel = EditorGUILayout.Foldout (ToggleViewModel, "ViewModel - __XXX__")) {
+		if (ToggleViewModel = EditorGUILayout.Foldout (ToggleViewModel, "ViewModel - GameCore")) {
 
 			if (VM != null) {
 				InspectorGUI_ViewModel ();
@@ -67,10 +67,21 @@ public class __XXX__ElementEditor : Editor, IElementEditor
 
 		EditorGUILayout.BeginHorizontal ();
 		EditorGUILayout.PrefixLabel ("Name & ID");
-		EditorGUILayout.TextField (string.Format ("{0} ({1})", "__XXX__ViewModel", VM.VMID.ToString ().Substring (0, 8)));
+		EditorGUILayout.TextField (string.Format ("{0} ({1})", "GameCoreViewModel", VM.VMID.ToString ().Substring (0, 8)));
 		EditorGUILayout.EndHorizontal ();
 
-		/****VIEWMODEL_GUI****/
+		
+
+		string vmk;
+
+		vmk = "GameID";
+		string tempGameID = EditorGUILayout.DelayedTextField (vmk, VM.GameID);
+		if (tempGameID != VM.GameID) {
+			VM.GameID = tempGameID;
+		}
+
+		vmk = "MyInfo";
+		EditorGUILayout.DelayedTextField (vmk, VM.MyInfo != null ? VM.MyInfo.ToString () : "null (PlayerInfoViewModel)");
 
 		EditorGUILayout.EndVertical ();
 		EditorGUI.indentLevel--;

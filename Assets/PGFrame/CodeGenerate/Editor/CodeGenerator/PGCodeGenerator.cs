@@ -20,6 +20,7 @@ public class PGCodeGenerator
 	IPGCodeSubGenerator sg_ViewModel;
 	IPGCodeSubGenerator sg_ControllerBase;
 	IPGCodeSubGenerator sg_Controller;
+	IPGCodeSubGenerator sg_ViewInterface;
 	IPGCodeSubGenerator sg_ViewBase;
 	IPGCodeSubGenerator sg_View;
 	IPGCodeSubGenerator sg_ElementEditor;
@@ -34,6 +35,7 @@ public class PGCodeGenerator
 		sg_ViewModel = new PGCodeSubGenerator_ViewModel (Path.Combine (Application.dataPath, "PGFrame/CodeGenerate/Template/__XXX__ViewModel.txt"));
 		sg_ControllerBase = new PGCodeSubGenerator_ControllerBase (Path.Combine (Application.dataPath, "PGFrame/CodeGenerate/Template/__XXX__ControllerBase.txt"));
 		sg_Controller = new PGCodeSubGenerator_Controller (Path.Combine (Application.dataPath, "PGFrame/CodeGenerate/Template/__XXX__Controller.txt"));
+		sg_ViewInterface = new PGCodeSubGenerator_ViewInterface (Path.Combine (Application.dataPath, "PGFrame/CodeGenerate/Template/__XXX__ViewInterface.txt"));
 		sg_ViewBase = new PGCodeSubGenerator_ViewBase (Path.Combine (Application.dataPath, "PGFrame/CodeGenerate/Template/__XXX__ViewBase.txt"));
 		sg_View = new PGCodeSubGenerator_View (Path.Combine (Application.dataPath, "PGFrame/CodeGenerate/Template/__XXX__View.txt"));
 		sg_ElementEditor = new PGCodeSubGenerator_ElementEditor (Path.Combine (Application.dataPath, "PGFrame/CodeGenerate/Template/__XXX__ElementEditor.txt"));
@@ -59,6 +61,8 @@ public class PGCodeGenerator
 				sg_ControllerBase.GenerateCode (jo, filesGenerated);
 			if (sg_Controller.CanGenerate (jo))
 				sg_Controller.GenerateCode (jo, filesGenerated);
+			if (sg_ViewInterface.CanGenerate (jo))
+				sg_ViewInterface.GenerateCode (jo, filesGenerated);
 			if (sg_ViewBase.CanGenerate (jo))
 				sg_ViewBase.GenerateCode (jo, filesGenerated);
 			if (sg_View.CanGenerate (jo))

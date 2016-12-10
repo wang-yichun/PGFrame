@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEditor;
 using System;
 using System.Collections;
@@ -7,14 +7,14 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UniRx;
 
-[CustomEditor (typeof(__YYY__))]
-public class __YYY__ElementViewEditor : __XXX__ElementEditor
+[CustomEditor (typeof(PlayerInfoView))]
+public class PlayerInfoViewElementViewEditor : PlayerInfoElementEditor
 {
-	public __YYY__ V { get; set; }
+	public PlayerInfoView V { get; set; }
 
 	void OnEnable ()
 	{
-		V = (__YYY__)target;
+		V = (PlayerInfoView)target;
 
 		if (EditorApplication.isPlaying == false) {
 			V.CreateViewModel ();
@@ -29,6 +29,6 @@ public class __YYY__ElementViewEditor : __XXX__ElementEditor
 		JsonSerializerSettings settings = new JsonSerializerSettings () {
 			ReferenceLoopHandling = ReferenceLoopHandling.Ignore
 		};
-		V.ViewModelInitValueJson = JsonConvert.SerializeObject ((__XXX__ViewModelBase)VM, settings);
+		V.ViewModelInitValueJson = JsonConvert.SerializeObject ((PlayerInfoViewModelBase)VM, settings);
 	}
 }

@@ -27,15 +27,28 @@ public partial class PGFrameWindow : EditorWindow
 	public Texture2D pgf_enum_icon;
 	public Texture2D pgf_workspace_icon;
 
+	public Dictionary<DocType, Texture2D> pgf_doctype_short_icons;
+
+	public void SetDocTypeIcons ()
+	{
+
+		pgf_window_title_icon = Resources.Load<Texture2D> ("pgf_window_title_icon");
+		pgf_element_icon = Resources.Load<Texture2D> ("pgf_element_icon");
+		pgf_simple_class_icon = Resources.Load<Texture2D> ("pgf_simple_class_icon");
+		pgf_enum_icon = Resources.Load<Texture2D> ("pgf_enum_icon");
+		pgf_workspace_icon = Resources.Load<Texture2D> ("pgf_workspace_icon");
+
+		pgf_doctype_short_icons = new Dictionary<DocType, Texture2D> ();
+		pgf_doctype_short_icons.Add (DocType.Element, Resources.Load<Texture2D> ("pgf_element_short_icon"));
+		pgf_doctype_short_icons.Add (DocType.SimpleClass, Resources.Load<Texture2D> ("pgf_simple_class_short_icon"));
+		pgf_doctype_short_icons.Add (DocType.Enum, Resources.Load<Texture2D> ("pgf_enum_short_icon"));
+	}
+
 	[MenuItem ("PogoRock/PGFrame/PGFrame... %`")]
 	static void Init ()
 	{
 		PGFrameWindow window = (PGFrameWindow)EditorWindow.GetWindow (typeof(PGFrameWindow));
-		window.pgf_window_title_icon = Resources.Load<Texture2D> ("pgf_window_title_icon");
-		window.pgf_element_icon = Resources.Load<Texture2D> ("pgf_element_icon");
-		window.pgf_simple_class_icon = Resources.Load<Texture2D> ("pgf_simple_class_icon");
-		window.pgf_enum_icon = Resources.Load<Texture2D> ("pgf_enum_icon");
-		window.pgf_workspace_icon = Resources.Load<Texture2D> ("pgf_workspace_icon");
+		window.SetDocTypeIcons ();
 		window.titleContent = new GUIContent (window.pgf_window_title_icon);
 		window.Show ();
 		Current = window;

@@ -97,7 +97,7 @@ public partial class PGFrameWindow : EditorWindow
 		ElementMembersList.drawHeaderCallback += (Rect rect) => {
 			GUI.Label (rect, "Members in Element");
 		};
-		float[] split = new float[]{ 0f, .2f, .6f, 1f };
+		float[] split = new float[]{ 0f, .2f, .6f, 1f, 1.2f };
 		float[] split_c = new float[]{ 0f, .3f, .6f, .9f, .95f, 1f };
 
 		ElementMembersList.drawElementCallback += (Rect rect, int index, bool isActive, bool isFocused) => {
@@ -131,6 +131,26 @@ public partial class PGFrameWindow : EditorWindow
 				r.x = (rect.width - 25f) * split [split_idx] + 25f;
 				r.width = (rect.width - 25f) * (split [split_idx + 1] - split [split_idx]) - 2f;
 				jo_member ["Type"] = GUI.TextField (r, jo_member ["Type"].Value<string> ());
+
+
+				string[] ts = jo_member ["Type"].Value<string> ().Split (new char[]{ '.' });
+				string workspace = "";
+				string single_name = "";
+				if (ts.Length == 1) {
+					workspace = PGFrameWindow.Current.SelectedWorkspace.Name;
+					single_name = ts [0];
+				} else if (ts.Length == 2) {
+					workspace = ts [0];
+					single_name = ts [1];
+				}
+				DocType? dt = CommonManager.GetTheDocTypeByName (workspace, single_name);
+				if (dt.HasValue && pgf_doctype_short_icons != null && pgf_doctype_short_icons.ContainsKey (dt.Value)) {
+					split_idx++;
+					r.x = (rect.width - 25f) * split [split_idx] + 25f;
+					r.width = (rect.width - 25f) * (split [split_idx + 1] - split [split_idx]) - 2f;
+//					jo_member ["Type"] = GUI.TextField (r, jo_member ["Type"].Value<string> ());
+					GUI.Label (r, this.pgf_doctype_short_icons [dt.Value]);
+				}
 
 				if (ShowDesc) {
 					r.y = rect.y + singleRowHeight - 6f;

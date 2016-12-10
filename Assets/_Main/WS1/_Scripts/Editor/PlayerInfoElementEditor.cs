@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEditor;
 using System;
 using System.Collections;
@@ -7,9 +7,9 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UniRx;
 
-public class __XXX__ElementEditor : Editor, IElementEditor
+public class PlayerInfoElementEditor : Editor, IElementEditor
 {
-	public __XXX__ViewModel VM { get; set; }
+	public PlayerInfoViewModel VM { get; set; }
 
 	bool ToggleSettings = true;
 	bool ToggleVMJsonOn = false;
@@ -36,7 +36,7 @@ public class __XXX__ElementEditor : Editor, IElementEditor
 			EditorGUILayout.EndHorizontal ();
 			V.AutoCreateViewModel = EditorGUILayout.ToggleLeft ("Auto Create ViewModel", V.AutoCreateViewModel);
 			if (ToggleVMJsonOn = EditorGUILayout.ToggleLeft (string.Format ("Show VM Json (Length:{0})", V.VMJsonSize), ToggleVMJsonOn)) {
-				EditorGUILayout.TextArea (JsonConvert.SerializeObject ((__XXX__ViewModelBase)VM, Formatting.Indented));
+				EditorGUILayout.TextArea (JsonConvert.SerializeObject ((PlayerInfoViewModelBase)VM, Formatting.Indented));
 			}
 			EditorGUILayout.Space ();
 		}
@@ -46,7 +46,7 @@ public class __XXX__ElementEditor : Editor, IElementEditor
 			EditorGUILayout.Space ();
 		}
 
-		if (ToggleViewModel = EditorGUILayout.Foldout (ToggleViewModel, "ViewModel - __XXX__")) {
+		if (ToggleViewModel = EditorGUILayout.Foldout (ToggleViewModel, "ViewModel - PlayerInfo")) {
 
 			if (VM != null) {
 				InspectorGUI_ViewModel ();
@@ -67,10 +67,24 @@ public class __XXX__ElementEditor : Editor, IElementEditor
 
 		EditorGUILayout.BeginHorizontal ();
 		EditorGUILayout.PrefixLabel ("Name & ID");
-		EditorGUILayout.TextField (string.Format ("{0} ({1})", "__XXX__ViewModel", VM.VMID.ToString ().Substring (0, 8)));
+		EditorGUILayout.TextField (string.Format ("{0} ({1})", "PlayerInfoViewModel", VM.VMID.ToString ().Substring (0, 8)));
 		EditorGUILayout.EndHorizontal ();
 
-		/****VIEWMODEL_GUI****/
+		
+
+		string vmk;
+
+		vmk = "Name";
+		string tempName = EditorGUILayout.DelayedTextField (vmk, VM.Name);
+		if (tempName != VM.Name) {
+			VM.Name = tempName;
+		}
+
+		vmk = "Score";
+		int tempScore = EditorGUILayout.DelayedIntField (vmk, VM.Score);
+		if (tempScore != VM.Score) {
+			VM.Score = tempScore;
+		}
 
 		EditorGUILayout.EndVertical ();
 		EditorGUI.indentLevel--;

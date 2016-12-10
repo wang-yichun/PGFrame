@@ -67,9 +67,16 @@ public class PGFrameCommonManager
 		DocType? dt = null;
 		if (CommonObjectDic != null) {
 			if (CommonObjectDic.ContainsKey (workspace)) {
-				CommonModel.ElementFilesModel m = CommonObjectDic [workspace].ElementFiles.FirstOrDefault (_efm => _efm.Name == name);
-				if (m != null) {
-					dt = m.DocType;
+				if (name.EndsWith ("ViewModel")) {
+					CommonModel.ElementFilesModel m = CommonObjectDic [workspace].ElementFiles.FirstOrDefault (_efm => _efm.Name + "ViewModel" == name);
+					if (m != null) {
+						dt = m.DocType;
+					}
+				} else {
+					CommonModel.ElementFilesModel m = CommonObjectDic [workspace].ElementFiles.FirstOrDefault (_efm => _efm.Name == name);
+					if (m != null) {
+						dt = m.DocType;
+					}
 				}
 			}
 		}

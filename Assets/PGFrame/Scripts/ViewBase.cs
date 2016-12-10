@@ -2,10 +2,24 @@
 
 public class ViewBase : MonoBehaviour
 {
-
+	[SerializeField, HideInInspector]
 	public bool AutoCreateViewModel = false;
 
-	public string ViewModelInitValueJson;
+	[SerializeField, HideInInspector]
+	private string viewModelInitValueJson;
+
+	public string ViewModelInitValueJson {
+		get {
+			return viewModelInitValueJson;
+		}
+		set {
+			viewModelInitValueJson = value;
+			VMJsonSize = viewModelInitValueJson.Length;
+		}
+	}
+
+	[SerializeField, HideInInspector]
+	public int VMJsonSize;
 
 	void Awake ()
 	{

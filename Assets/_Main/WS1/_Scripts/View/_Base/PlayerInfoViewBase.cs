@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,11 +7,11 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UniRx;
 
-public class __YYY__Base : __ZZZ__ , I__XXX__View
+public class PlayerInfoViewBase : ViewBase , IPlayerInfoView
 {
-	public __XXX__ViewModel VM;
+	public PlayerInfoViewModel VM;
 
-	public __XXX__ViewModel __XXX__ {
+	public PlayerInfoViewModel PlayerInfo {
 		get {
 			return VM;
 		}
@@ -25,7 +25,7 @@ public class __YYY__Base : __ZZZ__ , I__XXX__View
 	public override void Initialize (ViewModelBase viewModel)
 	{
 		if (viewModel != null) {
-			VM = (__XXX__ViewModel)viewModel;
+			VM = (PlayerInfoViewModel)viewModel;
 		} else {
 			if (AutoCreateViewModel) {
 				if (VM == null) {
@@ -40,16 +40,16 @@ public class __YYY__Base : __ZZZ__ , I__XXX__View
 	public override void CreateViewModel ()
 	{
 		if (string.IsNullOrEmpty (ViewModelInitValueJson) == false) {
-			VM = JsonConvert.DeserializeObject<__XXX__ViewModel> (ViewModelInitValueJson);
+			VM = JsonConvert.DeserializeObject<PlayerInfoViewModel> (ViewModelInitValueJson);
 		} else {
-			VM = new __XXX__ViewModel ();
+			VM = new PlayerInfoViewModel ();
 		}
 	}
 
 	public override void Bind ()
 	{
 		base.Bind ();
-		/****bind_code****/
+		
 	}
 
 	public override void AfterBind ()
@@ -57,7 +57,7 @@ public class __YYY__Base : __ZZZ__ , I__XXX__View
 		base.AfterBind ();
 	}
 
-	/****bind_func****/
+	
 
-	/****vm_property_view****/
+	
 }
