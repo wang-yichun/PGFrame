@@ -13,7 +13,7 @@ public class ReactiveDictionaryEditorPopupWindow<T,U> : PopupWindowContent
 	{
 	}
 
-	public ReactiveDictionaryEditorPopupWindow (Editor parent, ReactiveDictionary<T,U> rd)
+	public ReactiveDictionaryEditorPopupWindow (IElementEditor parent, ReactiveDictionary<T,U> rd)
 	{
 		this.parent = parent;
 		this.rd = rd;
@@ -21,7 +21,7 @@ public class ReactiveDictionaryEditorPopupWindow<T,U> : PopupWindowContent
 		PV = default(U);
 	}
 
-	Editor parent;
+	IElementEditor parent;
 
 	public ReactiveDictionary<T,U> rd;
 
@@ -49,7 +49,7 @@ public class ReactiveDictionaryEditorPopupWindow<T,U> : PopupWindowContent
 				T newKey = JsonConvert.DeserializeObject<T> (tempkJson2);
 				rd [newKey] = value;
 				rd.Remove (key);
-				(parent as IElementEditor).VMCopyToJson ();
+				parent.VMCopyToJson ();
 			}
 
 			string tempvJson = JsonConvert.SerializeObject (value);
@@ -57,12 +57,12 @@ public class ReactiveDictionaryEditorPopupWindow<T,U> : PopupWindowContent
 			if (tempvJson != tempvJson2) {
 				U newValue = JsonConvert.DeserializeObject<U> (tempvJson2);
 				rd [key] = newValue;
-				(parent as IElementEditor).VMCopyToJson ();
+				parent.VMCopyToJson ();
 			}
 
 			if (GUILayout.Button ("-", GUILayout.MaxWidth (20))) {
 				rd.Remove (key);
-				(parent as IElementEditor).VMCopyToJson ();
+				parent.VMCopyToJson ();
 				break;
 			}
 
@@ -80,7 +80,7 @@ public class ReactiveDictionaryEditorPopupWindow<T,U> : PopupWindowContent
 
 		if (GUILayout.Button ("+", GUILayout.MaxWidth (20))) {
 			rd.Add (PK, PV);
-			(parent as IElementEditor).VMCopyToJson ();
+			parent.VMCopyToJson ();
 		}
 		EditorGUILayout.EndHorizontal ();
 		
@@ -88,6 +88,12 @@ public class ReactiveDictionaryEditorPopupWindow<T,U> : PopupWindowContent
 		GUILayout.FlexibleSpace ();
 		if (GUILayout.Button ("Json")) {
 			PRDebug.TagLog ("ReactiveDictionary", new Color (.2f, .2f, 1f), JsonConvert.SerializeObject (rd, Formatting.Indented));
+		}
+		if (GUILayout.Button ("Clear")) {
+			rd.Clear ();
+			this.editorWindow.Close ();
+			parent.VMCopyToJson ();
+			GUI.changed = true;
 		}
 		if (GUILayout.Button ("Close")) {
 			this.editorWindow.Close ();

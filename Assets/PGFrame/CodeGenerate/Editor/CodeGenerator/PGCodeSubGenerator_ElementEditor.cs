@@ -123,20 +123,27 @@ public static class GenCode_ElementEditor
 						
 		vmk = ""{0}"";
 		EditorGUILayout.BeginHorizontal ();
-		string {0} = JsonConvert.SerializeObject (VM.{0});
-		string temp{0} = EditorGUILayout.DelayedTextField (vmk, {0});
-		if (temp{0} != {0}) {{
-			if (string.IsNullOrEmpty (temp{0})) {{
-				VM.{0} = null;
-			}} else {{
-				VM.{0} = JsonConvert.DeserializeObject<{1}> ({0});
+		if (VM.{0} == null) {{
+			EditorGUILayout.PrefixLabel (vmk);
+			if (GUILayout.Button (""Create"")) {{
+				VM.{0} = new {1} ();
 			}}
-		}}
-		if (GUILayout.Button (""..."", GUILayout.MaxWidth (20))) {{
-			PopupWindow.Show (
-				new Rect (Event.current.mousePosition.x, Event.current.mousePosition.y, 0f, 0f), 
-				new SimpleClassPropertyEditorPopupWindow<{1}> (this, VM.RP_{0})
-			);
+		}} else {{
+			string {0} = JsonConvert.SerializeObject (VM.{0});
+			string temp{0} = EditorGUILayout.DelayedTextField (vmk, {0});
+			if (temp{0} != {0}) {{
+				if (string.IsNullOrEmpty (temp{0})) {{
+					VM.{0} = null;
+				}} else {{
+					VM.{0} = JsonConvert.DeserializeObject<{1}> ({0});
+				}}
+			}}
+			if (GUILayout.Button (""..."", GUILayout.MaxWidth (20))) {{
+				PopupWindow.Show (
+					new Rect (Event.current.mousePosition.x, Event.current.mousePosition.y, 0f, 0f), 
+					new SimpleClassReactivePropertyEditorPopupWindow<{1}> (this, VM.RP_{0})
+				);
+			}}
 		}}
 		EditorGUILayout.EndHorizontal ();", name, type);
 						is_ese = true;
@@ -145,7 +152,7 @@ public static class GenCode_ElementEditor
 						result = string.Format (@"
 
 		vmk = ""{0}"";
-		EditorGUILayout.EnumPopup (vmk, VM.{0});", name);
+		VM.{0} = ({1})EditorGUILayout.EnumPopup (vmk, VM.{0});", name, type);
 						is_ese = true;
 						break;
 					default:

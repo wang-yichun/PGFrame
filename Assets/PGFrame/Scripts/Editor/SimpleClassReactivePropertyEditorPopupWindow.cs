@@ -7,16 +7,16 @@ using System;
 using PogoTools;
 using Newtonsoft.Json.Linq;
 
-public class SimpleClassPropertyEditorPopupWindow<T> : PopupWindowContent
+public class SimpleClassReactivePropertyEditorPopupWindow<T> : PopupWindowContent
 {
 
-	public SimpleClassPropertyEditorPopupWindow ()
+	public SimpleClassReactivePropertyEditorPopupWindow ()
 	{
 	}
 
-	public SimpleClassPropertyEditorPopupWindow (Editor parent, ReactiveProperty<T> rp)
+	public SimpleClassReactivePropertyEditorPopupWindow (IElementEditor parent, ReactiveProperty<T> rp)
 	{
-		this.parent = (IElementEditor)parent;
+		this.parent = parent;
 		this.rp = rp;
 		jsonStr = JsonConvert.SerializeObject (rp.Value, Formatting.Indented);
 		jsonStr_ori = jsonStr;

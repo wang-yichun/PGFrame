@@ -13,14 +13,14 @@ public class ReactiveCollectionEditorPopupWindow<T> : PopupWindowContent
 	{
 	}
 
-	public ReactiveCollectionEditorPopupWindow (Editor parent, ReactiveCollection<T> rc)
+	public ReactiveCollectionEditorPopupWindow (IElementEditor parent, ReactiveCollection<T> rc)
 	{
 		this.parent = parent;
 		this.rc = rc;
 		PE = default(T);
 	}
 
-	Editor parent;
+	IElementEditor parent;
 
 	public ReactiveCollection<T> rc;
 
@@ -44,16 +44,16 @@ public class ReactiveCollectionEditorPopupWindow<T> : PopupWindowContent
 			string tempJson2 = EditorGUILayout.DelayedTextField (tempJson);
 			if (tempJson != tempJson2) {
 				rc [i] = JsonConvert.DeserializeObject<T> (tempJson2);
-				(parent as IElementEditor).VMCopyToJson ();
+				parent.VMCopyToJson ();
 			}
 			if (GUILayout.Button ("-", GUILayout.MaxWidth (20))) {
 				rc.RemoveAt (i);
-				(parent as IElementEditor).VMCopyToJson ();
+				parent.VMCopyToJson ();
 				break;
 			}
 			if (GUILayout.Button ("+", GUILayout.MaxWidth (20))) {
 				rc.Insert (i, PE);
-				(parent as IElementEditor).VMCopyToJson ();
+				parent.VMCopyToJson ();
 				break;
 			}
 			EditorGUILayout.EndHorizontal ();
@@ -73,6 +73,12 @@ public class ReactiveCollectionEditorPopupWindow<T> : PopupWindowContent
 		GUILayout.FlexibleSpace ();
 		if (GUILayout.Button ("Json")) {
 			PRDebug.TagLog ("ReactiveDictionary", new Color (.2f, .2f, 1f), JsonConvert.SerializeObject (rc, Formatting.Indented));
+		}
+		if (GUILayout.Button ("Clear")) {
+			rc.Clear ();
+			this.editorWindow.Close ();
+			parent.VMCopyToJson ();
+			GUI.changed = true;
 		}
 		if (GUILayout.Button ("Close")) {
 			this.editorWindow.Close ();

@@ -280,7 +280,7 @@ public class FirstElementEditor : Editor, IElementEditor
 		EditorGUILayout.EndHorizontal ();
 
 		vmk = "MyEA";
-		EditorGUILayout.EnumPopup (vmk, VM.MyEA);
+		VM.MyEA = (EA)EditorGUILayout.EnumPopup (vmk, VM.MyEA);
 						
 		vmk = "SCA_a";
 		EditorGUILayout.BeginHorizontal ();
@@ -302,7 +302,7 @@ public class FirstElementEditor : Editor, IElementEditor
 			if (GUILayout.Button ("...", GUILayout.MaxWidth (20))) {
 				PopupWindow.Show (
 					new Rect (Event.current.mousePosition.x, Event.current.mousePosition.y, 0f, 0f), 
-					new SimpleClassPropertyEditorPopupWindow<SCA> (this, VM.RP_SCA_a)
+					new SimpleClassReactivePropertyEditorPopupWindow<SCA> (this, VM.RP_SCA_a)
 				);
 			}
 		}
