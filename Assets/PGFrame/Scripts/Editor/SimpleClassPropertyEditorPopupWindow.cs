@@ -16,14 +16,14 @@ public class SimpleClassPropertyEditorPopupWindow<T> : PopupWindowContent
 
 	public SimpleClassPropertyEditorPopupWindow (Editor parent, ReactiveProperty<T> rp)
 	{
-		this.parent = parent;
+		this.parent = (IElementEditor)parent;
 		this.rp = rp;
 		jsonStr = JsonConvert.SerializeObject (rp.Value, Formatting.Indented);
 		jsonStr_ori = jsonStr;
 		PE = default(T);
 	}
 
-	Editor parent;
+	IElementEditor parent;
 
 	public ReactiveProperty<T> rp;
 	public string jsonStr_ori;
@@ -54,6 +54,13 @@ public class SimpleClassPropertyEditorPopupWindow<T> : PopupWindowContent
 					rp.Value = JsonConvert.DeserializeObject<T> (jsonStr_ori);
 				}
 			}
+			parent.VMCopyToJson ();
+		}
+		if (GUILayout.Button ("Set Null")) {
+			rp.Value = default(T);
+			this.editorWindow.Close ();
+			parent.VMCopyToJson ();
+			GUI.changed = true;
 		}
 		if (GUILayout.Button ("Close")) {
 			this.editorWindow.Close ();

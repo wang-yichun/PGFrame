@@ -284,20 +284,27 @@ public class FirstElementEditor : Editor, IElementEditor
 						
 		vmk = "SCA_a";
 		EditorGUILayout.BeginHorizontal ();
-		string SCA_a = JsonConvert.SerializeObject (VM.SCA_a);
-		string tempSCA_a = EditorGUILayout.DelayedTextField (vmk, SCA_a);
-		if (tempSCA_a != SCA_a) {
-			if (string.IsNullOrEmpty (tempSCA_a)) {
-				VM.SCA_a = null;
-			} else {
-				VM.SCA_a = JsonConvert.DeserializeObject<SCA> (SCA_a);
+		if (VM.SCA_a == null) {
+			EditorGUILayout.PrefixLabel (vmk);
+			if (GUILayout.Button ("Create")) {
+				VM.SCA_a = new SCA ();
 			}
-		}
-		if (GUILayout.Button ("...", GUILayout.MaxWidth (20))) {
-			PopupWindow.Show (
-				new Rect (Event.current.mousePosition.x, Event.current.mousePosition.y, 0f, 0f), 
-				new SimpleClassPropertyEditorPopupWindow<SCA> (this, VM.RP_SCA_a)
-			);
+		} else {
+			string SCA_a = JsonConvert.SerializeObject (VM.SCA_a);
+			string tempSCA_a = EditorGUILayout.DelayedTextField (vmk, SCA_a);
+			if (tempSCA_a != SCA_a) {
+				if (string.IsNullOrEmpty (tempSCA_a)) {
+					VM.SCA_a = null;
+				} else {
+					VM.SCA_a = JsonConvert.DeserializeObject<SCA> (SCA_a);
+				}
+			}
+			if (GUILayout.Button ("...", GUILayout.MaxWidth (20))) {
+				PopupWindow.Show (
+					new Rect (Event.current.mousePosition.x, Event.current.mousePosition.y, 0f, 0f), 
+					new SimpleClassPropertyEditorPopupWindow<SCA> (this, VM.RP_SCA_a)
+				);
+			}
 		}
 		EditorGUILayout.EndHorizontal ();
 
