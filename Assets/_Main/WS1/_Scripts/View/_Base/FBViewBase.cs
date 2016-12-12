@@ -1,12 +1,13 @@
 using UnityEngine;
-using UniRx;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using UniRx;
 
-public class FBViewBase : ViewBase
+public class FBViewBase : ViewBase , IFBView
 {
 	public FBViewModel VM;
 
@@ -68,4 +69,5 @@ public class FBViewBase : ViewBase
 	{
 	}
 
+	
 }

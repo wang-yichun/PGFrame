@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UniRx;
 
-public class FirstViewBase : FBView
+public class FirstViewBase : FBView , IFirstView
 {
 	public FirstViewModel VM;
 
@@ -94,4 +94,5 @@ public class FirstViewBase : FBView
 	{
 	}
 
+	
 }

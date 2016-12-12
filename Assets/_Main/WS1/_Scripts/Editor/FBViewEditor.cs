@@ -1,8 +1,10 @@
 using UnityEngine;
 using UnityEditor;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UniRx;
 
 [CustomEditor (typeof(FBView))]
@@ -24,6 +26,9 @@ public class FBViewElementViewEditor : FBElementEditor
 
 	public override void VMCopyToJson ()
 	{
-		V.ViewModelInitValueJson = JsonConvert.SerializeObject ((FBViewModelBase)VM);
+		JsonSerializerSettings settings = new JsonSerializerSettings () {
+			ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+		};
+		V.ViewModelInitValueJson = JsonConvert.SerializeObject ((FBViewModelBase)VM, settings);
 	}
 }

@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UniRx;
 
-public class FirstHudViewBase : ViewBase
+public class FirstHudViewBase : ViewBase , IFirstView
 {
 	public FirstViewModel VM;
 
@@ -84,4 +84,5 @@ public class FirstHudViewBase : ViewBase
 	{
 	}
 
+	
 }

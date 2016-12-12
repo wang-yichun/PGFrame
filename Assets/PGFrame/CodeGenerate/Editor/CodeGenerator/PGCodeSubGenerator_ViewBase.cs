@@ -64,13 +64,15 @@ public class PGCodeSubGenerator_ViewBase: IPGCodeSubGenerator
 		JArray ja_members = jo ["Member"] as JArray;
 		for (int i = 0; i < ja_members.Count; i++) {
 			JObject jo_member = ja_members [i] as JObject;
-			string member_name = jo_member ["Name"].Value<string> ();
-			string member_type = jo_member ["Type"].Value<string> ();
-			DocType? dt = PGFrameTools.GetDocTypeByWorkspaceAndType (ws_name, member_type);
-			if (dt.HasValue && dt.Value == DocType.Element) {
+			RxType rt = (RxType)Enum.Parse (typeof(RxType), jo_member ["RxType"].Value<string> ());
+			if (rt != RxType.Command) {
+				string member_name = jo_member ["Name"].Value<string> ();
+				string member_type = jo_member ["Type"].Value<string> ();
+				DocType? dt = PGFrameTools.GetDocTypeByWorkspaceAndType (ws_name, member_type);
+				if (dt.HasValue && dt.Value == DocType.Element) {
 
-				string element_name = member_type.ConvertToElementName ();
-				sb.AppendFormat (@"
+					string element_name = member_type.ConvertToElementName ();
+					sb.AppendFormat (@"
 	
 	[SerializeField, HideInInspector]
 	public ViewBase _{0}View;
@@ -82,6 +84,7 @@ public class PGCodeSubGenerator_ViewBase: IPGCodeSubGenerator
 			_{0}View = (ViewBase)value;
 		}}
 	}}", member_name, element_name);
+				}
 			}
 		}
 

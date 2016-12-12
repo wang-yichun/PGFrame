@@ -11,25 +11,41 @@ public class FirstElementEditor : Editor, IElementEditor
 {
 	public FirstViewModel VM { get; set; }
 
-	bool ToggleDefault = true;
+	bool ToggleSettings = true;
+	bool ToggleVMJsonOn = false;
+	bool ToggleView = true;
 	bool ToggleViewModel = true;
 
 	public Dictionary<string, string> CommandParams { get; set; }
 
 	public override void OnInspectorGUI ()
 	{
+		ViewBase V = target as ViewBase;
+
 		EditorGUILayout.BeginVertical ();
-		if (ToggleDefault = EditorGUILayout.Foldout (ToggleDefault, "View")) {
+		if (ToggleSettings = EditorGUILayout.Foldout (ToggleSettings, "Settings")) {
+			EditorGUILayout.BeginHorizontal ();
+			if (GUILayout.Button ("Log VMJson")) {
+				Debug.Log (V.ViewModelInitValueJson);
+			}
 			if (GUILayout.Button ("Clear VM & InitValueJson")) {
 				VM = null;
-				ViewBase V = target as ViewBase;
+				V = target as ViewBase;
 				V.ViewModelInitValueJson = string.Empty;
 			}
-			EditorGUI.indentLevel++;
-			base.OnInspectorGUI ();
-			EditorGUI.indentLevel--;
+			EditorGUILayout.EndHorizontal ();
+			V.AutoCreateViewModel = EditorGUILayout.ToggleLeft ("Auto Create ViewModel", V.AutoCreateViewModel);
+			if (ToggleVMJsonOn = EditorGUILayout.ToggleLeft (string.Format ("Show VM Json (Length:{0})", V.VMJsonSize), ToggleVMJsonOn)) {
+				EditorGUILayout.TextArea (JsonConvert.SerializeObject ((FirstViewModelBase)VM, Formatting.Indented));
+			}
 			EditorGUILayout.Space ();
 		}
+
+		if (ToggleView = EditorGUILayout.Foldout (ToggleView, "View")) {
+			base.OnInspectorGUI ();
+			EditorGUILayout.Space ();
+		}
+
 		if (ToggleViewModel = EditorGUILayout.Foldout (ToggleViewModel, "ViewModel - First")) {
 
 			if (VM != null) {
