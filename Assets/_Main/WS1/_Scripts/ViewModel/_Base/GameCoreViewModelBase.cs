@@ -48,7 +48,7 @@ public class GameCoreViewModelBase : ViewModelBase
 	/*  */
 	public ReactiveProperty<PlayerInfoViewModel> RP_MyInfo;
 
-	[JsonProperty]
+	
 	public PlayerInfoViewModel MyInfo {
 		get {
 			return RP_MyInfo.Value;

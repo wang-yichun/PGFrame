@@ -59,7 +59,7 @@ public class PGCodeSubGenerator_ViewModelBase: IPGCodeSubGenerator
 		for (int i = 0; i < ja.Count; i++) {
 			JObject jom = (JObject)ja [i];
 			sb.Append ("\n");
-			sb.Append (jom.GenReactiveMemberCode ());
+			sb.Append (jom.GenReactiveMemberCode (jo));
 //			PogoTools.PRDebug.TagLog ("GetReactiveMembers", Color.white, JsonConvert.SerializeObject (jom));
 		}
 		return sb.ToString ();
@@ -116,12 +116,12 @@ public class {NAME}Command : ViewModelCommandBase
 
 public static class GenCode_ViewModelBase
 {
-	public static string GenReactiveMemberCode (this JObject jom)
+	public static string GenReactiveMemberCode (this JObject jom, JObject jo)
 	{
 		string result = string.Empty;
 		switch (jom ["RxType"].Value<string> ()) {
 		case "Property":
-			result = jom.GenReactiveMemberProperty ();
+			result = jom.GenReactiveMemberProperty (jo);
 			break;
 		case "Collection":
 			result = jom.GenReactiveMemberCollection ();
@@ -138,13 +138,13 @@ public static class GenCode_ViewModelBase
 		return result;
 	}
 
-	public static string GenReactiveMemberProperty (this JObject jom)
+	public static string GenReactiveMemberProperty (this JObject jom, JObject jo)
 	{
 		string template = @"
 	/* {DESC} */
 	public ReactiveProperty<{TYPE}> RP_{NAME};
 
-	[JsonProperty]{JSONCONVERTER}
+	{JSONPROPERTY}{JSONCONVERTER}
 	public {TYPE} {NAME} {
 		get {
 			return RP_{NAME}.Value;
@@ -154,6 +154,13 @@ public static class GenCode_ViewModelBase
 		}
 	}";
 	
+		DocType? dt = PGFrameTools.GetDocTypeByWorkspaceAndType (jo ["Workspace"].Value<string> (), jom ["Type"].Value<string> ());
+		if (dt.HasValue && dt.Value == DocType.Element) {
+			template = template.Replace ("{JSONPROPERTY}", string.Empty);
+		} else {
+			template = template.Replace ("{JSONPROPERTY}", "[JsonProperty]");
+		}
+
 		template = template.Replace ("{NAME}", jom ["Name"].Value<string> ());
 		template = template.Replace ("{TYPE}", jom ["Type"].Value<string> ());
 		template = template.Replace ("{DESC}", jom ["Desc"].Value<string> ());
