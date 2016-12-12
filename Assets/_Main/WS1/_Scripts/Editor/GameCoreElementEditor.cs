@@ -83,7 +83,10 @@ public class GameCoreElementEditor : Editor, IElementEditor
 		vmk = "MyInfo";
 		ViewBase MyInfoView = (target as IGameCoreView).MyInfoView as ViewBase;
 		ViewBase tempMyInfoView = (ViewBase)EditorGUILayout.ObjectField (vmk, MyInfoView, typeof(ViewBase), true);
-		if (MyInfoView != tempMyInfoView) {
+		if (tempMyInfoView == null) {
+			(target as IGameCoreView).MyInfoView = null;
+			VM.MyInfo = null;
+		} else if (MyInfoView != tempMyInfoView) {
 			var view = tempMyInfoView as IPlayerInfoView;
 			if (view != null) {
 				(target as IGameCoreView).MyInfoView = tempMyInfoView as IPlayerInfoView;

@@ -61,14 +61,14 @@ public class GameCoreViewBase : ViewBase , IGameCoreView
 
 	
 	
-	[HideInInspector]
-	public IPlayerInfoView _MyInfoView;
+	[SerializeField, HideInInspector]
+	public ViewBase _MyInfoView;
 	public IPlayerInfoView MyInfoView {
 		get {
-			return _MyInfoView;
+			return (IPlayerInfoView)_MyInfoView;
 		}
 		set {
-			_MyInfoView = value;
+			_MyInfoView = (ViewBase)value;
 		}
 	}
 }

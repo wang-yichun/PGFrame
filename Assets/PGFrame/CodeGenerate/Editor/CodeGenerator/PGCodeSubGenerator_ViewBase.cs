@@ -72,14 +72,14 @@ public class PGCodeSubGenerator_ViewBase: IPGCodeSubGenerator
 				string element_name = member_type.ConvertToElementName ();
 				sb.AppendFormat (@"
 	
-	[HideInInspector]
-	public I{1}View _{0}View;
+	[SerializeField, HideInInspector]
+	public ViewBase _{0}View;
 	public I{1}View {0}View {{
 		get {{
-			return _{0}View;
+			return (I{1}View)_{0}View;
 		}}
 		set {{
-			_{0}View = value;
+			_{0}View = (ViewBase)value;
 		}}
 	}}", member_name, element_name);
 			}
