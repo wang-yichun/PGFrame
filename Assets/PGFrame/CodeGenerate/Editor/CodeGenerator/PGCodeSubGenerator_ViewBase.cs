@@ -43,7 +43,8 @@ public class PGCodeSubGenerator_ViewBase: IPGCodeSubGenerator
 			code = code.Replace ("__ZZZ__", string.IsNullOrEmpty (baseViewName) ? "ViewBase" : baseViewName);
 			code = code.Replace (BIND_CODE, bind_code);
 			code = code.Replace (BIND_FUNC, bind_func);
-			code = code.Replace (VM_PROPERTY_VIEW, GetVMPropertyViewCode (jo, i));
+			code = code.Replace (VM_PROPERTY_VIEW, GetVMPropertyViewCode (jo));
+			code = code.Replace (VM_PROPERTY_REF, GetVMPropertyRefCode (jo));
 			string file = Path.Combine (targetPath, string.Format ("{0}Base.cs", viewName));
 			File.WriteAllText (file, code);
 			filesGenerated.Add (file);
@@ -55,8 +56,33 @@ public class PGCodeSubGenerator_ViewBase: IPGCodeSubGenerator
 	public static readonly string BIND_CODE = @"/****bind_code****/";
 	public static readonly string BIND_FUNC = @"/****bind_func****/";
 	public static readonly string VM_PROPERTY_VIEW = @"/****vm_property_view****/";
+	public static readonly string VM_PROPERTY_REF = @"/****vm_property_ref****/";
 
-	public string GetVMPropertyViewCode (JObject jo, int view_idx)
+	public string GetVMPropertyRefCode (JObject jo)
+	{
+		StringBuilder sb = new StringBuilder ();
+
+		string ws_name = jo ["Workspace"].Value<string> ();
+		JArray ja_members = jo ["Member"] as JArray;
+		for (int i = 0; i < ja_members.Count; i++) {
+			JObject jo_member = ja_members [i] as JObject;
+			RxType rt = (RxType)Enum.Parse (typeof(RxType), jo_member ["RxType"].Value<string> ());
+			if (rt != RxType.Command) {
+				string member_name = jo_member ["Name"].Value<string> ();
+				string member_type = jo_member ["Type"].Value<string> ();
+				DocType? dt = PGFrameTools.GetDocTypeByWorkspaceAndType (ws_name, member_type);
+				if (dt.HasValue && dt.Value == DocType.Element) {
+
+					string element_name = member_type.ConvertToElementName ();
+					sb.AppendFormat (@"
+		VM.{0} = _{0}View.GetViewModel () as {1}ViewModel;", member_name, element_name);
+				}
+			}
+		}
+		return sb.ToString ();
+	}
+
+	public string GetVMPropertyViewCode (JObject jo)
 	{
 		StringBuilder sb = new StringBuilder ();
 

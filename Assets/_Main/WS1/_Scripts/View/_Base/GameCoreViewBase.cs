@@ -41,9 +41,16 @@ public class GameCoreViewBase : ViewBase , IGameCoreView
 	{
 		if (string.IsNullOrEmpty (ViewModelInitValueJson) == false) {
 			VM = JsonConvert.DeserializeObject<GameCoreViewModel> (ViewModelInitValueJson);
+			ViewModelPropertyRef ();
 		} else {
 			VM = new GameCoreViewModel ();
 		}
+	}
+
+	public void ViewModelPropertyRef ()
+	{
+		
+		VM.MyInfo = _MyInfoView.GetViewModel () as PlayerInfoViewModel;
 	}
 
 	public override void Bind ()
