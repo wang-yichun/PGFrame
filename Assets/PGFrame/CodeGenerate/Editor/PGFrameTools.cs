@@ -22,4 +22,13 @@
 
 		return dt;
 	}
+
+	public static string ConvertToElementName (this string viewModelName)
+	{
+		if (viewModelName.Contains ("ViewModel")) {
+			int idx_need_cut = viewModelName.LastIndexOf ("ViewModel");
+			return viewModelName.Substring (0, idx_need_cut);
+		}
+		return null;
+	}
 }

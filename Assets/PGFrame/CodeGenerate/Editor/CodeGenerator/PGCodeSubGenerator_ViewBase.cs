@@ -68,10 +68,20 @@ public class PGCodeSubGenerator_ViewBase: IPGCodeSubGenerator
 			string member_type = jo_member ["Type"].Value<string> ();
 			DocType? dt = PGFrameTools.GetDocTypeByWorkspaceAndType (ws_name, member_type);
 			if (dt.HasValue && dt.Value == DocType.Element) {
+
+				string element_name = member_type.ConvertToElementName ();
 				sb.AppendFormat (@"
 	
 	[HideInInspector]
-	public ViewBase {0}View;", member_name);
+	public I{1}View _{0}View;
+	public I{1}View {0}View {{
+		get {{
+			return _{0}View;
+		}}
+		set {{
+			_{0}View = value;
+		}}
+	}}", member_name, element_name);
 			}
 		}
 

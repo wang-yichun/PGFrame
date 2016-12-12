@@ -62,7 +62,7 @@ public class PGCodeSubGenerator_ElementEditor: IPGCodeSubGenerator
 		JArray ja = (JArray)jo ["Member"];
 		for (int i = 0; i < ja.Count; i++) {
 			JObject jom = (JObject)ja [i];
-			sb.Append (jom.GenEditorCode ());
+			sb.Append (jom.GenEditorCode (jo));
 		}
 
 		return sb.ToString ();
@@ -71,12 +71,12 @@ public class PGCodeSubGenerator_ElementEditor: IPGCodeSubGenerator
 
 public static class GenCode_ElementEditor
 {
-	public static string GenEditorCode (this JObject jom)
+	public static string GenEditorCode (this JObject jom, JObject jo)
 	{
 		string result = string.Empty;
 		switch (jom ["RxType"].Value<string> ()) {
 		case "Property":
-			result = jom.GenEditorGUIProperty ();
+			result = jom.GenEditorGUIProperty (jo);
 			break;
 		case "Collection":
 			result = jom.GenEditorGUICollection ();
@@ -93,10 +93,13 @@ public static class GenCode_ElementEditor
 		return result;
 	}
 
-	public static string GenEditorGUIProperty (this JObject jom)
+	public static string GenEditorGUIProperty (this JObject jom, JObject jo)
 	{
+		string element_name = jo ["Common"] ["Name"].Value<string> ();
+			
 		string name = jom ["Name"].Value<string> ();
 		string type = jom ["Type"].Value<string> ();
+
 		string result = "";
 
 		string[] ts = type.Split (new char[]{ '.' });
@@ -117,17 +120,22 @@ public static class GenCode_ElementEditor
 				if (dt != null) {
 					switch (dt.Value) {
 					case DocType.Element:
-						// PR_TODO:
-//						result = string.Format (@"
-//
-//		vmk = ""{0}"";
-//		ViewBase {0}View = (target as GameCoreView).{0}View;
-//		ViewBase temp{0}View = (ViewBase)EditorGUILayout.ObjectField (vmk, {0}View, typeof(PlayerInfoView), true);
-//		if ({0}View != temp{0}View) {{
-//			(target as GameCoreView).{0}View = tempMyInfoView;
-//			VM.MyInfo = ((PlayerInfoView)tempMyInfoView).VM;
-//						}}", name, type);
-//						is_ese = true;
+						string member_element_name = type.ConvertToElementName ();
+						result = string.Format (@"
+
+		vmk = ""{0}"";
+		ViewBase {0}View = (target as I{1}View).{0}View as ViewBase;
+		ViewBase temp{0}View = (ViewBase)EditorGUILayout.ObjectField (vmk, {0}View, typeof(ViewBase), true);
+		if ({0}View != temp{0}View) {{
+			var view = temp{0}View as I{2}View;
+			if (view != null) {{
+				(target as I{1}View).{0}View = temp{0}View as I{2}View;
+				VM.{0} = ({2}ViewModel)tempMyInfoView.GetViewModel ();
+			}} else {{
+				Debug.Log (""类型不匹配, 需要一个: {2}"");
+			}}
+		}}", name, element_name, member_element_name);
+						is_ese = true;
 						break;
 					case DocType.SimpleClass:
 						result = string.Format (@"

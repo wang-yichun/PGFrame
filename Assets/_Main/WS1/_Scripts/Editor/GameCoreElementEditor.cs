@@ -81,11 +81,16 @@ public class GameCoreElementEditor : Editor, IElementEditor
 		}
 
 		vmk = "MyInfo";
-		ViewBase myInfoView = (target as GameCoreView).MyInfoView;
-		ViewBase tempMyInfoView = (ViewBase)EditorGUILayout.ObjectField (vmk, myInfoView, typeof(PlayerInfoView), true);
-		if (myInfoView != tempMyInfoView) {
-			(target as GameCoreView).MyInfoView = tempMyInfoView;
-			VM.MyInfo = ((PlayerInfoView)tempMyInfoView).VM;
+		ViewBase MyInfoView = (target as IGameCoreView).MyInfoView as ViewBase;
+		ViewBase tempMyInfoView = (ViewBase)EditorGUILayout.ObjectField (vmk, MyInfoView, typeof(ViewBase), true);
+		if (MyInfoView != tempMyInfoView) {
+			var view = tempMyInfoView as IPlayerInfoView;
+			if (view != null) {
+				(target as IGameCoreView).MyInfoView = tempMyInfoView as IPlayerInfoView;
+				VM.MyInfo = (PlayerInfoViewModel)tempMyInfoView.GetViewModel ();
+			} else {
+				Debug.Log ("类型不匹配, 需要一个: PlayerInfo");
+			}
 		}
 
 		EditorGUILayout.EndVertical ();

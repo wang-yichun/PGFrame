@@ -1,3 +1,4 @@
 ﻿public interface I__XXX__View
 {
+	/****vm_property_view****/
 }

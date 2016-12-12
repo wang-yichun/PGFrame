@@ -33,6 +33,7 @@ public class PGCodeSubGenerator_ViewInterface: IPGCodeSubGenerator
 		string targetPath = Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/View/_Interface");
 		string code = File.ReadAllText (templateFileInfo.FullName);
 		code = code.Replace ("__XXX__", elementName);
+		code = code.Replace (VM_PROPERTY_VIEW, GetVMPropertyViewCode (jo));
 		string file = Path.Combine (targetPath, string.Format ("I{0}View.cs", elementName));
 		File.WriteAllText (file, code);
 		filesGenerated.Add (file);
@@ -40,4 +41,26 @@ public class PGCodeSubGenerator_ViewInterface: IPGCodeSubGenerator
 
 	#endregion
 
+	public static readonly string VM_PROPERTY_VIEW = @"/****vm_property_view****/";
+
+	public string GetVMPropertyViewCode (JObject jo)
+	{
+		StringBuilder sb = new StringBuilder ();
+
+		string ws_name = jo ["Workspace"].Value<string> ();
+		JArray ja_members = jo ["Member"] as JArray;
+		for (int i = 0; i < ja_members.Count; i++) {
+			JObject jo_member = ja_members [i] as JObject;
+			string member_name = jo_member ["Name"].Value<string> ();
+			string member_type = jo_member ["Type"].Value<string> ();
+			DocType? dt = PGFrameTools.GetDocTypeByWorkspaceAndType (ws_name, member_type);
+			if (dt.HasValue && dt.Value == DocType.Element) {
+				string element_name = member_type.ConvertToElementName ();
+				sb.AppendFormat (@"
+	I{1}View {0}View {{ get; set; }}", member_name, element_name);
+			}
+		}
+
+		return sb.ToString ();
+	}
 }

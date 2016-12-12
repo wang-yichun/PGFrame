@@ -62,5 +62,13 @@ public class GameCoreViewBase : ViewBase , IGameCoreView
 	
 	
 	[HideInInspector]
-	public ViewBase MyInfoView;
+	public IPlayerInfoView _MyInfoView;
+	public IPlayerInfoView MyInfoView {
+		get {
+			return _MyInfoView;
+		}
+		set {
+			_MyInfoView = value;
+		}
+	}
 }
