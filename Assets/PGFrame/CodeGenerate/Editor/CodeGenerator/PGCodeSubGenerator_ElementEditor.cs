@@ -125,6 +125,8 @@ public static class GenCode_ElementEditor
 
 		vmk = ""{0}"";
 		ViewBase {0}View = (target as I{1}View).{0}View as ViewBase;
+		if (EditorApplication.isPlaying && VM.{0} == null)
+			{0}View = null;
 		ViewBase temp{0}View = (ViewBase)EditorGUILayout.ObjectField (vmk, {0}View, typeof(ViewBase), true);
 		if (tempMyInfoView == null) {{
 			(target as I{1}View).{0}View = null;
