@@ -75,6 +75,9 @@ public class PGCodeSubGenerator_ViewBase: IPGCodeSubGenerator
 
 					string element_name = member_type.ConvertToElementName ();
 					sb.AppendFormat (@"
+		if (_{0}View.GetViewModel () == null) {{
+			_{0}View.CreateViewModel ();
+		}}
 		VM.{0} = _{0}View.GetViewModel () as {1}ViewModel;", member_name, element_name);
 				}
 			}

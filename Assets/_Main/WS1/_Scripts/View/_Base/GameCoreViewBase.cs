@@ -27,10 +27,8 @@ public class GameCoreViewBase : ViewBase , IGameCoreView
 		if (viewModel != null) {
 			VM = (GameCoreViewModel)viewModel;
 		} else {
-			if (AutoCreateViewModel) {
-				if (VM == null) {
-					CreateViewModel ();
-				}
+			if (AutoCreateViewModel && VM == null) {
+				CreateViewModel ();
 			}
 		}
 
@@ -39,7 +37,7 @@ public class GameCoreViewBase : ViewBase , IGameCoreView
 
 	public override void CreateViewModel ()
 	{
-		if (string.IsNullOrEmpty (ViewModelInitValueJson) == false) {
+		if (UseEmptyViewModel || string.IsNullOrEmpty (ViewModelInitValueJson) == false) {
 			VM = JsonConvert.DeserializeObject<GameCoreViewModel> (ViewModelInitValueJson);
 			ViewModelPropertyRef ();
 		} else {
@@ -50,6 +48,9 @@ public class GameCoreViewBase : ViewBase , IGameCoreView
 	public void ViewModelPropertyRef ()
 	{
 		
+		if (_MyInfoView.GetViewModel () == null) {
+			_MyInfoView.CreateViewModel ();
+		}
 		VM.MyInfo = _MyInfoView.GetViewModel () as PlayerInfoViewModel;
 	}
 

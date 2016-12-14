@@ -27,10 +27,8 @@ public class PlayerInfoViewBase : ViewBase , IPlayerInfoView
 		if (viewModel != null) {
 			VM = (PlayerInfoViewModel)viewModel;
 		} else {
-			if (AutoCreateViewModel) {
-				if (VM == null) {
-					CreateViewModel ();
-				}
+			if (AutoCreateViewModel && VM == null) {
+				CreateViewModel ();
 			}
 		}
 
@@ -39,11 +37,17 @@ public class PlayerInfoViewBase : ViewBase , IPlayerInfoView
 
 	public override void CreateViewModel ()
 	{
-		if (string.IsNullOrEmpty (ViewModelInitValueJson) == false) {
+		if (UseEmptyViewModel || string.IsNullOrEmpty (ViewModelInitValueJson) == false) {
 			VM = JsonConvert.DeserializeObject<PlayerInfoViewModel> (ViewModelInitValueJson);
+			ViewModelPropertyRef ();
 		} else {
 			VM = new PlayerInfoViewModel ();
 		}
+	}
+
+	public void ViewModelPropertyRef ()
+	{
+		
 	}
 
 	public override void Bind ()

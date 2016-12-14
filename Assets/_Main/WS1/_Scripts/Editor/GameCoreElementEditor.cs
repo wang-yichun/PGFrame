@@ -35,6 +35,7 @@ public class GameCoreElementEditor : Editor, IElementEditor
 			}
 			EditorGUILayout.EndHorizontal ();
 			V.AutoCreateViewModel = EditorGUILayout.ToggleLeft ("Auto Create ViewModel", V.AutoCreateViewModel);
+			V.UseEmptyViewModel = EditorGUILayout.ToggleLeft ("Use Empty ViewModel", V.UseEmptyViewModel);
 			if (ToggleVMJsonOn = EditorGUILayout.ToggleLeft (string.Format ("Show VM Json (Length:{0})", V.VMJsonSize), ToggleVMJsonOn)) {
 				EditorGUILayout.TextArea (JsonConvert.SerializeObject ((GameCoreViewModelBase)VM, Formatting.Indented));
 			}

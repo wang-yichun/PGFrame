@@ -6,6 +6,9 @@ public class ViewBase : MonoBehaviour
 	public bool AutoCreateViewModel = false;
 
 	[SerializeField, HideInInspector]
+	public bool UseEmptyViewModel = true;
+
+	[SerializeField, HideInInspector]
 	private string viewModelInitValueJson;
 
 	public string ViewModelInitValueJson {
