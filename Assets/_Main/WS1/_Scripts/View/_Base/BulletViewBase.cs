@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,11 +7,11 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UniRx;
 
-public class __YYY__Base : __ZZZ__ , I__XXX__View
+public class BulletViewBase : ViewBase , IBulletView
 {
-	public __XXX__ViewModel VM;
+	public BulletViewModel VM;
 
-	public __XXX__ViewModel __XXX__ {
+	public BulletViewModel Bullet {
 		get {
 			return VM;
 		}
@@ -25,7 +25,7 @@ public class __YYY__Base : __ZZZ__ , I__XXX__View
 	public override void Initialize (ViewModelBase viewModel)
 	{
 		if (viewModel != null) {
-			VM = (__XXX__ViewModel)viewModel;
+			VM = (BulletViewModel)viewModel;
 		} else {
 			if (AutoCreateViewModel && VM == null) {
 				CreateViewModel ();
@@ -38,22 +38,22 @@ public class __YYY__Base : __ZZZ__ , I__XXX__View
 	public override void CreateViewModel ()
 	{
 		if (UseEmptyViewModel || string.IsNullOrEmpty (ViewModelInitValueJson)) {
-			VM = new __XXX__ViewModel ();
+			VM = new BulletViewModel ();
 		} else {
-			VM = JsonConvert.DeserializeObject<__XXX__ViewModel> (ViewModelInitValueJson);
+			VM = JsonConvert.DeserializeObject<BulletViewModel> (ViewModelInitValueJson);
 			ViewModelPropertyRef ();
 		}
 	}
 
 	public void ViewModelPropertyRef ()
 	{
-		/****vm_property_ref****/
+		
 	}
 
 	public override void Bind ()
 	{
 		base.Bind ();
-		/****bind_code****/
+		
 	}
 
 	public override void AfterBind ()
@@ -61,7 +61,7 @@ public class __YYY__Base : __ZZZ__ , I__XXX__View
 		base.AfterBind ();
 	}
 
-	/****bind_func****/
+	
 
-	/****vm_property_view****/
+	
 }

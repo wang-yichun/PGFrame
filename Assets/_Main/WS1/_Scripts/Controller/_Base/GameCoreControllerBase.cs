@@ -16,7 +16,14 @@ public class GameCoreControllerBase<T> : ControllerBase<T>
 		GameCoreViewModel vm = (GameCoreViewModel)viewModel;
 
 		
+		vm.RC_AddSomeBullet.Subscribe (_ => {
+			AddSomeBullet ((GameCoreViewModel)viewModel);
+		});
 	}
 
 	
+	/*  */
+	public virtual void AddSomeBullet (GameCoreViewModel viewModel)
+	{
+	}
 }

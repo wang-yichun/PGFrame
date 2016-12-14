@@ -37,11 +37,11 @@ public class GameCoreViewBase : ViewBase , IGameCoreView
 
 	public override void CreateViewModel ()
 	{
-		if (UseEmptyViewModel || string.IsNullOrEmpty (ViewModelInitValueJson) == false) {
+		if (UseEmptyViewModel || string.IsNullOrEmpty (ViewModelInitValueJson)) {
+			VM = new GameCoreViewModel ();
+		} else {
 			VM = JsonConvert.DeserializeObject<GameCoreViewModel> (ViewModelInitValueJson);
 			ViewModelPropertyRef ();
-		} else {
-			VM = new GameCoreViewModel ();
 		}
 	}
 
@@ -58,6 +58,8 @@ public class GameCoreViewBase : ViewBase , IGameCoreView
 	{
 		base.Bind ();
 		
+		VM.CurrentBullets.ObserveAdd ().Subscribe (OnAdd_CurrentBullets);
+		VM.CurrentBullets.ObserveRemove ().Subscribe (OnRemove_CurrentBullets);
 	}
 
 	public override void AfterBind ()
@@ -66,6 +68,14 @@ public class GameCoreViewBase : ViewBase , IGameCoreView
 	}
 
 	
+
+	public virtual void OnAdd_CurrentBullets (CollectionAddEvent<BulletViewModel> e)
+	{
+	}
+
+	public virtual void OnRemove_CurrentBullets (CollectionRemoveEvent<BulletViewModel> e)
+	{
+	}
 
 	
 	

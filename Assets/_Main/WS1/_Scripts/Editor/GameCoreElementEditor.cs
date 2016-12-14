@@ -99,6 +99,33 @@ public class GameCoreElementEditor : Editor, IElementEditor
 			}
 		}
 
+		vmk = "CurrentBullets";
+		EditorGUILayout.BeginHorizontal ();
+		string CurrentBulletsJson = JsonConvert.SerializeObject (VM.CurrentBullets);
+		string tempCurrentBulletsJson = EditorGUILayout.DelayedTextField (vmk, CurrentBulletsJson);
+		if (tempCurrentBulletsJson != CurrentBulletsJson) {
+			if (string.IsNullOrEmpty (tempCurrentBulletsJson)) {
+				VM.CurrentBullets = null;
+			} else {
+				VM.CurrentBullets = JsonConvert.DeserializeObject<ReactiveCollection<BulletViewModel>> (tempCurrentBulletsJson);
+			}
+		}
+		if (GUILayout.Button ("...", GUILayout.MaxWidth (20))) {
+			PopupWindow.Show (
+				new Rect (Event.current.mousePosition.x, Event.current.mousePosition.y, 0f, 0f), 
+				new ReactiveCollectionEditorPopupWindow<BulletViewModel> (this, VM.CurrentBullets)
+			);
+		}
+		EditorGUILayout.EndHorizontal ();
+
+		vmk = "AddSomeBullet";
+		EditorGUILayout.BeginHorizontal ();
+		EditorGUILayout.PrefixLabel (vmk);
+		if (GUILayout.Button ("Invoke")) {
+			VM.RC_AddSomeBullet.Execute ();
+		}
+		EditorGUILayout.EndHorizontal ();
+
 		EditorGUILayout.EndVertical ();
 		EditorGUI.indentLevel--;
 

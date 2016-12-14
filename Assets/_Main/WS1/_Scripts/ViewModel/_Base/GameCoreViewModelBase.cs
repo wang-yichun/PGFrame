@@ -22,6 +22,8 @@ public class GameCoreViewModelBase : ViewModelBase
 		
 		RP_GameID = new ReactiveProperty<string> ();
 		RP_MyInfo = new ReactiveProperty<PlayerInfoViewModel> ();
+		CurrentBullets = new ReactiveCollection<BulletViewModel> ();
+		RC_AddSomeBullet = new ReactiveCommand ();
 	}
 
 	public override void Attach ()
@@ -57,5 +59,17 @@ public class GameCoreViewModelBase : ViewModelBase
 			RP_MyInfo.Value = value;
 		}
 	}
+
+	/*  */
+	[JsonProperty] public ReactiveCollection<BulletViewModel> CurrentBullets;
+
+	/*  */
+	public ReactiveCommand RC_AddSomeBullet;
+	
 }
 
+
+public class AddSomeBulletCommand : ViewModelCommandBase
+{
+
+}

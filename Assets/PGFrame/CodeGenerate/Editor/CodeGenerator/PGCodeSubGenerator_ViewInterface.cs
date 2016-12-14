@@ -52,7 +52,7 @@ public class PGCodeSubGenerator_ViewInterface: IPGCodeSubGenerator
 		for (int i = 0; i < ja_members.Count; i++) {
 			JObject jo_member = ja_members [i] as JObject;
 			RxType rt = (RxType)Enum.Parse (typeof(RxType), jo_member ["RxType"].Value<string> ());
-			if (rt != RxType.Command) {
+			if (rt == RxType.Property) {
 				string member_name = jo_member ["Name"].Value<string> ();
 				string member_type = jo_member ["Type"].Value<string> ();
 				DocType? dt = PGFrameTools.GetDocTypeByWorkspaceAndType (ws_name, member_type);

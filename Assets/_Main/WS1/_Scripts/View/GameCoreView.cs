@@ -26,4 +26,21 @@ public class GameCoreView : GameCoreViewBase
 		base.AfterBind ();
 		Debug.Log (string.Format ("GameCoreView in {0} AfterBind.", gameObject.name));
 	}
+
+	public GameObject BulletPrefab;
+	public Transform BulletContainer;
+
+	public override void OnAdd_CurrentBullets (CollectionAddEvent<BulletViewModel> e)
+	{
+		GameObject go = Instantiate<GameObject> (BulletPrefab);
+		go.transform.SetParent (BulletContainer);
+
+		BulletView bulletView = go.GetComponent<BulletView> ();
+		bulletView.Initialize (e.Value);
+	}
+
+	public override void OnRemove_CurrentBullets (CollectionRemoveEvent<BulletViewModel> e)
+	{
+		
+	}
 }
