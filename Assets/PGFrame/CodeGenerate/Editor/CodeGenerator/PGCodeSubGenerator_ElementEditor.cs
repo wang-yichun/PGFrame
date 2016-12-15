@@ -3,125 +3,128 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Newtonsoft.Json.Linq;
 
-public class PGCodeSubGenerator_ElementEditor: IPGCodeSubGenerator
+namespace PGFrame
 {
-	public PGCodeSubGenerator_ElementEditor ()
+	using Newtonsoft.Json.Linq;
+
+	public class PGCodeSubGenerator_ElementEditor: IPGCodeSubGenerator
 	{
-	}
+		public PGCodeSubGenerator_ElementEditor ()
+		{
+		}
 
-	public PGCodeSubGenerator_ElementEditor (string templateFileName)
-	{
-		templateFileInfo = new FileInfo (templateFileName);
-	}
+		public PGCodeSubGenerator_ElementEditor (string templateFileName)
+		{
+			templateFileInfo = new FileInfo (templateFileName);
+		}
 
-	FileInfo templateFileInfo;
+		FileInfo templateFileInfo;
 
-	#region IPGCodeSubGenerator implementation
+		#region IPGCodeSubGenerator implementation
 
-	public bool CanGenerate (JObject jo)
-	{
-		return true;
-	}
+		public bool CanGenerate (JObject jo)
+		{
+			return true;
+		}
 
-	public void GenerateCode (JObject jo, IList<string> filesGenerated)
-	{
-		string workspaceName = jo ["Workspace"].Value<string> ();
-		string elementName = jo ["Common"] ["Name"].Value<string> ();
-		string targetPath = Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/Editor");
-		string code = File.ReadAllText (templateFileInfo.FullName);
-		code = code.Replace ("__XXX__", elementName);
-		code = code.Replace (VIEWMODEL_GUI, GetViewModelGUICode (jo));
-		string file = Path.Combine (targetPath, string.Format ("{0}ElementEditor.cs", elementName));
-		File.WriteAllText (file, code);
-		filesGenerated.Add (file);
-	}
+		public void GenerateCode (JObject jo, IList<string> filesGenerated)
+		{
+			string workspaceName = jo ["Workspace"].Value<string> ();
+			string elementName = jo ["Common"] ["Name"].Value<string> ();
+			string targetPath = Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/Editor");
+			string code = File.ReadAllText (templateFileInfo.FullName);
+			code = code.Replace ("__XXX__", elementName);
+			code = code.Replace (VIEWMODEL_GUI, GetViewModelGUICode (jo));
+			string file = Path.Combine (targetPath, string.Format ("{0}ElementEditor.cs", elementName));
+			File.WriteAllText (file, code);
+			filesGenerated.Add (file);
+		}
 
-	#endregion
+		#endregion
 
-	public static readonly string VIEWMODEL_GUI = @"/****VIEWMODEL_GUI****/";
+		public static readonly string VIEWMODEL_GUI = @"/****VIEWMODEL_GUI****/";
 
-	public string GetViewModelGUICode (JObject jo)
-	{
-		string baseType = jo ["Common"] ["Type"].Value<string> ();
+		public string GetViewModelGUICode (JObject jo)
+		{
+			string baseType = jo ["Common"] ["Type"].Value<string> ();
 
-		StringBuilder sb = new StringBuilder ();
+			StringBuilder sb = new StringBuilder ();
 
-		if (string.IsNullOrEmpty (baseType) == false) {
-			sb.Append (string.Format (@"
+			if (string.IsNullOrEmpty (baseType) == false) {
+				sb.Append (string.Format (@"
 		EditorGUILayout.BeginVertical (""box"");
 		{0}ElementEditor baseElementEditor = new {0}ElementEditor ();
 		baseElementEditor.VM = VM as {0}ViewModel;
 		baseElementEditor.InspectorGUI_ViewModel ();
 		EditorGUILayout.EndVertical ();", baseType));
+			}
+
+			sb.Append ("\n\n\t\tstring vmk;");
+
+			JArray ja = (JArray)jo ["Member"];
+			for (int i = 0; i < ja.Count; i++) {
+				JObject jom = (JObject)ja [i];
+				sb.Append (jom.GenEditorCode (jo));
+			}
+
+			return sb.ToString ();
 		}
-
-		sb.Append ("\n\n\t\tstring vmk;");
-
-		JArray ja = (JArray)jo ["Member"];
-		for (int i = 0; i < ja.Count; i++) {
-			JObject jom = (JObject)ja [i];
-			sb.Append (jom.GenEditorCode (jo));
-		}
-
-		return sb.ToString ();
-	}
-}
-
-public static class GenCode_ElementEditor
-{
-	public static string GenEditorCode (this JObject jom, JObject jo)
-	{
-		string result = string.Empty;
-		switch (jom ["RxType"].Value<string> ()) {
-		case "Property":
-			result = jom.GenEditorGUIProperty (jo);
-			break;
-		case "Collection":
-			result = jom.GenEditorGUICollection ();
-			break;
-		case "Dictionary":
-			result = jom.GenEditorGUIDictionary ();
-			break;
-		case "Command":
-			result = jom.GenEditorGUICommand ();
-			break;
-		default:
-			break;
-		}
-		return result;
 	}
 
-	public static string GenEditorGUIProperty (this JObject jom, JObject jo)
+	public static class GenCode_ElementEditor
 	{
-		string element_name = jo ["Common"] ["Name"].Value<string> ();
+		public static string GenEditorCode (this JObject jom, JObject jo)
+		{
+			string result = string.Empty;
+			switch (jom ["RxType"].Value<string> ()) {
+			case "Property":
+				result = jom.GenEditorGUIProperty (jo);
+				break;
+			case "Collection":
+				result = jom.GenEditorGUICollection ();
+				break;
+			case "Dictionary":
+				result = jom.GenEditorGUIDictionary ();
+				break;
+			case "Command":
+				result = jom.GenEditorGUICommand ();
+				break;
+			default:
+				break;
+			}
+			return result;
+		}
+
+		public static string GenEditorGUIProperty (this JObject jom, JObject jo)
+		{
+			string element_name = jo ["Common"] ["Name"].Value<string> ();
 			
-		string name = jom ["Name"].Value<string> ();
-		string type = jom ["Type"].Value<string> ();
+			string name = jom ["Name"].Value<string> ();
+			string type = jom ["Type"].Value<string> ();
 
-		string result = "";
+			string result = "";
 
-		string[] ts = type.Split (new char[]{ '.' });
-		string workspace = "";
-		string single_name = "";
-		if (ts.Length == 1) {
-			workspace = PGFrameWindow.Current.SelectedWorkspace.Name;
-			single_name = ts [0];
-		} else if (ts.Length == 2) {
-			workspace = ts [0];
-			single_name = ts [1];
-		}
+			string[] ts = type.Split (new char[]{ '.' });
+			string workspace = "";
+			string single_name = "";
+			if (ts.Length == 1) {
+				workspace = PGFrameWindow.Current.SelectedWorkspace.Name;
+				single_name = ts [0];
+			} else if (ts.Length == 2) {
+				workspace = ts [0];
+				single_name = ts [1];
+			}
 
-		bool is_ese = false;
-		if (string.IsNullOrEmpty (workspace) == false && string.IsNullOrEmpty (single_name) == false) {
-			if (PGFrameWindow.Current != null) {
-				DocType? dt = PGFrameWindow.Current.CommonManager.GetTheDocTypeByName (workspace, single_name);
-				if (dt != null) {
-					switch (dt.Value) {
-					case DocType.Element:
-						string member_element_name = type.ConvertToElementName ();
-						result = string.Format (@"
+			bool is_ese = false;
+			if (string.IsNullOrEmpty (workspace) == false && string.IsNullOrEmpty (single_name) == false) {
+				if (PGFrameWindow.Current != null) {
+					DocType? dt = PGFrameWindow.Current.CommonManager.GetTheDocTypeByName (workspace, single_name);
+					if (dt != null) {
+						switch (dt.Value) {
+						case DocType.Element:
+							string member_element_name = type.ConvertToElementName ();
+							result = string.Format (@"
 
 		vmk = ""{0}"";
 		ViewBase {0}View = (target as I{1}View).{0}View as ViewBase;
@@ -140,10 +143,10 @@ public static class GenCode_ElementEditor
 				Debug.Log (""类型不匹配, 需要一个: {2}"");
 			}}
 		}}", name, element_name, member_element_name);
-						is_ese = true;
-						break;
-					case DocType.SimpleClass:
-						result = string.Format (@"
+							is_ese = true;
+							break;
+						case DocType.SimpleClass:
+							result = string.Format (@"
 						
 		vmk = ""{0}"";
 		EditorGUILayout.BeginHorizontal ();
@@ -170,120 +173,120 @@ public static class GenCode_ElementEditor
 			}}
 		}}
 		EditorGUILayout.EndHorizontal ();", name, type);
-						is_ese = true;
-						break;
-					case DocType.Enum:
-						result = string.Format (@"
+							is_ese = true;
+							break;
+						case DocType.Enum:
+							result = string.Format (@"
 
 		vmk = ""{0}"";
 		VM.{0} = ({1})EditorGUILayout.EnumPopup (vmk, VM.{0});", name, type);
-						is_ese = true;
-						break;
-					default:
-						throw new System.ArgumentOutOfRangeException ();
+							is_ese = true;
+							break;
+						default:
+							throw new System.ArgumentOutOfRangeException ();
+						}
 					}
 				}
-			}
-		} 
+			} 
 
-		if (is_ese == false) {
-			switch (type) {
-			case "int":
-				result = string.Format (@"
+			if (is_ese == false) {
+				switch (type) {
+				case "int":
+					result = string.Format (@"
 
 		vmk = ""{0}"";
 		int temp{0} = EditorGUILayout.DelayedIntField (vmk, VM.{0});
 		if (temp{0} != VM.{0}) {{
 			VM.{0} = temp{0};
 		}}", name);
-				break;
-			case "long":
-				result = string.Format (@"
+					break;
+				case "long":
+					result = string.Format (@"
 
 		vmk = ""{0}"";
 		int temp{0} = EditorGUILayout.DelayedIntField (vmk, (int)VM.{0});
 		if ((long)temp{0} != VM.{0}) {{
 			VM.{0} = (long)temp{0};
 		}}", name);
-				break;
-			case "float":
-				result = string.Format (@"
+					break;
+				case "float":
+					result = string.Format (@"
 
 		vmk = ""{0}"";
 		float temp{0} = EditorGUILayout.DelayedFloatField (vmk, VM.{0});
 		if (temp{0} != VM.{0}) {{
 			VM.{0} = temp{0};
 		}}", name);
-				break;
-			case "double":
-				result = string.Format (@"
+					break;
+				case "double":
+					result = string.Format (@"
 
 		vmk = ""{0}"";
 		double temp{0} = EditorGUILayout.DelayedDoubleField (vmk, VM.{0});
 		if (temp{0} != VM.{0}) {{
 			VM.{0} = temp{0};
 		}}", name);
-				break;
-			case "string":
-				result = string.Format (@"
+					break;
+				case "string":
+					result = string.Format (@"
 
 		vmk = ""{0}"";
 		string temp{0} = EditorGUILayout.DelayedTextField (vmk, VM.{0});
 		if (temp{0} != VM.{0}) {{
 			VM.{0} = temp{0};
 		}}", name);
-				break;
-			case "UnityEngine.Vector2":
-				result = string.Format (@"
+					break;
+				case "UnityEngine.Vector2":
+					result = string.Format (@"
 
 		vmk = ""{0}"";
 		VM.{0} = EditorGUILayout.Vector2Field (vmk, VM.{0});", name);
-				break;
-			case "UnityEngine.Vector3":
-				result = string.Format (@"
+					break;
+				case "UnityEngine.Vector3":
+					result = string.Format (@"
 
 		vmk = ""{0}"";
 		VM.{0} = EditorGUILayout.Vector3Field (vmk, VM.{0});", name);
-				break;
-			case "UnityEngine.Vector4":
-				result = string.Format (@"
+					break;
+				case "UnityEngine.Vector4":
+					result = string.Format (@"
 
 		vmk = ""{0}"";
 		VM.{0} = EditorGUILayout.Vector4Field (vmk, VM.{0});", name);
-				break;
+					break;
 
-			case "UnityEngine.Quaternion":
-				result = string.Format (@"
+				case "UnityEngine.Quaternion":
+					result = string.Format (@"
 
 		vmk = ""{0}"";
 		Vector3 temp{0}Vector3 = VM.{0}.eulerAngles;
 		temp{0}Vector3 = EditorGUILayout.Vector3Field (vmk, temp{0}Vector3);
 		VM.{0} = Quaternion.Euler (temp{0}Vector3);", name);
-				break;
+					break;
 
-			case "UnityEngine.Rect":
-				result = string.Format (@"
+				case "UnityEngine.Rect":
+					result = string.Format (@"
 
 		vmk = ""{0}"";
 		VM.{0} = EditorGUILayout.RectField (vmk, VM.{0});", name);
-				break;
+					break;
 
-			case "UnityEngine.Bounds":
-				result = string.Format (@"
+				case "UnityEngine.Bounds":
+					result = string.Format (@"
 
 		vmk = ""{0}"";
 		VM.{0} = EditorGUILayout.BoundsField (vmk, VM.{0});", name);
-				break;
+					break;
 
-			case "UnityEngine.Color":
-				result = string.Format (@"
+				case "UnityEngine.Color":
+					result = string.Format (@"
 
 		vmk = ""{0}"";
 		VM.{0} = EditorGUILayout.ColorField (vmk, VM.{0});", name);
-				break;
+					break;
 
-			case "UnityEngine.AnimationCurve":
-				result = string.Format (@"
+				case "UnityEngine.AnimationCurve":
+					result = string.Format (@"
 			
 		vmk = ""{0}"";
 		EditorGUILayout.BeginHorizontal ();
@@ -299,10 +302,10 @@ public static class GenCode_ElementEditor
 			}}
 		}}
 		EditorGUILayout.EndHorizontal ();", name);
-				break;
+					break;
 
-			case "DateTime":
-				result = string.Format (@"
+				case "DateTime":
+					result = string.Format (@"
 
 		vmk = ""{0}"";
 		DateTime temp{0};
@@ -311,10 +314,10 @@ public static class GenCode_ElementEditor
 				VM.{0} = temp{0};
 			}}
 		}}", name);
-				break;
+					break;
 
-			case "TimeSpan":
-				result = string.Format (@"
+				case "TimeSpan":
+					result = string.Format (@"
 
 		vmk = ""{0}"";
 		TimeSpan temp{0};
@@ -323,10 +326,10 @@ public static class GenCode_ElementEditor
 				VM.{0} = temp{0};
 			}}
 		}}", name);
-				break;
+					break;
 
-			case "JObject":
-				result = string.Format (@"
+				case "JObject":
+					result = string.Format (@"
 
 		vmk = ""{0}"";
 		string temp{0}String = JsonConvert.SerializeObject (VM.{0});
@@ -338,10 +341,10 @@ public static class GenCode_ElementEditor
 				VM.{0} = JsonConvert.DeserializeObject<JObject> (temp{0}String);
 			}}
 		}}", name);
-				break;
+					break;
 
-			case "JArray":
-				result = string.Format (@"
+				case "JArray":
+					result = string.Format (@"
 
 		vmk = ""{0}"";
 		string temp{0}String = JsonConvert.SerializeObject (VM.{0});
@@ -353,25 +356,25 @@ public static class GenCode_ElementEditor
 				VM.{0} = JsonConvert.DeserializeObject<JArray> (temp{0}String);
 			}}
 		}}", name);
-				break;
+					break;
 
-			default:
-				result = string.Format (@"
+				default:
+					result = string.Format (@"
 
 		vmk = ""{0}"";
 		EditorGUILayout.DelayedTextField (vmk, VM.{0} != null ? VM.{0}.ToString () : ""null ({1})"");", name, type);
-				break;
+					break;
+				}
 			}
+			return result;
 		}
-		return result;
-	}
 
-	public static string GenEditorGUICollection (this JObject jom)
-	{
-		string name = jom ["Name"].Value<string> ();
-		string type = jom ["Type"].Value<string> ();
+		public static string GenEditorGUICollection (this JObject jom)
+		{
+			string name = jom ["Name"].Value<string> ();
+			string type = jom ["Type"].Value<string> ();
 
-		string result = string.Format (@"
+			string result = string.Format (@"
 
 		vmk = ""{0}"";
 		EditorGUILayout.BeginHorizontal ();
@@ -392,16 +395,16 @@ public static class GenCode_ElementEditor
 		}}
 		EditorGUILayout.EndHorizontal ();", name, type);
 
-		return result;
-	}
+			return result;
+		}
 
-	public static string GenEditorGUIDictionary (this JObject jom)
-	{
-		string name = jom ["Name"].Value<string> ();
-		string type = jom ["Type"].Value<string> ();
-		string[] types = type.Split (new char[]{ ',' });
+		public static string GenEditorGUIDictionary (this JObject jom)
+		{
+			string name = jom ["Name"].Value<string> ();
+			string type = jom ["Type"].Value<string> ();
+			string[] types = type.Split (new char[]{ ',' });
 
-		string result = string.Format (@"
+			string result = string.Format (@"
 
 		vmk = ""{0}"";
 		EditorGUILayout.BeginHorizontal ();
@@ -422,18 +425,18 @@ public static class GenCode_ElementEditor
 		}}
 		EditorGUILayout.EndHorizontal ();", name, types [0], types [1]);
 
-		return result;
-	}
+			return result;
+		}
 
-	public static string GenEditorGUICommand (this JObject jom)
-	{
-		string name = jom ["Name"].Value<string> ();
-		JArray para = jom ["Params"] as JArray;
+		public static string GenEditorGUICommand (this JObject jom)
+		{
+			string name = jom ["Name"].Value<string> ();
+			JArray para = jom ["Params"] as JArray;
 
-		string result;
+			string result;
 
-		if (para != null && para.Count > 0) {
-			result = string.Format (@"
+			if (para != null && para.Count > 0) {
+				result = string.Format (@"
 
 		vmk = ""{0}"";
 		EditorGUILayout.BeginHorizontal ();
@@ -459,8 +462,8 @@ public static class GenCode_ElementEditor
 			CommandParams [vmk] = EditorGUILayout.TextArea (CommandParams [vmk]);
 			EditorGUILayout.Space ();
 		}}", name);
-		} else {
-			result = string.Format (@"
+			} else {
+				result = string.Format (@"
 
 		vmk = ""{0}"";
 		EditorGUILayout.BeginHorizontal ();
@@ -469,8 +472,9 @@ public static class GenCode_ElementEditor
 			VM.RC_{0}.Execute ();
 		}}
 		EditorGUILayout.EndHorizontal ();", name);
-		}
+			}
 
-		return result;
+			return result;
+		}
 	}
 }

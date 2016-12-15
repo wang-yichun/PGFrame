@@ -1,15 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
-/// <summary>
-/// 定义代码生成器的接口
-/// </summary>
-public interface IPGCodeSubGenerator
+namespace PGFrame
 {
-	bool CanGenerate (JObject jo);
+	using Newtonsoft.Json;
+	using Newtonsoft.Json.Linq;
 
-	void GenerateCode (JObject jo, IList<string> filesGenerated);
+	/// <summary>
+	/// 定义代码生成器的接口
+	/// </summary>
+	public interface IPGCodeSubGenerator
+	{
+		bool CanGenerate (JObject jo);
+
+		void GenerateCode (JObject jo, IList<string> filesGenerated);
+	}
 }

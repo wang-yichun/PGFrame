@@ -1,6 +1,9 @@
-﻿public enum DocType
+﻿namespace PGFrame
 {
-	Element,
-	SimpleClass,
-	Enum
+	public enum DocType
+	{
+		Element,
+		SimpleClass,
+		Enum
+	}
 }

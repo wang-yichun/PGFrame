@@ -1,16 +1,19 @@
-﻿public abstract class JsonFileCreater
+﻿namespace PGFrame
 {
-	protected PGFrameWindow FrameWindow;
-
-	public JsonFileCreater (PGFrameWindow frameWindow, string name)
+	public abstract class JsonFileCreater
 	{
-		this.FrameWindow = frameWindow;
-		this.Name = name;
+		protected PGFrameWindow FrameWindow;
+
+		public JsonFileCreater (PGFrameWindow frameWindow, string name)
+		{
+			this.FrameWindow = frameWindow;
+			this.Name = name;
+		}
+
+		protected string Name;
+
+		public abstract void Create ();
+
+		public abstract string MakeJsonName ();
 	}
-
-	protected string Name;
-
-	public abstract void Create ();
-
-	public abstract string MakeJsonName ();
 }

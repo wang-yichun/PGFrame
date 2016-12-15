@@ -1,7 +1,10 @@
-﻿public enum RxType
+﻿namespace PGFrame
 {
-	Property,
-	Collection,
-	Dictionary,
-	Command
+	public enum RxType
+	{
+		Property,
+		Collection,
+		Dictionary,
+		Command
+	}
 }

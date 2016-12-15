@@ -26,11 +26,10 @@ public class FBViewBase : ViewBase , IFBView
 	{
 		if (viewModel != null) {
 			VM = (FBViewModel)viewModel;
+			VM.AddHostView (ViewModelBase.DefaultViewBaseKey, this);
 		} else {
-			if (AutoCreateViewModel) {
-				if (VM == null) {
-					CreateViewModel ();
-				}
+			if (AutoCreateViewModel && VM == null) {
+				CreateViewModel ();
 			}
 		}
 
@@ -39,11 +38,19 @@ public class FBViewBase : ViewBase , IFBView
 
 	public override void CreateViewModel ()
 	{
-		if (string.IsNullOrEmpty (ViewModelInitValueJson) == false) {
-			VM = JsonConvert.DeserializeObject<FBViewModel> (ViewModelInitValueJson);
-		} else {
+		if (UseEmptyViewModel || string.IsNullOrEmpty (ViewModelInitValueJson)) {
 			VM = new FBViewModel ();
+		} else {
+			VM = JsonConvert.DeserializeObject<FBViewModel> (ViewModelInitValueJson);
+			ViewModelPropertyRef ();
 		}
+		
+		VM.AddHostView (ViewModelBase.DefaultViewBaseKey, this);
+	}
+
+	public void ViewModelPropertyRef ()
+	{
+		
 	}
 
 	public override void Bind ()
