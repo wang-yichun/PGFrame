@@ -160,22 +160,17 @@ namespace PGFrame
 					AssetDatabase.Refresh ();
 				}
 			}
-//			for (int i = 0; i < xElements.Length; i++) {
-//				XLSXElement xe = xElements [i];
-//				Converter.SetElement (xe);
-//				Converter.Convert (Generator, false);
-//			}
-//				AssetDatabase.Refresh ();
-//			}
 
-//			if (GUILayout.Button ("删除代码")) {
-////			for (int i = 0; i < xElements.Length; i++) {
-////				XLSXElement xe = xElements [i];
-////				Converter.SetElement (xe);
-////				Converter.Convert (Generator, true);
-////			}
-//				AssetDatabase.Refresh ();
-//			}
+			if (SelectedWorkspace != null && jElements != null) {
+				if (GUILayout.Button (string.Format ("删除代码 ({0})", jElements.Length))) {
+					for (int i = 0; i < jElements.Length; i++) {
+						JSONElement xe = jElements [i];
+						Generator.DeleteCode (xe.jo);
+					}
+					AssetDatabase.Refresh ();
+				}
+			}
+
 			GUILayout.EndVertical ();
 		}
 

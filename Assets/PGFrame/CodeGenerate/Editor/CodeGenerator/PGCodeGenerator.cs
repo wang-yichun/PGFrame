@@ -98,17 +98,41 @@ namespace PGFrame
 			string workspaceName = jo ["Workspace"].Value<string> ();
 			string elementName = jo ["Common"] ["Name"].Value<string> ();
 
-			string[] targetPaths = {
-				Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/Controller/" + string.Format ("{0}Controller.cs", elementName)),
-				Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/Controller/_Base/" + string.Format ("{0}ControllerBase.cs", elementName)),
-				Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/ViewModel/" + string.Format ("{0}ViewModel.cs", elementName)),
-				Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/ViewModel/_Base/" + string.Format ("{0}ViewModelBase.cs", elementName)),
-				Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/View/" + string.Format ("{0}View.cs", elementName)),
-				Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/View/_Base/" + string.Format ("{0}ViewBase.cs", elementName)),
-				Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/Editor/" + string.Format ("{0}ElementEditor.cs", elementName)),
-				Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/SimpleClass/" + string.Format ("{0}.cs", elementName)),
-				Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/SimpleClass/_Base/" + string.Format ("{0}Base.cs", elementName))
-			};
+			List<string> targetPaths = new List<string> ();
+
+			DocType dt = (DocType)Enum.Parse (typeof(DocType), jo ["DocType"].Value<string> ());
+
+			switch (dt) {
+			case DocType.Element:
+				targetPaths.Add (Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/Controller/" + string.Format ("{0}Controller.cs", elementName)));
+				targetPaths.Add (Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/Controller/_Base/" + string.Format ("{0}ControllerBase.cs", elementName)));
+				targetPaths.Add (Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/ViewModel/" + string.Format ("{0}ViewModel.cs", elementName)));
+				targetPaths.Add (Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/ViewModel/_Base/" + string.Format ("{0}ViewModelBase.cs", elementName)));
+				targetPaths.Add (Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/View/_Interface/" + string.Format ("I{0}View.cs", elementName)));
+				targetPaths.Add (Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/Editor/" + string.Format ("{0}ElementEditor.cs", elementName)));
+
+				JArray ja_view = jo ["Views"] as JArray;
+				for (int i = 0; i < ja_view.Count; i++) {
+					JObject jo_view = ja_view [i] as JObject;
+					string view_name = jo_view ["Name"].Value<string> ();
+					targetPaths.Add (Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/View/" + string.Format ("{0}.cs", view_name)));
+					targetPaths.Add (Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/View/_Base/" + string.Format ("{0}Base.cs", view_name)));
+					targetPaths.Add (Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/Editor/" + string.Format ("{0}Editor.cs", view_name)));
+				}
+				break;
+			case DocType.SimpleClass:
+				targetPaths.Add (Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/SimpleClass/" + string.Format ("{0}.cs", elementName)));
+				targetPaths.Add (Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/SimpleClass/_Base/" + string.Format ("{0}Base.cs", elementName)));
+				break;
+			case DocType.Enum:
+				targetPaths.Add (Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/Enum/" + string.Format ("{0}.cs", elementName)));
+				break;
+			default:
+				throw new ArgumentOutOfRangeException ();
+			}
+
+
+
 			List<string> fileDeleted = new List<string> ();
 
 			foreach (string s in targetPaths) {
