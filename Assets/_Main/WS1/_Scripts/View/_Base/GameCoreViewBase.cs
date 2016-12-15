@@ -26,6 +26,7 @@ public class GameCoreViewBase : ViewBase , IGameCoreView
 	{
 		if (viewModel != null) {
 			VM = (GameCoreViewModel)viewModel;
+			VM.AddHostView (ViewModelBase.DefaultViewBaseKey, this);
 		} else {
 			if (AutoCreateViewModel && VM == null) {
 				CreateViewModel ();
@@ -43,6 +44,8 @@ public class GameCoreViewBase : ViewBase , IGameCoreView
 			VM = JsonConvert.DeserializeObject<GameCoreViewModel> (ViewModelInitValueJson);
 			ViewModelPropertyRef ();
 		}
+		
+		VM.AddHostView (ViewModelBase.DefaultViewBaseKey, this);
 	}
 
 	public void ViewModelPropertyRef ()

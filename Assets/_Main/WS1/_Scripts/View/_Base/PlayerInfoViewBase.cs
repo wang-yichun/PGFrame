@@ -26,6 +26,7 @@ public class PlayerInfoViewBase : ViewBase , IPlayerInfoView
 	{
 		if (viewModel != null) {
 			VM = (PlayerInfoViewModel)viewModel;
+			VM.AddHostView (ViewModelBase.DefaultViewBaseKey, this);
 		} else {
 			if (AutoCreateViewModel && VM == null) {
 				CreateViewModel ();
@@ -37,12 +38,14 @@ public class PlayerInfoViewBase : ViewBase , IPlayerInfoView
 
 	public override void CreateViewModel ()
 	{
-		if (UseEmptyViewModel || string.IsNullOrEmpty (ViewModelInitValueJson) == false) {
+		if (UseEmptyViewModel || string.IsNullOrEmpty (ViewModelInitValueJson)) {
+			VM = new PlayerInfoViewModel ();
+		} else {
 			VM = JsonConvert.DeserializeObject<PlayerInfoViewModel> (ViewModelInitValueJson);
 			ViewModelPropertyRef ();
-		} else {
-			VM = new PlayerInfoViewModel ();
 		}
+		
+		VM.AddHostView (ViewModelBase.DefaultViewBaseKey, this);
 	}
 
 	public void ViewModelPropertyRef ()

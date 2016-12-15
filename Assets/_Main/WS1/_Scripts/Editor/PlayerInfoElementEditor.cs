@@ -7,43 +7,20 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UniRx;
 
-public class PlayerInfoElementEditor : Editor, IElementEditor
+public class PlayerInfoElementEditor : ElementEditorBase<PlayerInfoViewModel>
 {
-	public PlayerInfoViewModel VM { get; set; }
-
-	bool ToggleSettings = true;
-	bool ToggleVMJsonOn = false;
-	bool ToggleView = true;
-	bool ToggleViewModel = true;
-
-	public Dictionary<string, string> CommandParams { get; set; }
+	public override PlayerInfoViewModel VM { get; set; }
 
 	public override void OnInspectorGUI ()
 	{
 		ViewBase V = target as ViewBase;
 
 		EditorGUILayout.BeginVertical ();
-		if (ToggleSettings = EditorGUILayout.Foldout (ToggleSettings, "Settings")) {
-			EditorGUILayout.BeginHorizontal ();
-			if (GUILayout.Button ("Log VMJson")) {
-				Debug.Log (V.ViewModelInitValueJson);
-			}
-			if (GUILayout.Button ("Clear VM & InitValueJson")) {
-				VM = null;
-				V = target as ViewBase;
-				V.ViewModelInitValueJson = string.Empty;
-			}
-			EditorGUILayout.EndHorizontal ();
-			V.AutoCreateViewModel = EditorGUILayout.ToggleLeft ("Auto Create ViewModel", V.AutoCreateViewModel);
-			V.UseEmptyViewModel = EditorGUILayout.ToggleLeft ("Use Empty ViewModel", V.UseEmptyViewModel);
-			if (ToggleVMJsonOn = EditorGUILayout.ToggleLeft (string.Format ("Show VM Json (Length:{0})", V.VMJsonSize), ToggleVMJsonOn)) {
-				EditorGUILayout.TextArea (JsonConvert.SerializeObject ((PlayerInfoViewModelBase)VM, Formatting.Indented));
-			}
-			EditorGUILayout.Space ();
-		}
+		
+		base.OnInspectorGUI ();
 
 		if (ToggleView = EditorGUILayout.Foldout (ToggleView, "View")) {
-			base.OnInspectorGUI ();
+			base.DrawDefaultInspector ();
 			EditorGUILayout.Space ();
 		}
 
