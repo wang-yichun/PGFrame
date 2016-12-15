@@ -35,6 +35,7 @@ namespace PGFrame
 			string targetPath = Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/Editor");
 			string code = File.ReadAllText (templateFileInfo.FullName);
 			code = code.Replace ("__XXX__", elementName);
+			code = code.Replace ("__WWW__", workspaceName);
 			code = code.Replace (VIEWMODEL_GUI, GetViewModelGUICode (jo));
 			string file = Path.Combine (targetPath, string.Format ("{0}ElementEditor.cs", elementName));
 			File.WriteAllText (file, code);

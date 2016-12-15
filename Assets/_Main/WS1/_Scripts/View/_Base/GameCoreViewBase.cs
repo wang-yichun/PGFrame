@@ -3,74 +3,77 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using UniRx;
 
-public class GameCoreViewBase : ViewBase , IGameCoreView
-{
-	public GameCoreViewModel VM;
+namespace WS1 {
 
-	public GameCoreViewModel GameCore {
-		get {
-			return VM;
-		}
-	}
+	using Newtonsoft.Json;
+	using Newtonsoft.Json.Linq;
+	using UniRx;
 
-	public override ViewModelBase GetViewModel ()
+	public class GameCoreViewBase : ViewBase , IGameCoreView
 	{
-		return VM;
-	}
+		public GameCoreViewModel VM;
 
-	public override void Initialize (ViewModelBase viewModel)
-	{
-		if (viewModel != null) {
-			VM = (GameCoreViewModel)viewModel;
-			VM.AddHostView (ViewModelBase.DefaultViewBaseKey, this);
-		} else {
-			if (AutoCreateViewModel && VM == null) {
-				CreateViewModel ();
+		public GameCoreViewModel GameCore {
+			get {
+				return VM;
 			}
 		}
 
-		base.Initialize (VM);
-	}
-
-	public override void CreateViewModel ()
-	{
-		if (UseEmptyViewModel || string.IsNullOrEmpty (ViewModelInitValueJson)) {
-			VM = new GameCoreViewModel ();
-		} else {
-			VM = JsonConvert.DeserializeObject<GameCoreViewModel> (ViewModelInitValueJson);
-			ViewModelPropertyRef ();
+		public override ViewModelBase GetViewModel ()
+		{
+			return VM;
 		}
-		
-		VM.AddHostView (ViewModelBase.DefaultViewBaseKey, this);
-	}
 
-	public void ViewModelPropertyRef ()
-	{
-		
+		public override void Initialize (ViewModelBase viewModel)
+		{
+			if (viewModel != null) {
+				VM = (GameCoreViewModel)viewModel;
+				VM.AddHostView (ViewModelBase.DefaultViewBaseKey, this);
+			} else {
+				if (AutoCreateViewModel && VM == null) {
+					CreateViewModel ();
+				}
+			}
+
+			base.Initialize (VM);
+		}
+
+		public override void CreateViewModel ()
+		{
+			if (UseEmptyViewModel || string.IsNullOrEmpty (ViewModelInitValueJson)) {
+				VM = new GameCoreViewModel ();
+			} else {
+				VM = JsonConvert.DeserializeObject<GameCoreViewModel> (ViewModelInitValueJson);
+				ViewModelPropertyRef ();
+			}
+			
+			VM.AddHostView (ViewModelBase.DefaultViewBaseKey, this);
+		}
+
+		public void ViewModelPropertyRef ()
+		{
+			
 		if (_MyInfoView.GetViewModel () == null) {
 			_MyInfoView.CreateViewModel ();
 		}
 		VM.MyInfo = _MyInfoView.GetViewModel () as PlayerInfoViewModel;
-	}
+		}
 
-	public override void Bind ()
-	{
-		base.Bind ();
-		
+		public override void Bind ()
+		{
+			base.Bind ();
+			
 		VM.CurrentBullets.ObserveAdd ().Subscribe (OnAdd_CurrentBullets);
 		VM.CurrentBullets.ObserveRemove ().Subscribe (OnRemove_CurrentBullets);
-	}
+		}
 
-	public override void AfterBind ()
-	{
-		base.AfterBind ();
-	}
+		public override void AfterBind ()
+		{
+			base.AfterBind ();
+		}
 
-	
+		
 
 	public virtual void OnAdd_CurrentBullets (CollectionAddEvent<BulletViewModel> e)
 	{
@@ -80,7 +83,7 @@ public class GameCoreViewBase : ViewBase , IGameCoreView
 	{
 	}
 
-	
+		
 	
 	[SerializeField, HideInInspector]
 	public ViewBase _MyInfoView;
@@ -92,4 +95,6 @@ public class GameCoreViewBase : ViewBase , IGameCoreView
 			_MyInfoView = (ViewBase)value;
 		}
 	}
+	}
+
 }

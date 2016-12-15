@@ -3,68 +3,73 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using UniRx;
 
-public class BulletViewBase : ViewBase , IBulletView
-{
-	public BulletViewModel VM;
+namespace WS1 {
 
-	public BulletViewModel Bullet {
-		get {
-			return VM;
-		}
-	}
+	using Newtonsoft.Json;
+	using Newtonsoft.Json.Linq;
+	using UniRx;
 
-	public override ViewModelBase GetViewModel ()
+	public class BulletViewBase : ViewBase , IBulletView
 	{
-		return VM;
-	}
+		public BulletViewModel VM;
 
-	public override void Initialize (ViewModelBase viewModel)
-	{
-		if (viewModel != null) {
-			VM = (BulletViewModel)viewModel;
-			VM.AddHostView (ViewBaseKey, this);
-		} else {
-			if (AutoCreateViewModel && VM == null) {
-				CreateViewModel ();
+		public BulletViewModel Bullet {
+			get {
+				return VM;
 			}
 		}
 
-		base.Initialize (VM);
-	}
-
-	public override void CreateViewModel ()
-	{
-		if (UseEmptyViewModel || string.IsNullOrEmpty (ViewModelInitValueJson)) {
-			VM = new BulletViewModel ();
-		} else {
-			VM = JsonConvert.DeserializeObject<BulletViewModel> (ViewModelInitValueJson);
-			ViewModelPropertyRef ();
+		public override ViewModelBase GetViewModel ()
+		{
+			return VM;
 		}
+
+		public override void Initialize (ViewModelBase viewModel)
+		{
+			if (viewModel != null) {
+				VM = (BulletViewModel)viewModel;
+				VM.AddHostView (ViewModelBase.DefaultViewBaseKey, this);
+			} else {
+				if (AutoCreateViewModel && VM == null) {
+					CreateViewModel ();
+				}
+			}
+
+			base.Initialize (VM);
+		}
+
+		public override void CreateViewModel ()
+		{
+			if (UseEmptyViewModel || string.IsNullOrEmpty (ViewModelInitValueJson)) {
+				VM = new BulletViewModel ();
+			} else {
+				VM = JsonConvert.DeserializeObject<BulletViewModel> (ViewModelInitValueJson);
+				ViewModelPropertyRef ();
+			}
+			
+			VM.AddHostView (ViewModelBase.DefaultViewBaseKey, this);
+		}
+
+		public void ViewModelPropertyRef ()
+		{
+			
+		}
+
+		public override void Bind ()
+		{
+			base.Bind ();
+			
+		}
+
+		public override void AfterBind ()
+		{
+			base.AfterBind ();
+		}
+
 		
-		VM.AddHostView (ViewBaseKey, this);
-	}
 
-	public void ViewModelPropertyRef ()
-	{
 		
 	}
 
-	public override void Bind ()
-	{
-		base.Bind ();
-		
-	}
-
-	public override void AfterBind ()
-	{
-		base.AfterBind ();
-	}
-
-	
-
-	
 }

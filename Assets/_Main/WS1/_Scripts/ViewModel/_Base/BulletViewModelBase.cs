@@ -2,34 +2,37 @@ using System.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using UniRx;
 
-/*//////////////////////////////////////////////////////////////////////////////
-  
-//////////////////////////////////////////////////////////////////////////////*/
-[JsonObjectAttribute (MemberSerialization.OptIn)]
-public class BulletViewModelBase : ViewModelBase
-{
-	public BulletViewModelBase ()
-	{
-	}
+namespace WS1 {
 
-	public override void Initialize ()
+	using Newtonsoft.Json;
+	using Newtonsoft.Json.Linq;
+	using UniRx;
+
+	/*//////////////////////////////////////////////////////////////////////////////
+	  
+	//////////////////////////////////////////////////////////////////////////////*/
+	[JsonObjectAttribute (MemberSerialization.OptIn)]
+	public class BulletViewModelBase : ViewModelBase
 	{
-		base.Initialize ();
-		
+		public BulletViewModelBase ()
+		{
+		}
+
+		public override void Initialize ()
+		{
+			base.Initialize ();
+			
 		RP_BType = new ReactiveProperty<BulletType> ();
-	}
+		}
 
-	public override void Attach ()
-	{
-		base.Attach ();
-		BulletController.Instance.Attach (this);
-	}
+		public override void Attach ()
+		{
+			base.Attach ();
+			BulletController.Instance.Attach (this);
+		}
 
-	
+		
 
 	/*  */
 	public ReactiveProperty<BulletType> RP_BType;
@@ -43,5 +46,8 @@ public class BulletViewModelBase : ViewModelBase
 			RP_BType.Value = value;
 		}
 	}
-}
+	}
 
+	
+
+}

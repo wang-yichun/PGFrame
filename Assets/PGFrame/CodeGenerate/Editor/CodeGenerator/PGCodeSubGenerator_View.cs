@@ -41,6 +41,7 @@ namespace PGFrame
 					string code = File.ReadAllText (templateFileInfo.FullName);
 					code = code.Replace ("__YYY__", viewName);
 					code = code.Replace ("__XXX__", elementName);
+					code = code.Replace ("__WWW__", workspaceName);
 					File.WriteAllText (file, code);
 					filesGenerated.Add (file);
 				}

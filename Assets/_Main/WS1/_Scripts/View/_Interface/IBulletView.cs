@@ -1,4 +1,8 @@
-public interface IBulletView
-{
-	
+namespace WS1 {
+
+	public interface IBulletView
+	{
+		
+	}
+
 }

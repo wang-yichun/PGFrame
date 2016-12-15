@@ -2,33 +2,38 @@ using System.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using UniRx;
 
-/*//////////////////////////////////////////////////////////////////////////////
- /****class_comment****/ 
-//////////////////////////////////////////////////////////////////////////////*/
-[JsonObjectAttribute (MemberSerialization.OptIn)]
-public class __XXX__ViewModelBase : __YYY__
-{
-	public __XXX__ViewModelBase ()
+namespace __WWW__ {
+
+	using Newtonsoft.Json;
+	using Newtonsoft.Json.Linq;
+	using UniRx;
+
+	/*//////////////////////////////////////////////////////////////////////////////
+	 /****class_comment****/ 
+	//////////////////////////////////////////////////////////////////////////////*/
+	[JsonObjectAttribute (MemberSerialization.OptIn)]
+	public class __XXX__ViewModelBase : __YYY__
 	{
+		public __XXX__ViewModelBase ()
+		{
+		}
+
+		public override void Initialize ()
+		{
+			base.Initialize ();
+			/****initialize_code****/
+		}
+
+		public override void Attach ()
+		{
+			base.Attach ();
+			__XXX__Controller.Instance.Attach (this);
+		}
+
+		/****reactive_members****/
 	}
 
-	public override void Initialize ()
-	{
-		base.Initialize ();
-		/****initialize_code****/
-	}
+	/****command_class****/
 
-	public override void Attach ()
-	{
-		base.Attach ();
-		__XXX__Controller.Instance.Attach (this);
-	}
-
-	/****reactive_members****/
 }
-
-/****command_class****/

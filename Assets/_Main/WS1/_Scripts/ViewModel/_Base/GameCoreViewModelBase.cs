@@ -2,38 +2,41 @@ using System.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using UniRx;
 
-/*//////////////////////////////////////////////////////////////////////////////
-  
-//////////////////////////////////////////////////////////////////////////////*/
-[JsonObjectAttribute (MemberSerialization.OptIn)]
-public class GameCoreViewModelBase : ViewModelBase
-{
-	public GameCoreViewModelBase ()
-	{
-	}
+namespace WS1 {
 
-	public override void Initialize ()
+	using Newtonsoft.Json;
+	using Newtonsoft.Json.Linq;
+	using UniRx;
+
+	/*//////////////////////////////////////////////////////////////////////////////
+	  
+	//////////////////////////////////////////////////////////////////////////////*/
+	[JsonObjectAttribute (MemberSerialization.OptIn)]
+	public class GameCoreViewModelBase : ViewModelBase
 	{
-		base.Initialize ();
-		
+		public GameCoreViewModelBase ()
+		{
+		}
+
+		public override void Initialize ()
+		{
+			base.Initialize ();
+			
 		RP_GameID = new ReactiveProperty<string> ();
 		RP_MyInfo = new ReactiveProperty<PlayerInfoViewModel> ();
 		CurrentBullets = new ReactiveCollection<BulletViewModel> ();
 		RC_AddSomeBullet = new ReactiveCommand ();
 		RC_RemoveSomeBullet = new ReactiveCommand ();
-	}
+		}
 
-	public override void Attach ()
-	{
-		base.Attach ();
-		GameCoreController.Instance.Attach (this);
-	}
+		public override void Attach ()
+		{
+			base.Attach ();
+			GameCoreController.Instance.Attach (this);
+		}
 
-	
+		
 
 	/*  */
 	public ReactiveProperty<string> RP_GameID;
@@ -71,9 +74,9 @@ public class GameCoreViewModelBase : ViewModelBase
 	/*  */
 	public ReactiveCommand RC_RemoveSomeBullet;
 	
-}
+	}
 
-
+	
 public class AddSomeBulletCommand : ViewModelCommandBase
 {
 
@@ -81,5 +84,8 @@ public class AddSomeBulletCommand : ViewModelCommandBase
 
 public class RemoveSomeBulletCommand : ViewModelCommandBase
 {
+
+}
+
 
 }

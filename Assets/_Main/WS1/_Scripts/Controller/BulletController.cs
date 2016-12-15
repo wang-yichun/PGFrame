@@ -5,11 +5,13 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using PogoTools;
 
-public class BulletController : BulletControllerBase<BulletController>
+namespace WS1
 {
-	public BulletController ()
+	public class BulletController : BulletControllerBase<BulletController>
 	{
+		public BulletController ()
+		{
+		}
+	
 	}
-	
-	
 }

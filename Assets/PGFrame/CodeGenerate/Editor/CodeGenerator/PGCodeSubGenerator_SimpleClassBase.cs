@@ -37,6 +37,7 @@ namespace PGFrame
 			string code = File.ReadAllText (templateFileInfo.FullName);
 			code = code.Replace ("__XXX__", elementName);
 			code = code.Replace ("__YYY__", string.IsNullOrEmpty (baseName) ? "SimpleClassBase" : baseName);
+			code = code.Replace ("__WWW__", workspaceName);
 
 			code = code.Replace (SC_MEMBER, GetMemberCode (jo));
 			code = code.Replace (SC_COMMENT, GetCommentCode (jo));

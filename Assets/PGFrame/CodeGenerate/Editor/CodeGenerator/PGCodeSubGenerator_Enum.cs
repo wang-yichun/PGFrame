@@ -36,6 +36,7 @@ namespace PGFrame
 			string targetPath = Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/Enum");
 			string code = File.ReadAllText (templateFileInfo.FullName);
 			code = code.Replace ("__XXX__", elementName);
+			code = code.Replace ("__WWW__", workspaceName);
 
 			code = code.Replace (E_I, GetItemCode (jo));
 			code = code.Replace (E_C, GetCommentCode (jo));

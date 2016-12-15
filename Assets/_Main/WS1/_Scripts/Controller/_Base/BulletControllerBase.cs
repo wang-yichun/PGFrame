@@ -1,22 +1,26 @@
 using UnityEngine;
 using System;
 using System.Collections;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using UniRx;
 
-public class BulletControllerBase<T> : ControllerBase<T>
-	where T: Singleton<T>, new()
-{
+namespace WS1 {
 
-	public override void Attach (ViewModelBase viewModel)
+	using Newtonsoft.Json;
+	using Newtonsoft.Json.Linq;
+	using UniRx;
+
+	public class BulletControllerBase<T> : ControllerBase<T>
+		where T: Singleton<T>, new()
 	{
-		UnityEngine.Debug.Log ("BulletControllerBase.Attach");
 
-		BulletViewModel vm = (BulletViewModel)viewModel;
+		public override void Attach (ViewModelBase viewModel)
+		{
+			UnityEngine.Debug.Log ("BulletControllerBase.Attach");
+
+			BulletViewModel vm = (BulletViewModel)viewModel;
+
+			
+		}
 
 		
 	}
-
-	
 }

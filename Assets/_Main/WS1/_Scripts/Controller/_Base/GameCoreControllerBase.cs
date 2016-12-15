@@ -1,30 +1,33 @@
 using UnityEngine;
 using System;
 using System.Collections;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using UniRx;
 
-public class GameCoreControllerBase<T> : ControllerBase<T>
-	where T: Singleton<T>, new()
-{
+namespace WS1 {
 
-	public override void Attach (ViewModelBase viewModel)
+	using Newtonsoft.Json;
+	using Newtonsoft.Json.Linq;
+	using UniRx;
+
+	public class GameCoreControllerBase<T> : ControllerBase<T>
+		where T: Singleton<T>, new()
 	{
-		UnityEngine.Debug.Log ("GameCoreControllerBase.Attach");
 
-		GameCoreViewModel vm = (GameCoreViewModel)viewModel;
+		public override void Attach (ViewModelBase viewModel)
+		{
+			UnityEngine.Debug.Log ("GameCoreControllerBase.Attach");
 
-		
+			GameCoreViewModel vm = (GameCoreViewModel)viewModel;
+
+			
 		vm.RC_AddSomeBullet.Subscribe (_ => {
 			AddSomeBullet ((GameCoreViewModel)viewModel);
 		});
 		vm.RC_RemoveSomeBullet.Subscribe (_ => {
 			RemoveSomeBullet ((GameCoreViewModel)viewModel);
 		});
-	}
+		}
 
-	
+		
 	/*  */
 	public virtual void AddSomeBullet (GameCoreViewModel viewModel)
 	{
@@ -32,5 +35,6 @@ public class GameCoreControllerBase<T> : ControllerBase<T>
 	/*  */
 	public virtual void RemoveSomeBullet (GameCoreViewModel viewModel)
 	{
+	}
 	}
 }

@@ -5,11 +5,14 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using PogoTools;
 
-public class PlayerInfoController : PlayerInfoControllerBase<PlayerInfoController>
+namespace WS1
 {
-	public PlayerInfoController ()
+	public class PlayerInfoController : PlayerInfoControllerBase<PlayerInfoController>
 	{
+		public PlayerInfoController ()
+		{
+		}
+	
+	
 	}
-	
-	
 }

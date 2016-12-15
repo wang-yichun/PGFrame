@@ -3,32 +3,37 @@ using UnityEditor;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using UniRx;
 
-[CustomEditor (typeof(BulletView))]
-public class BulletViewElementViewEditor : BulletElementEditor
-{
-	public BulletView V { get; set; }
+namespace WS1 {
 
-	void OnEnable ()
+	using Newtonsoft.Json;
+	using Newtonsoft.Json.Linq;
+	using UniRx;
+
+	[CustomEditor (typeof(BulletView))]
+	public class BulletViewElementViewEditor : BulletElementEditor
 	{
-		V = (BulletView)target;
+		public BulletView V { get; set; }
 
-		if (EditorApplication.isPlaying == false) {
-			V.CreateViewModel ();
+		void OnEnable ()
+		{
+			V = (BulletView)target;
+
+			if (EditorApplication.isPlaying == false) {
+				V.CreateViewModel ();
+			}
+			VM = V.VM;
+
+			CommandParams = new Dictionary<string, string> ();
 		}
-		VM = V.VM;
 
-		CommandParams = new Dictionary<string, string> ();
+		public override void VMCopyToJson ()
+		{
+			JsonSerializerSettings settings = new JsonSerializerSettings () {
+				ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+			};
+			V.ViewModelInitValueJson = JsonConvert.SerializeObject ((BulletViewModelBase)VM, settings);
+		}
 	}
 
-	public override void VMCopyToJson ()
-	{
-		JsonSerializerSettings settings = new JsonSerializerSettings () {
-			ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-		};
-		V.ViewModelInitValueJson = JsonConvert.SerializeObject ((BulletViewModelBase)VM, settings);
-	}
 }

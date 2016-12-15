@@ -5,6 +5,9 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UniRx;
 
-public class PlayerInfoViewModel : PlayerInfoViewModelBase
+namespace WS1
 {
+	public class PlayerInfoViewModel : PlayerInfoViewModelBase
+	{
+	}
 }

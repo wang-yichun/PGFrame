@@ -3,27 +3,32 @@ using UnityEngine.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using UniRx;
-using PogoTools;
 
-public class __YYY__ : __YYY__Base
-{
-	public override void Initialize (ViewModelBase viewModel)
+namespace __WWW__ {
+
+	using Newtonsoft.Json;
+	using Newtonsoft.Json.Linq;
+	using UniRx;
+	using PogoTools;
+
+	public class __YYY__ : __YYY__Base
 	{
-		base.Initialize (viewModel);
+		public override void Initialize (ViewModelBase viewModel)
+		{
+			base.Initialize (viewModel);
+		}
+
+		public override void Bind ()
+		{
+			base.Bind ();
+			Debug.Log (string.Format ("__YYY__ in {0} Bind.", gameObject.name));
+		}
+
+		public override void AfterBind ()
+		{
+			base.AfterBind ();
+			Debug.Log (string.Format ("__YYY__ in {0} AfterBind.", gameObject.name));
+		}
 	}
 
-	public override void Bind ()
-	{
-		base.Bind ();
-		Debug.Log (string.Format ("__YYY__ in {0} Bind.", gameObject.name));
-	}
-
-	public override void AfterBind ()
-	{
-		base.AfterBind ();
-		Debug.Log (string.Format ("__YYY__ in {0} AfterBind.", gameObject.name));
-	}
 }

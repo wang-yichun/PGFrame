@@ -36,6 +36,7 @@ namespace PGFrame
 			string targetPath = Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/View/_Interface");
 			string code = File.ReadAllText (templateFileInfo.FullName);
 			code = code.Replace ("__XXX__", elementName);
+			code = code.Replace ("__WWW__", workspaceName);
 			code = code.Replace (VM_PROPERTY_VIEW, GetVMPropertyViewCode (jo));
 			string file = Path.Combine (targetPath, string.Format ("I{0}View.cs", elementName));
 			File.WriteAllText (file, code);

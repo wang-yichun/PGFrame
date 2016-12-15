@@ -5,6 +5,9 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UniRx;
 
-public class BulletViewModel : BulletViewModelBase
+namespace WS1
 {
+	public class BulletViewModel : BulletViewModelBase
+	{
+	}
 }

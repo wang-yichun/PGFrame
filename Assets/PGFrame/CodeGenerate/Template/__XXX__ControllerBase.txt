@@ -1,22 +1,26 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using UniRx;
 
-public class __XXX__ControllerBase<T> : ControllerBase<T>
-	where T: Singleton<T>, new()
-{
+namespace __WWW__ {
 
-	public override void Attach (ViewModelBase viewModel)
+	using Newtonsoft.Json;
+	using Newtonsoft.Json.Linq;
+	using UniRx;
+
+	public class __XXX__ControllerBase<T> : ControllerBase<T>
+		where T: Singleton<T>, new()
 	{
-		UnityEngine.Debug.Log ("__XXX__ControllerBase.Attach");
 
-		__XXX__ViewModel vm = (__XXX__ViewModel)viewModel;
+		public override void Attach (ViewModelBase viewModel)
+		{
+			UnityEngine.Debug.Log ("__XXX__ControllerBase.Attach");
 
-		/****attach_code****/
+			__XXX__ViewModel vm = (__XXX__ViewModel)viewModel;
+
+			/****attach_code****/
+		}
+
+		/****member_function****/
 	}
-
-	/****member_function****/
 }

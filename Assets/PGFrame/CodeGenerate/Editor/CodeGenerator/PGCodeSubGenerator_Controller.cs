@@ -39,6 +39,7 @@ namespace PGFrame
 			string targetPath = Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/Controller");
 			string code = File.ReadAllText (templateFileInfo.FullName);
 			code = code.Replace ("__XXX__", elementName);
+			code = code.Replace ("__WWW__", workspaceName);
 			code = code.Replace (MEMBER_FUNCTION, GetMemberFunction (jo));
 			string file = Path.Combine (targetPath, string.Format ("{0}Controller.cs", elementName));
 			File.WriteAllText (file, code);

@@ -1,4 +1,8 @@
-﻿public interface I__XXX__View
-{
-	/****vm_property_view****/
+﻿namespace __WWW__ {
+
+	public interface I__XXX__View
+	{
+		/****vm_property_view****/
+	}
+
 }

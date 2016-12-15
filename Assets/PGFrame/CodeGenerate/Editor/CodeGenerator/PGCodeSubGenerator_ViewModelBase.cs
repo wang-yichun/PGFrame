@@ -38,6 +38,7 @@ namespace PGFrame
 			string code = File.ReadAllText (templateFileInfo.FullName);
 			code = code.Replace ("__XXX__", elementName);
 			code = code.Replace ("__YYY__", string.IsNullOrEmpty (baseName) ? "ViewModelBase" : baseName + "ViewModel");
+			code = code.Replace ("__WWW__", workspaceName);
 			code = code.Replace (REACTIVE_MEMBERS, GetReactiveMembers (jo));
 			code = code.Replace (COMMAND_CLASS, GetCommandClass (jo));
 			code = code.Replace (INITIALIZE_CODE, GetInitializeCode (jo));

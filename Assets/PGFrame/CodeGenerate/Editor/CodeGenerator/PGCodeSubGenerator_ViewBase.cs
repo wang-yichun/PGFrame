@@ -44,6 +44,7 @@ namespace PGFrame
 				code = code.Replace ("__YYY__", viewName);
 				code = code.Replace ("__XXX__", elementName);
 				code = code.Replace ("__ZZZ__", string.IsNullOrEmpty (baseViewName) ? "ViewBase" : baseViewName);
+				code = code.Replace ("__WWW__", workspaceName);
 				code = code.Replace (BIND_CODE, bind_code);
 				code = code.Replace (BIND_FUNC, bind_func);
 				code = code.Replace (VM_PROPERTY_VIEW, GetVMPropertyViewCode (jo));

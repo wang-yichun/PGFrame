@@ -3,32 +3,37 @@ using UnityEditor;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using UniRx;
 
-[CustomEditor (typeof(__YYY__))]
-public class __YYY__ElementViewEditor : __XXX__ElementEditor
-{
-	public __YYY__ V { get; set; }
+namespace __WWW__ {
 
-	void OnEnable ()
+	using Newtonsoft.Json;
+	using Newtonsoft.Json.Linq;
+	using UniRx;
+
+	[CustomEditor (typeof(__YYY__))]
+	public class __YYY__ElementViewEditor : __XXX__ElementEditor
 	{
-		V = (__YYY__)target;
+		public __YYY__ V { get; set; }
 
-		if (EditorApplication.isPlaying == false) {
-			V.CreateViewModel ();
+		void OnEnable ()
+		{
+			V = (__YYY__)target;
+
+			if (EditorApplication.isPlaying == false) {
+				V.CreateViewModel ();
+			}
+			VM = V.VM;
+
+			CommandParams = new Dictionary<string, string> ();
 		}
-		VM = V.VM;
 
-		CommandParams = new Dictionary<string, string> ();
+		public override void VMCopyToJson ()
+		{
+			JsonSerializerSettings settings = new JsonSerializerSettings () {
+				ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+			};
+			V.ViewModelInitValueJson = JsonConvert.SerializeObject ((__XXX__ViewModelBase)VM, settings);
+		}
 	}
 
-	public override void VMCopyToJson ()
-	{
-		JsonSerializerSettings settings = new JsonSerializerSettings () {
-			ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-		};
-		V.ViewModelInitValueJson = JsonConvert.SerializeObject ((__XXX__ViewModelBase)VM, settings);
-	}
 }

@@ -1,4 +1,8 @@
-public interface IPlayerInfoView
-{
-	
+namespace WS1 {
+
+	public interface IPlayerInfoView
+	{
+		
+	}
+
 }
