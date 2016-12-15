@@ -103,6 +103,14 @@ public class GameCoreElementEditor : ElementEditorBase<GameCoreViewModel>
 		}
 		EditorGUILayout.EndHorizontal ();
 
+		vmk = "RemoveSomeBullet";
+		EditorGUILayout.BeginHorizontal ();
+		EditorGUILayout.PrefixLabel (vmk);
+		if (GUILayout.Button ("Invoke")) {
+			VM.RC_RemoveSomeBullet.Execute ();
+		}
+		EditorGUILayout.EndHorizontal ();
+
 		EditorGUILayout.EndVertical ();
 		EditorGUI.indentLevel--;
 

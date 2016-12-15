@@ -33,14 +33,14 @@ public class GameCoreView : GameCoreViewBase
 	public override void OnAdd_CurrentBullets (CollectionAddEvent<BulletViewModel> e)
 	{
 		GameObject go = Instantiate<GameObject> (BulletPrefab);
-		go.transform.SetParent (BulletContainer);
-
 		BulletView bulletView = go.GetComponent<BulletView> ();
 		bulletView.Initialize (e.Value);
+
+		e.Value.GetView<BulletView> ("Default").transform.SetParent (BulletContainer);
 	}
 
 	public override void OnRemove_CurrentBullets (CollectionRemoveEvent<BulletViewModel> e)
 	{
-		
+		Destroy (e.Value.GetView<BulletView> ("Default").gameObject);
 	}
 }

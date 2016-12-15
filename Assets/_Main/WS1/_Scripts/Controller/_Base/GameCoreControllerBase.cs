@@ -19,11 +19,18 @@ public class GameCoreControllerBase<T> : ControllerBase<T>
 		vm.RC_AddSomeBullet.Subscribe (_ => {
 			AddSomeBullet ((GameCoreViewModel)viewModel);
 		});
+		vm.RC_RemoveSomeBullet.Subscribe (_ => {
+			RemoveSomeBullet ((GameCoreViewModel)viewModel);
+		});
 	}
 
 	
 	/*  */
 	public virtual void AddSomeBullet (GameCoreViewModel viewModel)
+	{
+	}
+	/*  */
+	public virtual void RemoveSomeBullet (GameCoreViewModel viewModel)
 	{
 	}
 }

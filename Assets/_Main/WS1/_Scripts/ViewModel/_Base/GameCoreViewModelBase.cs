@@ -24,6 +24,7 @@ public class GameCoreViewModelBase : ViewModelBase
 		RP_MyInfo = new ReactiveProperty<PlayerInfoViewModel> ();
 		CurrentBullets = new ReactiveCollection<BulletViewModel> ();
 		RC_AddSomeBullet = new ReactiveCommand ();
+		RC_RemoveSomeBullet = new ReactiveCommand ();
 	}
 
 	public override void Attach ()
@@ -66,10 +67,19 @@ public class GameCoreViewModelBase : ViewModelBase
 	/*  */
 	public ReactiveCommand RC_AddSomeBullet;
 	
+
+	/*  */
+	public ReactiveCommand RC_RemoveSomeBullet;
+	
 }
 
 
 public class AddSomeBulletCommand : ViewModelCommandBase
+{
+
+}
+
+public class RemoveSomeBulletCommand : ViewModelCommandBase
 {
 
 }

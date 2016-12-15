@@ -18,5 +18,13 @@ public class GameCoreController : GameCoreControllerBase<GameCoreController>
 		BulletViewModel bulletVM = new BulletViewModel ();
 		viewModel.CurrentBullets.Add (bulletVM);
 	}
+
+	public override void RemoveSomeBullet (GameCoreViewModel viewModel)
+	{
+		base.RemoveSomeBullet (viewModel);
+
+		if (viewModel.CurrentBullets.Count > 0)
+			viewModel.CurrentBullets.RemoveAt (0);
+	}
 	
 }

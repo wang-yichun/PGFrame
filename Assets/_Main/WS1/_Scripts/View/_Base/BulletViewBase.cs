@@ -26,7 +26,7 @@ public class BulletViewBase : ViewBase , IBulletView
 	{
 		if (viewModel != null) {
 			VM = (BulletViewModel)viewModel;
-			VM.AddHostView (ViewModelBase.DefaultViewBaseKey, this);
+			VM.AddHostView (ViewBaseKey, this);
 		} else {
 			if (AutoCreateViewModel && VM == null) {
 				CreateViewModel ();
@@ -45,7 +45,7 @@ public class BulletViewBase : ViewBase , IBulletView
 			ViewModelPropertyRef ();
 		}
 		
-		VM.AddHostView (ViewModelBase.DefaultViewBaseKey, this);
+		VM.AddHostView (ViewBaseKey, this);
 	}
 
 	public void ViewModelPropertyRef ()
