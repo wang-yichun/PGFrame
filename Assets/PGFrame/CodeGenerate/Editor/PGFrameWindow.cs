@@ -163,11 +163,13 @@ namespace PGFrame
 
 			if (SelectedWorkspace != null && jElements != null) {
 				if (GUILayout.Button (string.Format ("删除代码 ({0})", jElements.Length))) {
-					for (int i = 0; i < jElements.Length; i++) {
-						JSONElement xe = jElements [i];
-						Generator.DeleteCode (xe.jo);
+					if (EditorUtility.DisplayDialog ("警告!", string.Format ("确定删除整个Workspace:{0}的文件,包括非base层代码", SelectedWorkspace.Name), "确定删除", "取消操作")) {
+						for (int i = 0; i < jElements.Length; i++) {
+							JSONElement xe = jElements [i];
+							Generator.DeleteCode (xe.jo);
+						}
+						AssetDatabase.Refresh ();
 					}
-					AssetDatabase.Refresh ();
 				}
 			}
 

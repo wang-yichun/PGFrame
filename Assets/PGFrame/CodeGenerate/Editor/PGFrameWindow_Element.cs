@@ -291,10 +291,8 @@ namespace PGFrame
 				JObject jo_member = ja_member [list.index] as JObject;
 				string element_rxtype = jo_member ["RxType"].Value<string> ();
 				string element_name = jo_member ["Name"].Value<string> ();
-				if (EditorUtility.DisplayDialog ("警告!", string.Format ("确定删除Element中的一个{0}成员:{1}", element_rxtype, element_name), "Yes", "No")) {
-					ja_member.RemoveAt (list.index);
-					evtools.DeleteMember (element_name);
-				}
+				ja_member.RemoveAt (list.index);
+				evtools.DeleteMember (element_name);
 			};
 		}
 
