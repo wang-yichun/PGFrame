@@ -32,9 +32,16 @@ namespace PGFrame
 
 		public Dictionary<DocType, Texture2D> pgf_doctype_short_icons;
 
+
+		public void RefreshIcons ()
+		{
+			if (pgf_doctype_short_icons == null) {
+				SetDocTypeIcons ();
+			}
+		}
+
 		public void SetDocTypeIcons ()
 		{
-
 			pgf_window_title_icon = Resources.Load<Texture2D> ("pgf_window_title_icon");
 			pgf_element_icon = Resources.Load<Texture2D> ("pgf_element_icon");
 			pgf_simple_class_icon = Resources.Load<Texture2D> ("pgf_simple_class_icon");
@@ -86,6 +93,7 @@ namespace PGFrame
 				Current = this;
 				Current.NeedRefresh = true;
 				Current.NeedRefreshCommon = true;
+				RefreshIcons ();
 			}
 
 			if (Event.current.type == EventType.Layout && (NeedRefresh || NeedRefreshCommon))
@@ -143,23 +151,31 @@ namespace PGFrame
 			}
 
 			GUILayout.FlexibleSpace ();
-			if (GUILayout.Button ("发布代码")) {
+			if (SelectedWorkspace != null && jElements != null) {
+				if (GUILayout.Button (string.Format ("发布代码 ({0})", jElements.Length))) {
+					for (int i = 0; i < jElements.Length; i++) {
+						JSONElement xe = jElements [i];
+						Generator.GenerateCode (xe.jo);
+					}
+					AssetDatabase.Refresh ();
+				}
+			}
 //			for (int i = 0; i < xElements.Length; i++) {
 //				XLSXElement xe = xElements [i];
 //				Converter.SetElement (xe);
 //				Converter.Convert (Generator, false);
 //			}
-				AssetDatabase.Refresh ();
-			}
-
-			if (GUILayout.Button ("删除代码")) {
-//			for (int i = 0; i < xElements.Length; i++) {
-//				XLSXElement xe = xElements [i];
-//				Converter.SetElement (xe);
-//				Converter.Convert (Generator, true);
+//				AssetDatabase.Refresh ();
 //			}
-				AssetDatabase.Refresh ();
-			}
+
+//			if (GUILayout.Button ("删除代码")) {
+////			for (int i = 0; i < xElements.Length; i++) {
+////				XLSXElement xe = xElements [i];
+////				Converter.SetElement (xe);
+////				Converter.Convert (Generator, true);
+////			}
+//				AssetDatabase.Refresh ();
+//			}
 			GUILayout.EndVertical ();
 		}
 

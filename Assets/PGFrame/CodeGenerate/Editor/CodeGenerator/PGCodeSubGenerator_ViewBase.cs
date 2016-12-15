@@ -200,9 +200,9 @@ namespace PGFrame
 			if (jo_view ["Members"] [member_name] ["Bind"] ["Changed"].Value<bool> ()) {
 				result = string.Format (@"
 
-	public virtual void OnChanged_{0} ({1} value)
-	{{
-	}}", member_name, member_type);
+		public virtual void OnChanged_{0} ({1} value)
+		{{
+		}}", member_name, member_type);
 			}
 			return result;
 		}
@@ -251,45 +251,45 @@ namespace PGFrame
 			if (jo_bind ["Add"].Value<bool> ()) {
 				sb.AppendFormat (@"
 
-	public virtual void OnAdd_{0} (CollectionAddEvent<{1}> e)
-	{{
-	}}", member_name, member_type);
+		public virtual void OnAdd_{0} (CollectionAddEvent<{1}> e)
+		{{
+		}}", member_name, member_type);
 			}
 			if (jo_bind ["CountChanged"].Value<bool> ()) {
 				sb.AppendFormat (@"
 
-	public virtual void OnCountChanged_{0} (int count)
-	{{
-	}}", member_name);
+		public virtual void OnCountChanged_{0} (int count)
+		{{
+		}}", member_name);
 			}
 
 			if (jo_bind ["Move"].Value<bool> ()) {
 				sb.AppendFormat (@"
 
-	public virtual void OnMove_{0} (CollectionMoveEvent<{1}> e)
-	{{
-	}}", member_name, member_type);
+		public virtual void OnMove_{0} (CollectionMoveEvent<{1}> e)
+		{{
+		}}", member_name, member_type);
 			}
 			if (jo_bind ["Remove"].Value<bool> ()) {
 				sb.AppendFormat (@"
 
-	public virtual void OnRemove_{0} (CollectionRemoveEvent<{1}> e)
-	{{
-	}}", member_name, member_type);
+		public virtual void OnRemove_{0} (CollectionRemoveEvent<{1}> e)
+		{{
+		}}", member_name, member_type);
 			}
 			if (jo_bind ["Replace"].Value<bool> ()) {
 				sb.AppendFormat (@"
 
-	public virtual void OnReplace_{0} (CollectionReplaceEvent<{1}> e)
-	{{
-	}}", member_name, member_type);
+		public virtual void OnReplace_{0} (CollectionReplaceEvent<{1}> e)
+		{{
+		}}", member_name, member_type);
 			}
 			if (jo_bind ["Reset"].Value<bool> ()) {
 				sb.AppendFormat (@"
 
-	public virtual void OnReset_{0} (Unit u)
-	{{
-	}}", member_name);
+		public virtual void OnReset_{0} (Unit u)
+		{{
+		}}", member_name);
 			}
 
 			return sb.ToString ();
@@ -404,17 +404,17 @@ namespace PGFrame
 				if (jo_bind ["Executed"].Value<bool> ()) {
 					sb.AppendFormat (@"
 
-	public virtual void OnExecuted_{0} (Unit unit)
-	{{
-	}}", member_name);
+		public virtual void OnExecuted_{0} (Unit unit)
+		{{
+		}}", member_name);
 				}
 			} else {
 				if (jo_bind ["Executed"].Value<bool> ()) {
 					sb.AppendFormat (@"
 
-	public virtual void OnExecuted_{0} ({0}Command command)
-	{{
-	}}", member_name);
+		public virtual void OnExecuted_{0} ({0}Command command)
+		{{
+		}}", member_name);
 				}
 			}
 

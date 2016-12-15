@@ -60,6 +60,7 @@ namespace WS2 {
 		{
 			base.Bind ();
 			
+		VM.RP_Type.Subscribe (OnChanged_Type);
 		}
 
 		public override void AfterBind ()
@@ -68,6 +69,10 @@ namespace WS2 {
 		}
 
 		
+
+	public virtual void OnChanged_Type (BallType value)
+	{
+	}
 
 		
 	}
