@@ -1,18 +1,24 @@
 using UnityEngine;
+using System;
 using System.Collections;
-using UniRx;
 
-public class SecondControllerBase<T> : ControllerBase<T>
-	where T: Singleton<T>, new()
-{
+namespace WS1 {
 
-	public override void Attach (ViewModelBase viewModel)
+	using Newtonsoft.Json;
+	using Newtonsoft.Json.Linq;
+	using UniRx;
+
+	public class SecondControllerBase<T> : ControllerBase<T>
+		where T: Singleton<T>, new()
 	{
-		UnityEngine.Debug.Log ("SecondControllerBase.Attach");
 
-		SecondViewModel vm = (SecondViewModel)viewModel;
+		public override void Attach (ViewModelBase viewModel)
+		{
+			UnityEngine.Debug.Log ("SecondControllerBase.Attach");
 
-		
+			SecondViewModel vm = (SecondViewModel)viewModel;
+
+			
 		vm.RC_StringCommand.Subscribe<StringCommandCommand> (command => {
 			command.Sender = viewModel;
 			StringCommand ((SecondViewModel)viewModel, command);
@@ -24,9 +30,9 @@ public class SecondControllerBase<T> : ControllerBase<T>
 		vm.RC_SimpleCommand.Subscribe (_ => {
 			SimpleCommand ((SecondViewModel)viewModel);
 		});
-	}
+		}
 
-	
+		
 	/*  */
 	public virtual void StringCommand (SecondViewModel viewModel, StringCommandCommand command)
 	{
@@ -38,5 +44,6 @@ public class SecondControllerBase<T> : ControllerBase<T>
 	/*  */
 	public virtual void SimpleCommand (SecondViewModel viewModel)
 	{
+	}
 	}
 }

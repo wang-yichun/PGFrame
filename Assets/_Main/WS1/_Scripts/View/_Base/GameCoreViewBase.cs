@@ -75,13 +75,13 @@ namespace WS1 {
 
 		
 
-	public virtual void OnAdd_CurrentBullets (CollectionAddEvent<BulletViewModel> e)
-	{
-	}
+		public virtual void OnAdd_CurrentBullets (CollectionAddEvent<BulletViewModel> e)
+		{
+		}
 
-	public virtual void OnRemove_CurrentBullets (CollectionRemoveEvent<BulletViewModel> e)
-	{
-	}
+		public virtual void OnRemove_CurrentBullets (CollectionRemoveEvent<BulletViewModel> e)
+		{
+		}
 
 		
 	

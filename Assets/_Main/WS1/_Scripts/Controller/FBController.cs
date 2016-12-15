@@ -1,16 +1,25 @@
 using UnityEngine;
+using System;
 using System.Collections;
-using PogoTools;
 
-public class FBController : FBControllerBase<FBController>
-{
-	public FBController ()
+namespace WS1 {
+
+	using Newtonsoft.Json;
+	using Newtonsoft.Json.Linq;
+	using PogoTools;
+
+	public class FBController : FBControllerBase<FBController>
 	{
-	}
-
-	public override void FBTestCMD (FBViewModel viewModel)
+		public FBController ()
+		{
+		}
+		
+		
+	/*  */
+	public virtual void FBTestCMD (FBViewModel viewModel)
 	{
 		base.FBTestCMD (viewModel);
-		Debug.Log ("FBTestCMD: " + viewModel.VMID);
 	}
+	}
+
 }

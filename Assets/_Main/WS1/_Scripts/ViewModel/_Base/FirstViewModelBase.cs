@@ -2,25 +2,28 @@ using System.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using UniRx;
 
-/*//////////////////////////////////////////////////////////////////////////////
- 一个 element 的定义
+namespace WS1 {
+
+	using Newtonsoft.Json;
+	using Newtonsoft.Json.Linq;
+	using UniRx;
+
+	/*//////////////////////////////////////////////////////////////////////////////
+	 一个 element 的定义
 一个 element 的定义的第二行 
-//////////////////////////////////////////////////////////////////////////////*/
-[JsonObjectAttribute (MemberSerialization.OptIn)]
-public class FirstViewModelBase : FBViewModel
-{
-	public FirstViewModelBase ()
+	//////////////////////////////////////////////////////////////////////////////*/
+	[JsonObjectAttribute (MemberSerialization.OptIn)]
+	public class FirstViewModelBase : FBViewModel
 	{
-	}
+		public FirstViewModelBase ()
+		{
+		}
 
-	public override void Initialize ()
-	{
-		base.Initialize ();
-		
+		public override void Initialize ()
+		{
+			base.Initialize ();
+			
 		RP_LabelTextNum = new ReactiveProperty<int> ();
 		Numbers = new ReactiveCollection<int> ();
 		MyDictionary = new ReactiveDictionary<string, string> ();
@@ -45,15 +48,15 @@ public class FirstViewModelBase : FBViewModel
 		RectList = new ReactiveCollection<UnityEngine.Rect> ();
 		RP_MyEA = new ReactiveProperty<EA> ();
 		RP_SCA_a = new ReactiveProperty<SCA> ();
-	}
+		}
 
-	public override void Attach ()
-	{
-		base.Attach ();
-		FirstController.Instance.Attach (this);
-	}
+		public override void Attach ()
+		{
+			base.Attach ();
+			FirstController.Instance.Attach (this);
+		}
 
-	
+		
 
 	/* LabelText# LabelTextNum's Comment */
 	public ReactiveProperty<int> RP_LabelTextNum;
@@ -302,9 +305,9 @@ public class FirstViewModelBase : FBViewModel
 			RP_SCA_a.Value = value;
 		}
 	}
-}
+	}
 
-
+	
 public class DefaultCommandCommand : ViewModelCommandBase
 {
 
@@ -319,4 +322,7 @@ public class AddNumCommand : ViewModelCommandBase
 	/*  */
 	public int Param1;
 	
+}
+
+
 }

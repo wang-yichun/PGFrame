@@ -61,23 +61,23 @@ namespace WS1 {
 			VM.GameID = tempGameID;
 		}
 
-		vmk = "MyInfo";
-		ViewBase MyInfoView = (target as IGameCoreView).MyInfoView as ViewBase;
-		if (EditorApplication.isPlaying && VM.MyInfo == null)
-			MyInfoView = null;
-		ViewBase tempMyInfoView = (ViewBase)EditorGUILayout.ObjectField (vmk, MyInfoView, typeof(ViewBase), true);
-		if (tempMyInfoView == null) {
-			(target as IGameCoreView).MyInfoView = null;
-			VM.MyInfo = null;
-		} else if (MyInfoView != tempMyInfoView) {
-			var view = tempMyInfoView as IPlayerInfoView;
-			if (view != null) {
-				(target as IGameCoreView).MyInfoView = tempMyInfoView as IPlayerInfoView;
-				VM.MyInfo = (PlayerInfoViewModel)tempMyInfoView.GetViewModel ();
-			} else {
-				Debug.Log ("类型不匹配, 需要一个: PlayerInfo");
+			vmk = "MyInfo";
+			ViewBase MyInfoView = (target as IGameCoreView).MyInfoView as ViewBase;
+			if (EditorApplication.isPlaying && VM.MyInfo == null)
+				MyInfoView = null;
+			ViewBase tempMyInfoView = (ViewBase)EditorGUILayout.ObjectField (vmk, MyInfoView, typeof(ViewBase), true);
+			if (tempMyInfoView == null) {
+				(target as IGameCoreView).MyInfoView = null;
+				VM.MyInfo = null;
+			} else if (MyInfoView != tempMyInfoView) {
+				var view = tempMyInfoView as WS1.IPlayerInfoView;
+				if (view != null) {
+					(target as IGameCoreView).MyInfoView = tempMyInfoView as WS1.IPlayerInfoView;
+					VM.MyInfo = (WS1.PlayerInfoViewModel)tempMyInfoView.GetViewModel ();
+				} else {
+					Debug.Log ("类型不匹配, 需要一个: PlayerInfo");
+				}
 			}
-		}
 
 		vmk = "CurrentBullets";
 		EditorGUILayout.BeginHorizontal ();

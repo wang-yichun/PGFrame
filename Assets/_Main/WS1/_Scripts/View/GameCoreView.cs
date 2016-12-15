@@ -4,8 +4,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace WS1
-{
+namespace WS1 {
+
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
 	using UniRx;
@@ -29,22 +29,6 @@ namespace WS1
 			base.AfterBind ();
 			Debug.Log (string.Format ("GameCoreView in {0} AfterBind.", gameObject.name));
 		}
-
-		public GameObject BulletPrefab;
-		public Transform BulletContainer;
-
-		public override void OnAdd_CurrentBullets (CollectionAddEvent<BulletViewModel> e)
-		{
-			GameObject go = Instantiate<GameObject> (BulletPrefab);
-			BulletView bulletView = go.GetComponent<BulletView> ();
-			bulletView.Initialize (e.Value);
-
-			e.Value.GetView<BulletView> ("Default").transform.SetParent (BulletContainer);
-		}
-
-		public override void OnRemove_CurrentBullets (CollectionRemoveEvent<BulletViewModel> e)
-		{
-			Destroy (e.Value.GetView<BulletView> ("Default").gameObject);
-		}
 	}
+
 }

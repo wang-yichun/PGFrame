@@ -1,22 +1,35 @@
 using UnityEngine;
+using System;
 using System.Collections;
-using PogoTools;
 
-public class SecondController : SecondControllerBase<SecondController>
-{
-	public SecondController ()
+namespace WS1 {
+
+	using Newtonsoft.Json;
+	using Newtonsoft.Json.Linq;
+	using PogoTools;
+
+	public class SecondController : SecondControllerBase<SecondController>
 	{
-	}
-
-	public override void SimpleCommand (SecondViewModel viewModel)
+		public SecondController ()
+		{
+		}
+		
+		
+	/*  */
+	public virtual void StringCommand (SecondViewModel viewModel, StringCommandCommand command)
 	{
-		base.SimpleCommand (viewModel);
-		Debug.Log ("SimpleCommand");
+		base.StringCommand (viewModel, command);
 	}
-
-	public override void IntCommand (SecondViewModel viewModel, IntCommandCommand command)
+	/*  */
+	public virtual void IntCommand (SecondViewModel viewModel, IntCommandCommand command)
 	{
 		base.IntCommand (viewModel, command);
-		Debug.Log ("IntCommand: " + command.Param0);
 	}
+	/*  */
+	public virtual void SimpleCommand (SecondViewModel viewModel)
+	{
+		base.SimpleCommand (viewModel);
+	}
+	}
+
 }

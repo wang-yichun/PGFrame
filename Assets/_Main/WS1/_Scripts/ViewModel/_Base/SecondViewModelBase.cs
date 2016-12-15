@@ -1,22 +1,28 @@
 using System.Linq;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using UniRx;
-using Newtonsoft.Json;
 
-////////////////////////////////////////////////////////////////////////////////
-// 一个 element 的定义 
-////////////////////////////////////////////////////////////////////////////////
-[JsonObjectAttribute (MemberSerialization.OptIn)]
-public class SecondViewModelBase : ViewModelBase
-{
-	public SecondViewModelBase ()
-	{
-	}
+namespace WS1 {
 
-	public override void Initialize ()
+	using Newtonsoft.Json;
+	using Newtonsoft.Json.Linq;
+	using UniRx;
+
+	/*//////////////////////////////////////////////////////////////////////////////
+	 一个 element 的定义 
+	//////////////////////////////////////////////////////////////////////////////*/
+	[JsonObjectAttribute (MemberSerialization.OptIn)]
+	public class SecondViewModelBase : ViewModelBase
 	{
-		
+		public SecondViewModelBase ()
+		{
+		}
+
+		public override void Initialize ()
+		{
+			base.Initialize ();
+			
 		RP_IntValue = new ReactiveProperty<int> ();
 		RP_LongValue = new ReactiveProperty<long> ();
 		RP_FloatValue = new ReactiveProperty<float> ();
@@ -31,14 +37,15 @@ public class SecondViewModelBase : ViewModelBase
 		RC_StringCommand = new ReactiveCommand<StringCommandCommand> ();
 		RC_IntCommand = new ReactiveCommand<IntCommandCommand> ();
 		RC_SimpleCommand = new ReactiveCommand ();
-	}
+		}
 
-	public override void Attach ()
-	{
-		SecondController.Instance.Attach (this);
-	}
+		public override void Attach ()
+		{
+			base.Attach ();
+			SecondController.Instance.Attach (this);
+		}
 
-	
+		
 
 	/* Label上的文字 */
 	public ReactiveProperty<int> RP_IntValue;
@@ -124,9 +131,9 @@ public class SecondViewModelBase : ViewModelBase
 	/*  */
 	public ReactiveCommand RC_SimpleCommand;
 	
-}
+	}
 
-
+	
 public class StringCommandCommand : ViewModelCommandBase
 {
 
@@ -145,5 +152,8 @@ public class IntCommandCommand : ViewModelCommandBase
 
 public class SimpleCommandCommand : ViewModelCommandBase
 {
+
+}
+
 
 }

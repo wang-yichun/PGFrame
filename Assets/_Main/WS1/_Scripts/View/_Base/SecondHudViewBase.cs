@@ -1,58 +1,65 @@
 using UnityEngine;
-using UniRx;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
-public class SecondHudViewBase : ViewBase
-{
-	public SecondViewModel VM;
+namespace WS1 {
 
-	public SecondViewModel Second {
-		get {
-			return VM;
-		}
-	}
+	using Newtonsoft.Json;
+	using Newtonsoft.Json.Linq;
+	using UniRx;
 
-	public override ViewModelBase GetViewModel ()
+	public class SecondHudViewBase : ViewBase , ISecondView
 	{
-		return VM;
-	}
+		public SecondViewModel VM;
 
-	public bool AutoCreateViewModel = false;
-
-	public string ViewModelInitValueJson;
-
-	public override void Initialize (ViewModelBase viewModel)
-	{
-		if (viewModel != null) {
-			VM = (SecondViewModel)viewModel;
-		} else {
-			if (AutoCreateViewModel) {
-				if (VM == null) {
-					CreateViewModel ();
-				}
+		public SecondViewModel Second {
+			get {
+				return VM;
 			}
 		}
 
-		base.Initialize (null);
-	}
-
-	public void CreateViewModel ()
-	{
-		if (string.IsNullOrEmpty (ViewModelInitValueJson) == false) {
-			VM = JsonConvert.DeserializeObject<SecondViewModel> (ViewModelInitValueJson);
-		} else {
-			VM = new SecondViewModel ();
+		public override ViewModelBase GetViewModel ()
+		{
+			return VM;
 		}
-	}
 
-	public override void Bind ()
-	{
-		base.Bind ();
-		
+		public override void Initialize (ViewModelBase viewModel)
+		{
+			if (viewModel != null) {
+				VM = (SecondViewModel)viewModel;
+				VM.AddHostView (ViewModelBase.DefaultViewBaseKey, this);
+			} else {
+				if (AutoCreateViewModel && VM == null) {
+					CreateViewModel ();
+				}
+			}
+
+			base.Initialize (VM);
+		}
+
+		public override void CreateViewModel ()
+		{
+			if (UseEmptyViewModel || string.IsNullOrEmpty (ViewModelInitValueJson)) {
+				VM = new SecondViewModel ();
+			} else {
+				VM = JsonConvert.DeserializeObject<SecondViewModel> (ViewModelInitValueJson);
+				ViewModelPropertyRef ();
+			}
+			
+			VM.AddHostView (ViewModelBase.DefaultViewBaseKey, this);
+		}
+
+		public void ViewModelPropertyRef ()
+		{
+			
+		}
+
+		public override void Bind ()
+		{
+			base.Bind ();
+			
 		VM.RP_IntValue.Subscribe (OnChanged_IntValue);
 		VM.IntList.ObserveAdd ().Subscribe (OnAdd_IntList);
 		VM.IntList.ObserveRemove ().Subscribe (OnRemove_IntList);
@@ -60,26 +67,26 @@ public class SecondHudViewBase : ViewBase
 		VM.IntDictionary.ObserveRemove ().Subscribe (OnRemove_IntDictionary);
 		VM.RC_IntCommand.Subscribe<IntCommandCommand> (OnExecuted_IntCommand);
 		VM.RC_SimpleCommand.Subscribe (OnExecuted_SimpleCommand);
-	}
+		}
 
-	public override void AfterBind ()
-	{
-		base.AfterBind ();
-	}
+		public override void AfterBind ()
+		{
+			base.AfterBind ();
+		}
 
-	
+		
 
-	public virtual void OnChanged_IntValue (int value)
-	{
-	}
+		public virtual void OnChanged_IntValue (int value)
+		{
+		}
 
-	public virtual void OnAdd_IntList (CollectionAddEvent<int> e)
-	{
-	}
+		public virtual void OnAdd_IntList (CollectionAddEvent<int> e)
+		{
+		}
 
-	public virtual void OnRemove_IntList (CollectionRemoveEvent<int> e)
-	{
-	}
+		public virtual void OnRemove_IntList (CollectionRemoveEvent<int> e)
+		{
+		}
 
 	public virtual void OnAdd_IntDictionary (DictionaryAddEvent<string, int> e)
 	{
@@ -89,12 +96,15 @@ public class SecondHudViewBase : ViewBase
 	{
 	}
 
-	public virtual void OnExecuted_IntCommand (IntCommandCommand command)
-	{
-	}
+		public virtual void OnExecuted_IntCommand (IntCommandCommand command)
+		{
+		}
 
-	public virtual void OnExecuted_SimpleCommand (Unit unit)
-	{
+		public virtual void OnExecuted_SimpleCommand (Unit unit)
+		{
+		}
+
+		
 	}
 
 }

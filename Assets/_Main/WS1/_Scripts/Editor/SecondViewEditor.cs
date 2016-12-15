@@ -1,29 +1,39 @@
 using UnityEngine;
 using UnityEditor;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using Newtonsoft.Json;
-using UniRx;
 
-[CustomEditor (typeof(SecondView))]
-public class SecondViewElementViewEditor : SecondElementEditor
-{
-	public SecondView V { get; set; }
+namespace WS1 {
 
-	void OnEnable ()
+	using Newtonsoft.Json;
+	using Newtonsoft.Json.Linq;
+	using UniRx;
+
+	[CustomEditor (typeof(SecondView))]
+	public class SecondViewElementViewEditor : SecondElementEditor
 	{
-		V = (SecondView)target;
+		public SecondView V { get; set; }
 
-		if (EditorApplication.isPlaying == false) {
-			V.CreateViewModel ();
+		void OnEnable ()
+		{
+			V = (SecondView)target;
+
+			if (EditorApplication.isPlaying == false) {
+				V.CreateViewModel ();
+			}
+			VM = V.VM;
+
+			CommandParams = new Dictionary<string, string> ();
 		}
-		VM = V.VM;
 
-		CommandParams = new Dictionary<string, string> ();
+		public override void VMCopyToJson ()
+		{
+			JsonSerializerSettings settings = new JsonSerializerSettings () {
+				ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+			};
+			V.ViewModelInitValueJson = JsonConvert.SerializeObject ((SecondViewModelBase)VM, settings);
+		}
 	}
 
-	public override void VMCopyToJson ()
-	{
-		V.ViewModelInitValueJson = JsonConvert.SerializeObject ((SecondViewModelBase)VM);
-	}
 }

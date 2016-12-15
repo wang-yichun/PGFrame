@@ -2,35 +2,38 @@ using System.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using UniRx;
 
-/*//////////////////////////////////////////////////////////////////////////////
-  
-//////////////////////////////////////////////////////////////////////////////*/
-[JsonObjectAttribute (MemberSerialization.OptIn)]
-public class FBViewModelBase : ViewModelBase
-{
-	public FBViewModelBase ()
-	{
-	}
+namespace WS1 {
 
-	public override void Initialize ()
+	using Newtonsoft.Json;
+	using Newtonsoft.Json.Linq;
+	using UniRx;
+
+	/*//////////////////////////////////////////////////////////////////////////////
+	  
+	//////////////////////////////////////////////////////////////////////////////*/
+	[JsonObjectAttribute (MemberSerialization.OptIn)]
+	public class FBViewModelBase : ViewModelBase
 	{
-		base.Initialize ();
-		
+		public FBViewModelBase ()
+		{
+		}
+
+		public override void Initialize ()
+		{
+			base.Initialize ();
+			
 		RP_Count = new ReactiveProperty<int> ();
 		RC_FBTestCMD = new ReactiveCommand ();
-	}
+		}
 
-	public override void Attach ()
-	{
-		base.Attach ();
-		FBController.Instance.Attach (this);
-	}
+		public override void Attach ()
+		{
+			base.Attach ();
+			FBController.Instance.Attach (this);
+		}
 
-	
+		
 
 	/*  */
 	public ReactiveProperty<int> RP_Count;
@@ -48,10 +51,13 @@ public class FBViewModelBase : ViewModelBase
 	/*  */
 	public ReactiveCommand RC_FBTestCMD;
 	
-}
+	}
 
-
+	
 public class FBTestCMDCommand : ViewModelCommandBase
 {
+
+}
+
 
 }

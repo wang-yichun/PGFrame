@@ -1,23 +1,28 @@
 using System.Linq;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using UniRx;
-using Newtonsoft.Json;
 
-/*//////////////////////////////////////////////////////////////////////////////
-  
-//////////////////////////////////////////////////////////////////////////////*/
-[JsonObjectAttribute (MemberSerialization.OptIn)]
-public class PTestViewModelBase : ViewModelBase
-{
-	public PTestViewModelBase ()
-	{
-	}
+namespace WS1 {
 
-	public override void Initialize ()
+	using Newtonsoft.Json;
+	using Newtonsoft.Json.Linq;
+	using UniRx;
+
+	/*//////////////////////////////////////////////////////////////////////////////
+	  
+	//////////////////////////////////////////////////////////////////////////////*/
+	[JsonObjectAttribute (MemberSerialization.OptIn)]
+	public class PTestViewModelBase : ViewModelBase
 	{
-		base.Initialize ();
-		
+		public PTestViewModelBase ()
+		{
+		}
+
+		public override void Initialize ()
+		{
+			base.Initialize ();
+			
 		RP_DefaultProperty1 = new ReactiveProperty<string> ();
 		RP_DefaultProperty2 = new ReactiveProperty<string> ();
 		RP_DefaultProperty3 = new ReactiveProperty<int> ();
@@ -47,15 +52,15 @@ public class PTestViewModelBase : ViewModelBase
 		RC_DefaultCommand19 = new ReactiveCommand ();
 		RC_DefaultCommand20 = new ReactiveCommand ();
 		RP_CurrentFB = new ReactiveProperty<FBViewModel> ();
-	}
+		}
 
-	public override void Attach ()
-	{
-		base.Attach ();
-		PTestController.Instance.Attach (this);
-	}
+		public override void Attach ()
+		{
+			base.Attach ();
+			PTestController.Instance.Attach (this);
+		}
 
-	
+		
 
 	/*  */
 	public ReactiveProperty<string> RP_DefaultProperty1;
@@ -204,7 +209,7 @@ public class PTestViewModelBase : ViewModelBase
 	/*  */
 	public ReactiveProperty<FBViewModel> RP_CurrentFB;
 
-	[JsonProperty]
+	
 	public FBViewModel CurrentFB {
 		get {
 			return RP_CurrentFB.Value;
@@ -213,9 +218,9 @@ public class PTestViewModelBase : ViewModelBase
 			RP_CurrentFB.Value = value;
 		}
 	}
-}
+	}
 
-
+	
 public class DefaultCommand1Command : ViewModelCommandBase
 {
 
@@ -322,5 +327,8 @@ public class DefaultCommand19Command : ViewModelCommandBase
 
 public class DefaultCommand20Command : ViewModelCommandBase
 {
+
+}
+
 
 }

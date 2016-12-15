@@ -1,21 +1,24 @@
 using UnityEngine;
 using System;
 using System.Collections;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using UniRx;
 
-public class FirstControllerBase<T> : ControllerBase<T>
-	where T: Singleton<T>, new()
-{
+namespace WS1 {
 
-	public override void Attach (ViewModelBase viewModel)
+	using Newtonsoft.Json;
+	using Newtonsoft.Json.Linq;
+	using UniRx;
+
+	public class FirstControllerBase<T> : ControllerBase<T>
+		where T: Singleton<T>, new()
 	{
-		UnityEngine.Debug.Log ("FirstControllerBase.Attach");
 
-		FirstViewModel vm = (FirstViewModel)viewModel;
+		public override void Attach (ViewModelBase viewModel)
+		{
+			UnityEngine.Debug.Log ("FirstControllerBase.Attach");
 
-		
+			FirstViewModel vm = (FirstViewModel)viewModel;
+
+			
 		vm.RC_DefaultCommand.Subscribe (_ => {
 			DefaultCommand ((FirstViewModel)viewModel);
 		});
@@ -23,9 +26,9 @@ public class FirstControllerBase<T> : ControllerBase<T>
 			command.Sender = viewModel;
 			AddNum ((FirstViewModel)viewModel, command);
 		});
-	}
+		}
 
-	
+		
 	/*  */
 	public virtual void DefaultCommand (FirstViewModel viewModel)
 	{
@@ -33,5 +36,6 @@ public class FirstControllerBase<T> : ControllerBase<T>
 	/*  */
 	public virtual void AddNum (FirstViewModel viewModel, AddNumCommand command)
 	{
+	}
 	}
 }

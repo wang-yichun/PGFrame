@@ -3,32 +3,37 @@ using UnityEditor;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using UniRx;
 
-[CustomEditor (typeof(FirstHudView))]
-public class FirstHudViewElementViewEditor : FirstElementEditor
-{
-	public FirstHudView V { get; set; }
+namespace WS1 {
 
-	void OnEnable ()
+	using Newtonsoft.Json;
+	using Newtonsoft.Json.Linq;
+	using UniRx;
+
+	[CustomEditor (typeof(FirstHudView))]
+	public class FirstHudViewElementViewEditor : FirstElementEditor
 	{
-		V = (FirstHudView)target;
+		public FirstHudView V { get; set; }
 
-		if (EditorApplication.isPlaying == false) {
-			V.CreateViewModel ();
+		void OnEnable ()
+		{
+			V = (FirstHudView)target;
+
+			if (EditorApplication.isPlaying == false) {
+				V.CreateViewModel ();
+			}
+			VM = V.VM;
+
+			CommandParams = new Dictionary<string, string> ();
 		}
-		VM = V.VM;
 
-		CommandParams = new Dictionary<string, string> ();
+		public override void VMCopyToJson ()
+		{
+			JsonSerializerSettings settings = new JsonSerializerSettings () {
+				ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+			};
+			V.ViewModelInitValueJson = JsonConvert.SerializeObject ((FirstViewModelBase)VM, settings);
+		}
 	}
 
-	public override void VMCopyToJson ()
-	{
-		JsonSerializerSettings settings = new JsonSerializerSettings () {
-			ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-		};
-		V.ViewModelInitValueJson = JsonConvert.SerializeObject ((FirstViewModelBase)VM, settings);
-	}
 }

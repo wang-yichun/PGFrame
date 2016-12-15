@@ -3,7 +3,7 @@ namespace WS1 {
 	public interface IGameCoreView
 	{
 		
-	IPlayerInfoView MyInfoView { get; set; }
+		IPlayerInfoView MyInfoView { get; set; }
 	}
 
 }

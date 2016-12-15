@@ -1,53 +1,57 @@
 using UnityEngine;
 using UnityEditor;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using Newtonsoft.Json;
-using UniRx;
 
-public class PTestElementEditor : Editor, IElementEditor
-{
-	public PTestViewModel VM { get; set; }
+namespace WS1 {
 
-	bool ToggleDefault = true;
-	bool ToggleViewModel = true;
+	using Newtonsoft.Json;
+	using Newtonsoft.Json.Linq;
+	using UniRx;
 
-	public Dictionary<string, string> CommandParams { get; set; }
-
-	public override void OnInspectorGUI ()
+	public class PTestElementEditor : ElementEditorBase<PTestViewModel>
 	{
-		EditorGUILayout.BeginVertical ();
-		if (ToggleDefault = EditorGUILayout.Foldout (ToggleDefault, "View")) {
-			EditorGUI.indentLevel++;
-			base.OnInspectorGUI ();
-			EditorGUI.indentLevel--;
-			EditorGUILayout.Space ();
-		}
-		if (ToggleViewModel = EditorGUILayout.Foldout (ToggleViewModel, "ViewModel - PTest")) {
+		public override PTestViewModel VM { get; set; }
 
-			if (VM != null) {
-				InspectorGUI_ViewModel ();
-			} else {
-				EditorGUILayout.HelpBox ("没有绑定 ViewModel", MessageType.Warning);
+		public override void OnInspectorGUI ()
+		{
+			ViewBase V = target as ViewBase;
+
+			EditorGUILayout.BeginVertical ();
+			
+			base.OnInspectorGUI ();
+
+			if (ToggleView = EditorGUILayout.Foldout (ToggleView, "View")) {
+				base.DrawDefaultInspector ();
+				EditorGUILayout.Space ();
 			}
 
-			EditorGUILayout.Space ();
+			if (ToggleViewModel = EditorGUILayout.Foldout (ToggleViewModel, "ViewModel - PTest")) {
+
+				if (VM != null) {
+					InspectorGUI_ViewModel ();
+				} else {
+					EditorGUILayout.HelpBox ("没有绑定 ViewModel", MessageType.Warning);
+				}
+
+				EditorGUILayout.Space ();
+			}
+
+			EditorGUILayout.EndVertical ();
 		}
 
-		EditorGUILayout.EndVertical ();
-	}
+		public void InspectorGUI_ViewModel ()
+		{
+			EditorGUI.indentLevel++;
+			EditorGUILayout.BeginVertical ();
 
-	public void InspectorGUI_ViewModel ()
-	{
-		EditorGUI.indentLevel++;
-		EditorGUILayout.BeginVertical ();
+			EditorGUILayout.BeginHorizontal ();
+			EditorGUILayout.PrefixLabel ("Name & ID");
+			EditorGUILayout.TextField (string.Format ("{0} ({1})", "PTestViewModel", VM.VMID.ToString ().Substring (0, 8)));
+			EditorGUILayout.EndHorizontal ();
 
-		EditorGUILayout.BeginHorizontal ();
-		EditorGUILayout.PrefixLabel ("Name & ID");
-		EditorGUILayout.TextField (string.Format ("{0} ({1})", "PTestViewModel", VM.VMID.ToString ().Substring (0, 8)));
-		EditorGUILayout.EndHorizontal ();
-
-		
+			
 
 		string vmk;
 
@@ -344,24 +348,42 @@ public class PTestElementEditor : Editor, IElementEditor
 			VM.RC_DefaultCommand20.Execute ();
 		}
 		EditorGUILayout.EndHorizontal ();
-		vmk = "CurrentFB";
-		EditorGUILayout.DelayedTextField (vmk, "(FBViewModel)");
 
-		EditorGUILayout.EndVertical ();
-		EditorGUI.indentLevel--;
+			vmk = "CurrentFB";
+			ViewBase CurrentFBView = (target as IPTestView).CurrentFBView as ViewBase;
+			if (EditorApplication.isPlaying && VM.CurrentFB == null)
+				CurrentFBView = null;
+			ViewBase tempCurrentFBView = (ViewBase)EditorGUILayout.ObjectField (vmk, CurrentFBView, typeof(ViewBase), true);
+			if (tempCurrentFBView == null) {
+				(target as IPTestView).CurrentFBView = null;
+				VM.CurrentFB = null;
+			} else if (CurrentFBView != tempCurrentFBView) {
+				var view = tempCurrentFBView as WS1.IFBView;
+				if (view != null) {
+					(target as IPTestView).CurrentFBView = tempCurrentFBView as WS1.IFBView;
+					VM.CurrentFB = (WS1.FBViewModel)tempCurrentFBView.GetViewModel ();
+				} else {
+					Debug.Log ("类型不匹配, 需要一个: FB");
+				}
+			}
 
-		if (EditorApplication.isPlaying == false) {
-			if (GUI.changed) {
-				VMCopyToJson ();
+			EditorGUILayout.EndVertical ();
+			EditorGUI.indentLevel--;
+
+			if (EditorApplication.isPlaying == false) {
+				if (GUI.changed) {
+					VMCopyToJson ();
+				}
 			}
 		}
+
+		#region IElementEditor implementation
+
+		public virtual void VMCopyToJson ()
+		{
+		}
+
+		#endregion
 	}
 
-	#region IElementEditor implementation
-
-	public virtual void VMCopyToJson ()
-	{
-	}
-
-	#endregion
 }

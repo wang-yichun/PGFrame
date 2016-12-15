@@ -1,5 +1,15 @@
-using UniRx;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 
-public class SecondViewModel : SecondViewModelBase
-{
+namespace WS1 {
+
+	using Newtonsoft.Json;
+	using Newtonsoft.Json.Linq;
+	using UniRx;
+
+	public class SecondViewModel : SecondViewModelBase
+	{
+	}
+
 }

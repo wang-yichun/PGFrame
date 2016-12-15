@@ -2,9 +2,8 @@ using UnityEngine;
 using System;
 using System.Collections;
 
-namespace WS1
-{
-	
+namespace WS1 {
+
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
 	using PogoTools;
@@ -14,22 +13,18 @@ namespace WS1
 		public GameCoreController ()
 		{
 		}
-
-		public override void AddSomeBullet (GameCoreViewModel viewModel)
-		{
-			base.AddSomeBullet (viewModel);
-
-			BulletViewModel bulletVM = new BulletViewModel ();
-			viewModel.CurrentBullets.Add (bulletVM);
-		}
-
-		public override void RemoveSomeBullet (GameCoreViewModel viewModel)
-		{
-			base.RemoveSomeBullet (viewModel);
-
-			if (viewModel.CurrentBullets.Count > 0)
-				viewModel.CurrentBullets.RemoveAt (0);
-		}
-	
+		
+		
+	/*  */
+	public virtual void AddSomeBullet (GameCoreViewModel viewModel)
+	{
+		base.AddSomeBullet (viewModel);
 	}
+	/*  */
+	public virtual void RemoveSomeBullet (GameCoreViewModel viewModel)
+	{
+		base.RemoveSomeBullet (viewModel);
+	}
+	}
+
 }

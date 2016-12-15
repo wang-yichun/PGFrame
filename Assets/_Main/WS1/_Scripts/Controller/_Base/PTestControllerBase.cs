@@ -1,18 +1,24 @@
 using UnityEngine;
+using System;
 using System.Collections;
-using UniRx;
 
-public class PTestControllerBase<T> : ControllerBase<T>
-	where T: Singleton<T>, new()
-{
+namespace WS1 {
 
-	public override void Attach (ViewModelBase viewModel)
+	using Newtonsoft.Json;
+	using Newtonsoft.Json.Linq;
+	using UniRx;
+
+	public class PTestControllerBase<T> : ControllerBase<T>
+		where T: Singleton<T>, new()
 	{
-		UnityEngine.Debug.Log ("PTestControllerBase.Attach");
 
-		PTestViewModel vm = (PTestViewModel)viewModel;
+		public override void Attach (ViewModelBase viewModel)
+		{
+			UnityEngine.Debug.Log ("PTestControllerBase.Attach");
 
-		
+			PTestViewModel vm = (PTestViewModel)viewModel;
+
+			
 		vm.RC_DefaultCommand1.Subscribe<DefaultCommand1Command> (command => {
 			command.Sender = viewModel;
 			DefaultCommand1 ((PTestViewModel)viewModel, command);
@@ -75,9 +81,9 @@ public class PTestControllerBase<T> : ControllerBase<T>
 		vm.RC_DefaultCommand20.Subscribe (_ => {
 			DefaultCommand20 ((PTestViewModel)viewModel);
 		});
-	}
+		}
 
-	
+		
 	/*  */
 	public virtual void DefaultCommand1 (PTestViewModel viewModel, DefaultCommand1Command command)
 	{
@@ -157,5 +163,6 @@ public class PTestControllerBase<T> : ControllerBase<T>
 	/*  */
 	public virtual void DefaultCommand20 (PTestViewModel viewModel)
 	{
+	}
 	}
 }

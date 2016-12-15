@@ -1,54 +1,69 @@
 using UnityEngine;
-using UniRx;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
-public class PTestViewBase : ViewBase
-{
-	public PTestViewModel VM;
+namespace WS1 {
 
-	public PTestViewModel PTest {
-		get {
-			return VM;
-		}
-	}
+	using Newtonsoft.Json;
+	using Newtonsoft.Json.Linq;
+	using UniRx;
 
-	public override ViewModelBase GetViewModel ()
+	public class PTestViewBase : ViewBase , IPTestView
 	{
-		return VM;
-	}
+		public PTestViewModel VM;
 
-	public override void Initialize (ViewModelBase viewModel)
-	{
-		if (viewModel != null) {
-			VM = (PTestViewModel)viewModel;
-		} else {
-			if (AutoCreateViewModel) {
-				if (VM == null) {
-					CreateViewModel ();
-				}
+		public PTestViewModel PTest {
+			get {
+				return VM;
 			}
 		}
 
-		base.Initialize (VM);
-	}
-
-	public override void CreateViewModel ()
-	{
-		if (string.IsNullOrEmpty (ViewModelInitValueJson) == false) {
-			VM = JsonConvert.DeserializeObject<PTestViewModel> (ViewModelInitValueJson);
-		} else {
-			VM = new PTestViewModel ();
+		public override ViewModelBase GetViewModel ()
+		{
+			return VM;
 		}
-	}
 
-	public override void Bind ()
-	{
-		base.Bind ();
-		
+		public override void Initialize (ViewModelBase viewModel)
+		{
+			if (viewModel != null) {
+				VM = (PTestViewModel)viewModel;
+				VM.AddHostView (ViewModelBase.DefaultViewBaseKey, this);
+			} else {
+				if (AutoCreateViewModel && VM == null) {
+					CreateViewModel ();
+				}
+			}
+
+			base.Initialize (VM);
+		}
+
+		public override void CreateViewModel ()
+		{
+			if (UseEmptyViewModel || string.IsNullOrEmpty (ViewModelInitValueJson)) {
+				VM = new PTestViewModel ();
+			} else {
+				VM = JsonConvert.DeserializeObject<PTestViewModel> (ViewModelInitValueJson);
+				ViewModelPropertyRef ();
+			}
+			
+			VM.AddHostView (ViewModelBase.DefaultViewBaseKey, this);
+		}
+
+		public void ViewModelPropertyRef ()
+		{
+			
+		if (_CurrentFBView.GetViewModel () == null) {
+			_CurrentFBView.CreateViewModel ();
+		}
+		VM.CurrentFB = _CurrentFBView.GetViewModel () as FBViewModel;
+		}
+
+		public override void Bind ()
+		{
+			base.Bind ();
+			
 		VM.RP_DefaultProperty1.Subscribe (OnChanged_DefaultProperty1);
 		VM.RP_DefaultProperty2.Subscribe (OnChanged_DefaultProperty2);
 		VM.RP_DefaultProperty3.Subscribe (OnChanged_DefaultProperty3);
@@ -81,46 +96,46 @@ public class PTestViewBase : ViewBase
 		VM.RC_DefaultCommand18.Subscribe (OnExecuted_DefaultCommand18);
 		VM.RC_DefaultCommand19.Subscribe (OnExecuted_DefaultCommand19);
 		VM.RC_DefaultCommand20.Subscribe (OnExecuted_DefaultCommand20);
-	}
+		}
 
-	public override void AfterBind ()
-	{
-		base.AfterBind ();
-	}
+		public override void AfterBind ()
+		{
+			base.AfterBind ();
+		}
 
-	
+		
 
-	public virtual void OnChanged_DefaultProperty1 (string value)
-	{
-	}
+		public virtual void OnChanged_DefaultProperty1 (string value)
+		{
+		}
 
-	public virtual void OnChanged_DefaultProperty2 (string value)
-	{
-	}
+		public virtual void OnChanged_DefaultProperty2 (string value)
+		{
+		}
 
-	public virtual void OnChanged_DefaultProperty3 (int value)
-	{
-	}
+		public virtual void OnChanged_DefaultProperty3 (int value)
+		{
+		}
 
-	public virtual void OnChanged_DefaultProperty4 (float value)
-	{
-	}
+		public virtual void OnChanged_DefaultProperty4 (float value)
+		{
+		}
 
-	public virtual void OnAdd_DefaultCollection1 (CollectionAddEvent<string> e)
-	{
-	}
+		public virtual void OnAdd_DefaultCollection1 (CollectionAddEvent<string> e)
+		{
+		}
 
-	public virtual void OnRemove_DefaultCollection1 (CollectionRemoveEvent<string> e)
-	{
-	}
+		public virtual void OnRemove_DefaultCollection1 (CollectionRemoveEvent<string> e)
+		{
+		}
 
-	public virtual void OnAdd_DefaultCollection2 (CollectionAddEvent<int> e)
-	{
-	}
+		public virtual void OnAdd_DefaultCollection2 (CollectionAddEvent<int> e)
+		{
+		}
 
-	public virtual void OnRemove_DefaultCollection2 (CollectionRemoveEvent<int> e)
-	{
-	}
+		public virtual void OnRemove_DefaultCollection2 (CollectionRemoveEvent<int> e)
+		{
+		}
 
 	public virtual void OnAdd_DefaultDictionary1 (DictionaryAddEvent<string, string> e)
 	{
@@ -138,84 +153,98 @@ public class PTestViewBase : ViewBase
 	{
 	}
 
-	public virtual void OnExecuted_DefaultCommand1 (DefaultCommand1Command command)
-	{
-	}
+		public virtual void OnExecuted_DefaultCommand1 (DefaultCommand1Command command)
+		{
+		}
 
-	public virtual void OnExecuted_DefaultCommand2 (Unit unit)
-	{
-	}
+		public virtual void OnExecuted_DefaultCommand2 (Unit unit)
+		{
+		}
 
-	public virtual void OnExecuted_DefaultCommand3 (Unit unit)
-	{
-	}
+		public virtual void OnExecuted_DefaultCommand3 (Unit unit)
+		{
+		}
 
-	public virtual void OnExecuted_DefaultCommand4 (Unit unit)
-	{
-	}
+		public virtual void OnExecuted_DefaultCommand4 (Unit unit)
+		{
+		}
 
-	public virtual void OnExecuted_DefaultCommand5 (Unit unit)
-	{
-	}
+		public virtual void OnExecuted_DefaultCommand5 (Unit unit)
+		{
+		}
 
-	public virtual void OnExecuted_DefaultCommand6 (Unit unit)
-	{
-	}
+		public virtual void OnExecuted_DefaultCommand6 (Unit unit)
+		{
+		}
 
-	public virtual void OnExecuted_DefaultCommand7 (Unit unit)
-	{
-	}
+		public virtual void OnExecuted_DefaultCommand7 (Unit unit)
+		{
+		}
 
-	public virtual void OnExecuted_DefaultCommand8 (DefaultCommand8Command command)
-	{
-	}
+		public virtual void OnExecuted_DefaultCommand8 (DefaultCommand8Command command)
+		{
+		}
 
-	public virtual void OnExecuted_DefaultCommand9 (Unit unit)
-	{
-	}
+		public virtual void OnExecuted_DefaultCommand9 (Unit unit)
+		{
+		}
 
-	public virtual void OnExecuted_DefaultCommand10 (Unit unit)
-	{
-	}
+		public virtual void OnExecuted_DefaultCommand10 (Unit unit)
+		{
+		}
 
-	public virtual void OnExecuted_DefaultCommand11 (Unit unit)
-	{
-	}
+		public virtual void OnExecuted_DefaultCommand11 (Unit unit)
+		{
+		}
 
-	public virtual void OnExecuted_DefaultCommand12 (Unit unit)
-	{
-	}
+		public virtual void OnExecuted_DefaultCommand12 (Unit unit)
+		{
+		}
 
-	public virtual void OnExecuted_DefaultCommand13 (Unit unit)
-	{
-	}
+		public virtual void OnExecuted_DefaultCommand13 (Unit unit)
+		{
+		}
 
-	public virtual void OnExecuted_DefaultCommand14 (Unit unit)
-	{
-	}
+		public virtual void OnExecuted_DefaultCommand14 (Unit unit)
+		{
+		}
 
-	public virtual void OnExecuted_DefaultCommand15 (Unit unit)
-	{
-	}
+		public virtual void OnExecuted_DefaultCommand15 (Unit unit)
+		{
+		}
 
-	public virtual void OnExecuted_DefaultCommand16 (Unit unit)
-	{
-	}
+		public virtual void OnExecuted_DefaultCommand16 (Unit unit)
+		{
+		}
 
-	public virtual void OnExecuted_DefaultCommand17 (Unit unit)
-	{
-	}
+		public virtual void OnExecuted_DefaultCommand17 (Unit unit)
+		{
+		}
 
-	public virtual void OnExecuted_DefaultCommand18 (Unit unit)
-	{
-	}
+		public virtual void OnExecuted_DefaultCommand18 (Unit unit)
+		{
+		}
 
-	public virtual void OnExecuted_DefaultCommand19 (Unit unit)
-	{
-	}
+		public virtual void OnExecuted_DefaultCommand19 (Unit unit)
+		{
+		}
 
-	public virtual void OnExecuted_DefaultCommand20 (Unit unit)
-	{
+		public virtual void OnExecuted_DefaultCommand20 (Unit unit)
+		{
+		}
+
+		
+	
+	[SerializeField, HideInInspector]
+	public ViewBase _CurrentFBView;
+	public IFBView CurrentFBView {
+		get {
+			return (IFBView)_CurrentFBView;
+		}
+		set {
+			_CurrentFBView = (ViewBase)value;
+		}
+	}
 	}
 
 }

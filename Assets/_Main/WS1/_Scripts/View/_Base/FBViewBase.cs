@@ -3,78 +3,83 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using UniRx;
 
-public class FBViewBase : ViewBase , IFBView
-{
-	public FBViewModel VM;
+namespace WS1 {
 
-	public FBViewModel FB {
-		get {
-			return VM;
-		}
-	}
+	using Newtonsoft.Json;
+	using Newtonsoft.Json.Linq;
+	using UniRx;
 
-	public override ViewModelBase GetViewModel ()
+	public class FBViewBase : ViewBase , IFBView
 	{
-		return VM;
-	}
+		public FBViewModel VM;
 
-	public override void Initialize (ViewModelBase viewModel)
-	{
-		if (viewModel != null) {
-			VM = (FBViewModel)viewModel;
-			VM.AddHostView (ViewModelBase.DefaultViewBaseKey, this);
-		} else {
-			if (AutoCreateViewModel && VM == null) {
-				CreateViewModel ();
+		public FBViewModel FB {
+			get {
+				return VM;
 			}
 		}
 
-		base.Initialize (VM);
-	}
-
-	public override void CreateViewModel ()
-	{
-		if (UseEmptyViewModel || string.IsNullOrEmpty (ViewModelInitValueJson)) {
-			VM = new FBViewModel ();
-		} else {
-			VM = JsonConvert.DeserializeObject<FBViewModel> (ViewModelInitValueJson);
-			ViewModelPropertyRef ();
+		public override ViewModelBase GetViewModel ()
+		{
+			return VM;
 		}
-		
-		VM.AddHostView (ViewModelBase.DefaultViewBaseKey, this);
-	}
 
-	public void ViewModelPropertyRef ()
-	{
-		
-	}
+		public override void Initialize (ViewModelBase viewModel)
+		{
+			if (viewModel != null) {
+				VM = (FBViewModel)viewModel;
+				VM.AddHostView (ViewModelBase.DefaultViewBaseKey, this);
+			} else {
+				if (AutoCreateViewModel && VM == null) {
+					CreateViewModel ();
+				}
+			}
 
-	public override void Bind ()
-	{
-		base.Bind ();
-		
+			base.Initialize (VM);
+		}
+
+		public override void CreateViewModel ()
+		{
+			if (UseEmptyViewModel || string.IsNullOrEmpty (ViewModelInitValueJson)) {
+				VM = new FBViewModel ();
+			} else {
+				VM = JsonConvert.DeserializeObject<FBViewModel> (ViewModelInitValueJson);
+				ViewModelPropertyRef ();
+			}
+			
+			VM.AddHostView (ViewModelBase.DefaultViewBaseKey, this);
+		}
+
+		public void ViewModelPropertyRef ()
+		{
+			
+		}
+
+		public override void Bind ()
+		{
+			base.Bind ();
+			
 		VM.RP_Count.Subscribe (OnChanged_Count);
 		VM.RC_FBTestCMD.Subscribe (OnExecuted_FBTestCMD);
+		}
+
+		public override void AfterBind ()
+		{
+			base.AfterBind ();
+		}
+
+		
+
+		public virtual void OnChanged_Count (int value)
+		{
+		}
+
+		public virtual void OnExecuted_FBTestCMD (Unit unit)
+		{
+		}
+
+		
 	}
 
-	public override void AfterBind ()
-	{
-		base.AfterBind ();
-	}
-
-	
-
-	public virtual void OnChanged_Count (int value)
-	{
-	}
-
-	public virtual void OnExecuted_FBTestCMD (Unit unit)
-	{
-	}
-
-	
 }

@@ -1,9 +1,11 @@
-/*//////////////////////////////////////////////////////////////////////////////
- This is my first SimpleClass SCA. 
-//////////////////////////////////////////////////////////////////////////////*/
-public class SCABase : SimpleClassBase
-{
-	
+namespace WS1 {
+
+	/*//////////////////////////////////////////////////////////////////////////////
+	 This is my first SimpleClass SCA. 
+	//////////////////////////////////////////////////////////////////////////////*/
+	public class SCABase : SimpleClassBase
+	{
+		
 
 	/* First # member */
 	[UnityEngine.SerializeField, UnityEngine.Tooltip("First # member")]
@@ -28,4 +30,6 @@ public class SCABase : SimpleClassBase
 	private EA _myEA;
 
 	public EA myEA { get { return _myEA; } set { _myEA = value; } }
+	}
+
 }

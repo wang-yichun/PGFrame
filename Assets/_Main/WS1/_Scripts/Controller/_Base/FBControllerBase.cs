@@ -1,29 +1,33 @@
 using UnityEngine;
 using System;
 using System.Collections;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using UniRx;
 
-public class FBControllerBase<T> : ControllerBase<T>
-	where T: Singleton<T>, new()
-{
+namespace WS1 {
 
-	public override void Attach (ViewModelBase viewModel)
+	using Newtonsoft.Json;
+	using Newtonsoft.Json.Linq;
+	using UniRx;
+
+	public class FBControllerBase<T> : ControllerBase<T>
+		where T: Singleton<T>, new()
 	{
-		UnityEngine.Debug.Log ("FBControllerBase.Attach");
 
-		FBViewModel vm = (FBViewModel)viewModel;
+		public override void Attach (ViewModelBase viewModel)
+		{
+			UnityEngine.Debug.Log ("FBControllerBase.Attach");
 
-		
+			FBViewModel vm = (FBViewModel)viewModel;
+
+			
 		vm.RC_FBTestCMD.Subscribe (_ => {
 			FBTestCMD ((FBViewModel)viewModel);
 		});
-	}
+		}
 
-	
+		
 	/*  */
 	public virtual void FBTestCMD (FBViewModel viewModel)
 	{
+	}
 	}
 }

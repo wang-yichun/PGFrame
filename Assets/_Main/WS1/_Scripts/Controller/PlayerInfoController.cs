@@ -1,18 +1,20 @@
 using UnityEngine;
 using System;
 using System.Collections;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using PogoTools;
 
-namespace WS1
-{
+namespace WS1 {
+
+	using Newtonsoft.Json;
+	using Newtonsoft.Json.Linq;
+	using PogoTools;
+
 	public class PlayerInfoController : PlayerInfoControllerBase<PlayerInfoController>
 	{
 		public PlayerInfoController ()
 		{
 		}
-	
-	
+		
+		
 	}
+
 }

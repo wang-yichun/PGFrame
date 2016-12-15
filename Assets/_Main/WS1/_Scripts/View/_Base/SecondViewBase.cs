@@ -1,65 +1,75 @@
 using UnityEngine;
-using UniRx;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
-public class SecondViewBase : ViewBase
-{
-	public SecondViewModel VM;
+namespace WS1 {
 
-	public SecondViewModel Second {
-		get {
-			return VM;
-		}
-	}
+	using Newtonsoft.Json;
+	using Newtonsoft.Json.Linq;
+	using UniRx;
 
-	public override ViewModelBase GetViewModel ()
+	public class SecondViewBase : ViewBase , ISecondView
 	{
-		return VM;
-	}
+		public SecondViewModel VM;
 
-	public bool AutoCreateViewModel = false;
-
-	public string ViewModelInitValueJson;
-
-	public override void Initialize (ViewModelBase viewModel)
-	{
-		if (viewModel != null) {
-			VM = (SecondViewModel)viewModel;
-		} else {
-			if (AutoCreateViewModel) {
-				if (VM == null) {
-					CreateViewModel ();
-				}
+		public SecondViewModel Second {
+			get {
+				return VM;
 			}
 		}
 
-		base.Initialize (null);
-	}
-
-	public void CreateViewModel ()
-	{
-		if (string.IsNullOrEmpty (ViewModelInitValueJson) == false) {
-			VM = JsonConvert.DeserializeObject<SecondViewModel> (ViewModelInitValueJson);
-		} else {
-			VM = new SecondViewModel ();
+		public override ViewModelBase GetViewModel ()
+		{
+			return VM;
 		}
-	}
 
-	public override void Bind ()
-	{
-		base.Bind ();
+		public override void Initialize (ViewModelBase viewModel)
+		{
+			if (viewModel != null) {
+				VM = (SecondViewModel)viewModel;
+				VM.AddHostView (ViewModelBase.DefaultViewBaseKey, this);
+			} else {
+				if (AutoCreateViewModel && VM == null) {
+					CreateViewModel ();
+				}
+			}
+
+			base.Initialize (VM);
+		}
+
+		public override void CreateViewModel ()
+		{
+			if (UseEmptyViewModel || string.IsNullOrEmpty (ViewModelInitValueJson)) {
+				VM = new SecondViewModel ();
+			} else {
+				VM = JsonConvert.DeserializeObject<SecondViewModel> (ViewModelInitValueJson);
+				ViewModelPropertyRef ();
+			}
+			
+			VM.AddHostView (ViewModelBase.DefaultViewBaseKey, this);
+		}
+
+		public void ViewModelPropertyRef ()
+		{
+			
+		}
+
+		public override void Bind ()
+		{
+			base.Bind ();
+			
+		}
+
+		public override void AfterBind ()
+		{
+			base.AfterBind ();
+		}
+
+		
+
 		
 	}
-
-	public override void AfterBind ()
-	{
-		base.AfterBind ();
-	}
-
-	
 
 }

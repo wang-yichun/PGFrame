@@ -1,4 +1,8 @@
-public interface IFBView
-{
-	
+namespace WS1 {
+
+	public interface IFBView
+	{
+		
+	}
+
 }

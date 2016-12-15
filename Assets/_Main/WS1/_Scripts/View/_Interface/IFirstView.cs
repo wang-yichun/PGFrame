@@ -1,4 +1,8 @@
-public interface IFirstView
-{
-	
+namespace WS1 {
+
+	public interface IFirstView
+	{
+		
+	}
+
 }

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Diagnostics;
+using WS1;
 
 public class PerformanceTestDriver : MonoBehaviour
 {

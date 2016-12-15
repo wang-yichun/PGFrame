@@ -3,53 +3,63 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using UniRx;
 
-public class FirstViewBase : FBView , IFirstView
-{
-	public FirstViewModel VM;
+namespace WS1 {
 
-	public FirstViewModel First {
-		get {
-			return VM;
-		}
-	}
+	using Newtonsoft.Json;
+	using Newtonsoft.Json.Linq;
+	using UniRx;
 
-	public override ViewModelBase GetViewModel ()
+	public class FirstViewBase : FBView , IFirstView
 	{
-		return VM;
-	}
+		public FirstViewModel VM;
 
-	public override void Initialize (ViewModelBase viewModel)
-	{
-		if (viewModel != null) {
-			VM = (FirstViewModel)viewModel;
-		} else {
-			if (AutoCreateViewModel) {
-				if (VM == null) {
-					CreateViewModel ();
-				}
+		public FirstViewModel First {
+			get {
+				return VM;
 			}
 		}
 
-		base.Initialize (VM);
-	}
-
-	public override void CreateViewModel ()
-	{
-		if (string.IsNullOrEmpty (ViewModelInitValueJson) == false) {
-			VM = JsonConvert.DeserializeObject<FirstViewModel> (ViewModelInitValueJson);
-		} else {
-			VM = new FirstViewModel ();
+		public override ViewModelBase GetViewModel ()
+		{
+			return VM;
 		}
-	}
 
-	public override void Bind ()
-	{
-		base.Bind ();
-		
+		public override void Initialize (ViewModelBase viewModel)
+		{
+			if (viewModel != null) {
+				VM = (FirstViewModel)viewModel;
+				VM.AddHostView (ViewModelBase.DefaultViewBaseKey, this);
+			} else {
+				if (AutoCreateViewModel && VM == null) {
+					CreateViewModel ();
+				}
+			}
+
+			base.Initialize (VM);
+		}
+
+		public override void CreateViewModel ()
+		{
+			if (UseEmptyViewModel || string.IsNullOrEmpty (ViewModelInitValueJson)) {
+				VM = new FirstViewModel ();
+			} else {
+				VM = JsonConvert.DeserializeObject<FirstViewModel> (ViewModelInitValueJson);
+				ViewModelPropertyRef ();
+			}
+			
+			VM.AddHostView (ViewModelBase.DefaultViewBaseKey, this);
+		}
+
+		public void ViewModelPropertyRef ()
+		{
+			
+		}
+
+		public override void Bind ()
+		{
+			base.Bind ();
+			
 		VM.RP_LabelTextNum.Subscribe (OnChanged_LabelTextNum);
 		VM.Numbers.ObserveAdd ().Subscribe (OnAdd_Numbers);
 		VM.Numbers.ObserveRemove ().Subscribe (OnRemove_Numbers);
@@ -57,26 +67,26 @@ public class FirstViewBase : FBView , IFirstView
 		VM.MyDictionary.ObserveRemove ().Subscribe (OnRemove_MyDictionary);
 		VM.RC_DefaultCommand.Subscribe (OnExecuted_DefaultCommand);
 		VM.RP_SCA_a.Subscribe (OnChanged_SCA_a);
-	}
+		}
 
-	public override void AfterBind ()
-	{
-		base.AfterBind ();
-	}
+		public override void AfterBind ()
+		{
+			base.AfterBind ();
+		}
 
-	
+		
 
-	public virtual void OnChanged_LabelTextNum (int value)
-	{
-	}
+		public virtual void OnChanged_LabelTextNum (int value)
+		{
+		}
 
-	public virtual void OnAdd_Numbers (CollectionAddEvent<int> e)
-	{
-	}
+		public virtual void OnAdd_Numbers (CollectionAddEvent<int> e)
+		{
+		}
 
-	public virtual void OnRemove_Numbers (CollectionRemoveEvent<int> e)
-	{
-	}
+		public virtual void OnRemove_Numbers (CollectionRemoveEvent<int> e)
+		{
+		}
 
 	public virtual void OnAdd_MyDictionary (DictionaryAddEvent<string, string> e)
 	{
@@ -86,13 +96,15 @@ public class FirstViewBase : FBView , IFirstView
 	{
 	}
 
-	public virtual void OnExecuted_DefaultCommand (Unit unit)
-	{
+		public virtual void OnExecuted_DefaultCommand (Unit unit)
+		{
+		}
+
+		public virtual void OnChanged_SCA_a (SCA value)
+		{
+		}
+
+		
 	}
 
-	public virtual void OnChanged_SCA_a (SCA value)
-	{
-	}
-
-	
 }

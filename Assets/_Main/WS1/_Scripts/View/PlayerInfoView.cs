@@ -3,13 +3,14 @@ using UnityEngine.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using UniRx;
-using PogoTools;
 
-namespace WS1
-{
+namespace WS1 {
+
+	using Newtonsoft.Json;
+	using Newtonsoft.Json.Linq;
+	using UniRx;
+	using PogoTools;
+
 	public class PlayerInfoView : PlayerInfoViewBase
 	{
 		public override void Initialize (ViewModelBase viewModel)
@@ -29,4 +30,5 @@ namespace WS1
 			Debug.Log (string.Format ("PlayerInfoView in {0} AfterBind.", gameObject.name));
 		}
 	}
+
 }
