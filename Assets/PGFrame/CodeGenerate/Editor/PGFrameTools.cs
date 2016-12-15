@@ -1,4 +1,7 @@
-﻿namespace PGFrame
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace PGFrame
 {
 	public static class PGFrameTools
 	{
@@ -23,6 +26,24 @@
 			}
 
 			return dt;
+		}
+
+		public static string[] SplitWorkspaceAndTypeName (string sw_name, string type_name)
+		{
+			List<string> ts = type_name.Split (new char[]{ '.' }).ToList ();
+			string[] result = new string[2];
+			if (ts.Count == 0) {
+				result [0] = "";
+				result [1] = "";
+			} else if (ts.Count == 1) {
+				result [0] = sw_name;
+				result [1] = ts [0];
+			} else {
+				result [1] = ts.Last ();
+				ts.RemoveAt (ts.Count - 1);
+				result [0] = string.Join (".", ts.ToArray ());
+			}
+			return result;
 		}
 
 		public static string ConvertToElementName (this string viewModelName)

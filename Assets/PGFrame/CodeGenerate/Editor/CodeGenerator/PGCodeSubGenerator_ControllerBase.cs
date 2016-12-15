@@ -38,6 +38,10 @@ namespace PGFrame
 			code = code.Replace ("__WWW__", workspaceName);
 			code = code.Replace (ATTACH_CODE, GetAttachCode (jo));
 			code = code.Replace (MEMBER_FUNCTION, GetMemberFunction (jo));
+
+			if (!Directory.Exists (targetPath))
+				Directory.CreateDirectory (targetPath);
+
 			string file = Path.Combine (targetPath, string.Format ("{0}ControllerBase.cs", elementName));
 			File.WriteAllText (file, code);
 			filesGenerated.Add (file);

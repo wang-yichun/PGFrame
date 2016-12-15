@@ -39,6 +39,10 @@ namespace PGFrame
 			string code = File.ReadAllText (templateFileInfo.FullName);
 			code = code.Replace ("__XXX__", elementName);
 			code = code.Replace ("__WWW__", workspaceName);
+
+			if (!Directory.Exists (targetPath))
+				Directory.CreateDirectory (targetPath);
+
 			string file = Path.Combine (targetPath, string.Format ("{0}ViewModel.cs", elementName));
 			File.WriteAllText (file, code);
 			filesGenerated.Add (file);

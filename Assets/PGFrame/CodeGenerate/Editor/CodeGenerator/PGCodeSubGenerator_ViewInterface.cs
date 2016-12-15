@@ -39,6 +39,10 @@ namespace PGFrame
 			code = code.Replace ("__WWW__", workspaceName);
 			code = code.Replace (VM_PROPERTY_VIEW, GetVMPropertyViewCode (jo));
 			string file = Path.Combine (targetPath, string.Format ("I{0}View.cs", elementName));
+
+			if (!Directory.Exists (targetPath))
+				Directory.CreateDirectory (targetPath);
+
 			File.WriteAllText (file, code);
 			filesGenerated.Add (file);
 		}
@@ -61,9 +65,12 @@ namespace PGFrame
 					string member_type = jo_member ["Type"].Value<string> ();
 					DocType? dt = PGFrameTools.GetDocTypeByWorkspaceAndType (ws_name, member_type);
 					if (dt.HasValue && dt.Value == DocType.Element) {
-						string element_name = member_type.ConvertToElementName ();
+						string[] element_splited_type = PGFrameTools.SplitWorkspaceAndTypeName (string.Empty, member_type);
+						string element_ws = element_splited_type [0];
+						string element_type = element_splited_type [1];
+						string element_name = element_type.ConvertToElementName ();
 						sb.AppendFormat (@"
-	I{1}View {0}View {{ get; set; }}", member_name, element_name);
+		{2}I{1}View {0}View {{ get; set; }}", member_name, element_name, string.IsNullOrEmpty (element_ws) ? "" : element_ws + ".");
 					}
 				}
 			}

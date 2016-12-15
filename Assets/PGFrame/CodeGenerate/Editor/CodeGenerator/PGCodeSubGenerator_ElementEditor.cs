@@ -37,6 +37,10 @@ namespace PGFrame
 			code = code.Replace ("__XXX__", elementName);
 			code = code.Replace ("__WWW__", workspaceName);
 			code = code.Replace (VIEWMODEL_GUI, GetViewModelGUICode (jo));
+
+			if (!Directory.Exists (targetPath))
+				Directory.CreateDirectory (targetPath);
+
 			string file = Path.Combine (targetPath, string.Format ("{0}ElementEditor.cs", elementName));
 			File.WriteAllText (file, code);
 			filesGenerated.Add (file);
@@ -124,26 +128,29 @@ namespace PGFrame
 					if (dt != null) {
 						switch (dt.Value) {
 						case DocType.Element:
-							string member_element_name = type.ConvertToElementName ();
+							string[] element_splited_type = PGFrameTools.SplitWorkspaceAndTypeName (workspace, type);
+							string element_ws = element_splited_type [0];
+							string element_type = element_splited_type [1];
+							string member_element_name = element_type.ConvertToElementName ();
 							result = string.Format (@"
 
-		vmk = ""{0}"";
-		ViewBase {0}View = (target as I{1}View).{0}View as ViewBase;
-		if (EditorApplication.isPlaying && VM.{0} == null)
-			{0}View = null;
-		ViewBase temp{0}View = (ViewBase)EditorGUILayout.ObjectField (vmk, {0}View, typeof(ViewBase), true);
-		if (tempMyInfoView == null) {{
-			(target as I{1}View).{0}View = null;
-			VM.{0} = null;
-		}} else if ({0}View != temp{0}View) {{
-			var view = temp{0}View as I{2}View;
-			if (view != null) {{
-				(target as I{1}View).{0}View = temp{0}View as I{2}View;
-				VM.{0} = ({2}ViewModel)tempMyInfoView.GetViewModel ();
-			}} else {{
-				Debug.Log (""类型不匹配, 需要一个: {2}"");
-			}}
-		}}", name, element_name, member_element_name);
+			vmk = ""{0}"";
+			ViewBase {0}View = (target as I{1}View).{0}View as ViewBase;
+			if (EditorApplication.isPlaying && VM.{0} == null)
+				{0}View = null;
+			ViewBase temp{0}View = (ViewBase)EditorGUILayout.ObjectField (vmk, {0}View, typeof(ViewBase), true);
+			if (temp{0}View == null) {{
+				(target as I{1}View).{0}View = null;
+				VM.{0} = null;
+			}} else if ({0}View != temp{0}View) {{
+				var view = temp{0}View as {3}I{2}View;
+				if (view != null) {{
+					(target as I{1}View).{0}View = temp{0}View as {3}I{2}View;
+					VM.{0} = ({3}{2}ViewModel)temp{0}View.GetViewModel ();
+				}} else {{
+					Debug.Log (""类型不匹配, 需要一个: {2}"");
+				}}
+			}}", name, element_name, member_element_name, string.IsNullOrEmpty (element_ws) ? "" : element_ws + ".");
 							is_ese = true;
 							break;
 						case DocType.SimpleClass:

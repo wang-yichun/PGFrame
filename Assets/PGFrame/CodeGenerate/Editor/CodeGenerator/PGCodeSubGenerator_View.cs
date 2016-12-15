@@ -36,6 +36,10 @@ namespace PGFrame
 				JObject jo_view = ja_views [i] as JObject;
 				string viewName = jo_view ["Name"].Value<string> ();
 				string targetPath = Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/View");
+
+				if (!Directory.Exists (targetPath))
+					Directory.CreateDirectory (targetPath);
+
 				string file = Path.Combine (targetPath, string.Format ("{0}.cs", viewName));
 				if (!File.Exists (file)) {
 					string code = File.ReadAllText (templateFileInfo.FullName);

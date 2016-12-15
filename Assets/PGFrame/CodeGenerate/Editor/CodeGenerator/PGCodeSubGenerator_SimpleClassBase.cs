@@ -42,6 +42,9 @@ namespace PGFrame
 			code = code.Replace (SC_MEMBER, GetMemberCode (jo));
 			code = code.Replace (SC_COMMENT, GetCommentCode (jo));
 
+			if (!Directory.Exists (targetPath))
+				Directory.CreateDirectory (targetPath);
+
 			string file = Path.Combine (targetPath, string.Format ("{0}Base.cs", elementName));
 			File.WriteAllText (file, code);
 			filesGenerated.Add (file);

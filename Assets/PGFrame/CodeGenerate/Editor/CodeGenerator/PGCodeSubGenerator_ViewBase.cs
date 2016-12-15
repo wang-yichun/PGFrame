@@ -49,6 +49,10 @@ namespace PGFrame
 				code = code.Replace (BIND_FUNC, bind_func);
 				code = code.Replace (VM_PROPERTY_VIEW, GetVMPropertyViewCode (jo));
 				code = code.Replace (VM_PROPERTY_REF, GetVMPropertyRefCode (jo));
+
+				if (!Directory.Exists (targetPath))
+					Directory.CreateDirectory (targetPath);
+
 				string file = Path.Combine (targetPath, string.Format ("{0}Base.cs", viewName));
 				File.WriteAllText (file, code);
 				filesGenerated.Add (file);

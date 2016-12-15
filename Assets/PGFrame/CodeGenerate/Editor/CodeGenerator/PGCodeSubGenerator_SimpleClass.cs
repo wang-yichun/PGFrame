@@ -40,11 +40,8 @@ namespace PGFrame
 			code = code.Replace ("__XXX__", elementName);
 			code = code.Replace ("__WWW__", workspaceName);
 
-			// PR_TODO:
-//		code = code.Replace (REACTIVE_MEMBERS, GetReactiveMembers (jo));
-//		code = code.Replace (COMMAND_CLASS, GetCommandClass (jo));
-//		code = code.Replace (INITIALIZE_CODE, GetInitializeCode (jo));
-//		code = code.Replace (CLASS_COMMENT, GetClassDescription (jo));
+			if (!Directory.Exists (targetPath))
+				Directory.CreateDirectory (targetPath);
 
 			string file = Path.Combine (targetPath, string.Format ("{0}.cs", elementName));
 			File.WriteAllText (file, code);

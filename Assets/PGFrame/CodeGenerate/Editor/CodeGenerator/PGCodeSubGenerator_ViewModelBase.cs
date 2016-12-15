@@ -43,6 +43,10 @@ namespace PGFrame
 			code = code.Replace (COMMAND_CLASS, GetCommandClass (jo));
 			code = code.Replace (INITIALIZE_CODE, GetInitializeCode (jo));
 			code = code.Replace (CLASS_COMMENT, GetClassDescription (jo));
+
+			if (!Directory.Exists (targetPath))
+				Directory.CreateDirectory (targetPath);
+
 			string file = Path.Combine (targetPath, string.Format ("{0}ViewModelBase.cs", elementName));
 			File.WriteAllText (file, code);
 			filesGenerated.Add (file);

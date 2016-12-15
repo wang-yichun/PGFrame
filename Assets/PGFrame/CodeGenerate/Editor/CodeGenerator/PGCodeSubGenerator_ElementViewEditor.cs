@@ -40,6 +40,10 @@ namespace PGFrame
 				code = code.Replace ("__YYY__", viewName);
 				code = code.Replace ("__XXX__", elementName);
 				code = code.Replace ("__WWW__", workspaceName);
+
+				if (!Directory.Exists (targetPath))
+					Directory.CreateDirectory (targetPath);
+
 				string file = Path.Combine (targetPath, string.Format ("{0}Editor.cs", viewName));
 				File.WriteAllText (file, code);
 				filesGenerated.Add (file);
