@@ -55,10 +55,26 @@ namespace WS1
 		public void ViewModelPropertyRef ()
 		{
 			
-			if (_MyInfoView.GetViewModel () == null) {
-				_MyInfoView.CreateViewModel ();
+
+			if (_MyInfoView != null) {
+				if (_MyInfoView.GetViewModel () == null) {
+					_MyInfoView.CreateViewModel ();
+				}
+				ViewModelBase _MyInfoViewModel = _MyInfoView.GetViewModel ();
+				if (_MyInfoViewModel != null) {
+					VM.MyInfo = _MyInfoView.GetViewModel () as PlayerInfoViewModel;
+				}
 			}
-			VM.MyInfo = _MyInfoView.GetViewModel () as PlayerInfoViewModel;
+
+			if (_MyWS2BallView != null) {
+				if (_MyWS2BallView.GetViewModel () == null) {
+					_MyWS2BallView.CreateViewModel ();
+				}
+				ViewModelBase _MyWS2BallViewModel = _MyWS2BallView.GetViewModel ();
+				if (_MyWS2BallViewModel != null) {
+					VM.MyWS2Ball = _MyWS2BallView.GetViewModel () as WS2.BallViewModel;
+				}
+			}
 		}
 
 		public override void Bind ()
@@ -89,12 +105,24 @@ namespace WS1
 		[SerializeField, HideInInspector]
 		public ViewBase _MyInfoView;
 
-		public IPlayerInfoView MyInfoView {
+		public WS1.IPlayerInfoView MyInfoView {
 			get {
-				return (IPlayerInfoView)_MyInfoView;
+				return (WS1.IPlayerInfoView)_MyInfoView;
 			}
 			set {
 				_MyInfoView = (ViewBase)value;
+			}
+		}
+	
+		[SerializeField, HideInInspector]
+		public ViewBase _MyWS2BallView;
+
+		public WS2.IBallView MyWS2BallView {
+			get {
+				return (WS2.IBallView)_MyWS2BallView;
+			}
+			set {
+				_MyWS2BallView = (ViewBase)value;
 			}
 		}
 	}

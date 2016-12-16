@@ -29,6 +29,7 @@ namespace WS1
 			CurrentBullets = new ReactiveCollection<BulletViewModel> ();
 			RC_AddSomeBullet = new ReactiveCommand ();
 			RC_RemoveSomeBullet = new ReactiveCommand ();
+			RP_MyWS2Ball = new ReactiveProperty<WS2.BallViewModel> ();
 		}
 
 		public override void Attach ()
@@ -75,6 +76,19 @@ namespace WS1
 		/*  */
 		public ReactiveCommand RC_RemoveSomeBullet;
 		
+
+		/*  */
+		public ReactiveProperty<WS2.BallViewModel> RP_MyWS2Ball;
+
+		
+		public WS2.BallViewModel MyWS2Ball {
+			get {
+				return RP_MyWS2Ball.Value;
+			}
+			set {
+				RP_MyWS2Ball.Value = value;
+			}
+		}
 	}
 
 	

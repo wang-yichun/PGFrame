@@ -55,10 +55,16 @@ namespace WS1
 		public void ViewModelPropertyRef ()
 		{
 			
-			if (_CurrentFBView.GetViewModel () == null) {
-				_CurrentFBView.CreateViewModel ();
+
+			if (_CurrentFBView != null) {
+				if (_CurrentFBView.GetViewModel () == null) {
+					_CurrentFBView.CreateViewModel ();
+				}
+				ViewModelBase _CurrentFBViewModel = _CurrentFBView.GetViewModel ();
+				if (_CurrentFBViewModel != null) {
+					VM.CurrentFB = _CurrentFBView.GetViewModel () as FBViewModel;
+				}
 			}
-			VM.CurrentFB = _CurrentFBView.GetViewModel () as FBViewModel;
 		}
 
 		public override void Bind ()
@@ -239,9 +245,9 @@ namespace WS1
 		[SerializeField, HideInInspector]
 		public ViewBase _CurrentFBView;
 
-		public IFBView CurrentFBView {
+		public WS1.IFBView CurrentFBView {
 			get {
-				return (IFBView)_CurrentFBView;
+				return (WS1.IFBView)_CurrentFBView;
 			}
 			set {
 				_CurrentFBView = (ViewBase)value;

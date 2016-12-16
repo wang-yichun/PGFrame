@@ -115,6 +115,24 @@ namespace WS1
 		}
 		EditorGUILayout.EndHorizontal ();
 
+			vmk = "MyWS2Ball";
+			ViewBase MyWS2BallView = (target as IGameCoreView).MyWS2BallView as ViewBase;
+			if (EditorApplication.isPlaying && VM.MyWS2Ball == null)
+				MyWS2BallView = null;
+			ViewBase tempMyWS2BallView = (ViewBase)EditorGUILayout.ObjectField (vmk, MyWS2BallView, typeof(ViewBase), true);
+			if (tempMyWS2BallView == null) {
+				(target as IGameCoreView).MyWS2BallView = null;
+				VM.MyWS2Ball = null;
+			} else if (MyWS2BallView != tempMyWS2BallView) {
+				var view = tempMyWS2BallView as WS2.IBallView;
+				if (view != null) {
+					(target as IGameCoreView).MyWS2BallView = tempMyWS2BallView as WS2.IBallView;
+					VM.MyWS2Ball = (WS2.BallViewModel)tempMyWS2BallView.GetViewModel ();
+				} else {
+					Debug.Log ("类型不匹配, 需要一个: Ball");
+				}
+			}
+
 			EditorGUILayout.EndVertical ();
 			EditorGUI.indentLevel--;
 

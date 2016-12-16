@@ -83,10 +83,16 @@ namespace PGFrame
 
 						string element_name = member_type.ConvertToElementName ();
 						sb.AppendFormat (@"
-			if (_{0}View.GetViewModel () == null) {{
-				_{0}View.CreateViewModel ();
-			}}
-			VM.{0} = _{0}View.GetViewModel () as {1}ViewModel;", member_name, element_name);
+
+			if (_{0}View != null) {{
+				if (_{0}View.GetViewModel () == null) {{
+					_{0}View.CreateViewModel ();
+				}}
+				ViewModelBase _{0}ViewModel = _{0}View.GetViewModel ();
+				if (_{0}ViewModel != null) {{
+					VM.{0} = _{0}View.GetViewModel () as {1}ViewModel;
+				}}
+			}}", member_name, element_name);
 					}
 				}
 			}
@@ -107,21 +113,24 @@ namespace PGFrame
 					string member_type = jo_member ["Type"].Value<string> ();
 					DocType? dt = PGFrameTools.GetDocTypeByWorkspaceAndType (ws_name, member_type);
 					if (dt.HasValue && dt.Value == DocType.Element) {
-
-						string element_name = member_type.ConvertToElementName ();
+						string[] element_splited_type = PGFrameTools.SplitWorkspaceAndTypeName (ws_name, member_type);
+						string element_ws = element_splited_type [0];
+						string element_type = element_splited_type [1];
+						string member_element_name = element_type.ConvertToElementName ();
+//						string element_name = member_type.ConvertToElementName ();
 						sb.AppendFormat (@"
 	
 		[SerializeField, HideInInspector]
 		public ViewBase _{0}View;
 
-		public I{1}View {0}View {{
+		public {2}I{1}View {0}View {{
 			get {{
-				return (I{1}View)_{0}View;
+				return ({2}I{1}View)_{0}View;
 			}}
 			set {{
 				_{0}View = (ViewBase)value;
 			}}
-		}}", member_name, element_name);
+		}}", member_name, member_element_name, string.IsNullOrEmpty (element_ws) ? "" : element_ws + ".");
 					}
 				}
 			}
