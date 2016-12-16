@@ -81,11 +81,11 @@ namespace PGFrame
 				JObject jom = (JObject)ja [i];
 				if (jom ["RxType"].Value<string> () == "Command") {
 					string template = @"
-public class {NAME}Command : ViewModelCommandBase
-{
-/****command_member****/
-}
-";
+	public class {NAME}Command : ViewModelCommandBase
+	{
+	/****command_member****/
+	}
+	";
 					template = template.Replace ("{NAME}", jom ["Name"].Value<string> ());
 
 					StringBuilder sbc = new StringBuilder ();
@@ -149,18 +149,18 @@ public class {NAME}Command : ViewModelCommandBase
 		public static string GenReactiveMemberProperty (this JObject jom, JObject jo)
 		{
 			string template = @"
-	/* {DESC} */
-	public ReactiveProperty<{TYPE}> RP_{NAME};
+		/* {DESC} */
+		public ReactiveProperty<{TYPE}> RP_{NAME};
 
-	{JSONPROPERTY}{JSONCONVERTER}
-	public {TYPE} {NAME} {
-		get {
-			return RP_{NAME}.Value;
-		}
-		set {
-			RP_{NAME}.Value = value;
-		}
-	}";
+		{JSONPROPERTY}{JSONCONVERTER}
+		public {TYPE} {NAME} {
+			get {
+				return RP_{NAME}.Value;
+			}
+			set {
+				RP_{NAME}.Value = value;
+			}
+		}";
 	
 			DocType? dt = PGFrameTools.GetDocTypeByWorkspaceAndType (jo ["Workspace"].Value<string> (), jom ["Type"].Value<string> ());
 			if (dt.HasValue && dt.Value == DocType.Element) {
@@ -203,8 +203,8 @@ public class {NAME}Command : ViewModelCommandBase
 		public static string GenReactiveMemberCollection (this JObject jom)
 		{
 			string template = @"
-	/* {DESC} */
-	[JsonProperty] public ReactiveCollection<{TYPE}> {NAME};";
+		/* {DESC} */
+		[JsonProperty] public ReactiveCollection<{TYPE}> {NAME};";
 			template = template.Replace ("{NAME}", jom ["Name"].Value<string> ());
 			template = template.Replace ("{TYPE}", jom ["Type"].Value<string> ());
 			template = template.Replace ("{DESC}", jom ["Desc"].Value<string> ());
@@ -214,8 +214,8 @@ public class {NAME}Command : ViewModelCommandBase
 		public static string GenReactiveMemberDictionary (this JObject jom)
 		{
 			string template = @"
-	/* {DESC} */
-	[JsonProperty] public ReactiveDictionary<{TYPE0}, {TYPE1}> {NAME};";
+		/* {DESC} */
+		[JsonProperty] public ReactiveDictionary<{TYPE0}, {TYPE1}> {NAME};";
 		
 			template = template.Replace ("{NAME}", jom ["Name"].Value<string> ());
 			string[] types = jom ["Type"].Value<string> ().Split (new char[]{ ',' });
@@ -231,16 +231,16 @@ public class {NAME}Command : ViewModelCommandBase
 			string template = string.Empty;
 			if (ja != null && ja.Count > 0) {
 				template = @"
-	/* {DESC} */
-	public ReactiveCommand<{NAME}Command> RC_{NAME};
-	";
+		/* {DESC} */
+		public ReactiveCommand<{NAME}Command> RC_{NAME};
+		";
 				template = template.Replace ("{NAME}", jom ["Name"].Value<string> ());
 				template = template.Replace ("{DESC}", jom ["Desc"].Value<string> ());
 			} else {
 				template = @"
-	/* {DESC} */
-	public ReactiveCommand RC_{NAME};
-	";
+		/* {DESC} */
+		public ReactiveCommand RC_{NAME};
+		";
 				template = template.Replace ("{NAME}", jom ["Name"].Value<string> ());
 				template = template.Replace ("{DESC}", jom ["Desc"].Value<string> ());
 			}
@@ -250,9 +250,9 @@ public class {NAME}Command : ViewModelCommandBase
 		public static string GenCommandMember (this JObject jom)
 		{
 			string template = @"
-	/* {PARAMDESCRIPTION} */
-	public {PARAMTYPE} {PARAMNAME};
-	";
+		/* {PARAMDESCRIPTION} */
+		public {PARAMTYPE} {PARAMNAME};
+		";
 			template = template.Replace ("{PARAMDESCRIPTION}", jom ["Desc"].Value<string> ());
 			template = template.Replace ("{PARAMTYPE}", jom ["Type"].Value<string> ());
 			template = template.Replace ("{PARAMNAME}", jom ["Name"].Value<string> ());
@@ -284,7 +284,7 @@ public class {NAME}Command : ViewModelCommandBase
 		public static string GenInitializeCodeProperty (this JObject jom)
 		{
 			string template = @"
-		RP_{NAME} = new ReactiveProperty<{TYPE}> ();";
+			RP_{NAME} = new ReactiveProperty<{TYPE}> ();";
 
 			template = template.Replace ("{NAME}", jom ["Name"].Value<string> ());
 			template = template.Replace ("{TYPE}", jom ["Type"].Value<string> ());
@@ -294,7 +294,7 @@ public class {NAME}Command : ViewModelCommandBase
 		public static string GenInitializeCodeCollection (this JObject jom)
 		{
 			string template = @"
-		{NAME} = new ReactiveCollection<{TYPE}> ();";
+			{NAME} = new ReactiveCollection<{TYPE}> ();";
 
 			template = template.Replace ("{NAME}", jom ["Name"].Value<string> ());
 			template = template.Replace ("{TYPE}", jom ["Type"].Value<string> ());
@@ -304,7 +304,7 @@ public class {NAME}Command : ViewModelCommandBase
 		public static string GenInitializeCodeDictionary (this JObject jom)
 		{
 			string template = @"
-		{NAME} = new ReactiveDictionary<{TYPE0}, {TYPE1}> ();";
+			{NAME} = new ReactiveDictionary<{TYPE0}, {TYPE1}> ();";
 
 			template = template.Replace ("{NAME}", jom ["Name"].Value<string> ());
 			string[] types = jom ["Type"].Value<string> ().Split (new char[]{ ',' });
@@ -319,11 +319,11 @@ public class {NAME}Command : ViewModelCommandBase
 			string template = string.Empty;
 			if (ja != null && ja.Count > 0) {
 				template = @"
-		RC_{NAME} = new ReactiveCommand<{NAME}Command> ();";
+			RC_{NAME} = new ReactiveCommand<{NAME}Command> ();";
 				template = template.Replace ("{NAME}", jom ["Name"].Value<string> ());
 			} else {
 				template = @"
-		RC_{NAME} = new ReactiveCommand ();";
+			RC_{NAME} = new ReactiveCommand ();";
 				template = template.Replace ("{NAME}", jom ["Name"].Value<string> ());
 			}
 			return template;

@@ -11,11 +11,11 @@ namespace WS1
 	using Newtonsoft.Json.Linq;
 	using UniRx;
 
-	public class SecondViewBase : ViewBase , ISecondView
+	public class PlayerInfoHudViewBase : ViewBase , IPlayerInfoView
 	{
-		public SecondViewModel VM;
+		public PlayerInfoViewModel VM;
 
-		public SecondViewModel Second {
+		public PlayerInfoViewModel PlayerInfo {
 			get {
 				return VM;
 			}
@@ -29,7 +29,7 @@ namespace WS1
 		public override void Initialize (ViewModelBase viewModel)
 		{
 			if (viewModel != null) {
-				VM = (SecondViewModel)viewModel;
+				VM = (PlayerInfoViewModel)viewModel;
 				VM.AddHostView (ViewModelBase.DefaultViewBaseKey, this);
 			} else {
 				if (AutoCreateViewModel && VM == null) {
@@ -43,9 +43,9 @@ namespace WS1
 		public override void CreateViewModel ()
 		{
 			if (UseEmptyViewModel || string.IsNullOrEmpty (ViewModelInitValueJson)) {
-				VM = new SecondViewModel ();
+				VM = new PlayerInfoViewModel ();
 			} else {
-				VM = JsonConvert.DeserializeObject<SecondViewModel> (ViewModelInitValueJson);
+				VM = JsonConvert.DeserializeObject<PlayerInfoViewModel> (ViewModelInitValueJson);
 				ViewModelPropertyRef ();
 			}
 			
@@ -61,6 +61,8 @@ namespace WS1
 		{
 			base.Bind ();
 			
+		VM.RP_Name.Subscribe (OnChanged_Name);
+		VM.RP_Score.Subscribe (OnChanged_Score);
 		}
 
 		public override void AfterBind ()
@@ -69,6 +71,14 @@ namespace WS1
 		}
 
 		
+
+		public virtual void OnChanged_Name (string value)
+		{
+		}
+
+		public virtual void OnChanged_Score (int value)
+		{
+		}
 
 		
 	}

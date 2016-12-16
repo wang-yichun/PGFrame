@@ -3,7 +3,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace WS1 {
+namespace WS1 
+{
 
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
@@ -23,8 +24,8 @@ namespace WS1 {
 		{
 			base.Initialize ();
 			
-		RP_Name = new ReactiveProperty<string> ();
-		RP_Score = new ReactiveProperty<int> ();
+			RP_Name = new ReactiveProperty<string> ();
+			RP_Score = new ReactiveProperty<int> ();
 		}
 
 		public override void Attach ()
@@ -35,31 +36,31 @@ namespace WS1 {
 
 		
 
-	/*  */
-	public ReactiveProperty<string> RP_Name;
+		/*  */
+		public ReactiveProperty<string> RP_Name;
 
-	[JsonProperty]
-	public string Name {
-		get {
-			return RP_Name.Value;
+		[JsonProperty]
+		public string Name {
+			get {
+				return RP_Name.Value;
+			}
+			set {
+				RP_Name.Value = value;
+			}
 		}
-		set {
-			RP_Name.Value = value;
-		}
-	}
 
-	/*  */
-	public ReactiveProperty<int> RP_Score;
+		/*  */
+		public ReactiveProperty<int> RP_Score;
 
-	[JsonProperty]
-	public int Score {
-		get {
-			return RP_Score.Value;
+		[JsonProperty]
+		public int Score {
+			get {
+				return RP_Score.Value;
+			}
+			set {
+				RP_Score.Value = value;
+			}
 		}
-		set {
-			RP_Score.Value = value;
-		}
-	}
 	}
 
 	

@@ -3,7 +3,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace WS1 {
+namespace WS1 
+{
 
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
@@ -23,7 +24,7 @@ namespace WS1 {
 		{
 			base.Initialize ();
 			
-		RP_BType = new ReactiveProperty<BulletType> ();
+			RP_BType = new ReactiveProperty<BulletType> ();
 		}
 
 		public override void Attach ()
@@ -34,18 +35,18 @@ namespace WS1 {
 
 		
 
-	/*  */
-	public ReactiveProperty<BulletType> RP_BType;
+		/*  */
+		public ReactiveProperty<BulletType> RP_BType;
 
-	[JsonProperty]
-	public BulletType BType {
-		get {
-			return RP_BType.Value;
+		[JsonProperty]
+		public BulletType BType {
+			get {
+				return RP_BType.Value;
+			}
+			set {
+				RP_BType.Value = value;
+			}
 		}
-		set {
-			RP_BType.Value = value;
-		}
-	}
 	}
 
 	

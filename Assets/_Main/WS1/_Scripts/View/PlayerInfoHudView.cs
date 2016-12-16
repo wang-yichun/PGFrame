@@ -1,18 +1,17 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace __WWW__ 
-{
+namespace WS1 {
 
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
 	using UniRx;
 	using PogoTools;
 
-	public class __YYY__ : __YYY__Base
+	public class PlayerInfoHudView : PlayerInfoHudViewBase
 	{
 		public override void Initialize (ViewModelBase viewModel)
 		{
@@ -22,13 +21,13 @@ namespace __WWW__
 		public override void Bind ()
 		{
 			base.Bind ();
-			Debug.Log (string.Format ("__YYY__ in {0} Bind.", gameObject.name));
+			Debug.Log (string.Format ("PlayerInfoHudView in {0} Bind.", gameObject.name));
 		}
 
 		public override void AfterBind ()
 		{
 			base.AfterBind ();
-			Debug.Log (string.Format ("__YYY__ in {0} AfterBind.", gameObject.name));
+			Debug.Log (string.Format ("PlayerInfoHudView in {0} AfterBind.", gameObject.name));
 		}
 	}
 

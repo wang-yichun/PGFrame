@@ -3,7 +3,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace WS1 {
+namespace WS1 
+{
 
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
@@ -23,8 +24,8 @@ namespace WS1 {
 		{
 			base.Initialize ();
 			
-		RP_Count = new ReactiveProperty<int> ();
-		RC_FBTestCMD = new ReactiveCommand ();
+			RP_Count = new ReactiveProperty<int> ();
+			RC_FBTestCMD = new ReactiveCommand ();
 		}
 
 		public override void Attach ()
@@ -35,29 +36,29 @@ namespace WS1 {
 
 		
 
-	/*  */
-	public ReactiveProperty<int> RP_Count;
+		/*  */
+		public ReactiveProperty<int> RP_Count;
 
-	[JsonProperty]
-	public int Count {
-		get {
-			return RP_Count.Value;
+		[JsonProperty]
+		public int Count {
+			get {
+				return RP_Count.Value;
+			}
+			set {
+				RP_Count.Value = value;
+			}
 		}
-		set {
-			RP_Count.Value = value;
-		}
+
+		/*  */
+		public ReactiveCommand RC_FBTestCMD;
+		
 	}
 
-	/*  */
-	public ReactiveCommand RC_FBTestCMD;
+	
+	public class FBTestCMDCommand : ViewModelCommandBase
+	{
 	
 	}
-
 	
-public class FBTestCMDCommand : ViewModelCommandBase
-{
-
-}
-
 
 }
