@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace WS1 
+namespace WS1
 {
 
 	using Newtonsoft.Json;

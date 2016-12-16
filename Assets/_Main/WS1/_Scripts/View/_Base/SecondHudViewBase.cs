@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace WS1 
+namespace WS1
 {
 
 	using Newtonsoft.Json;
@@ -61,13 +61,13 @@ namespace WS1
 		{
 			base.Bind ();
 			
-		VM.RP_IntValue.Subscribe (OnChanged_IntValue);
-		VM.IntList.ObserveAdd ().Subscribe (OnAdd_IntList);
-		VM.IntList.ObserveRemove ().Subscribe (OnRemove_IntList);
-		VM.IntDictionary.ObserveAdd ().Subscribe (OnAdd_IntDictionary);
-		VM.IntDictionary.ObserveRemove ().Subscribe (OnRemove_IntDictionary);
-		VM.RC_IntCommand.Subscribe<IntCommandCommand> (OnExecuted_IntCommand);
-		VM.RC_SimpleCommand.Subscribe (OnExecuted_SimpleCommand);
+			VM.RP_IntValue.Subscribe (OnChanged_IntValue);
+			VM.IntList.ObserveAdd ().Subscribe (OnAdd_IntList);
+			VM.IntList.ObserveRemove ().Subscribe (OnRemove_IntList);
+			VM.IntDictionary.ObserveAdd ().Subscribe (OnAdd_IntDictionary);
+			VM.IntDictionary.ObserveRemove ().Subscribe (OnRemove_IntDictionary);
+			VM.RC_IntCommand.Subscribe<IntCommandCommand> (OnExecuted_IntCommand);
+			VM.RC_SimpleCommand.Subscribe (OnExecuted_SimpleCommand);
 		}
 
 		public override void AfterBind ()
@@ -89,21 +89,21 @@ namespace WS1
 		{
 		}
 
-	public virtual void OnAdd_IntDictionary (DictionaryAddEvent<string, int> e)
-	{
-	}
-
-	public virtual void OnRemove_IntDictionary (DictionaryRemoveEvent<string, int> e)
-	{
-	}
-
-		public virtual void OnExecuted_IntCommand (IntCommandCommand command)
+		public virtual void OnAdd_IntDictionary (DictionaryAddEvent<string, int> e)
 		{
 		}
 
-		public virtual void OnExecuted_SimpleCommand (Unit unit)
+		public virtual void OnRemove_IntDictionary (DictionaryRemoveEvent<string, int> e)
 		{
 		}
+
+			public virtual void OnExecuted_IntCommand (IntCommandCommand command)
+			{
+			}
+
+			public virtual void OnExecuted_SimpleCommand (Unit unit)
+			{
+			}
 
 		
 	}

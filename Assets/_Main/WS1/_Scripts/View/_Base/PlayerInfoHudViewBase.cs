@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace WS1 
+namespace WS1
 {
 
 	using Newtonsoft.Json;
@@ -61,8 +61,8 @@ namespace WS1
 		{
 			base.Bind ();
 			
-		VM.RP_Name.Subscribe (OnChanged_Name);
-		VM.RP_Score.Subscribe (OnChanged_Score);
+			VM.RP_Name.Subscribe (OnChanged_Name);
+			VM.RP_Score.Subscribe (OnChanged_Score);
 		}
 
 		public override void AfterBind ()

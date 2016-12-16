@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace WS1 
+namespace WS1
 {
 
 	using Newtonsoft.Json;

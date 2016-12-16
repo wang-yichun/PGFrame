@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace WS1 
+namespace WS1
 {
 
 	using Newtonsoft.Json;
@@ -61,11 +61,11 @@ namespace WS1
 		{
 			base.Bind ();
 			
-		VM.RP_LabelTextNum.Subscribe (OnChanged_LabelTextNum);
-		VM.Numbers.ObserveAdd ().Subscribe (OnAdd_Numbers);
-		VM.Numbers.ObserveRemove ().Subscribe (OnRemove_Numbers);
-		VM.MyDictionary.ObserveAdd ().Subscribe (OnAdd_MyDictionary);
-		VM.MyDictionary.ObserveRemove ().Subscribe (OnRemove_MyDictionary);
+			VM.RP_LabelTextNum.Subscribe (OnChanged_LabelTextNum);
+			VM.Numbers.ObserveAdd ().Subscribe (OnAdd_Numbers);
+			VM.Numbers.ObserveRemove ().Subscribe (OnRemove_Numbers);
+			VM.MyDictionary.ObserveAdd ().Subscribe (OnAdd_MyDictionary);
+			VM.MyDictionary.ObserveRemove ().Subscribe (OnRemove_MyDictionary);
 		}
 
 		public override void AfterBind ()
@@ -87,13 +87,13 @@ namespace WS1
 		{
 		}
 
-	public virtual void OnAdd_MyDictionary (DictionaryAddEvent<string, string> e)
-	{
-	}
+		public virtual void OnAdd_MyDictionary (DictionaryAddEvent<string, string> e)
+		{
+		}
 
-	public virtual void OnRemove_MyDictionary (DictionaryRemoveEvent<string, string> e)
-	{
-	}
+		public virtual void OnRemove_MyDictionary (DictionaryRemoveEvent<string, string> e)
+		{
+		}
 
 		
 	}

@@ -4,7 +4,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace WS1 {
+namespace WS1
+{
 
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
@@ -28,6 +29,12 @@ namespace WS1 {
 		{
 			base.AfterBind ();
 			Debug.Log (string.Format ("PlayerInfoView in {0} AfterBind.", gameObject.name));
+		}
+
+		public override void OnChanged_Name (string value)
+		{
+			base.OnChanged_Name (value);
+			Debug.Log ("PlayerInfoView.OnChanged_Name: " + value);
 		}
 	}
 

@@ -83,10 +83,10 @@ namespace PGFrame
 
 						string element_name = member_type.ConvertToElementName ();
 						sb.AppendFormat (@"
-		if (_{0}View.GetViewModel () == null) {{
-			_{0}View.CreateViewModel ();
-		}}
-		VM.{0} = _{0}View.GetViewModel () as {1}ViewModel;", member_name, element_name);
+			if (_{0}View.GetViewModel () == null) {{
+				_{0}View.CreateViewModel ();
+			}}
+			VM.{0} = _{0}View.GetViewModel () as {1}ViewModel;", member_name, element_name);
 					}
 				}
 			}
@@ -111,16 +111,17 @@ namespace PGFrame
 						string element_name = member_type.ConvertToElementName ();
 						sb.AppendFormat (@"
 	
-	[SerializeField, HideInInspector]
-	public ViewBase _{0}View;
-	public I{1}View {0}View {{
-		get {{
-			return (I{1}View)_{0}View;
-		}}
-		set {{
-			_{0}View = (ViewBase)value;
-		}}
-	}}", member_name, element_name);
+		[SerializeField, HideInInspector]
+		public ViewBase _{0}View;
+
+		public I{1}View {0}View {{
+			get {{
+				return (I{1}View)_{0}View;
+			}}
+			set {{
+				_{0}View = (ViewBase)value;
+			}}
+		}}", member_name, element_name);
 					}
 				}
 			}
@@ -187,7 +188,7 @@ namespace PGFrame
 			string result = "";
 			if (jo_view ["Members"] [member_name] ["Bind"] ["Changed"].Value<bool> ()) {
 				result = string.Format (@"
-		VM.RP_{0}.Subscribe (OnChanged_{0});", member_name);
+			VM.RP_{0}.Subscribe (OnChanged_{0});", member_name);
 			}
 			return result;
 		}
@@ -215,27 +216,27 @@ namespace PGFrame
 
 			if (jo_bind ["Add"].Value<bool> ()) {
 				sb.AppendFormat (@"
-		VM.{0}.ObserveAdd ().Subscribe (OnAdd_{0});", member_name);
+			VM.{0}.ObserveAdd ().Subscribe (OnAdd_{0});", member_name);
 			}
 			if (jo_bind ["CountChanged"].Value<bool> ()) {
 				sb.AppendFormat (@"
-		VM.{0}.ObserveCountChanged ().Subscribe (OnCountChanged_{0});", member_name);
+			VM.{0}.ObserveCountChanged ().Subscribe (OnCountChanged_{0});", member_name);
 			}
 			if (jo_bind ["Move"].Value<bool> ()) {
 				sb.AppendFormat (@"
-		VM.{0}.ObserveMove ().Subscribe (OnMove_{0});", member_name);
+			VM.{0}.ObserveMove ().Subscribe (OnMove_{0});", member_name);
 			}
 			if (jo_bind ["Remove"].Value<bool> ()) {
 				sb.AppendFormat (@"
-		VM.{0}.ObserveRemove ().Subscribe (OnRemove_{0});", member_name);
+			VM.{0}.ObserveRemove ().Subscribe (OnRemove_{0});", member_name);
 			}
 			if (jo_bind ["Replace"].Value<bool> ()) {
 				sb.AppendFormat (@"
-		VM.{0}.ObserveReplace ().Subscribe (OnReplace_{0});", member_name);
+			VM.{0}.ObserveReplace ().Subscribe (OnReplace_{0});", member_name);
 			}
 			if (jo_bind ["Reset"].Value<bool> ()) {
 				sb.AppendFormat (@"
-		VM.{0}.ObserveReset ().Subscribe (OnReset_{0});", member_name);
+			VM.{0}.ObserveReset ().Subscribe (OnReset_{0});", member_name);
 			}
 
 			return sb.ToString ();
@@ -303,23 +304,23 @@ namespace PGFrame
 
 			if (jo_bind ["Add"].Value<bool> ()) {
 				sb.AppendFormat (@"
-		VM.{0}.ObserveAdd ().Subscribe (OnAdd_{0});", member_name);
+			VM.{0}.ObserveAdd ().Subscribe (OnAdd_{0});", member_name);
 			}
 			if (jo_bind ["CountChanged"].Value<bool> ()) {
 				sb.AppendFormat (@"
-		VM.{0}.ObserveCountChanged ().Subscribe (OnCountChanged_{0});", member_name);
+			VM.{0}.ObserveCountChanged ().Subscribe (OnCountChanged_{0});", member_name);
 			}
 			if (jo_bind ["Remove"].Value<bool> ()) {
 				sb.AppendFormat (@"
-		VM.{0}.ObserveRemove ().Subscribe (OnRemove_{0});", member_name);
+			VM.{0}.ObserveRemove ().Subscribe (OnRemove_{0});", member_name);
 			}
 			if (jo_bind ["Replace"].Value<bool> ()) {
 				sb.AppendFormat (@"
-		VM.{0}.ObserveReplace ().Subscribe (OnReplace_{0});", member_name);
+			VM.{0}.ObserveReplace ().Subscribe (OnReplace_{0});", member_name);
 			}
 			if (jo_bind ["Reset"].Value<bool> ()) {
 				sb.AppendFormat (@"
-		VM.{0}.ObserveReset ().Subscribe (OnReset_{0});", member_name);
+			VM.{0}.ObserveReset ().Subscribe (OnReset_{0});", member_name);
 			}
 
 			return sb.ToString ();
@@ -336,38 +337,38 @@ namespace PGFrame
 			if (jo_bind ["Add"].Value<bool> ()) {
 				sb.AppendFormat (@"
 
-	public virtual void OnAdd_{0} (DictionaryAddEvent<{1}, {2}> e)
-	{{
-	}}", member_name, member_types [0], member_types [1]);
+		public virtual void OnAdd_{0} (DictionaryAddEvent<{1}, {2}> e)
+		{{
+		}}", member_name, member_types [0], member_types [1]);
 			}
 			if (jo_bind ["CountChanged"].Value<bool> ()) {
 				sb.AppendFormat (@"
 
-	public virtual void OnCountChanged_{0} (int count)
-	{{
-	}}", member_name);
+		public virtual void OnCountChanged_{0} (int count)
+		{{
+		}}", member_name);
 			}
 			
 			if (jo_bind ["Remove"].Value<bool> ()) {
 				sb.AppendFormat (@"
 
-	public virtual void OnRemove_{0} (DictionaryRemoveEvent<{1}, {2}> e)
-	{{
-	}}", member_name, member_types [0], member_types [1]);
+		public virtual void OnRemove_{0} (DictionaryRemoveEvent<{1}, {2}> e)
+		{{
+		}}", member_name, member_types [0], member_types [1]);
 			}
 			if (jo_bind ["Replace"].Value<bool> ()) {
 				sb.AppendFormat (@"
 
-	public virtual void OnReplace_{0} (DictionaryReplaceEvent<{1}, {2}> e)
-	{{
-	}}", member_name, member_types [0], member_types [1]);
+		public virtual void OnReplace_{0} (DictionaryReplaceEvent<{1}, {2}> e)
+		{{
+		}}", member_name, member_types [0], member_types [1]);
 			}
 			if (jo_bind ["Reset"].Value<bool> ()) {
 				sb.AppendFormat (@"
 
-	public virtual void OnReset_{0} (Unit u)
-	{{
-	}}", member_name);
+		public virtual void OnReset_{0} (Unit u)
+		{{
+		}}", member_name);
 			}
 
 			return sb.ToString ();
@@ -382,13 +383,13 @@ namespace PGFrame
 			if (jo_member ["Params"] == null || (jo_member ["Params"] as JArray).Count == 0) {
 				if (jo_bind ["Executed"].Value<bool> ()) {
 					sb.AppendFormat (@"
-		VM.RC_{0}.Subscribe (OnExecuted_{0});", member_name);
+			VM.RC_{0}.Subscribe (OnExecuted_{0});", member_name);
 				}
 			} else {
 				if (jo_bind ["Executed"].Value<bool> ()) {
 					sb.AppendFormat (@"
-		VM.RC_{0}.Subscribe<{0}Command> (OnExecuted_{0});", member_name);
-				}
+			VM.RC_{0}.Subscribe<{0}Command> (OnExecuted_{0});", member_name);
+				}				
 			}
 
 			return sb.ToString ();
@@ -404,17 +405,17 @@ namespace PGFrame
 				if (jo_bind ["Executed"].Value<bool> ()) {
 					sb.AppendFormat (@"
 
-		public virtual void OnExecuted_{0} (Unit unit)
-		{{
-		}}", member_name);
+			public virtual void OnExecuted_{0} (Unit unit)
+			{{
+			}}", member_name);
 				}
 			} else {
 				if (jo_bind ["Executed"].Value<bool> ()) {
 					sb.AppendFormat (@"
 
-		public virtual void OnExecuted_{0} ({0}Command command)
-		{{
-		}}", member_name);
+			public virtual void OnExecuted_{0} ({0}Command command)
+			{{
+			}}", member_name);
 				}
 			}
 

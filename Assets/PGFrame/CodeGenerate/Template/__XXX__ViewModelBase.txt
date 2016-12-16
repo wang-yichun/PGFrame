@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace __WWW__ 
+namespace __WWW__
 {
 
 	using Newtonsoft.Json;

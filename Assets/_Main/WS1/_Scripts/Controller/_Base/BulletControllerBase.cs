@@ -2,7 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections;
 
-namespace WS1 
+namespace WS1
 {
 
 	using Newtonsoft.Json;

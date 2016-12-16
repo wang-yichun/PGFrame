@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace WS1 
+namespace WS1
 {
 
 	using Newtonsoft.Json;
@@ -61,8 +61,8 @@ namespace WS1
 		{
 			base.Bind ();
 			
-		VM.RP_Count.Subscribe (OnChanged_Count);
-		VM.RC_FBTestCMD.Subscribe (OnExecuted_FBTestCMD);
+			VM.RP_Count.Subscribe (OnChanged_Count);
+			VM.RC_FBTestCMD.Subscribe (OnExecuted_FBTestCMD);
 		}
 
 		public override void AfterBind ()
@@ -76,9 +76,9 @@ namespace WS1
 		{
 		}
 
-		public virtual void OnExecuted_FBTestCMD (Unit unit)
-		{
-		}
+			public virtual void OnExecuted_FBTestCMD (Unit unit)
+			{
+			}
 
 		
 	}

@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace WS1 
+namespace WS1
 {
 
 	using Newtonsoft.Json;
@@ -55,18 +55,18 @@ namespace WS1
 		public void ViewModelPropertyRef ()
 		{
 			
-		if (_MyInfoView.GetViewModel () == null) {
-			_MyInfoView.CreateViewModel ();
-		}
-		VM.MyInfo = _MyInfoView.GetViewModel () as PlayerInfoViewModel;
+			if (_MyInfoView.GetViewModel () == null) {
+				_MyInfoView.CreateViewModel ();
+			}
+			VM.MyInfo = _MyInfoView.GetViewModel () as PlayerInfoViewModel;
 		}
 
 		public override void Bind ()
 		{
 			base.Bind ();
 			
-		VM.CurrentBullets.ObserveAdd ().Subscribe (OnAdd_CurrentBullets);
-		VM.CurrentBullets.ObserveRemove ().Subscribe (OnRemove_CurrentBullets);
+			VM.CurrentBullets.ObserveAdd ().Subscribe (OnAdd_CurrentBullets);
+			VM.CurrentBullets.ObserveRemove ().Subscribe (OnRemove_CurrentBullets);
 		}
 
 		public override void AfterBind ()
@@ -86,16 +86,17 @@ namespace WS1
 
 		
 	
-	[SerializeField, HideInInspector]
-	public ViewBase _MyInfoView;
-	public IPlayerInfoView MyInfoView {
-		get {
-			return (IPlayerInfoView)_MyInfoView;
+		[SerializeField, HideInInspector]
+		public ViewBase _MyInfoView;
+
+		public IPlayerInfoView MyInfoView {
+			get {
+				return (IPlayerInfoView)_MyInfoView;
+			}
+			set {
+				_MyInfoView = (ViewBase)value;
+			}
 		}
-		set {
-			_MyInfoView = (ViewBase)value;
-		}
-	}
 	}
 
 }
