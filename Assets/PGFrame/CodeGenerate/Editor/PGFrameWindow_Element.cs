@@ -136,24 +136,40 @@ namespace PGFrame
 					r.width = (rect.width - 25f) * (split [split_idx + 1] - split [split_idx]) - 2f;
 					jo_member ["Type"] = GUI.TextField (r, jo_member ["Type"].Value<string> ());
 
+					string jo_member_type = jo_member ["Type"].Value<string> ();
 
-					string[] ts = jo_member ["Type"].Value<string> ().Split (new char[]{ '.' });
-					string workspace = "";
-					string single_name = "";
-					if (ts.Length == 1) {
-						workspace = PGFrameWindow.Current.SelectedWorkspace.Name;
-						single_name = ts [0];
-					} else if (ts.Length == 2) {
-						workspace = ts [0];
-						single_name = ts [1];
+					if (jo_member ["RxType"].Value<string> () == "Dictionary") {
+						string[] dic_type_split = jo_member_type.Split (new char[]{ ',' });
+						if (dic_type_split.Length == 2) {
+							jo_member_type = dic_type_split [1];
+						}
 					}
-					DocType? dt = CommonManager.GetTheDocTypeByName (workspace, single_name);
-					if (dt.HasValue && pgf_doctype_short_icons != null && pgf_doctype_short_icons.ContainsKey (dt.Value)) {
+
+					TypeType? tt = PGFrameTools.GetTypeTypeByType (jo_member_type);
+					if (tt.HasValue && pgf_typetype_short_icons != null && pgf_typetype_short_icons.ContainsKey (tt.Value)) {
 						split_idx++;
 						r.x = (rect.width - 25f) * split [split_idx] + 25f;
 						r.width = (rect.width - 25f) * (split [split_idx + 1] - split [split_idx]) - 2f;
-//					jo_member ["Type"] = GUI.TextField (r, jo_member ["Type"].Value<string> ());
-						GUI.Label (r, this.pgf_doctype_short_icons [dt.Value]);
+						GUI.Label (r, this.pgf_typetype_short_icons [tt.Value]);
+					} else {
+						string[] ts = jo_member ["Type"].Value<string> ().Split (new char[]{ '.' });
+						string workspace = "";
+						string single_name = "";
+						if (ts.Length == 1) {
+							workspace = PGFrameWindow.Current.SelectedWorkspace.Name;
+							single_name = ts [0];
+						} else if (ts.Length == 2) {
+							workspace = ts [0];
+							single_name = ts [1];
+						}
+
+						DocType? dt = CommonManager.GetTheDocTypeByName (workspace, single_name);
+						if (dt.HasValue && pgf_doctype_short_icons != null && pgf_doctype_short_icons.ContainsKey (dt.Value)) {
+							split_idx++;
+							r.x = (rect.width - 25f) * split [split_idx] + 25f;
+							r.width = (rect.width - 25f) * (split [split_idx + 1] - split [split_idx]) - 2f;
+							GUI.Label (r, this.pgf_doctype_short_icons [dt.Value]);
+						}
 					}
 
 					if (ShowDesc) {

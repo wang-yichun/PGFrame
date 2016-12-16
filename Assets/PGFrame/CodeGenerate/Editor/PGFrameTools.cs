@@ -28,6 +28,19 @@ namespace PGFrame
 			return dt;
 		}
 
+		public static TypeType? GetTypeTypeByType (string type_name)
+		{
+			TypeType? result = null;
+			foreach (TypeType key in TypeTypeName.dic.Keys) {
+				string[] values = TypeTypeName.dic [key];
+				if (values.Contains (type_name)) {
+					result = key;
+					break;
+				}
+			}
+			return result;
+		}
+
 		public static string[] SplitWorkspaceAndTypeName (string sw_name, string type_name)
 		{
 			List<string> ts = type_name.Split (new char[]{ '.' }).ToList ();

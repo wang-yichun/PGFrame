@@ -26,7 +26,6 @@ namespace WS1
 			
 			RP_MyBallType = new ReactiveProperty<WS2.BallType> ();
 			MyBalls = new ReactiveCollection<WS2.BallViewModel> ();
-			RP_CurrentBall = new ReactiveProperty<WS2.BallViewModel> ();
 		}
 
 		public override void Attach ()
@@ -52,19 +51,6 @@ namespace WS1
 
 		/*  */
 		[JsonProperty] public ReactiveCollection<WS2.BallViewModel> MyBalls;
-
-		/*  */
-		public ReactiveProperty<WS2.BallViewModel> RP_CurrentBall;
-
-		
-		public WS2.BallViewModel CurrentBall {
-			get {
-				return RP_CurrentBall.Value;
-			}
-			set {
-				RP_CurrentBall.Value = value;
-			}
-		}
 	}
 
 	

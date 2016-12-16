@@ -31,7 +31,7 @@ namespace PGFrame
 		public Texture2D pgf_workspace_icon;
 
 		public Dictionary<DocType, Texture2D> pgf_doctype_short_icons;
-
+		public Dictionary<TypeType, Texture2D> pgf_typetype_short_icons;
 
 		public void RefreshIcons ()
 		{
@@ -52,6 +52,11 @@ namespace PGFrame
 			pgf_doctype_short_icons.Add (DocType.Element, Resources.Load<Texture2D> ("pgf_element_short_icon"));
 			pgf_doctype_short_icons.Add (DocType.SimpleClass, Resources.Load<Texture2D> ("pgf_simple_class_short_icon"));
 			pgf_doctype_short_icons.Add (DocType.Enum, Resources.Load<Texture2D> ("pgf_enum_short_icon"));
+
+			pgf_typetype_short_icons = new Dictionary<TypeType, Texture2D> ();
+			pgf_typetype_short_icons.Add (TypeType.System, Resources.Load<Texture2D> ("pgf_system_short_icon"));
+			pgf_typetype_short_icons.Add (TypeType.Unity, Resources.Load<Texture2D> ("pgf_unity_short_icon"));
+			pgf_typetype_short_icons.Add (TypeType.Other, Resources.Load<Texture2D> ("pgf_other_short_icon"));
 		}
 
 		[MenuItem ("PogoRock/PGFrame/PGFrame... %`")]

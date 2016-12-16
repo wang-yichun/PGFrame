@@ -78,7 +78,7 @@ namespace PGFrame
 						}
 					} else {
 						CommonModel.ElementFilesModel m = CommonObjectDic [workspace].ElementFiles.FirstOrDefault (_efm => _efm.Name == name);
-						if (m != null) {
+						if (m != null && m.DocType != DocType.Element) {
 							dt = m.DocType;
 						}
 					}

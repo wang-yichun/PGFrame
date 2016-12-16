@@ -78,24 +78,6 @@ namespace WS1
 		}
 		EditorGUILayout.EndHorizontal ();
 
-			vmk = "CurrentBall";
-			ViewBase CurrentBallView = (target as IBallManagerView).CurrentBallView as ViewBase;
-			if (EditorApplication.isPlaying && VM.CurrentBall == null)
-				CurrentBallView = null;
-			ViewBase tempCurrentBallView = (ViewBase)EditorGUILayout.ObjectField (vmk, CurrentBallView, typeof(ViewBase), true);
-			if (tempCurrentBallView == null) {
-				(target as IBallManagerView).CurrentBallView = null;
-				VM.CurrentBall = null;
-			} else if (CurrentBallView != tempCurrentBallView) {
-				var view = tempCurrentBallView as WS2.IBallView;
-				if (view != null) {
-					(target as IBallManagerView).CurrentBallView = tempCurrentBallView as WS2.IBallView;
-					VM.CurrentBall = (WS2.BallViewModel)tempCurrentBallView.GetViewModel ();
-				} else {
-					Debug.Log ("类型不匹配, 需要一个: Ball");
-				}
-			}
-
 			EditorGUILayout.EndVertical ();
 			EditorGUI.indentLevel--;
 
