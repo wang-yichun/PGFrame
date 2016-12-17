@@ -36,11 +36,11 @@ namespace PGFrame
 		public void RefreshIcons ()
 		{
 			if (pgf_doctype_short_icons == null) {
-				SetDocTypeIcons ();
+				SetIcons ();
 			}
 		}
 
-		public void SetDocTypeIcons ()
+		public void SetIcons ()
 		{
 			pgf_window_title_icon = Resources.Load<Texture2D> ("pgf_window_title_icon");
 			pgf_element_icon = Resources.Load<Texture2D> ("pgf_element_icon");
@@ -59,11 +59,11 @@ namespace PGFrame
 			pgf_typetype_short_icons.Add (TypeType.Other, Resources.Load<Texture2D> ("pgf_other_short_icon"));
 		}
 
-		[MenuItem ("PogoRock/PGFrame/PGFrame... %`")]
+		[MenuItem ("PogoRock/PGFrame/PGFrame... %_F1")]
 		static void Init ()
 		{
 			PGFrameWindow window = (PGFrameWindow)EditorWindow.GetWindow (typeof(PGFrameWindow));
-			window.SetDocTypeIcons ();
+			window.SetIcons ();
 			window.titleContent = new GUIContent (window.pgf_window_title_icon);
 			window.Show ();
 			Current = window;
