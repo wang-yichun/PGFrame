@@ -14,7 +14,7 @@ namespace WS1
 
 	public class PTestViewBase : ViewBase , IPTestView
 	{
-		public PTestViewModel VM;
+		public  PTestViewModel VM;
 
 		public PTestViewModel PTest {
 			get {
@@ -58,7 +58,7 @@ namespace WS1
 			base.Initialize (VM);
 		}
 
-		public void ViewModelPropertyRef ()
+		public override void ViewModelPropertyRef ()
 		{
 			
 

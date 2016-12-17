@@ -17,8 +17,6 @@ namespace WS1
 		public override void Attach (ViewModelBase viewModel)
 		{
 			SecondViewModel vm = (SecondViewModel)viewModel;
-
-			
 			vm.RC_StringCommand.Subscribe<StringCommandCommand> (command => {
 				command.Sender = viewModel;
 				StringCommand ((SecondViewModel)viewModel, command);

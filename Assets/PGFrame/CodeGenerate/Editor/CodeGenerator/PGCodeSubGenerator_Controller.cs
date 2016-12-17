@@ -67,14 +67,14 @@ namespace PGFrame
 					if (jap != null && jap.Count > 0) {
 						template = @"
 		/* {DESC} */
-		public virtual void {NAME} ({ELEMENTNAME}ViewModel viewModel, {NAME}Command command)
+		public override void {NAME} ({ELEMENTNAME}ViewModel viewModel, {NAME}Command command)
 		{
 			base.{NAME} (viewModel, command);
 		}";
 					} else {
 						template = @"
 		/* {DESC} */
-		public virtual void {NAME} ({ELEMENTNAME}ViewModel viewModel)
+		public override void {NAME} ({ELEMENTNAME}ViewModel viewModel)
 		{
 			base.{NAME} (viewModel);
 		}";

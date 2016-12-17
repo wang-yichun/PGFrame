@@ -14,7 +14,7 @@ namespace WS1
 
 	public class PlayerInfoViewBase : ViewBase , IPlayerInfoView
 	{
-		public PlayerInfoViewModel VM;
+		public  PlayerInfoViewModel VM;
 
 		public PlayerInfoViewModel PlayerInfo {
 			get {
@@ -58,7 +58,7 @@ namespace WS1
 			base.Initialize (VM);
 		}
 
-		public void ViewModelPropertyRef ()
+		public override void ViewModelPropertyRef ()
 		{
 			
 		}

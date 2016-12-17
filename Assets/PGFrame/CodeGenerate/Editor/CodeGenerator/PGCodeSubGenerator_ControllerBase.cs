@@ -34,9 +34,11 @@ namespace PGFrame
 			string elementName = jo ["Common"] ["Name"].Value<string> ();
 			string targetPath = Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/Controller/_Base");
 			string code = File.ReadAllText (templateFileInfo.FullName);
+
+			string attach_code = GetAttachCode (jo);
 			code = code.Replace ("__XXX__", elementName);
 			code = code.Replace ("__WWW__", workspaceName);
-			code = code.Replace (ATTACH_CODE, GetAttachCode (jo));
+			code = code.Replace (ATTACH_CODE, attach_code);
 			code = code.Replace (MEMBER_FUNCTION, GetMemberFunction (jo));
 
 			if (!Directory.Exists (targetPath))
@@ -60,6 +62,11 @@ namespace PGFrame
 			for (int i = 0; i < ja.Count; i++) {
 				JObject jom = (JObject)ja [i];
 				if (jom ["RxType"].Value<string> () == "Command") {
+
+					if (sb.Length == 0) {
+						sb.AppendFormat ("{0}ViewModel vm = ({0}ViewModel)viewModel;", elementName);
+					}
+
 					string template;
 					JArray jap = (JArray)jom ["Params"];
 					if (jap != null && jap.Count > 0) {

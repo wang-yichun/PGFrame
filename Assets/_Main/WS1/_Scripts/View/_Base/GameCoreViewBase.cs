@@ -14,7 +14,7 @@ namespace WS1
 
 	public class GameCoreViewBase : ViewBase , IGameCoreView
 	{
-		public GameCoreViewModel VM;
+		public  GameCoreViewModel VM;
 
 		public GameCoreViewModel GameCore {
 			get {
@@ -58,7 +58,7 @@ namespace WS1
 			base.Initialize (VM);
 		}
 
-		public void ViewModelPropertyRef ()
+		public override void ViewModelPropertyRef ()
 		{
 			
 

@@ -14,7 +14,7 @@ namespace WS1
 
 	public class BulletViewBase : ViewBase , IBulletView
 	{
-		public BulletViewModel VM;
+		public  BulletViewModel VM;
 
 		public BulletViewModel Bullet {
 			get {
@@ -58,7 +58,7 @@ namespace WS1
 			base.Initialize (VM);
 		}
 
-		public void ViewModelPropertyRef ()
+		public override void ViewModelPropertyRef ()
 		{
 			
 		}

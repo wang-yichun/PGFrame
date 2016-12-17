@@ -23,9 +23,10 @@ namespace WS2
 
 		public override void Initialize ()
 		{
-			base.Initialize ();
 			
 			RP_Type = new ReactiveProperty<BallType> ();
+			
+			base.Initialize ();
 		}
 
 		public override void Attach ()

@@ -14,7 +14,7 @@ namespace WS1
 
 	public class SecondHudViewBase : ViewBase , ISecondView
 	{
-		public SecondViewModel VM;
+		public  SecondViewModel VM;
 
 		public SecondViewModel Second {
 			get {
@@ -58,7 +58,7 @@ namespace WS1
 			base.Initialize (VM);
 		}
 
-		public void ViewModelPropertyRef ()
+		public override void ViewModelPropertyRef ()
 		{
 			
 		}

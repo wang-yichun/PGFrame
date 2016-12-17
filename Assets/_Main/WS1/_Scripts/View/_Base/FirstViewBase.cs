@@ -14,7 +14,7 @@ namespace WS1
 
 	public class FirstViewBase : FBView , IFirstView
 	{
-		public FirstViewModel VM;
+		public new FirstViewModel VM;
 
 		public FirstViewModel First {
 			get {
@@ -58,7 +58,7 @@ namespace WS1
 			base.Initialize (VM);
 		}
 
-		public void ViewModelPropertyRef ()
+		public override void ViewModelPropertyRef ()
 		{
 			
 		}

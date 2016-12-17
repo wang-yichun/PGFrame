@@ -17,8 +17,6 @@ namespace WS1
 		public override void Attach (ViewModelBase viewModel)
 		{
 			FirstViewModel vm = (FirstViewModel)viewModel;
-
-			
 			vm.RC_DefaultCommand.Subscribe (_ => {
 				DefaultCommand ((FirstViewModel)viewModel);
 			}).AddTo (viewModel.baseAttachDisposables);

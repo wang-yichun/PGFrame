@@ -14,7 +14,7 @@ namespace WS1
 
 	public class FBViewBase : ViewBase , IFBView
 	{
-		public FBViewModel VM;
+		public  FBViewModel VM;
 
 		public FBViewModel FB {
 			get {
@@ -58,7 +58,7 @@ namespace WS1
 			base.Initialize (VM);
 		}
 
-		public void ViewModelPropertyRef ()
+		public override void ViewModelPropertyRef ()
 		{
 			
 		}

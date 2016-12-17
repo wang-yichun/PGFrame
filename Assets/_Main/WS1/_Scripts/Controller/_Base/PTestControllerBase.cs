@@ -17,8 +17,6 @@ namespace WS1
 		public override void Attach (ViewModelBase viewModel)
 		{
 			PTestViewModel vm = (PTestViewModel)viewModel;
-
-			
 			vm.RC_DefaultCommand1.Subscribe<DefaultCommand1Command> (command => {
 				command.Sender = viewModel;
 				DefaultCommand1 ((PTestViewModel)viewModel, command);

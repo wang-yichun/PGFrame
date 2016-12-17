@@ -16,8 +16,6 @@ namespace WS1
 
 		public override void Attach (ViewModelBase viewModel)
 		{
-			PlayerInfoViewModel vm = (PlayerInfoViewModel)viewModel;
-
 			
 		}
 

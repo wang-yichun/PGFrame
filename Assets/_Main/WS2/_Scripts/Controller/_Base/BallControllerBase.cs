@@ -16,11 +16,12 @@ namespace WS2
 
 		public override void Attach (ViewModelBase viewModel)
 		{
-			UnityEngine.Debug.Log ("BallControllerBase.Attach");
-
-			BallViewModel vm = (BallViewModel)viewModel;
-
 			
+		}
+
+		public override void Detach (ViewModelBase viewModel)
+		{
+			base.Detach (viewModel);
 		}
 
 		

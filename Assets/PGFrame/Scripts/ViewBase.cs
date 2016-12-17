@@ -67,6 +67,10 @@ namespace PGFrame
 			}
 		}
 
+		public virtual void ViewModelPropertyRef ()
+		{
+		}
+
 		public void Dispose ()
 		{
 			ViewModelBase VM = GetViewModel ();

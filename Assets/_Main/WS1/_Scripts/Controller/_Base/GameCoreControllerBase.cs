@@ -17,8 +17,6 @@ namespace WS1
 		public override void Attach (ViewModelBase viewModel)
 		{
 			GameCoreViewModel vm = (GameCoreViewModel)viewModel;
-
-			
 			vm.RC_AddSomeBullet.Subscribe (_ => {
 				AddSomeBullet ((GameCoreViewModel)viewModel);
 			}).AddTo (viewModel.baseAttachDisposables);

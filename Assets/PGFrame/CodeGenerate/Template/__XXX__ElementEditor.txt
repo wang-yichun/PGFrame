@@ -67,7 +67,7 @@ namespace __WWW__
 
 		#region IElementEditor implementation
 
-		public virtual void VMCopyToJson ()
+		public override void VMCopyToJson ()
 		{
 		}
 

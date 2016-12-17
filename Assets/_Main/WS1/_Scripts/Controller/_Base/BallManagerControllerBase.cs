@@ -16,8 +16,6 @@ namespace WS1
 
 		public override void Attach (ViewModelBase viewModel)
 		{
-			BallManagerViewModel vm = (BallManagerViewModel)viewModel;
-
 			
 		}
 

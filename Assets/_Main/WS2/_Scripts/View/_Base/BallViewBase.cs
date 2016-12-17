@@ -14,7 +14,7 @@ namespace WS2
 
 	public class BallViewBase : ViewBase , IBallView
 	{
-		public BallViewModel VM;
+		public  BallViewModel VM;
 
 		public BallViewModel Ball {
 			get {
@@ -58,7 +58,7 @@ namespace WS2
 			base.Initialize (VM);
 		}
 
-		public void ViewModelPropertyRef ()
+		public override void ViewModelPropertyRef ()
 		{
 			
 		}
@@ -72,7 +72,7 @@ namespace WS2
 		{
 			base.Bind ();
 			
-			VM.RP_Type.Subscribe (OnChanged_Type);
+			VM.RP_Type.Subscribe (OnChanged_Type).AddTo(baseBindDisposables);
 		}
 
 		public override void AfterBind ()

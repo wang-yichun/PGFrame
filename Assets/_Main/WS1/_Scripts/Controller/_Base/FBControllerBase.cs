@@ -17,8 +17,6 @@ namespace WS1
 		public override void Attach (ViewModelBase viewModel)
 		{
 			FBViewModel vm = (FBViewModel)viewModel;
-
-			
 			vm.RC_FBTestCMD.Subscribe (_ => {
 				FBTestCMD ((FBViewModel)viewModel);
 			}).AddTo (viewModel.baseAttachDisposables);

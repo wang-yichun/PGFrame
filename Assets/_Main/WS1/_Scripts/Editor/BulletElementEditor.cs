@@ -72,7 +72,7 @@ namespace WS1
 
 		#region IElementEditor implementation
 
-		public virtual void VMCopyToJson ()
+		public override void VMCopyToJson ()
 		{
 		}
 
