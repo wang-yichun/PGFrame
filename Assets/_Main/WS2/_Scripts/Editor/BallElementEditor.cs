@@ -4,8 +4,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace WS2 {
+namespace WS2
+{
 
+	using PGFrame;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
 	using UniRx;

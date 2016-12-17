@@ -2,8 +2,10 @@ using UnityEngine;
 using System;
 using System.Collections;
 
-namespace WS2 {
+namespace WS2
+{
 
+	using PGFrame;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
 	using UniRx;

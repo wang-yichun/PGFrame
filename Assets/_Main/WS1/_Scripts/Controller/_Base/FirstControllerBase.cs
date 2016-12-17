@@ -21,23 +21,23 @@ namespace WS1
 			FirstViewModel vm = (FirstViewModel)viewModel;
 
 			
-		vm.RC_DefaultCommand.Subscribe (_ => {
-			DefaultCommand ((FirstViewModel)viewModel);
-		});
-		vm.RC_AddNum.Subscribe<AddNumCommand> (command => {
-			command.Sender = viewModel;
-			AddNum ((FirstViewModel)viewModel, command);
-		});
+			vm.RC_DefaultCommand.Subscribe (_ => {
+				DefaultCommand ((FirstViewModel)viewModel);
+			});
+			vm.RC_AddNum.Subscribe<AddNumCommand> (command => {
+				command.Sender = viewModel;
+				AddNum ((FirstViewModel)viewModel, command);
+			});
 		}
 
 		
-	/*  */
-	public virtual void DefaultCommand (FirstViewModel viewModel)
-	{
-	}
-	/*  */
-	public virtual void AddNum (FirstViewModel viewModel, AddNumCommand command)
-	{
-	}
+		/*  */
+		public virtual void DefaultCommand (FirstViewModel viewModel)
+		{
+		}
+		/*  */
+		public virtual void AddNum (FirstViewModel viewModel, AddNumCommand command)
+		{
+		}
 	}
 }

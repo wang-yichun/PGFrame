@@ -1,3 +1,8 @@
-﻿public class SimpleClassBase
+﻿namespace PGFrame
 {
+	
+	public class SimpleClassBase
+	{
+	}
+
 }

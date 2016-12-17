@@ -81,7 +81,7 @@ namespace WS1
 		public override void Bind ()
 		{
 			base.Bind ();
-			
+
 			VM.CurrentBullets.ObserveAdd ().Subscribe (OnAdd_CurrentBullets);
 			VM.CurrentBullets.ObserveRemove ().Subscribe (OnRemove_CurrentBullets);
 		}

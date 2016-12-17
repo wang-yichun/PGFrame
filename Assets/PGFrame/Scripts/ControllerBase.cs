@@ -1,11 +1,14 @@
-﻿using UniRx;
-
-public class ControllerBase<T> : Singleton<T>
-	where T: Singleton<T>, new()
+﻿namespace PGFrame
 {
 
-	public virtual void Attach (ViewModelBase viewModel)
+	public class ControllerBase<T> : Singleton<T>
+		where T: Singleton<T>, new()
 	{
-		UnityEngine.Debug.Log ("ControllerBase.Attach");
+
+		public virtual void Attach (ViewModelBase viewModel)
+		{
+			UnityEngine.Debug.Log ("ControllerBase.Attach");
+		}
 	}
+
 }

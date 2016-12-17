@@ -66,18 +66,18 @@ namespace PGFrame
 					JArray jap = (JArray)jom ["Params"];
 					if (jap != null && jap.Count > 0) {
 						template = @"
-	/* {DESC} */
-	public virtual void {NAME} ({ELEMENTNAME}ViewModel viewModel, {NAME}Command command)
-	{
-		base.{NAME} (viewModel, command);
-	}";
+		/* {DESC} */
+		public virtual void {NAME} ({ELEMENTNAME}ViewModel viewModel, {NAME}Command command)
+		{
+			base.{NAME} (viewModel, command);
+		}";
 					} else {
 						template = @"
-	/* {DESC} */
-	public virtual void {NAME} ({ELEMENTNAME}ViewModel viewModel)
-	{
-		base.{NAME} (viewModel);
-	}";
+		/* {DESC} */
+		public virtual void {NAME} ({ELEMENTNAME}ViewModel viewModel)
+		{
+			base.{NAME} (viewModel);
+		}";
 					}
 					template = template.Replace ("{ELEMENTNAME}", elementName);
 					template = template.Replace ("{NAME}", jom ["Name"].Value<string> ());

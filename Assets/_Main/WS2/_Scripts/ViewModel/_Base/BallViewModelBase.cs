@@ -3,8 +3,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace WS2 {
+namespace WS2
+{
 
+	using PGFrame;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
 	using UniRx;
@@ -23,7 +25,7 @@ namespace WS2 {
 		{
 			base.Initialize ();
 			
-		RP_Type = new ReactiveProperty<BallType> ();
+			RP_Type = new ReactiveProperty<BallType> ();
 		}
 
 		public override void Attach ()
@@ -34,18 +36,18 @@ namespace WS2 {
 
 		
 
-	/*  */
-	public ReactiveProperty<BallType> RP_Type;
+		/*  */
+		public ReactiveProperty<BallType> RP_Type;
 
-	[JsonProperty]
-	public BallType Type {
-		get {
-			return RP_Type.Value;
+		[JsonProperty]
+		public BallType Type {
+			get {
+				return RP_Type.Value;
+			}
+			set {
+				RP_Type.Value = value;
+			}
 		}
-		set {
-			RP_Type.Value = value;
-		}
-	}
 	}
 
 	

@@ -64,15 +64,15 @@ namespace PGFrame
 					JArray jap = (JArray)jom ["Params"];
 					if (jap != null && jap.Count > 0) {
 						template = @"
-		vm.RC_{NAME}.Subscribe<{NAME}Command> (command => {
-			command.Sender = viewModel;
-			{NAME} (({ELEMENTNAME}ViewModel)viewModel, command);
-		});";
+			vm.RC_{NAME}.Subscribe<{NAME}Command> (command => {
+				command.Sender = viewModel;
+				{NAME} (({ELEMENTNAME}ViewModel)viewModel, command);
+			});";
 					} else {
 						template = @"
-		vm.RC_{NAME}.Subscribe (_ => {
-			{NAME} (({ELEMENTNAME}ViewModel)viewModel);
-		});";
+			vm.RC_{NAME}.Subscribe (_ => {
+				{NAME} (({ELEMENTNAME}ViewModel)viewModel);
+			});";
 					}
 					template = template.Replace ("{ELEMENTNAME}", elementName);
 					template = template.Replace ("{NAME}", jom ["Name"].Value<string> ());
@@ -93,9 +93,9 @@ namespace PGFrame
 					string template;
 					JArray jap = (JArray)jom ["Params"];
 					if (jap != null && jap.Count > 0) {
-						template = "\n\t/* {DESC} */\n\tpublic virtual void {NAME} ({ELEMENTNAME}ViewModel viewModel, {NAME}Command command)\n\t{\n\t}";
+						template = "\n\t\t/* {DESC} */\n\t\tpublic virtual void {NAME} ({ELEMENTNAME}ViewModel viewModel, {NAME}Command command)\n\t\t{\n\t\t}";
 					} else {
-						template = "\n\t/* {DESC} */\n\tpublic virtual void {NAME} ({ELEMENTNAME}ViewModel viewModel)\n\t{\n\t}";
+						template = "\n\t\t/* {DESC} */\n\t\tpublic virtual void {NAME} ({ELEMENTNAME}ViewModel viewModel)\n\t\t{\n\t\t}";
 					}
 					template = template.Replace ("{ELEMENTNAME}", elementName);
 					template = template.Replace ("{NAME}", jom ["Name"].Value<string> ());

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 
 namespace WS2 {
 
+	using PGFrame;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
 	using UniRx;
