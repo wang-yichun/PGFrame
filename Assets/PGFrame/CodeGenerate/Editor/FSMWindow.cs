@@ -56,5 +56,8 @@ public class FSMWindow : EditorWindow
 		GUILayout.EndVertical ();
 
 		GUI.DragWindow ();
+
+		windowRect = new Rect (Mathf.Floor (windowRect.x / 10f) * 10f, Mathf.Floor (windowRect.y / 10f) * 10f, windowRect.width, windowRect.height);
+		windowRect2 = new Rect (Mathf.Floor (windowRect2.x / 10f) * 10f, Mathf.Floor (windowRect2.y / 10f) * 10f, windowRect2.width, windowRect2.height);
 	}
 }
