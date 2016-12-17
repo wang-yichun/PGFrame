@@ -28,6 +28,7 @@ namespace PGFrame
 		public Texture2D pgf_element_icon;
 		public Texture2D pgf_simple_class_icon;
 		public Texture2D pgf_enum_icon;
+		public Texture2D pgf_fsm_icon;
 		public Texture2D pgf_workspace_icon;
 
 		public Dictionary<DocType, Texture2D> pgf_doctype_short_icons;
@@ -46,6 +47,7 @@ namespace PGFrame
 			pgf_element_icon = Resources.Load<Texture2D> ("pgf_element_icon");
 			pgf_simple_class_icon = Resources.Load<Texture2D> ("pgf_simple_class_icon");
 			pgf_enum_icon = Resources.Load<Texture2D> ("pgf_enum_icon");
+			pgf_fsm_icon = Resources.Load<Texture2D> ("pgf_fsm_icon");
 			pgf_workspace_icon = Resources.Load<Texture2D> ("pgf_workspace_icon");
 
 			pgf_doctype_short_icons = new Dictionary<DocType, Texture2D> ();
@@ -146,6 +148,9 @@ namespace PGFrame
 						break;
 					case DocType.Enum:
 						DesignList_Enum ();
+						break;
+					case DocType.FSM:
+						DesignList ();
 						break;
 					default:
 						throw new ArgumentOutOfRangeException ();
@@ -275,6 +280,9 @@ namespace PGFrame
 				case DocType.Enum:
 					icon = pgf_enum_icon;
 					break;
+				case DocType.FSM:
+					icon = pgf_fsm_icon;
+					break;
 				default:
 					throw new ArgumentOutOfRangeException ();
 				}
@@ -282,6 +290,9 @@ namespace PGFrame
 				GUIContent content = new GUIContent (jo_element_filename, icon);
 				if (GUI.Button (r, content, GUIStyleTemplate.ButtonStyleAlignmentLeft ())) {
 					SelectedJsonElement = jElements.Single (je => je.FileName == jo_element_filename);
+
+					FSMWindow.Init ();
+					FSMWindow.Current.jElement = SelectedJsonElement;
 
 					AutoSelected.SelectedJsonFileName = jo_element_filename;
 					AutoSelected.Save ();

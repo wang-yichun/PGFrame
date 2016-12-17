@@ -3,6 +3,14 @@ using System.Collections;
 
 public static class GUIStyleTemplate
 {
+	public static GUIStyle FSMTitleStyle ()
+	{
+		GUIStyle s = new GUIStyle (GUI.skin.label);
+		s.fontSize = 20;
+		s.fontStyle = FontStyle.Bold;
+		return s;
+	}
+
 	public static GUIStyle GreenDescStyle ()
 	{
 		GUIStyle s = new GUIStyle ();

@@ -4,6 +4,7 @@
 	{
 		Element,
 		SimpleClass,
-		Enum
+		Enum,
+		FSM
 	}
 }
