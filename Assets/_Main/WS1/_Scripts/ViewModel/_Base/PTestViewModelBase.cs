@@ -23,7 +23,6 @@ namespace WS1
 
 		public override void Initialize ()
 		{
-			base.Initialize ();
 			
 			RP_DefaultProperty1 = new ReactiveProperty<string> ();
 			RP_DefaultProperty2 = new ReactiveProperty<string> ();
@@ -54,6 +53,8 @@ namespace WS1
 			RC_DefaultCommand19 = new ReactiveCommand ();
 			RC_DefaultCommand20 = new ReactiveCommand ();
 			RP_CurrentFB = new ReactiveProperty<FBViewModel> ();
+			
+			base.Initialize ();
 		}
 
 		public override void Attach ()

@@ -23,10 +23,11 @@ namespace WS1
 
 		public override void Initialize ()
 		{
-			base.Initialize ();
 			
 			RP_MyBallType = new ReactiveProperty<WS2.BallType> ();
 			MyBalls = new ReactiveCollection<WS2.BallViewModel> ();
+			
+			base.Initialize ();
 		}
 
 		public override void Attach ()

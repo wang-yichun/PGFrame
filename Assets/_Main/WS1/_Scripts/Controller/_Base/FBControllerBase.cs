@@ -23,7 +23,12 @@ namespace WS1
 			
 			vm.RC_FBTestCMD.Subscribe (_ => {
 				FBTestCMD ((FBViewModel)viewModel);
-			});
+			}).AddTo (viewModel.baseAttachDisposables);
+		}
+
+		public override void Detach (ViewModelBase viewModel)
+		{
+			base.Detach (viewModel);
 		}
 
 		

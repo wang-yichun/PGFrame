@@ -72,8 +72,8 @@ namespace WS1
 		{
 			base.Bind ();
 			
-			VM.RP_Name.Subscribe (OnChanged_Name);
-			VM.RP_Score.Subscribe (OnChanged_Score);
+			VM.RP_Name.Subscribe (OnChanged_Name).AddTo(baseBindDisposables);
+			VM.RP_Score.Subscribe (OnChanged_Score).AddTo(baseBindDisposables);
 		}
 
 		public override void AfterBind ()

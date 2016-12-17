@@ -24,7 +24,6 @@ namespace WS1
 
 		public override void Initialize ()
 		{
-			base.Initialize ();
 			
 			RP_LabelTextNum = new ReactiveProperty<int> ();
 			Numbers = new ReactiveCollection<int> ();
@@ -50,6 +49,8 @@ namespace WS1
 			RectList = new ReactiveCollection<UnityEngine.Rect> ();
 			RP_MyEA = new ReactiveProperty<EA> ();
 			RP_SCA_a = new ReactiveProperty<SCA> ();
+			
+			base.Initialize ();
 		}
 
 		public override void Attach ()

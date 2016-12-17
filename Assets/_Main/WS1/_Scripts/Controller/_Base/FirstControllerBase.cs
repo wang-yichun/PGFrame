@@ -23,11 +23,16 @@ namespace WS1
 			
 			vm.RC_DefaultCommand.Subscribe (_ => {
 				DefaultCommand ((FirstViewModel)viewModel);
-			});
+			}).AddTo (viewModel.baseAttachDisposables);
 			vm.RC_AddNum.Subscribe<AddNumCommand> (command => {
 				command.Sender = viewModel;
 				AddNum ((FirstViewModel)viewModel, command);
-			});
+			}).AddTo (viewModel.baseAttachDisposables);
+		}
+
+		public override void Detach (ViewModelBase viewModel)
+		{
+			base.Detach (viewModel);
 		}
 
 		

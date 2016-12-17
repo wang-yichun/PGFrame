@@ -23,10 +23,11 @@ namespace WS1
 
 		public override void Initialize ()
 		{
-			base.Initialize ();
 			
 			RP_Name = new ReactiveProperty<string> ();
 			RP_Score = new ReactiveProperty<int> ();
+			
+			base.Initialize ();
 		}
 
 		public override void Attach ()

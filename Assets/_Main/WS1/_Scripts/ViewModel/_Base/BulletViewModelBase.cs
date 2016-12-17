@@ -23,9 +23,10 @@ namespace WS1
 
 		public override void Initialize ()
 		{
-			base.Initialize ();
 			
 			RP_BType = new ReactiveProperty<BulletType> ();
+			
+			base.Initialize ();
 		}
 
 		public override void Attach ()

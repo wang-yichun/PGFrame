@@ -72,13 +72,13 @@ namespace WS1
 		{
 			base.Bind ();
 			
-			VM.RP_IntValue.Subscribe (OnChanged_IntValue);
-			VM.IntList.ObserveAdd ().Subscribe (OnAdd_IntList);
-			VM.IntList.ObserveRemove ().Subscribe (OnRemove_IntList);
-			VM.IntDictionary.ObserveAdd ().Subscribe (OnAdd_IntDictionary);
-			VM.IntDictionary.ObserveRemove ().Subscribe (OnRemove_IntDictionary);
-			VM.RC_IntCommand.Subscribe<IntCommandCommand> (OnExecuted_IntCommand);
-			VM.RC_SimpleCommand.Subscribe (OnExecuted_SimpleCommand);
+			VM.RP_IntValue.Subscribe (OnChanged_IntValue).AddTo(baseBindDisposables);
+			VM.IntList.ObserveAdd ().Subscribe (OnAdd_IntList).AddTo(baseBindDisposables);
+			VM.IntList.ObserveRemove ().Subscribe (OnRemove_IntList).AddTo(baseBindDisposables);
+			VM.IntDictionary.ObserveAdd ().Subscribe (OnAdd_IntDictionary).AddTo(baseBindDisposables);
+			VM.IntDictionary.ObserveRemove ().Subscribe (OnRemove_IntDictionary).AddTo(baseBindDisposables);
+			VM.RC_IntCommand.Subscribe<IntCommandCommand> (OnExecuted_IntCommand).AddTo(baseBindDisposables);
+			VM.RC_SimpleCommand.Subscribe (OnExecuted_SimpleCommand).AddTo(baseBindDisposables);
 		}
 
 		public override void AfterBind ()

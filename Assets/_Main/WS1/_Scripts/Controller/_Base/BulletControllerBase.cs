@@ -23,6 +23,11 @@ namespace WS1
 			
 		}
 
+		public override void Detach (ViewModelBase viewModel)
+		{
+			base.Detach (viewModel);
+		}
+
 		
 	}
 }

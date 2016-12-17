@@ -23,10 +23,11 @@ namespace WS1
 
 		public override void Initialize ()
 		{
-			base.Initialize ();
 			
 			RP_Count = new ReactiveProperty<int> ();
 			RC_FBTestCMD = new ReactiveCommand ();
+			
+			base.Initialize ();
 		}
 
 		public override void Attach ()

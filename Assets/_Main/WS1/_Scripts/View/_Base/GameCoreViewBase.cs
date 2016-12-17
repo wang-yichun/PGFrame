@@ -92,8 +92,8 @@ namespace WS1
 		{
 			base.Bind ();
 			
-			VM.CurrentBullets.ObserveAdd ().Subscribe (OnAdd_CurrentBullets);
-			VM.CurrentBullets.ObserveRemove ().Subscribe (OnRemove_CurrentBullets);
+			VM.CurrentBullets.ObserveAdd ().Subscribe (OnAdd_CurrentBullets).AddTo(baseBindDisposables);
+			VM.CurrentBullets.ObserveRemove ().Subscribe (OnRemove_CurrentBullets).AddTo(baseBindDisposables);
 		}
 
 		public override void AfterBind ()

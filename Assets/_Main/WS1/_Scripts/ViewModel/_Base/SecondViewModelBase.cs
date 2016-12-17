@@ -23,7 +23,6 @@ namespace WS1
 
 		public override void Initialize ()
 		{
-			base.Initialize ();
 			
 			RP_IntValue = new ReactiveProperty<int> ();
 			RP_LongValue = new ReactiveProperty<long> ();
@@ -39,6 +38,8 @@ namespace WS1
 			RC_StringCommand = new ReactiveCommand<StringCommandCommand> ();
 			RC_IntCommand = new ReactiveCommand<IntCommandCommand> ();
 			RC_SimpleCommand = new ReactiveCommand ();
+			
+			base.Initialize ();
 		}
 
 		public override void Attach ()
