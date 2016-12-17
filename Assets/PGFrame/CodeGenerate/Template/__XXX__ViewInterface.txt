@@ -1,6 +1,8 @@
 ﻿namespace __WWW__
 {
 
+	using PGFrame;
+	
 	public interface I__XXX__View
 	{
 		/****vm_property_view****/

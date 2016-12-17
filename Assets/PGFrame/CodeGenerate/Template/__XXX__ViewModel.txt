@@ -5,6 +5,7 @@ using System.Collections.Generic;
 namespace __WWW__
 {
 
+	using PGFrame;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
 	using UniRx;
