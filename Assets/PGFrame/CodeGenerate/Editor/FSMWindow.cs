@@ -159,8 +159,21 @@ namespace PGFrame
 
 		void WindowFunction (int windowID)
 		{
+			JArray ja_states = jElement.jo ["State"] as JArray;
+			JObject jo_states = ja_states [windowID] as JObject;
+
 			GUILayout.BeginVertical ();
-			GUILayout.Label ("Hello World");
+
+			JArray ja_transitions = jo_states ["Transitions"] as JArray;
+
+			for (int i = 0; i < ja_transitions.Count; i++) {
+				JObject jo_transition = ja_transitions [i] as JObject;
+				GUILayout.BeginHorizontal ();
+				string transition_name = jo_transition ["Name"].Value<string> ();
+				GUILayout.Label (transition_name);
+				GUILayout.EndHorizontal ();
+			}
+
 			GUILayout.EndVertical ();
 
 			GUI.DragWindow ();

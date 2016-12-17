@@ -28,7 +28,7 @@
       "Name": "SA",
       "Transitions": [
         {
-          "Transition": "ToB",
+          "Name": "ToB",
           "TargetState": "SB"
         }
       ],
@@ -43,11 +43,11 @@
       "Name": "SB",
       "Transitions": [
         {
-          "Transition": "ToA",
+          "Name": "ToA",
           "TargetState": "SA"
         },
         {
-          "Transition": "ToC",
+          "Name": "ToC",
           "TargetState": "SC"
         }
       ],
