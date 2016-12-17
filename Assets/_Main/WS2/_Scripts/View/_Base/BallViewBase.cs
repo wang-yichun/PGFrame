@@ -22,9 +22,26 @@ namespace WS2
 			}
 		}
 
+		public override void CreateViewModel ()
+		{
+			if (UseEmptyViewModel || string.IsNullOrEmpty (ViewModelInitValueJson)) {
+				VM = new BallViewModel ();
+			} else {
+				VM = JsonConvert.DeserializeObject<BallViewModel> (ViewModelInitValueJson);
+				ViewModelPropertyRef ();
+			}
+			
+			VM.AddHostView (ViewModelBase.DefaultViewBaseKey, this);
+		}
+
 		public override ViewModelBase GetViewModel ()
 		{
 			return VM;
+		}
+		
+		public override void SetViewModel (ViewModelBase viewModel)
+		{
+			VM = (BallViewModel)viewModel;
 		}
 
 		public override void Initialize (ViewModelBase viewModel)
@@ -41,23 +58,16 @@ namespace WS2
 			base.Initialize (VM);
 		}
 
-		public override void CreateViewModel ()
-		{
-			if (UseEmptyViewModel || string.IsNullOrEmpty (ViewModelInitValueJson)) {
-				VM = new BallViewModel ();
-			} else {
-				VM = JsonConvert.DeserializeObject<BallViewModel> (ViewModelInitValueJson);
-				ViewModelPropertyRef ();
-			}
-			
-			VM.AddHostView (ViewModelBase.DefaultViewBaseKey, this);
-		}
-
 		public void ViewModelPropertyRef ()
 		{
 			
 		}
 
+		public override void BeforeBind ()
+		{
+			base.BeforeBind ();
+		}
+		
 		public override void Bind ()
 		{
 			base.Bind ();
