@@ -16,7 +16,10 @@ namespace WS1
 
 		public override void Attach (ViewModelBase viewModel)
 		{
+			UnityEngine.Debug.Log ("GameCoreControllerBase.Attach");
+
 			GameCoreViewModel vm = (GameCoreViewModel)viewModel;
+
 			
 			vm.RC_AddSomeBullet.Subscribe (_ => {
 				AddSomeBullet ((GameCoreViewModel)viewModel);

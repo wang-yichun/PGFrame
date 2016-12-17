@@ -22,9 +22,26 @@ namespace WS1
 			}
 		}
 
+		public override void CreateViewModel ()
+		{
+			if (UseEmptyViewModel || string.IsNullOrEmpty (ViewModelInitValueJson)) {
+				VM = new GameCoreViewModel ();
+			} else {
+				VM = JsonConvert.DeserializeObject<GameCoreViewModel> (ViewModelInitValueJson);
+				ViewModelPropertyRef ();
+			}
+			
+			VM.AddHostView (ViewModelBase.DefaultViewBaseKey, this);
+		}
+
 		public override ViewModelBase GetViewModel ()
 		{
 			return VM;
+		}
+		
+		public override void SetViewModel (ViewModelBase viewModel)
+		{
+			VM = (GameCoreViewModel)viewModel;
 		}
 
 		public override void Initialize (ViewModelBase viewModel)
@@ -39,18 +56,6 @@ namespace WS1
 			}
 
 			base.Initialize (VM);
-		}
-
-		public override void CreateViewModel ()
-		{
-			if (UseEmptyViewModel || string.IsNullOrEmpty (ViewModelInitValueJson)) {
-				VM = new GameCoreViewModel ();
-			} else {
-				VM = JsonConvert.DeserializeObject<GameCoreViewModel> (ViewModelInitValueJson);
-				ViewModelPropertyRef ();
-			}
-			
-			VM.AddHostView (ViewModelBase.DefaultViewBaseKey, this);
 		}
 
 		public void ViewModelPropertyRef ()
@@ -78,10 +83,15 @@ namespace WS1
 			}
 		}
 
+		public override void BeforeBind ()
+		{
+			base.BeforeBind ();
+		}
+		
 		public override void Bind ()
 		{
 			base.Bind ();
-
+			
 			VM.CurrentBullets.ObserveAdd ().Subscribe (OnAdd_CurrentBullets);
 			VM.CurrentBullets.ObserveRemove ().Subscribe (OnRemove_CurrentBullets);
 		}
