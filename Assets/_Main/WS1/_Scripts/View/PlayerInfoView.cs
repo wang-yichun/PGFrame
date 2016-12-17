@@ -7,6 +7,7 @@ using System.Collections.Generic;
 namespace WS1
 {
 
+	using PGFrame;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
 	using UniRx;
@@ -29,12 +30,6 @@ namespace WS1
 		{
 			base.AfterBind ();
 			Debug.Log (string.Format ("PlayerInfoView in {0} AfterBind.", gameObject.name));
-		}
-
-		public override void OnChanged_Name (string value)
-		{
-			base.OnChanged_Name (value);
-			Debug.Log ("PlayerInfoView.OnChanged_Name: " + value);
 		}
 	}
 

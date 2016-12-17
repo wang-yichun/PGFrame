@@ -7,6 +7,7 @@ using System.Collections.Generic;
 namespace WS1
 {
 
+	using PGFrame;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
 	using UniRx;
@@ -23,18 +24,12 @@ namespace WS1
 		{
 			base.Bind ();
 			Debug.Log (string.Format ("GameCoreView in {0} Bind.", gameObject.name));
-
-			// MyInfoHud
-			GameObject MyInfoHud_GO = GameObject.Find ("MyInfoHud");
-			PlayerInfoHudView MyInfoHud_View = MyInfoHud_GO.GetComponent<PlayerInfoHudView> ();
-			MyInfoHud_View.Initialize (GameCore.MyInfo);
 		}
 
 		public override void AfterBind ()
 		{
 			base.AfterBind ();
 			Debug.Log (string.Format ("GameCoreView in {0} AfterBind.", gameObject.name));
-
 		}
 	}
 

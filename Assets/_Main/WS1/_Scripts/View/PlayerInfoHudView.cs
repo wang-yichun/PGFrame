@@ -7,6 +7,7 @@ using System.Collections.Generic;
 namespace WS1
 {
 
+	using PGFrame;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
 	using UniRx;
@@ -29,18 +30,6 @@ namespace WS1
 		{
 			base.AfterBind ();
 			Debug.Log (string.Format ("PlayerInfoHudView in {0} AfterBind.", gameObject.name));
-		}
-
-		public override void OnChanged_Name (string value)
-		{
-			base.OnChanged_Name (value);
-			Debug.Log ("PlayerInfoHudView.OnChanged_Name: " + value);
-		}
-
-		public override void OnChanged_Score (int value)
-		{
-			base.OnChanged_Score (value);
-			Debug.Log ("PlayerInfoHudView.OnChanged_Score: " + value);
 		}
 	}
 
