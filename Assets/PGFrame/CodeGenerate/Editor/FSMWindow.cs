@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using UnityEditor.Graphs;
 using System.Collections;
 
 public class FSMWindow : EditorWindow
@@ -26,9 +27,34 @@ public class FSMWindow : EditorWindow
 		window.Show ();
 	}
 
-	void OnGUI ()
+	Rect windowRect = new Rect (100 + 100, 100, 100, 100);
+	Rect windowRect2 = new Rect (100, 100, 100, 100);
+
+	Vector2 scrollPosition;
+
+	private void OnGUI ()
 	{
-		GUI.Box (new Rect (0, 0, 200, 100), "");
-		EditorGUI.DrawRect (new Rect (300, 0, 200, 100), Color.gray);
+		scrollPosition = GUILayout.BeginScrollView (scrollPosition);
+
+		Handles.BeginGUI ();
+		Handles.DrawBezier (windowRect.center, windowRect2.center, new Vector2 (windowRect.xMax + 50f, windowRect.center.y), new Vector2 (windowRect2.xMin - 50f, windowRect2.center.y), Color.red, null, 5f);
+		Handles.EndGUI ();
+
+		BeginWindows ();
+		windowRect = GUI.Window (0, windowRect, WindowFunction, "Box1");
+		windowRect2 = GUI.Window (1, windowRect2, WindowFunction, "Box2");
+
+		EndWindows ();
+
+		GUILayout.EndScrollView ();
+	}
+
+	void WindowFunction (int windowID)
+	{
+		GUILayout.BeginVertical ();
+		GUILayout.Label ("Hello World");
+		GUILayout.EndVertical ();
+
+		GUI.DragWindow ();
 	}
 }
