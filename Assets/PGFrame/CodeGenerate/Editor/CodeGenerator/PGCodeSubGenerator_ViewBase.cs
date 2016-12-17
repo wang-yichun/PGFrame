@@ -147,7 +147,7 @@ namespace PGFrame
 			StringBuilder sb_bind_code = new StringBuilder ();
 			StringBuilder sb_bind_func = new StringBuilder ();
 
-			string elementName = jo ["Common"] ["Name"].Value<string> ();
+//			string elementName = jo ["Common"] ["Name"].Value<string> ();
 			JArray ja_members = jo ["Member"] as JArray;
 			JObject jo_view = jo ["Views"] [view_idx] as JObject;
 

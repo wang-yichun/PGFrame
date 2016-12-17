@@ -18,8 +18,6 @@ namespace WS1
 
 		public override void OnInspectorGUI ()
 		{
-			ViewBase V = target as ViewBase;
-
 			EditorGUILayout.BeginVertical ();
 			
 			base.OnInspectorGUI ();

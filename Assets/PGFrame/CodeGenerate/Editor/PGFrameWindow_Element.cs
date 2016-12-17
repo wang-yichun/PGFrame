@@ -305,7 +305,7 @@ namespace PGFrame
 			};
 			ElementMembersList.onRemoveCallback += (ReorderableList list) => {
 				JObject jo_member = ja_member [list.index] as JObject;
-				string element_rxtype = jo_member ["RxType"].Value<string> ();
+//				string element_rxtype = jo_member ["RxType"].Value<string> ();
 				string element_name = jo_member ["Name"].Value<string> ();
 				ja_member.RemoveAt (list.index);
 				evtools.DeleteMember (element_name);
@@ -317,7 +317,7 @@ namespace PGFrame
 			ElementViewTools evtools = new ElementViewTools (SelectedJsonElement.jo);
 
 			JArray ja_members = SelectedJsonElement.jo ["Member"] as JArray;
-			JArray ja_views = SelectedJsonElement.jo ["Views"] as JArray;
+//			JArray ja_views = SelectedJsonElement.jo ["Views"] as JArray;
 
 			RxType selected = (RxType)obj;
 
@@ -403,72 +403,73 @@ namespace PGFrame
 				string viewType = jo_view ["Type"].Value<string> ();
 				JObject jo_view_members = jo_view ["Members"] as JObject;
 
-				VerticalBox:
-				{
-					Color color = GUI.backgroundColor;
+				#region VerticalBox
 
-					if (SelectedViewIdx == i)
-						GUI.backgroundColor = Color.cyan;
+				Color color = GUI.backgroundColor;
 
-					EditorGUILayout.BeginVertical ("box");
-					GUI.backgroundColor = color;
+				if (SelectedViewIdx == i)
+					GUI.backgroundColor = Color.cyan;
 
-					EditorGUILayout.BeginHorizontal ();
-					string fold_flag = SelectedViewIdx == i ? "-" : "+";
+				EditorGUILayout.BeginVertical ("box");
+				GUI.backgroundColor = color;
 
-					if (SelectedViewIdx == i) {
-						if (GUILayout.Button (string.Format (" {0}", fold_flag), GUIStyleTemplate.LabelStyle (), GUILayout.MaxWidth (10))) {
-							SelectedViewIdx = SelectedViewIdx != i ? i : -1;
-						}
-						viewName = GUILayout.TextField (viewName);
-						if (viewName != jo_view ["Name"].Value<string> ()) {
-							jo_view ["Name"] = viewName;
-						}
-						GUILayout.Label (" : ", GUIStyleTemplate.LabelStyle (), GUILayout.MaxWidth (10));
-						viewType = GUILayout.TextField (viewType);
-						if (viewType != jo_view ["Type"].Value<string> ()) {
-							jo_view ["Type"] = viewType;
-						}
-					} else {
-						if (GUILayout.Button (string.Format (" {0} {1} : {2}", fold_flag, viewName, viewType), GUIStyleTemplate.LabelStyle ())) {
-							SelectedViewIdx = SelectedViewIdx != i ? i : -1;
-						}
+				EditorGUILayout.BeginHorizontal ();
+				string fold_flag = SelectedViewIdx == i ? "-" : "+";
+
+				if (SelectedViewIdx == i) {
+					if (GUILayout.Button (string.Format (" {0}", fold_flag), GUIStyleTemplate.LabelStyle (), GUILayout.MaxWidth (10))) {
+						SelectedViewIdx = SelectedViewIdx != i ? i : -1;
 					}
-
-					if (GUILayout.Button ("-", GUIStyleTemplate.BlackCommandLink (), GUILayout.MaxWidth (10))) {
-						ElementViewTools evtools = new ElementViewTools (SelectedJsonElement.jo);
-						evtools.DeleteView (i);
+					viewName = GUILayout.TextField (viewName);
+					if (viewName != jo_view ["Name"].Value<string> ()) {
+						jo_view ["Name"] = viewName;
 					}
-
-					if (i != 0) {
-						if (GUILayout.Button ("^", GUIStyleTemplate.BlackCommandLink (), GUILayout.MaxWidth (10))) {
-							JObject jo0 = ja_views [i] as JObject;
-							JObject jo1 = ja_views [i - 1] as JObject;
-							ja_views [i] = jo1;
-							ja_views [i - 1] = jo0;
-						}
+					GUILayout.Label (" : ", GUIStyleTemplate.LabelStyle (), GUILayout.MaxWidth (10));
+					viewType = GUILayout.TextField (viewType);
+					if (viewType != jo_view ["Type"].Value<string> ()) {
+						jo_view ["Type"] = viewType;
 					}
-					EditorGUILayout.EndHorizontal ();
-
-					if (SelectedViewIdx == i) {
-
-						if (jo_view ["Desc"] == null) {
-							jo_view ["Desc"] = "";
-						}
-						jo_view ["Desc"] = GUILayout.TextArea (jo_view ["Desc"].Value<string> (), GUIStyleTemplate.GreenDescStyle2 ());
-
-						for (int j = 0; j < ja_member.Count; j++) {
-							JObject jo_member = ja_member [j] as JObject;
-							string memberName = jo_member ["Name"].Value<string> ();
-							string rxType = jo_member ["RxType"].Value<string> ();
-
-							GUILayout.Label (string.Format ("{1} | {0}", rxType, memberName), EditorStyles.helpBox);
-							JObject jo_view_bind = jo_view_members [memberName] ["Bind"] as JObject;
-							DesignViewBind (jo_view_bind);
-						}
+				} else {
+					if (GUILayout.Button (string.Format (" {0} {1} : {2}", fold_flag, viewName, viewType), GUIStyleTemplate.LabelStyle ())) {
+						SelectedViewIdx = SelectedViewIdx != i ? i : -1;
 					}
-					EditorGUILayout.EndVertical ();
 				}
+
+				if (GUILayout.Button ("-", GUIStyleTemplate.BlackCommandLink (), GUILayout.MaxWidth (10))) {
+					ElementViewTools evtools = new ElementViewTools (SelectedJsonElement.jo);
+					evtools.DeleteView (i);
+				}
+
+				if (i != 0) {
+					if (GUILayout.Button ("^", GUIStyleTemplate.BlackCommandLink (), GUILayout.MaxWidth (10))) {
+						JObject jo0 = ja_views [i] as JObject;
+						JObject jo1 = ja_views [i - 1] as JObject;
+						ja_views [i] = jo1;
+						ja_views [i - 1] = jo0;
+					}
+				}
+				EditorGUILayout.EndHorizontal ();
+
+				if (SelectedViewIdx == i) {
+
+					if (jo_view ["Desc"] == null) {
+						jo_view ["Desc"] = "";
+					}
+					jo_view ["Desc"] = GUILayout.TextArea (jo_view ["Desc"].Value<string> (), GUIStyleTemplate.GreenDescStyle2 ());
+
+					for (int j = 0; j < ja_member.Count; j++) {
+						JObject jo_member = ja_member [j] as JObject;
+						string memberName = jo_member ["Name"].Value<string> ();
+						string rxType = jo_member ["RxType"].Value<string> ();
+
+						GUILayout.Label (string.Format ("{1} | {0}", rxType, memberName), EditorStyles.helpBox);
+						JObject jo_view_bind = jo_view_members [memberName] ["Bind"] as JObject;
+						DesignViewBind (jo_view_bind);
+					}
+				}
+				EditorGUILayout.EndVertical ();
+
+				#endregion
 			}
 			GUILayout.EndScrollView ();
 

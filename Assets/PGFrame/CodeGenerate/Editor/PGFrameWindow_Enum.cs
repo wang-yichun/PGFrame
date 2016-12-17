@@ -74,7 +74,6 @@ namespace PGFrame
 				GUI.Label (rect, "Items in Enum");
 			};
 			float[] split = new float[]{ 0f, .2f, .6f, 1f };
-			float[] split_c = new float[]{ 0f, .3f, .6f, .9f, .95f, 1f };
 
 			EnumMembersList.drawElementCallback += (Rect rect, int index, bool isActive, bool isFocused) => {
 				JObject jo_member = ja_member [index] as JObject;
@@ -185,9 +184,6 @@ namespace PGFrame
 
 		float CalcHeight_Enum (int index)
 		{
-			JArray ja_member = SelectedJsonElement.jo ["Member"] as JArray;
-			JObject jo_member = ja_member [index] as JObject;
-
 			float show_desc_height_amplify = 1f;
 			if (ShowDesc) {
 				show_desc_height_amplify = 2f;

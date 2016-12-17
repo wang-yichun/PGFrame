@@ -59,7 +59,7 @@ namespace PGFrame
 		{
 			StringBuilder sb_sc_member = new StringBuilder ();
 
-			string sc_name = jo ["Common"] ["Name"].Value<string> ();
+//			string sc_name = jo ["Common"] ["Name"].Value<string> ();
 			JArray ja_members = jo ["Member"] as JArray;
 
 			for (int i = 0; i < ja_members.Count; i++) {

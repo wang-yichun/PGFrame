@@ -18,8 +18,6 @@ namespace __WWW__
 
 		public override void OnInspectorGUI ()
 		{
-			ViewBase V = target as ViewBase;
-
 			EditorGUILayout.BeginVertical ();
 			
 			base.OnInspectorGUI ();

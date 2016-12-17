@@ -17,11 +17,11 @@ namespace WS1
 		}
 		
 		
-	/*  */
-	public virtual void FBTestCMD (FBViewModel viewModel)
-	{
-		base.FBTestCMD (viewModel);
-	}
+		/*  */
+		public override void FBTestCMD (FBViewModel viewModel)
+		{
+			base.FBTestCMD (viewModel);
+		}
 	}
 
 }

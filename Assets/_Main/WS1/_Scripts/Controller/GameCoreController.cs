@@ -18,12 +18,12 @@ namespace WS1
 		
 		
 		/*  */
-		public virtual void AddSomeBullet (GameCoreViewModel viewModel)
+		public override void AddSomeBullet (GameCoreViewModel viewModel)
 		{
 			base.AddSomeBullet (viewModel);
 		}
 		/*  */
-		public virtual void RemoveSomeBullet (GameCoreViewModel viewModel)
+		public override void RemoveSomeBullet (GameCoreViewModel viewModel)
 		{
 			base.RemoveSomeBullet (viewModel);
 		}

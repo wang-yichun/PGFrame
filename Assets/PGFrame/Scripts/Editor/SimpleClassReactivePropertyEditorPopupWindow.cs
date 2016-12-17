@@ -20,7 +20,6 @@ public class SimpleClassReactivePropertyEditorPopupWindow<T> : PopupWindowConten
 		this.rp = rp;
 		jsonStr = JsonConvert.SerializeObject (rp.Value, Formatting.Indented);
 		jsonStr_ori = jsonStr;
-		PE = default(T);
 	}
 
 	IElementEditor parent;
@@ -35,8 +34,6 @@ public class SimpleClassReactivePropertyEditorPopupWindow<T> : PopupWindowConten
 	}
 
 	Vector2 scrollViewPos;
-
-	T PE;
 
 	public override void OnGUI (Rect rect)
 	{

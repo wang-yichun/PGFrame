@@ -17,16 +17,16 @@ namespace WS1
 		}
 		
 		
-	/*  */
-	public virtual void DefaultCommand (FirstViewModel viewModel)
-	{
-		base.DefaultCommand (viewModel);
-	}
-	/*  */
-	public virtual void AddNum (FirstViewModel viewModel, AddNumCommand command)
-	{
-		base.AddNum (viewModel, command);
-	}
+		/*  */
+		public override void DefaultCommand (FirstViewModel viewModel)
+		{
+			base.DefaultCommand (viewModel);
+		}
+		/*  */
+		public override void AddNum (FirstViewModel viewModel, AddNumCommand command)
+		{
+			base.AddNum (viewModel, command);
+		}
 	}
 
 }

@@ -339,7 +339,7 @@ namespace PGFrame
 				return;
 			}
 
-			string JsonRootFull = Path.Combine (Application.dataPath, JsonRoot);
+//			string JsonRootFull = Path.Combine (Application.dataPath, JsonRoot);
 			if (SelectedWorkspace == null) {
 				GUILayout.Label ("Root", EditorStyles.boldLabel);
 				scrollViewPos = GUILayout.BeginScrollView (scrollViewPos);

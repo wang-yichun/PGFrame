@@ -17,21 +17,21 @@ namespace WS1
 		}
 		
 		
-	/*  */
-	public virtual void StringCommand (SecondViewModel viewModel, StringCommandCommand command)
-	{
-		base.StringCommand (viewModel, command);
-	}
-	/*  */
-	public virtual void IntCommand (SecondViewModel viewModel, IntCommandCommand command)
-	{
-		base.IntCommand (viewModel, command);
-	}
-	/*  */
-	public virtual void SimpleCommand (SecondViewModel viewModel)
-	{
-		base.SimpleCommand (viewModel);
-	}
+		/*  */
+		public override void StringCommand (SecondViewModel viewModel, StringCommandCommand command)
+		{
+			base.StringCommand (viewModel, command);
+		}
+		/*  */
+		public override void IntCommand (SecondViewModel viewModel, IntCommandCommand command)
+		{
+			base.IntCommand (viewModel, command);
+		}
+		/*  */
+		public override void SimpleCommand (SecondViewModel viewModel)
+		{
+			base.SimpleCommand (viewModel);
+		}
 	}
 
 }
