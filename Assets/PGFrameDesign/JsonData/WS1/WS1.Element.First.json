@@ -1,0 +1,475 @@
+{
+  "Workspace": "WS1",
+  "DocType": "Element",
+  "Common": {
+    "Name": "First",
+    "Type": "FB",
+    "Desc": "一个 element 的定义\n一个 element 的定义的第二行"
+  },
+  "Member": [
+    {
+      "RxType": "Property",
+      "Name": "LabelTextNum",
+      "Type": "int",
+      "Desc": "LabelText# LabelTextNum's Comment"
+    },
+    {
+      "RxType": "Collection",
+      "Name": "Numbers",
+      "Type": "int",
+      "Desc": "This is a numbers list"
+    },
+    {
+      "RxType": "Dictionary",
+      "Name": "MyDictionary",
+      "Type": "string,string",
+      "Desc": "我的字典#"
+    },
+    {
+      "RxType": "Command",
+      "Name": "DefaultCommand",
+      "Desc": ""
+    },
+    {
+      "RxType": "Property",
+      "Name": "MyNewProperty",
+      "Type": "object",
+      "Desc": ""
+    },
+    {
+      "RxType": "Collection",
+      "Name": "DefaultCollection",
+      "Type": "object",
+      "Desc": ""
+    },
+    {
+      "RxType": "Property",
+      "Name": "DefaultProperty",
+      "Type": "object",
+      "Desc": ""
+    },
+    {
+      "RxType": "Command",
+      "Name": "AddNum",
+      "Desc": "",
+      "Params": [
+        {
+          "Name": "Param0",
+          "Type": "int",
+          "Desc": ""
+        },
+        {
+          "Name": "Param1",
+          "Type": "int",
+          "Desc": ""
+        }
+      ]
+    },
+    {
+      "RxType": "Property",
+      "Name": "CurrentVector2",
+      "Type": "UnityEngine.Vector2",
+      "Desc": ""
+    },
+    {
+      "RxType": "Property",
+      "Name": "CurrentVector3",
+      "Type": "UnityEngine.Vector3",
+      "Desc": ""
+    },
+    {
+      "RxType": "Property",
+      "Name": "CurrentVector4",
+      "Type": "UnityEngine.Vector4",
+      "Desc": ""
+    },
+    {
+      "RxType": "Property",
+      "Name": "CurrentQuaternion",
+      "Type": "UnityEngine.Quaternion",
+      "Desc": ""
+    },
+    {
+      "RxType": "Property",
+      "Name": "CurrentRect",
+      "Type": "UnityEngine.Rect",
+      "Desc": ""
+    },
+    {
+      "RxType": "Property",
+      "Name": "CurrentBounds",
+      "Type": "UnityEngine.Bounds",
+      "Desc": ""
+    },
+    {
+      "RxType": "Property",
+      "Name": "CurrentColor",
+      "Type": "UnityEngine.Color",
+      "Desc": ""
+    },
+    {
+      "RxType": "Property",
+      "Name": "CurrentAC",
+      "Type": "UnityEngine.AnimationCurve",
+      "Desc": ""
+    },
+    {
+      "RxType": "Property",
+      "Name": "CurrentDateTime",
+      "Type": "DateTime",
+      "Desc": ""
+    },
+    {
+      "RxType": "Property",
+      "Name": "CurrentTimeSpan",
+      "Type": "TimeSpan",
+      "Desc": ""
+    },
+    {
+      "RxType": "Property",
+      "Name": "CurrentJObject",
+      "Type": "JObject",
+      "Desc": ""
+    },
+    {
+      "RxType": "Property",
+      "Name": "CurrentJArray",
+      "Type": "JArray",
+      "Desc": ""
+    },
+    {
+      "RxType": "Collection",
+      "Name": "V3List",
+      "Type": "UnityEngine.Vector3",
+      "Desc": ""
+    },
+    {
+      "RxType": "Collection",
+      "Name": "RectList",
+      "Type": "UnityEngine.Rect",
+      "Desc": ""
+    },
+    {
+      "RxType": "Property",
+      "Name": "MyEA",
+      "Type": "EA",
+      "Desc": ""
+    },
+    {
+      "RxType": "Property",
+      "Name": "SCA_a",
+      "Type": "SCA",
+      "Desc": ""
+    }
+  ],
+  "Views": [
+    {
+      "Name": "FirstView",
+      "Type": "FBView",
+      "Desc": "FirstView 的注释\nHello World!",
+      "Members": {
+        "LabelTextNum": {
+          "Bind": {
+            "Changed": true
+          }
+        },
+        "Numbers": {
+          "Bind": {
+            "Add": true,
+            "CountChanged": false,
+            "EveryValueChanged": false,
+            "Move": false,
+            "Remove": true,
+            "Replace": false,
+            "Reset": false
+          }
+        },
+        "MyDictionary": {
+          "Bind": {
+            "Add": true,
+            "CountChanged": false,
+            "EveryValueChanged": false,
+            "Remove": true,
+            "Replace": false,
+            "Reset": false
+          }
+        },
+        "DefaultCollection": {
+          "Bind": {
+            "Add": false,
+            "CountChanged": false,
+            "EveryValueChanged": false,
+            "Move": false,
+            "Remove": false,
+            "Replace": false,
+            "Reset": false
+          }
+        },
+        "MyNewProperty": {
+          "Bind": {
+            "Changed": false
+          }
+        },
+        "DefaultCommand": {
+          "Bind": {
+            "Executed": true
+          }
+        },
+        "DefaultProperty": {
+          "Bind": {
+            "Changed": false
+          }
+        },
+        "AddNum": {
+          "Bind": {
+            "Executed": false
+          }
+        },
+        "CurrentVector3": {
+          "Bind": {
+            "Changed": false
+          }
+        },
+        "CurrentRect": {
+          "Bind": {
+            "Changed": false
+          }
+        },
+        "CurrentQuaternion": {
+          "Bind": {
+            "Changed": false
+          }
+        },
+        "CurrentVector2": {
+          "Bind": {
+            "Changed": false
+          }
+        },
+        "CurrentVector4": {
+          "Bind": {
+            "Changed": false
+          }
+        },
+        "CurrentBounds": {
+          "Bind": {
+            "Changed": false
+          }
+        },
+        "CurrentColor": {
+          "Bind": {
+            "Changed": false
+          }
+        },
+        "CurrentDateTime": {
+          "Bind": {
+            "Changed": false
+          }
+        },
+        "CurrentTimeSpan": {
+          "Bind": {
+            "Changed": false
+          }
+        },
+        "CurrentJObject": {
+          "Bind": {
+            "Changed": false
+          }
+        },
+        "CurrentJArray": {
+          "Bind": {
+            "Changed": false
+          }
+        },
+        "CurrentAC": {
+          "Bind": {
+            "Changed": false
+          }
+        },
+        "V3List": {
+          "Bind": {
+            "Add": false,
+            "CountChanged": false,
+            "Move": false,
+            "Remove": false,
+            "Replace": false,
+            "Reset": false
+          }
+        },
+        "RectList": {
+          "Bind": {
+            "Add": false,
+            "CountChanged": false,
+            "Move": false,
+            "Remove": false,
+            "Replace": false,
+            "Reset": false
+          }
+        },
+        "MyEA": {
+          "Bind": {
+            "Changed": false
+          }
+        },
+        "SCA_a": {
+          "Bind": {
+            "Changed": true
+          }
+        }
+      }
+    },
+    {
+      "Name": "FirstHudView",
+      "Type": "",
+      "Members": {
+        "LabelTextNum": {
+          "Bind": {
+            "Changed": true
+          }
+        },
+        "Numbers": {
+          "Bind": {
+            "Add": true,
+            "CountChanged": false,
+            "EveryValueChanged": false,
+            "Move": false,
+            "Remove": true,
+            "Replace": false,
+            "Reset": false
+          }
+        },
+        "MyDictionary": {
+          "Bind": {
+            "Add": true,
+            "CountChanged": false,
+            "EveryValueChanged": false,
+            "Remove": true,
+            "Replace": false,
+            "Reset": false
+          }
+        },
+        "DefaultCollection": {
+          "Bind": {
+            "Add": false,
+            "CountChanged": false,
+            "EveryValueChanged": false,
+            "Move": false,
+            "Remove": false,
+            "Replace": false,
+            "Reset": false
+          }
+        },
+        "MyNewProperty": {
+          "Bind": {
+            "Changed": false
+          }
+        },
+        "DefaultCommand": {
+          "Bind": {
+            "Executed": false
+          }
+        },
+        "DefaultProperty": {
+          "Bind": {
+            "Changed": false
+          }
+        },
+        "AddNum": {
+          "Bind": {
+            "Executed": false
+          }
+        },
+        "CurrentVector3": {
+          "Bind": {
+            "Changed": false
+          }
+        },
+        "CurrentRect": {
+          "Bind": {
+            "Changed": false
+          }
+        },
+        "CurrentQuaternion": {
+          "Bind": {
+            "Changed": false
+          }
+        },
+        "CurrentVector2": {
+          "Bind": {
+            "Changed": false
+          }
+        },
+        "CurrentVector4": {
+          "Bind": {
+            "Changed": false
+          }
+        },
+        "CurrentBounds": {
+          "Bind": {
+            "Changed": false
+          }
+        },
+        "CurrentColor": {
+          "Bind": {
+            "Changed": false
+          }
+        },
+        "CurrentDateTime": {
+          "Bind": {
+            "Changed": false
+          }
+        },
+        "CurrentTimeSpan": {
+          "Bind": {
+            "Changed": false
+          }
+        },
+        "CurrentJObject": {
+          "Bind": {
+            "Changed": false
+          }
+        },
+        "CurrentJArray": {
+          "Bind": {
+            "Changed": false
+          }
+        },
+        "CurrentAC": {
+          "Bind": {
+            "Changed": false
+          }
+        },
+        "V3List": {
+          "Bind": {
+            "Add": false,
+            "CountChanged": false,
+            "Move": false,
+            "Remove": false,
+            "Replace": false,
+            "Reset": false
+          }
+        },
+        "RectList": {
+          "Bind": {
+            "Add": false,
+            "CountChanged": false,
+            "Move": false,
+            "Remove": false,
+            "Replace": false,
+            "Reset": false
+          }
+        },
+        "MyEA": {
+          "Bind": {
+            "Changed": false
+          }
+        },
+        "SCA_a": {
+          "Bind": {
+            "Changed": false
+          }
+        }
+      },
+      "Desc": ""
+    }
+  ]
+}

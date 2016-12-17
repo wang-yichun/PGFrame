@@ -1,0 +1,30 @@
+{
+  "Workspace": "WS1",
+  "DocType": "Enum",
+  "Common": {
+    "Name": "EA",
+    "Desc": ""
+  },
+  "Member": [
+    {
+      "Name": "DefaultEnum",
+      "Int": 0,
+      "Desc": ""
+    },
+    {
+      "Name": "DefaultEnum1",
+      "Int": 1,
+      "Desc": ""
+    },
+    {
+      "Name": "DefaultEnum2",
+      "Int": 2,
+      "Desc": ""
+    },
+    {
+      "Name": "DefaultEnum3",
+      "Int": 3,
+      "Desc": ""
+    }
+  ]
+}

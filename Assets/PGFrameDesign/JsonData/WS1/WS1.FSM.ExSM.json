@@ -1,0 +1,72 @@
+{
+  "Workspace": "WS1",
+  "DocType": "FSM",
+  "Common": {
+    "Name": "GameCoreFSM",
+    "Desc": "描述一个游戏核心的状态",
+    "EntryState": "SA"
+  },
+  "Transition": [
+    {
+      "Name": "ToStateB"
+    },
+    {
+      "Name": "ToStateA"
+    },
+    {
+      "Name": "ToC"
+    },
+    {
+      "Name": "ToD"
+    },
+    {
+      "Name": "ToE"
+    }
+  ],
+  "State": [
+    {
+      "Name": "SA",
+      "Transitions": [
+        {
+          "Transition": "ToB",
+          "TargetState": "SB"
+        }
+      ],
+      "Rect": {
+        "x": 240,
+        "y": 120,
+        "w": 160,
+        "h": 100
+      }
+    },
+    {
+      "Name": "SB",
+      "Transitions": [
+        {
+          "Transition": "ToA",
+          "TargetState": "SA"
+        },
+        {
+          "Transition": "ToC",
+          "TargetState": "SC"
+        }
+      ],
+      "Rect": {
+        "x": 500,
+        "y": 90,
+        "w": 160,
+        "h": 100
+      }
+    },
+    {
+      "Name": "SC",
+      "Transitions": [],
+      "Rect": {
+        "x": 350,
+        "y": 250,
+        "w": 160,
+        "h": 100
+      }
+    }
+  ]
+}

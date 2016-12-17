@@ -1,0 +1,31 @@
+{
+  "Workspace": "WS1",
+  "DocType": "SimpleClass",
+  "Common": {
+    "Name": "SCA",
+    "Type": "",
+    "Desc": "This is my first SimpleClass SCA."
+  },
+  "Member": [
+    {
+      "Name": "DefaultSimpleClass",
+      "Type": "string",
+      "Desc": "First # member"
+    },
+    {
+      "Name": "DefaultSimpleClass1",
+      "Type": "int",
+      "Desc": "2nd # member"
+    },
+    {
+      "Name": "DefaultSimpleClass2",
+      "Type": "UnityEngine.Vector3",
+      "Desc": ""
+    },
+    {
+      "Name": "myEA",
+      "Type": "EA",
+      "Desc": ""
+    }
+  ]
+}

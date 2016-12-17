@@ -1,0 +1,76 @@
+{
+  "Workspace": "WS1",
+  "DocType": "Workspace",
+  "ElementFiles": [
+    {
+      "DocType": "Element",
+      "Name": "FB",
+      "File": "WS1.Element.FB.json"
+    },
+    {
+      "DocType": "Element",
+      "Name": "First",
+      "File": "WS1.Element.First.json"
+    },
+    {
+      "DocType": "Element",
+      "Name": "Second",
+      "File": "WS1.Element.Second.json"
+    },
+    {
+      "DocType": "Element",
+      "Name": "PTest",
+      "File": "WS1.Element.PTest.json"
+    },
+    {
+      "DocType": "SimpleClass",
+      "Name": "SCA",
+      "File": "WS1.SimpleClass.SCA.json"
+    },
+    {
+      "DocType": "SimpleClass",
+      "Name": "SCB",
+      "File": "WS1.SimpleClass.SCB.json"
+    },
+    {
+      "DocType": "Enum",
+      "Name": "EA",
+      "File": "WS1.Enum.EA.json"
+    },
+    {
+      "DocType": "Enum",
+      "Name": "EB",
+      "File": "WS1.Enum.EB.json"
+    },
+    {
+      "DocType": "Element",
+      "Name": "PlayerInfo",
+      "File": "WS1.Element.PlayerInfo.json"
+    },
+    {
+      "DocType": "Element",
+      "Name": "GameCore",
+      "File": "WS1.Element.GameCore.json"
+    },
+    {
+      "DocType": "Element",
+      "Name": "Bullet",
+      "File": "WS1.Element.Bullet.json"
+    },
+    {
+      "DocType": "Enum",
+      "Name": "BulletType",
+      "File": "WS1.Enum.BulletType.json"
+    },
+    {
+      "DocType": "Element",
+      "Name": "BallManager",
+      "File": "WS1.Element.BallManager.json"
+    },
+    {
+      "DocType": "FSM",
+      "Name": "ExSM",
+      "File": "WS1.FSM.ExSM.json"
+    }
+  ]
+}

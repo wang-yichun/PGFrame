@@ -1,0 +1,331 @@
+{
+  "Workspace": "WS1",
+  "DocType": "Element",
+  "Common": {
+    "Name": "Second",
+    "Type": "",
+    "Desc": "一个 element 的定义"
+  },
+  "Member": [
+    {
+      "RxType": "Property",
+      "Name": "IntValue",
+      "Type": "int",
+      "Desc": "Label上的文字"
+    },
+    {
+      "RxType": "Property",
+      "Name": "LongValue",
+      "Type": "long",
+      "Desc": ""
+    },
+    {
+      "RxType": "Property",
+      "Name": "FloatValue",
+      "Type": "float",
+      "Desc": ""
+    },
+    {
+      "RxType": "Property",
+      "Name": "DoubleValue",
+      "Type": "double",
+      "Desc": ""
+    },
+    {
+      "RxType": "Collection",
+      "Name": "IntList",
+      "Type": "int",
+      "Desc": "一个整形数组"
+    },
+    {
+      "RxType": "Collection",
+      "Name": "LongList",
+      "Type": "long",
+      "Desc": ""
+    },
+    {
+      "RxType": "Collection",
+      "Name": "FloatList",
+      "Type": "float",
+      "Desc": ""
+    },
+    {
+      "RxType": "Collection",
+      "Name": "DoubleList",
+      "Type": "double",
+      "Desc": ""
+    },
+    {
+      "RxType": "Collection",
+      "Name": "StringList",
+      "Type": "string",
+      "Desc": ""
+    },
+    {
+      "RxType": "Dictionary",
+      "Name": "IntDictionary",
+      "Type": "string,int",
+      "Desc": "我的字典"
+    },
+    {
+      "RxType": "Dictionary",
+      "Name": "StringDictionary",
+      "Type": "int,string",
+      "Desc": ""
+    },
+    {
+      "RxType": "Command",
+      "Name": "StringCommand",
+      "Desc": "",
+      "Params": [
+        {
+          "Name": "Param0",
+          "Type": "string",
+          "Desc": ""
+        }
+      ]
+    },
+    {
+      "RxType": "Command",
+      "Name": "IntCommand",
+      "Desc": "",
+      "Params": [
+        {
+          "Name": "Param0",
+          "Type": "int",
+          "Desc": ""
+        }
+      ]
+    },
+    {
+      "RxType": "Command",
+      "Name": "SimpleCommand",
+      "Desc": ""
+    }
+  ],
+  "Views": [
+    {
+      "Name": "SecondView",
+      "Type": "",
+      "Desc": "",
+      "Members": {
+        "IntValue": {
+          "Bind": {
+            "Changed": false
+          }
+        },
+        "IntList": {
+          "Bind": {
+            "Add": false,
+            "CountChanged": false,
+            "Move": false,
+            "Remove": false,
+            "Replace": false,
+            "Reset": false
+          }
+        },
+        "IntDictionary": {
+          "Bind": {
+            "Add": false,
+            "CountChanged": false,
+            "Remove": false,
+            "Replace": false,
+            "Reset": false
+          }
+        },
+        "LongValue": {
+          "Bind": {
+            "Changed": false
+          }
+        },
+        "FloatValue": {
+          "Bind": {
+            "Changed": false
+          }
+        },
+        "DoubleValue": {
+          "Bind": {
+            "Changed": false
+          }
+        },
+        "LongList": {
+          "Bind": {
+            "Add": false,
+            "CountChanged": false,
+            "Move": false,
+            "Remove": false,
+            "Replace": false,
+            "Reset": false
+          }
+        },
+        "FloatList": {
+          "Bind": {
+            "Add": false,
+            "CountChanged": false,
+            "Move": false,
+            "Remove": false,
+            "Replace": false,
+            "Reset": false
+          }
+        },
+        "DoubleList": {
+          "Bind": {
+            "Add": false,
+            "CountChanged": false,
+            "Move": false,
+            "Remove": false,
+            "Replace": false,
+            "Reset": false
+          }
+        },
+        "StringList": {
+          "Bind": {
+            "Add": false,
+            "CountChanged": false,
+            "Move": false,
+            "Remove": false,
+            "Replace": false,
+            "Reset": false
+          }
+        },
+        "StringDictionary": {
+          "Bind": {
+            "Add": false,
+            "CountChanged": false,
+            "Remove": false,
+            "Replace": false,
+            "Reset": false
+          }
+        },
+        "StringCommand": {
+          "Bind": {
+            "Executed": false
+          }
+        },
+        "IntCommand": {
+          "Bind": {
+            "Executed": false
+          }
+        },
+        "SimpleCommand": {
+          "Bind": {
+            "Executed": false
+          }
+        }
+      }
+    },
+    {
+      "Name": "SecondHudView",
+      "Type": "",
+      "Desc": "",
+      "Members": {
+        "IntValue": {
+          "Bind": {
+            "Changed": true
+          }
+        },
+        "IntList": {
+          "Bind": {
+            "Add": true,
+            "CountChanged": false,
+            "Move": false,
+            "Remove": true,
+            "Replace": false,
+            "Reset": false
+          }
+        },
+        "IntDictionary": {
+          "Bind": {
+            "Add": true,
+            "CountChanged": false,
+            "Remove": true,
+            "Replace": false,
+            "Reset": false
+          }
+        },
+        "LongValue": {
+          "Bind": {
+            "Changed": false
+          }
+        },
+        "FloatValue": {
+          "Bind": {
+            "Changed": false
+          }
+        },
+        "DoubleValue": {
+          "Bind": {
+            "Changed": false
+          }
+        },
+        "LongList": {
+          "Bind": {
+            "Add": false,
+            "CountChanged": false,
+            "Move": false,
+            "Remove": false,
+            "Replace": false,
+            "Reset": false
+          }
+        },
+        "FloatList": {
+          "Bind": {
+            "Add": false,
+            "CountChanged": false,
+            "Move": false,
+            "Remove": false,
+            "Replace": false,
+            "Reset": false
+          }
+        },
+        "DoubleList": {
+          "Bind": {
+            "Add": false,
+            "CountChanged": false,
+            "Move": false,
+            "Remove": false,
+            "Replace": false,
+            "Reset": false
+          }
+        },
+        "StringList": {
+          "Bind": {
+            "Add": false,
+            "CountChanged": false,
+            "Move": false,
+            "Remove": false,
+            "Replace": false,
+            "Reset": false
+          }
+        },
+        "StringDictionary": {
+          "Bind": {
+            "Add": false,
+            "CountChanged": false,
+            "Remove": false,
+            "Replace": false,
+            "Reset": false
+          }
+        },
+        "StringCommand": {
+          "Bind": {
+            "Executed": false
+          }
+        },
+        "IntCommand": {
+          "Bind": {
+            "Executed": true
+          }
+        },
+        "SimpleCommand": {
+          "Bind": {
+            "Executed": true
+          }
+        }
+      }
+    }
+  ],
+  "FilePath": "/Users/EthanW/Documents/UnityProjects/PGFrame/Assets/PGFrameDesign/WS1.Element.xlsx",
+  "TableName": "Second",
+  "CreateTime": "2016-11-10T18:02:04.799938+08:00"
+}

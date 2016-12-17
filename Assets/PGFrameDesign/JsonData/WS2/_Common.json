@@ -1,0 +1,16 @@
+{
+  "Workspace": "WS2",
+  "DocType": "Workspace",
+  "ElementFiles": [
+    {
+      "DocType": "Element",
+      "Name": "Ball",
+      "File": "WS2.Element.Ball.json"
+    },
+    {
+      "DocType": "Enum",
+      "Name": "BallType",
+      "File": "WS2.Enum.BallType.json"
+    }
+  ]
+}

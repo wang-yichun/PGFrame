@@ -1,0 +1,20 @@
+{
+  "Workspace": "WS1",
+  "DocType": "Enum",
+  "Common": {
+    "Name": "MyEnum",
+    "Desc": "This is my first Enum"
+  },
+  "Member": [
+    {
+      "Name": "ME_FIRST",
+      "Int": "0",
+      "Desc": "第一选项"
+    },
+    {
+      "Name": "ME_SECOND",
+      "Int": "1",
+      "Desc": "第二选项"
+    }
+  ]
+}

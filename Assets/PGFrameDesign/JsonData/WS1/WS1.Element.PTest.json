@@ -1,0 +1,356 @@
+{
+  "Workspace": "WS1",
+  "DocType": "Element",
+  "Common": {
+    "Name": "PTest",
+    "Desc": "",
+    "Type": ""
+  },
+  "Member": [
+    {
+      "RxType": "Property",
+      "Name": "DefaultProperty1",
+      "Type": "string",
+      "Desc": ""
+    },
+    {
+      "RxType": "Property",
+      "Name": "DefaultProperty2",
+      "Type": "string",
+      "Desc": ""
+    },
+    {
+      "RxType": "Property",
+      "Name": "DefaultProperty3",
+      "Type": "int",
+      "Desc": ""
+    },
+    {
+      "RxType": "Property",
+      "Name": "DefaultProperty4",
+      "Type": "float",
+      "Desc": ""
+    },
+    {
+      "RxType": "Collection",
+      "Name": "DefaultCollection1",
+      "Type": "string",
+      "Desc": ""
+    },
+    {
+      "RxType": "Collection",
+      "Name": "DefaultCollection2",
+      "Type": "int",
+      "Desc": ""
+    },
+    {
+      "RxType": "Dictionary",
+      "Name": "DefaultDictionary1",
+      "Type": "string,string",
+      "Desc": ""
+    },
+    {
+      "RxType": "Dictionary",
+      "Name": "DefaultDictionary2",
+      "Type": "int,string",
+      "Desc": ""
+    },
+    {
+      "RxType": "Command",
+      "Name": "DefaultCommand1",
+      "Desc": "",
+      "Params": [
+        {
+          "Name": "Param0",
+          "Type": "string",
+          "Desc": ""
+        },
+        {
+          "Name": "Param1",
+          "Type": "int",
+          "Desc": ""
+        }
+      ]
+    },
+    {
+      "RxType": "Command",
+      "Name": "DefaultCommand2",
+      "Desc": ""
+    },
+    {
+      "RxType": "Command",
+      "Name": "DefaultCommand3",
+      "Desc": ""
+    },
+    {
+      "RxType": "Command",
+      "Name": "DefaultCommand4",
+      "Desc": ""
+    },
+    {
+      "RxType": "Command",
+      "Name": "DefaultCommand5",
+      "Desc": ""
+    },
+    {
+      "RxType": "Command",
+      "Name": "DefaultCommand6",
+      "Desc": ""
+    },
+    {
+      "RxType": "Command",
+      "Name": "DefaultCommand7",
+      "Desc": ""
+    },
+    {
+      "RxType": "Command",
+      "Name": "DefaultCommand8",
+      "Desc": "",
+      "Params": [
+        {
+          "Name": "Param0",
+          "Type": "float",
+          "Desc": ""
+        }
+      ]
+    },
+    {
+      "RxType": "Command",
+      "Name": "DefaultCommand9",
+      "Desc": ""
+    },
+    {
+      "RxType": "Command",
+      "Name": "DefaultCommand10",
+      "Desc": ""
+    },
+    {
+      "RxType": "Command",
+      "Name": "DefaultCommand11",
+      "Desc": ""
+    },
+    {
+      "RxType": "Command",
+      "Name": "DefaultCommand12",
+      "Desc": ""
+    },
+    {
+      "RxType": "Command",
+      "Name": "DefaultCommand13",
+      "Desc": ""
+    },
+    {
+      "RxType": "Command",
+      "Name": "DefaultCommand14",
+      "Desc": ""
+    },
+    {
+      "RxType": "Command",
+      "Name": "DefaultCommand15",
+      "Desc": ""
+    },
+    {
+      "RxType": "Command",
+      "Name": "DefaultCommand16",
+      "Desc": ""
+    },
+    {
+      "RxType": "Command",
+      "Name": "DefaultCommand17",
+      "Desc": ""
+    },
+    {
+      "RxType": "Command",
+      "Name": "DefaultCommand18",
+      "Desc": ""
+    },
+    {
+      "RxType": "Command",
+      "Name": "DefaultCommand19",
+      "Desc": ""
+    },
+    {
+      "RxType": "Command",
+      "Name": "DefaultCommand20",
+      "Desc": ""
+    },
+    {
+      "RxType": "Property",
+      "Name": "CurrentFB",
+      "Type": "FBViewModel",
+      "Desc": ""
+    }
+  ],
+  "Views": [
+    {
+      "Name": "PTestView",
+      "Type": "",
+      "Desc": "",
+      "Members": {
+        "DefaultProperty1": {
+          "Bind": {
+            "Changed": true
+          }
+        },
+        "DefaultProperty2": {
+          "Bind": {
+            "Changed": true
+          }
+        },
+        "DefaultProperty3": {
+          "Bind": {
+            "Changed": true
+          }
+        },
+        "DefaultProperty4": {
+          "Bind": {
+            "Changed": true
+          }
+        },
+        "DefaultCollection1": {
+          "Bind": {
+            "Add": true,
+            "CountChanged": false,
+            "Move": false,
+            "Remove": true,
+            "Replace": false,
+            "Reset": false
+          }
+        },
+        "DefaultCollection2": {
+          "Bind": {
+            "Add": true,
+            "CountChanged": false,
+            "Move": false,
+            "Remove": true,
+            "Replace": false,
+            "Reset": false
+          }
+        },
+        "DefaultDictionary1": {
+          "Bind": {
+            "Add": true,
+            "CountChanged": false,
+            "Remove": true,
+            "Replace": false,
+            "Reset": false
+          }
+        },
+        "DefaultDictionary2": {
+          "Bind": {
+            "Add": true,
+            "CountChanged": false,
+            "Remove": true,
+            "Replace": false,
+            "Reset": false
+          }
+        },
+        "DefaultCommand1": {
+          "Bind": {
+            "Executed": true
+          }
+        },
+        "DefaultCommand2": {
+          "Bind": {
+            "Executed": true
+          }
+        },
+        "DefaultCommand3": {
+          "Bind": {
+            "Executed": true
+          }
+        },
+        "DefaultCommand4": {
+          "Bind": {
+            "Executed": true
+          }
+        },
+        "DefaultCommand5": {
+          "Bind": {
+            "Executed": true
+          }
+        },
+        "DefaultCommand6": {
+          "Bind": {
+            "Executed": true
+          }
+        },
+        "DefaultCommand7": {
+          "Bind": {
+            "Executed": true
+          }
+        },
+        "DefaultCommand8": {
+          "Bind": {
+            "Executed": true
+          }
+        },
+        "DefaultCommand9": {
+          "Bind": {
+            "Executed": true
+          }
+        },
+        "DefaultCommand10": {
+          "Bind": {
+            "Executed": true
+          }
+        },
+        "DefaultCommand11": {
+          "Bind": {
+            "Executed": true
+          }
+        },
+        "DefaultCommand12": {
+          "Bind": {
+            "Executed": true
+          }
+        },
+        "DefaultCommand13": {
+          "Bind": {
+            "Executed": true
+          }
+        },
+        "DefaultCommand14": {
+          "Bind": {
+            "Executed": true
+          }
+        },
+        "DefaultCommand15": {
+          "Bind": {
+            "Executed": true
+          }
+        },
+        "DefaultCommand16": {
+          "Bind": {
+            "Executed": true
+          }
+        },
+        "DefaultCommand17": {
+          "Bind": {
+            "Executed": true
+          }
+        },
+        "DefaultCommand18": {
+          "Bind": {
+            "Executed": true
+          }
+        },
+        "DefaultCommand19": {
+          "Bind": {
+            "Executed": true
+          }
+        },
+        "DefaultCommand20": {
+          "Bind": {
+            "Executed": true
+          }
+        },
+        "CurrentFB": {
+          "Bind": {
+            "Changed": false
+          }
+        }
+      }
+    }
+  ]
+}

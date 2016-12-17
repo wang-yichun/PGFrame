@@ -1,0 +1,41 @@
+{
+  "Workspace": "WS1",
+  "DocType": "Element",
+  "Common": {
+    "Name": "FB",
+    "Desc": "",
+    "Type": ""
+  },
+  "Member": [
+    {
+      "RxType": "Property",
+      "Name": "Count",
+      "Type": "int",
+      "Desc": ""
+    },
+    {
+      "RxType": "Command",
+      "Name": "FBTestCMD",
+      "Desc": ""
+    }
+  ],
+  "Views": [
+    {
+      "Name": "FBView",
+      "Type": "",
+      "Desc": "",
+      "Members": {
+        "Count": {
+          "Bind": {
+            "Changed": true
+          }
+        },
+        "FBTestCMD": {
+          "Bind": {
+            "Executed": true
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "Workspace": "WS1",
+  "DocType": "Element",
+  "Common": {
+    "Name": "GameCore",
+    "Desc": "",
+    "Type": ""
+  },
+  "Member": [
+    {
+      "RxType": "Property",
+      "Name": "GameID",
+      "Type": "string",
+      "Desc": ""
+    },
+    {
+      "RxType": "Property",
+      "Name": "MyInfo",
+      "Type": "PlayerInfoViewModel",
+      "Desc": ""
+    },
+    {
+      "RxType": "Collection",
+      "Name": "CurrentBullets",
+      "Type": "BulletViewModel",
+      "Desc": ""
+    },
+    {
+      "RxType": "Command",
+      "Name": "AddSomeBullet",
+      "Desc": ""
+    },
+    {
+      "RxType": "Command",
+      "Name": "RemoveSomeBullet",
+      "Desc": ""
+    },
+    {
+      "RxType": "Property",
+      "Name": "MyWS2Ball",
+      "Type": "WS2.BallViewModel",
+      "Desc": ""
+    }
+  ],
+  "Views": [
+    {
+      "Name": "GameCoreView",
+      "Type": "",
+      "Desc": "",
+      "Members": {
+        "GameID": {
+          "Bind": {
+            "Changed": false
+          }
+        },
+        "MyInfo": {
+          "Bind": {
+            "Changed": false
+          }
+        },
+        "CurrentBullets": {
+          "Bind": {
+            "Add": true,
+            "CountChanged": false,
+            "Move": false,
+            "Remove": true,
+            "Replace": false,
+            "Reset": false
+          }
+        },
+        "AddSomeBullet": {
+          "Bind": {
+            "Executed": false
+          }
+        },
+        "RemoveSomeBullet": {
+          "Bind": {
+            "Executed": false
+          }
+        },
+        "MyWS2Ball": {
+          "Bind": {
+            "Changed": false
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "Workspace": "WS1",
+  "DocType": "SimpleClass",
+  "Common": {
+    "Name": "SCB",
+    "Type": "SCA",
+    "Desc": "test derive"
+  },
+  "Member": [
+    {
+      "Name": "SCB_Member",
+      "Type": "int",
+      "Desc": ""
+    }
+  ]
+}

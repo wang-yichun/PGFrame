@@ -1,0 +1,59 @@
+{
+  "Workspace": "WS1",
+  "DocType": "Element",
+  "Common": {
+    "Name": "PlayerInfo",
+    "Desc": "",
+    "Type": ""
+  },
+  "Member": [
+    {
+      "RxType": "Property",
+      "Name": "Name",
+      "Type": "string",
+      "Desc": ""
+    },
+    {
+      "RxType": "Property",
+      "Name": "Score",
+      "Type": "int",
+      "Desc": ""
+    }
+  ],
+  "Views": [
+    {
+      "Name": "PlayerInfoView",
+      "Type": "",
+      "Desc": "",
+      "Members": {
+        "Name": {
+          "Bind": {
+            "Changed": true
+          }
+        },
+        "Score": {
+          "Bind": {
+            "Changed": false
+          }
+        }
+      }
+    },
+    {
+      "Name": "PlayerInfoHudView",
+      "Type": "",
+      "Desc": "",
+      "Members": {
+        "Name": {
+          "Bind": {
+            "Changed": true
+          }
+        },
+        "Score": {
+          "Bind": {
+            "Changed": true
+          }
+        }
+      }
+    }
+  ]
+}

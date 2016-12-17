@@ -1,0 +1,31 @@
+{
+  "Workspace": "WS2",
+  "DocType": "Element",
+  "Common": {
+    "Name": "Ball",
+    "Desc": "",
+    "Type": ""
+  },
+  "Member": [
+    {
+      "RxType": "Property",
+      "Name": "Type",
+      "Type": "BallType",
+      "Desc": ""
+    }
+  ],
+  "Views": [
+    {
+      "Name": "BallView",
+      "Type": "",
+      "Desc": "",
+      "Members": {
+        "Type": {
+          "Bind": {
+            "Changed": true
+          }
+        }
+      }
+    }
+  ]
+}

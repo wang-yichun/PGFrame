@@ -1,0 +1,31 @@
+{
+  "Workspace": "WS1",
+  "DocType": "Element",
+  "Common": {
+    "Name": "Bullet",
+    "Desc": "",
+    "Type": ""
+  },
+  "Member": [
+    {
+      "RxType": "Property",
+      "Name": "BType",
+      "Type": "BulletType",
+      "Desc": ""
+    }
+  ],
+  "Views": [
+    {
+      "Name": "BulletView",
+      "Type": "",
+      "Desc": "",
+      "Members": {
+        "BType": {
+          "Bind": {
+            "Changed": false
+          }
+        }
+      }
+    }
+  ]
+}

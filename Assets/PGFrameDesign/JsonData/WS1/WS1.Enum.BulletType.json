@@ -1,0 +1,20 @@
+{
+  "Workspace": "WS1",
+  "DocType": "Enum",
+  "Common": {
+    "Name": "BulletType",
+    "Desc": ""
+  },
+  "Member": [
+    {
+      "Name": "Normal",
+      "Int": 0,
+      "Desc": ""
+    },
+    {
+      "Name": "Advanced",
+      "Int": 1,
+      "Desc": ""
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "Workspace": "WS1",
+  "DocType": "Element",
+  "Common": {
+    "Name": "BallManager",
+    "Desc": "",
+    "Type": ""
+  },
+  "Member": [
+    {
+      "RxType": "Property",
+      "Name": "MyBallType",
+      "Type": "WS2.BallType",
+      "Desc": ""
+    },
+    {
+      "RxType": "Collection",
+      "Name": "MyBalls",
+      "Type": "WS2.BallViewModel",
+      "Desc": ""
+    }
+  ],
+  "Views": []
+}

@@ -1,0 +1,9 @@
+{
+  "Workspace": "WS2",
+  "DocType": "Enum",
+  "Common": {
+    "Name": "BallType",
+    "Desc": ""
+  },
+  "Member": []
+}
