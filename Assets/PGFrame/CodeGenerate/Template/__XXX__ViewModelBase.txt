@@ -23,8 +23,9 @@ namespace __WWW__
 
 		public override void Initialize ()
 		{
-			base.Initialize ();
 			/****initialize_code****/
+			
+			base.Initialize ();
 		}
 
 		public override void Attach ()

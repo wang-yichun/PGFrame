@@ -23,6 +23,11 @@ namespace __WWW__
 			/****attach_code****/
 		}
 
+		public override void Detach (ViewModelBase viewModel)
+		{
+			base.Detach (viewModel);
+		}
+
 		/****member_function****/
 	}
 }

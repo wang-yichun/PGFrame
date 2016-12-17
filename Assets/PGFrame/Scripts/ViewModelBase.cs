@@ -6,7 +6,9 @@ using System.Collections.Generic;
 namespace PGFrame
 {
 	
-	public abstract class ViewModelBase
+	using UniRx;
+
+	public abstract class ViewModelBase : IDisposable
 	{
 		public Guid VMID;
 
@@ -15,25 +17,36 @@ namespace PGFrame
 		public ViewModelBase ()
 		{
 			VMID = Guid.NewGuid ();
-			HostViews = new Dictionary<string, ViewBase> ();
-
 			Initialize ();
-
-			Attach ();
 		}
 
 		public virtual void Initialize ()
 		{
+			baseAttachDisposables = new CompositeDisposable ();
+			HostViews = new Dictionary<string, ViewBase> ();
+			Attach ();
 		}
 
+		public void Dispose ()
+		{
+			HostViews = null;
+			baseAttachDisposables = null;
+		}
+
+		public CompositeDisposable baseAttachDisposables;
+
 		public virtual void Attach ()
+		{
+		}
+
+		public virtual void Detach ()
 		{
 		}
 
 		public Dictionary<string, ViewBase> HostViews;
 
 		public T GetView<T> (string key = null)
-		where T : ViewBase
+			where T : ViewBase
 		{
 			if (key == null)
 				key = DefaultViewBaseKey;

@@ -23,14 +23,14 @@ namespace WS1
 
 		public override void Initialize ()
 		{
-			base.Initialize ();
-			
 			RP_GameID = new ReactiveProperty<string> ();
 			RP_MyInfo = new ReactiveProperty<PlayerInfoViewModel> ();
 			CurrentBullets = new ReactiveCollection<BulletViewModel> ();
 			RC_AddSomeBullet = new ReactiveCommand ();
 			RC_RemoveSomeBullet = new ReactiveCommand ();
 			RP_MyWS2Ball = new ReactiveProperty<WS2.BallViewModel> ();
+
+			base.Initialize ();
 		}
 
 		public override void Attach ()

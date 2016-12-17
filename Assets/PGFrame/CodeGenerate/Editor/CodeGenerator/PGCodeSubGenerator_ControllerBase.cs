@@ -67,12 +67,12 @@ namespace PGFrame
 			vm.RC_{NAME}.Subscribe<{NAME}Command> (command => {
 				command.Sender = viewModel;
 				{NAME} (({ELEMENTNAME}ViewModel)viewModel, command);
-			});";
+			}).AddTo (viewModel.baseAttachDisposables);";
 					} else {
 						template = @"
 			vm.RC_{NAME}.Subscribe (_ => {
 				{NAME} (({ELEMENTNAME}ViewModel)viewModel);
-			});";
+			}).AddTo (viewModel.baseAttachDisposables);";
 					}
 					template = template.Replace ("{ELEMENTNAME}", elementName);
 					template = template.Replace ("{NAME}", jom ["Name"].Value<string> ());

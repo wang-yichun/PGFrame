@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
+using System;
 
 namespace PGFrame
 {
 	using UniRx;
 
-	public class ViewBase : MonoBehaviour
+	public class ViewBase : MonoBehaviour, IDisposable
 	{
 	
 		[SerializeField, HideInInspector]
@@ -39,7 +40,7 @@ namespace PGFrame
 
 		void OnDestroy ()
 		{
-			Finalize ();
+			Dispose ();
 		}
 
 		public virtual void CreateViewModel ()
@@ -57,6 +58,7 @@ namespace PGFrame
 
 		public virtual void Initialize (ViewModelBase viewModel)
 		{
+			baseBindDisposables = new CompositeDisposable ();
 			ViewModelBase VM = GetViewModel ();
 			if (VM != null) {
 				BeforeBind ();
@@ -65,14 +67,16 @@ namespace PGFrame
 			}
 		}
 
-		public virtual void Finalize ()
+		public void Dispose ()
 		{
 			ViewModelBase VM = GetViewModel ();
 			if (VM != null) {
 				Unbind ();
-				// PG_TODO: 调用 VM 中的 Detach
+				VM.Detach ();
+				VM.Dispose ();
 				SetViewModel (null);
 			}
+			baseBindDisposables = null;
 		}
 
 		public CompositeDisposable baseBindDisposables;

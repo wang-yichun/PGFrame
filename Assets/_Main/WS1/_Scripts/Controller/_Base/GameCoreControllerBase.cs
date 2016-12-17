@@ -23,10 +23,15 @@ namespace WS1
 			
 			vm.RC_AddSomeBullet.Subscribe (_ => {
 				AddSomeBullet ((GameCoreViewModel)viewModel);
-			});
+			}).AddTo (viewModel.baseAttachDisposables);
 			vm.RC_RemoveSomeBullet.Subscribe (_ => {
 				RemoveSomeBullet ((GameCoreViewModel)viewModel);
-			});
+			}).AddTo (viewModel.baseAttachDisposables);
+		}
+
+		public override void Detach (ViewModelBase viewModel)
+		{
+			base.Detach (viewModel);
 		}
 
 		

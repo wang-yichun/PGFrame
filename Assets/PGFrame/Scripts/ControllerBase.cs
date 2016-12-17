@@ -7,7 +7,14 @@
 
 		public virtual void Attach (ViewModelBase viewModel)
 		{
-			UnityEngine.Debug.Log ("ControllerBase.Attach");
+		}
+
+		public virtual void Detach (ViewModelBase viewModel)
+		{
+			if (viewModel.baseAttachDisposables != null) {
+				viewModel.baseAttachDisposables.Dispose ();
+				viewModel.baseAttachDisposables = null;
+			}
 		}
 	}
 
