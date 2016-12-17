@@ -132,9 +132,27 @@ namespace PGFrame
 			Handles.EndGUI ();
 
 			BeginWindows ();
-			windowRect = GUI.Window (0, windowRect, WindowFunction, "Box1");
-			windowRect2 = GUI.Window (1, windowRect2, WindowFunction, "Box2");
+			if (jElement != null) {
+				JArray ja_states = jElement.jo ["State"] as JArray;
 
+				for (int i = 0; i < ja_states.Count; i++) {
+
+					JObject jo_states = ja_states [i] as JObject;
+					string state_name = jo_states ["Name"].Value<string> ();
+					float x = jo_states ["Rect"] ["x"].Value<float> ();
+					float y = jo_states ["Rect"] ["y"].Value<float> ();
+					float w = jo_states ["Rect"] ["w"].Value<float> ();
+					float h = jo_states ["Rect"] ["h"].Value<float> ();
+
+					Rect rect = GUI.Window (i, new Rect (x, y, w, h), WindowFunction, state_name);
+					rect = SnapRect (rect);
+					jo_states ["Rect"] ["x"] = (int)rect.x;
+					jo_states ["Rect"] ["y"] = (int)rect.y;
+					jo_states ["Rect"] ["w"] = (int)rect.width;
+					jo_states ["Rect"] ["h"] = (int)rect.height;
+
+				}
+			}
 			EndWindows ();
 
 		}
@@ -161,6 +179,14 @@ namespace PGFrame
 			this.jElement.Load ();
 			this.jElement = null;
 			this.TransitionsList = null;
+		}
+
+		public Rect SnapRect (Rect rect)
+		{
+			rect.x = Mathf.Floor (rect.x / 10f) * 10f;
+			rect.y = Mathf.Floor (rect.y / 10f) * 10f;
+			return rect;
+//			return new Rect (Mathf.Floor (rect.x / 10f) * 10f, Mathf.Floor (rect.y / 10f) * 10f, rect.width, rect.height);
 		}
 	}
 }
