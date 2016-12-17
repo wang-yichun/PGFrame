@@ -16,8 +16,6 @@ namespace WS1
 
 		public override void Attach (ViewModelBase viewModel)
 		{
-			UnityEngine.Debug.Log ("BulletControllerBase.Attach");
-
 			BulletViewModel vm = (BulletViewModel)viewModel;
 
 			

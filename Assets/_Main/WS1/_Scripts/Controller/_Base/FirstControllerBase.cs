@@ -16,8 +16,6 @@ namespace WS1
 
 		public override void Attach (ViewModelBase viewModel)
 		{
-			UnityEngine.Debug.Log ("FirstControllerBase.Attach");
-
 			FirstViewModel vm = (FirstViewModel)viewModel;
 
 			

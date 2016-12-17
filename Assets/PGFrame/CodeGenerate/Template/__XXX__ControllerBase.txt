@@ -16,8 +16,6 @@ namespace __WWW__
 
 		public override void Attach (ViewModelBase viewModel)
 		{
-			UnityEngine.Debug.Log ("__XXX__ControllerBase.Attach");
-
 			__XXX__ViewModel vm = (__XXX__ViewModel)viewModel;
 
 			/****attach_code****/

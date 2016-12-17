@@ -16,8 +16,6 @@ namespace WS1
 
 		public override void Attach (ViewModelBase viewModel)
 		{
-			UnityEngine.Debug.Log ("PTestControllerBase.Attach");
-
 			PTestViewModel vm = (PTestViewModel)viewModel;
 
 			
