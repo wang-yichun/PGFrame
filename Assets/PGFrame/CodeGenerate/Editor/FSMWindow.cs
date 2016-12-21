@@ -19,10 +19,12 @@ namespace PGFrame
 		public static FSMWindow Current;
 
 		public Texture2D pgf_window_title_icon;
+		public Texture2D pgf_transation_point;
 
 		public void SetIcons ()
 		{
 			pgf_window_title_icon = Resources.Load<Texture2D> ("pgf_fsm_window_title_icon");
+			pgf_transation_point = Resources.Load<Texture2D> ("pgf_fsm_transation_point");
 		}
 
 		[MenuItem ("PogoRock/PGFrame/Finite State Machine... %_F2")]
@@ -115,6 +117,7 @@ namespace PGFrame
 			if (GUILayout.Button ("Save & Close")) {
 				SaveJsonFile ();
 				this.Close ();
+				return;
 			}
 			EditorGUILayout.Space ();
 			GUILayout.EndVertical ();
@@ -127,9 +130,7 @@ namespace PGFrame
 
 			GUILayout.EndHorizontal ();
 
-			Handles.BeginGUI ();
-			Handles.DrawBezier (windowRect.center, windowRect2.center, new Vector2 (windowRect.xMax + 50f, windowRect.center.y), new Vector2 (windowRect2.xMin - 50f, windowRect2.center.y), Color.red, null, 5f);
-			Handles.EndGUI ();
+			DrawTransitionLines ();
 
 			BeginWindows ();
 			if (jElement != null) {
@@ -145,6 +146,7 @@ namespace PGFrame
 					float h = jo_states ["Rect"] ["h"].Value<float> ();
 
 					Rect rect = GUI.Window (i, new Rect (x, y, w, h), WindowFunction, state_name);
+
 					rect = SnapRect (rect);
 					jo_states ["Rect"] ["x"] = (int)rect.x;
 					jo_states ["Rect"] ["y"] = (int)rect.y;
@@ -154,32 +156,36 @@ namespace PGFrame
 				}
 			}
 			EndWindows ();
-
 		}
 
 		void WindowFunction (int windowID)
 		{
 			JArray ja_states = jElement.jo ["State"] as JArray;
-			JObject jo_states = ja_states [windowID] as JObject;
+			JObject jo_state = ja_states [windowID] as JObject;
+			string state_name = jo_state ["Name"].Value<string> ();
 
 			GUILayout.BeginVertical ();
 
-			JArray ja_transitions = jo_states ["Transitions"] as JArray;
+			JArray ja_transitions = jo_state ["Transitions"] as JArray;
 
 			for (int i = 0; i < ja_transitions.Count; i++) {
 				JObject jo_transition = ja_transitions [i] as JObject;
 				GUILayout.BeginHorizontal ();
 				string transition_name = jo_transition ["Name"].Value<string> ();
 				GUILayout.Label (transition_name);
+
+				GUILayout.Label (pgf_transation_point);
 				GUILayout.EndHorizontal ();
 			}
 
 			GUILayout.EndVertical ();
 
-			GUI.DragWindow ();
+			if (Event.current.type == EventType.mouseDown/* && rect.Contains (Event.current.mousePosition)*/) {
+				Debug.Log ("Click " + windowID + " -- " + Event.current.mousePosition.ToString ());
+				focused_state_name = state_name;
+			}
 
-			windowRect = new Rect (Mathf.Floor (windowRect.x / 10f) * 10f, Mathf.Floor (windowRect.y / 10f) * 10f, windowRect.width, windowRect.height);
-			windowRect2 = new Rect (Mathf.Floor (windowRect2.x / 10f) * 10f, Mathf.Floor (windowRect2.y / 10f) * 10f, windowRect2.width, windowRect2.height);
+			GUI.DragWindow ();
 		}
 
 		public void SaveJsonFile ()
@@ -189,8 +195,9 @@ namespace PGFrame
 
 		public void OnDestroy ()
 		{
-			this.jElement.Load ();
-			this.jElement = null;
+			if (jElement != null) {
+				this.jElement = null;
+			}
 			this.TransitionsList = null;
 		}
 
@@ -200,6 +207,89 @@ namespace PGFrame
 			rect.y = Mathf.Floor (rect.y / 10f) * 10f;
 			return rect;
 //			return new Rect (Mathf.Floor (rect.x / 10f) * 10f, Mathf.Floor (rect.y / 10f) * 10f, rect.width, rect.height);
+		}
+
+		public string focused_state_name;
+
+		public void DrawTransitionLines ()
+		{
+			JArray ja_states = jElement.jo ["State"] as JArray;
+			for (int i = 0; i < ja_states.Count; i++) {
+				JObject jo_state = ja_states [i] as JObject;
+				string state_name = jo_state ["Name"].Value<string> ();
+				bool focused = false;
+				if (state_name == focused_state_name) {
+					focused = true;
+				}
+				JObject jo_rect = jo_state ["Rect"] as JObject;
+
+				Rect rect = new Rect (jo_rect ["x"].Value<float> (), jo_rect ["y"].Value<float> (), jo_rect ["w"].Value<float> (), jo_rect ["h"].Value<float> ());
+
+				JArray ja_transitions = jo_state ["Transitions"] as JArray;
+				for (int j = 0; j < ja_transitions.Count; j++) {
+					JObject jo_transition = ja_transitions [j] as JObject;
+					string transition_name = jo_transition ["Name"].Value<string> ();
+					string target_stage_name = jo_transition ["TargetState"].Value<string> ();
+
+					Vector2 startPosition;
+					Vector2 startTangent;
+					Vector2 endPostion;
+					Vector2 endTangent;
+					Vector2 targetCenter;
+
+					bool hasTargetState = GetStatePT (target_stage_name, out endPostion, out endTangent, out targetCenter, rect.center);
+
+					if (rect.center.x < targetCenter.x) {
+						startPosition = new Vector2 (rect.x + rect.width, rect.y + j * EditorGUIUtility.singleLineHeight + 1.7f * EditorGUIUtility.singleLineHeight);
+						startTangent = startPosition + Vector2.right * 50f;
+					} else {
+						startPosition = new Vector2 (rect.x, rect.y + j * EditorGUIUtility.singleLineHeight + 1.7f * EditorGUIUtility.singleLineHeight);
+						startTangent = startPosition + Vector2.left * 50f;
+					}
+
+					if (hasTargetState) {
+						Handles.BeginGUI ();
+
+						Color color = focused ? Color.green : Color.gray;
+
+						Handles.DrawBezier (startPosition, endPostion, startTangent, endTangent, color, null, 4f);
+						Vector2 arr0 = (endTangent - endPostion).normalized * 10f + endPostion + new Vector2 (0f, 5f);
+						Vector2 arr1 = (endTangent - endPostion).normalized * 10f + endPostion + new Vector2 (0f, -5f);
+						Handles.DrawBezier (endPostion, arr0, endPostion, arr0, color, null, 4f);
+						Handles.DrawBezier (endPostion, arr1, endPostion, arr1, color, null, 4f);
+						Handles.EndGUI ();
+					}
+				}
+			}
+		}
+
+		public bool GetStatePT (string stateName, out Vector2 endPosition, out Vector2 endTangent, out Vector2 targetCenter, Vector2 oriPosition)
+		{
+			endPosition = default(Vector2);
+			endTangent = default(Vector2);
+			targetCenter = default(Vector2);
+
+			JArray ja_states = jElement.jo ["State"] as JArray;
+			for (int i = 0; i < ja_states.Count; i++) {
+				JObject jo_state = ja_states [i] as JObject;
+				string state_name = jo_state ["Name"].Value<string> ();
+				if (state_name == stateName) {
+					JObject jo_rect = jo_state ["Rect"] as JObject;
+					Rect rect = new Rect (jo_rect ["x"].Value<float> (), jo_rect ["y"].Value<float> (), jo_rect ["w"].Value<float> (), jo_rect ["h"].Value<float> ());
+
+					if (rect.center.x > oriPosition.x) {
+						endPosition = new Vector2 (rect.x, rect.y + .5f * EditorGUIUtility.singleLineHeight);
+						endTangent = Vector2.left * 50f + endPosition;
+					} else {
+						endPosition = new Vector2 (rect.x + rect.width, rect.y + .5f * EditorGUIUtility.singleLineHeight);
+						endTangent = Vector2.right * 50f + endPosition;
+					}
+
+					targetCenter = rect.center;
+					return true;
+				}
+			}
+			return false;
 		}
 	}
 }
