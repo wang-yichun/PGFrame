@@ -171,6 +171,8 @@ namespace PGFrame
 			float maxWidth = 50f;
 			float maxHeight = 30f;
 
+			JObject jo_rect = jo_state ["Rect"] as JObject;
+
 			if (ja_transitions.Count > 0) {
 
 				// title size
@@ -191,7 +193,7 @@ namespace PGFrame
 					maxWidth = Mathf.Max (maxWidth, size.x + 11f);
 					maxHeight += size.y + 4f;
 
-					GUILayout.Label (content, style);
+					GUILayout.Label (content, style, GUILayout.Width (jo_rect ["w"].Value<float> () - 11f));
 
 					GUILayout.EndHorizontal ();
 				}
@@ -207,14 +209,14 @@ namespace PGFrame
 				GUILayout.Label (content, style);
 			}
 
-			JObject jo_rect = jo_state ["Rect"] as JObject;
+
 			jo_rect ["w"] = maxWidth;
 			jo_rect ["h"] = maxHeight;
 
 			GUILayout.EndVertical ();
 
 			if (Event.current.type == EventType.mouseDown/* && rect.Contains (Event.current.mousePosition)*/) {
-				Debug.Log ("Click " + windowID + " -- " + Event.current.mousePosition.ToString ());
+//				Debug.Log ("Click " + windowID + " -- " + Event.current.mousePosition.ToString ());
 				focused_state_name = state_name;
 			}
 
