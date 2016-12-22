@@ -291,8 +291,10 @@ namespace PGFrame
 				if (GUI.Button (r, content, GUIStyleTemplate.ButtonStyleAlignmentLeft ())) {
 					SelectedJsonElement = jElements.Single (je => je.FileName == jo_element_filename);
 
-					FSMWindow.Init ();
-					FSMWindow.Current.jElement = SelectedJsonElement;
+					if (dt == DocType.FSM) {
+						FSMWindow.Init ();
+						FSMWindow.Current.jElement = SelectedJsonElement;
+					}
 
 					AutoSelected.SelectedJsonFileName = jo_element_filename;
 					AutoSelected.Save ();

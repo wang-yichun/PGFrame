@@ -172,9 +172,15 @@ namespace PGFrame
 				JObject jo_transition = ja_transitions [i] as JObject;
 				GUILayout.BeginHorizontal ();
 				string transition_name = jo_transition ["Name"].Value<string> ();
-				GUILayout.Label (transition_name);
 
-				GUILayout.Label (pgf_transation_point);
+				GUIContent content = new GUIContent (transition_name);
+				GUIStyle style = GUI.skin.box;
+				style.alignment = TextAnchor.MiddleCenter;
+
+				GUILayout.Label (content, style);
+				Rect r = GUILayoutUtility.GetLastRect ();
+				Debug.Log (JsonConvert.SerializeObject (r));
+//				GUILayout.Label (pgf_transation_point);
 				GUILayout.EndHorizontal ();
 			}
 
@@ -240,10 +246,10 @@ namespace PGFrame
 					bool hasTargetState = GetStatePT (target_stage_name, out endPostion, out endTangent, out targetCenter, rect.center);
 
 					if (rect.center.x < targetCenter.x) {
-						startPosition = new Vector2 (rect.x + rect.width, rect.y + j * EditorGUIUtility.singleLineHeight + 1.7f * EditorGUIUtility.singleLineHeight);
+						startPosition = new Vector2 (rect.x + rect.width, rect.y + j * 23f + 1.8f * EditorGUIUtility.singleLineHeight);
 						startTangent = startPosition + Vector2.right * 50f;
 					} else {
-						startPosition = new Vector2 (rect.x, rect.y + j * EditorGUIUtility.singleLineHeight + 1.7f * EditorGUIUtility.singleLineHeight);
+						startPosition = new Vector2 (rect.x, rect.y + j * 23f + 1.8f * EditorGUIUtility.singleLineHeight);
 						startTangent = startPosition + Vector2.left * 50f;
 					}
 
