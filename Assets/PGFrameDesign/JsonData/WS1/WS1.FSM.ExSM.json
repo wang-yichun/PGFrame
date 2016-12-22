@@ -21,6 +21,9 @@
     },
     {
       "Name": "ToE"
+    },
+    {
+      "Name": "ToStateD"
     }
   ],
   "State": [
@@ -33,10 +36,10 @@
         }
       ],
       "Rect": {
-        "x": 120,
-        "y": 220,
-        "w": 160,
-        "h": 100
+        "x": 110,
+        "y": 290,
+        "w": 50.0,
+        "h": 53.0
       }
     },
     {
@@ -49,23 +52,42 @@
         {
           "Name": "ToC",
           "TargetState": "SC"
+        },
+        {
+          "Name": "ToStateD",
+          "TargetState": "SD"
         }
       ],
       "Rect": {
-        "x": 370,
-        "y": 150,
-        "w": 160,
-        "h": 100
+        "x": 300,
+        "y": 240,
+        "w": 65.0,
+        "h": 99.0
       }
     },
     {
       "Name": "SC",
       "Transitions": [],
       "Rect": {
-        "x": 610,
-        "y": 320,
-        "w": 160,
-        "h": 100
+        "x": 430,
+        "y": 370,
+        "w": 122.0,
+        "h": 53.0
+      }
+    },
+    {
+      "Name": "ThisIsMyLongestStateD",
+      "Transitions": [
+        {
+          "Name": "ToC",
+          "TargetState": "SC"
+        }
+      ],
+      "Rect": {
+        "x": 640,
+        "y": 280,
+        "w": 139.0,
+        "h": 53.0
       }
     }
   ]

@@ -138,20 +138,20 @@ namespace PGFrame
 
 				for (int i = 0; i < ja_states.Count; i++) {
 
-					JObject jo_states = ja_states [i] as JObject;
-					string state_name = jo_states ["Name"].Value<string> ();
-					float x = jo_states ["Rect"] ["x"].Value<float> ();
-					float y = jo_states ["Rect"] ["y"].Value<float> ();
-					float w = jo_states ["Rect"] ["w"].Value<float> ();
-					float h = jo_states ["Rect"] ["h"].Value<float> ();
+					JObject jo_state = ja_states [i] as JObject;
+					string state_name = jo_state ["Name"].Value<string> ();
+					float x = jo_state ["Rect"] ["x"].Value<float> ();
+					float y = jo_state ["Rect"] ["y"].Value<float> ();
+					float w = jo_state ["Rect"] ["w"].Value<float> ();
+					float h = jo_state ["Rect"] ["h"].Value<float> ();
 
 					Rect rect = GUI.Window (i, new Rect (x, y, w, h), WindowFunction, state_name);
 
 					rect = SnapRect (rect);
-					jo_states ["Rect"] ["x"] = (int)rect.x;
-					jo_states ["Rect"] ["y"] = (int)rect.y;
-					jo_states ["Rect"] ["w"] = (int)rect.width;
-					jo_states ["Rect"] ["h"] = (int)rect.height;
+					jo_state ["Rect"] ["x"] = (int)rect.x;
+					jo_state ["Rect"] ["y"] = (int)rect.y;
+					jo_state ["Rect"] ["w"] = (int)rect.width;
+					jo_state ["Rect"] ["h"] = (int)rect.height;
 
 				}
 			}
@@ -168,21 +168,48 @@ namespace PGFrame
 
 			JArray ja_transitions = jo_state ["Transitions"] as JArray;
 
-			for (int i = 0; i < ja_transitions.Count; i++) {
-				JObject jo_transition = ja_transitions [i] as JObject;
-				GUILayout.BeginHorizontal ();
-				string transition_name = jo_transition ["Name"].Value<string> ();
+			float maxWidth = 50f;
+			float maxHeight = 30f;
 
-				GUIContent content = new GUIContent (transition_name);
+			if (ja_transitions.Count > 0) {
+
+				// title size
+				GUIStyle style_cal = GUI.skin.label;
+				GUIContent title_content = new GUIContent (state_name);
+				Vector2 title_size = style_cal.CalcSize (title_content);
+				maxWidth = Mathf.Max (maxWidth, title_size.x + 11f);
+
+				for (int i = 0; i < ja_transitions.Count; i++) {
+					JObject jo_transition = ja_transitions [i] as JObject;
+					GUILayout.BeginHorizontal ();
+					string transition_name = jo_transition ["Name"].Value<string> ();
+
+					GUIStyle style = GUI.skin.box;
+					style.alignment = TextAnchor.MiddleCenter;
+					GUIContent content = new GUIContent (transition_name);
+					Vector2 size = style.CalcSize (content);
+					maxWidth = Mathf.Max (maxWidth, size.x + 11f);
+					maxHeight += size.y + 4f;
+
+					GUILayout.Label (content, style);
+
+					GUILayout.EndHorizontal ();
+				}
+			} else {
+
 				GUIStyle style = GUI.skin.box;
 				style.alignment = TextAnchor.MiddleCenter;
+				GUIContent content = new GUIContent ("No Transitions Out.");
+				Vector2 size = style.CalcSize (content);
+				maxWidth = Mathf.Max (maxWidth, size.x + 11f);
+				maxHeight += size.y + 4f;
 
 				GUILayout.Label (content, style);
-				Rect r = GUILayoutUtility.GetLastRect ();
-				Debug.Log (JsonConvert.SerializeObject (r));
-//				GUILayout.Label (pgf_transation_point);
-				GUILayout.EndHorizontal ();
 			}
+
+			JObject jo_rect = jo_state ["Rect"] as JObject;
+			jo_rect ["w"] = maxWidth;
+			jo_rect ["h"] = maxHeight;
 
 			GUILayout.EndVertical ();
 

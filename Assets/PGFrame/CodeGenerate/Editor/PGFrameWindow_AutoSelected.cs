@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Data;
 using System.Linq;
+using System;
 
 namespace PGFrame
 {
@@ -74,6 +75,12 @@ namespace PGFrame
 						if (SelectedJsonElement == null || SelectedJsonElement.Workspace != tempSelectedJsonElement.Workspace) {
 							SelectedJsonElement = tempSelectedJsonElement;
 							NeedRefresh = true;
+
+							DocType dt = (DocType)Enum.Parse (typeof(DocType), SelectedJsonElement.DocType);
+							if (dt == DocType.FSM) {
+								FSMWindow.Init ();
+								FSMWindow.Current.jElement = SelectedJsonElement;
+							}
 						}
 					}
 				}
