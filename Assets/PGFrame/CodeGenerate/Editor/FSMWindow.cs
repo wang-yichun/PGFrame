@@ -105,11 +105,31 @@ namespace PGFrame
 			TransitionsList.DoLayoutList ();
 
 			GUILayout.FlexibleSpace ();
+
+			if (in_state_rename_jo_state != null) {
+				GUILayout.BeginVertical ("box");
+				GUILayout.Label (string.Format ("Rename State({0}) To:", in_state_rename_jo_state ["Name"].Value<string> ()));
+				in_state_rename_target_name = GUILayout.TextField (in_state_rename_target_name);
+				if (GUILayout.Button ("Confirm Rename")) {
+					RenameState ();
+					in_state_rename_jo_state = null;
+					in_state_rename_target_name = "";
+				}
+				if (GUILayout.Button ("Cancel Rename State")) {
+					in_state_rename_jo_state = null;
+					in_state_rename_target_name = "";
+				}
+				GUILayout.EndVertical ();
+			}
+
 			if (in_state_transition_target_selecting_jo_state_transition != null) {
 				if (GUILayout.Button ("Cancel Transition To")) {
 					in_state_transition_target_selecting_jo_state_transition = null;
 					in_state_transition_target_selecting_window_id = -1;
 				}
+			}
+			if (GUILayout.Button ("Create New State")) {
+				
 			}
 			if (GUILayout.Button ("JElement")) {
 				PRDebug.TagLog (lt, lc, JsonConvert.SerializeObject (jElement, Formatting.Indented));
@@ -301,10 +321,14 @@ namespace PGFrame
 			menu.ShowAsContext ();
 		}
 
+		JObject in_state_rename_jo_state = null;
+		string in_state_rename_target_name = "";
+
 		public void ShowStateContextMenu_Add (int windowID)
 		{
 			JArray ja_states = jElement.jo ["State"] as JArray;
 			JObject jo_state = ja_states [windowID] as JObject;
+			string state_name = jo_state ["Name"].Value<string> ();
 
 			GenericMenu menu = new GenericMenu ();
 
@@ -313,7 +337,7 @@ namespace PGFrame
 				JObject jo_transition = ja_transitions [i] as JObject;
 				string transition_name = jo_transition ["Name"].Value<string> ();
 					
-				menu.AddItem (new GUIContent (transition_name), false, () => {
+				menu.AddItem (new GUIContent ("Add: " + transition_name), false, () => {
 					JArray ja_state_transitions = jo_state ["Transitions"] as JArray;
 					if (ja_state_transitions.FirstOrDefault (_ => _ ["Name"].Value<string> () == transition_name) == null) {
 						JObject jo_new_transitions = new JObject ();
@@ -323,6 +347,17 @@ namespace PGFrame
 					}
 				});
 			}
+
+			menu.AddSeparator ("");
+			menu.AddItem (new GUIContent ("Delete State"), false, () => {
+				ja_states.RemoveAt (windowID);
+			});
+				
+			menu.AddSeparator ("");
+			menu.AddItem (new GUIContent ("Rename State"), false, () => {
+				in_state_rename_jo_state = jo_state;
+			});
+
 			menu.ShowAsContext ();
 		}
 
@@ -434,6 +469,29 @@ namespace PGFrame
 				}
 			}
 			return false;
+		}
+
+		public void RenameState ()
+		{
+			JArray ja_states = jElement.jo ["State"] as JArray;
+			if (ja_states.FirstOrDefault (_ => _ ["Name"].Value<string> () == in_state_rename_target_name) == null) {
+
+				string ori_state_name = in_state_rename_jo_state ["Name"].Value<string> ();
+				in_state_rename_jo_state ["Name"] = in_state_rename_target_name;
+
+				for (int i = 0; i < ja_states.Count; i++) {
+					JObject jo_state = ja_states [i] as JObject;
+					JArray ja_state_transitions = jo_state ["Transitions"] as JArray;
+					for (int j = 0; j < ja_state_transitions.Count; j++) {
+						JObject jo_state_transition = ja_state_transitions [j] as JObject;
+						if (jo_state_transition ["TargetState"].Value<string> () == ori_state_name) {
+							jo_state_transition ["TargetState"] = in_state_rename_target_name;
+						}
+					}
+				}
+			} else {
+				PRDebug.TagLog (lt, lcr, "输入的状态名字已经被占用");
+			}
 		}
 	}
 }
