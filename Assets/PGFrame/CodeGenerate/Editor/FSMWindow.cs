@@ -130,7 +130,7 @@ namespace PGFrame
 				}
 			}
 			if (GUILayout.Button ("Create New State")) {
-				
+				CreateNewState ();
 			}
 			if (GUILayout.Button ("JElement")) {
 				PRDebug.TagLog (lt, lc, JsonConvert.SerializeObject (jElement, Formatting.Indented));
@@ -520,6 +520,24 @@ namespace PGFrame
 					}
 				}
 			}
+		}
+
+		public void CreateNewState ()
+		{
+			JArray ja_states = jElement.jo ["State"] as JArray;
+			string target_name = "NewState";
+			int digital_suffix = 0;
+			while (ja_states.FirstOrDefault (_ => _ ["Name"].Value<string> () == target_name) != null) {
+				digital_suffix++;
+				target_name = string.Format ("{0}{1}", target_name, digital_suffix);
+			}
+
+			JObject jo_state = new JObject ();
+			jo_state.Add ("Name", target_name);
+			jo_state.Add ("Transitions", new JArray ());
+			jo_state.Add ("Rect", new JObject (){ { "x", 150 }, { "y" , 100 }, { "w" , 100 }, { "h" , 50 } });
+
+			ja_states.Add (jo_state);
 		}
 	}
 }

@@ -8,94 +8,175 @@
   },
   "Transition": [
     {
-      "Name": "ToStateB"
+      "Name": "InitOnceOK"
     },
     {
-      "Name": "ToStateA"
+      "Name": "InitOK"
     },
     {
-      "Name": "ToC"
+      "Name": "Start"
     },
     {
-      "Name": "ToD"
+      "Name": "Restart"
     },
     {
-      "Name": "ToE"
+      "Name": "Pause"
     },
     {
-      "Name": "ToStateD"
+      "Name": "Resume"
+    },
+    {
+      "Name": "Win"
+    },
+    {
+      "Name": "Lose"
+    },
+    {
+      "Name": "Finish"
     }
   ],
   "State": [
     {
-      "Name": "SA_State",
+      "Name": "Running",
       "Transitions": [
         {
-          "Name": "ToB",
-          "TargetState": "SB"
+          "Name": "Pause",
+          "TargetState": "Pause"
+        },
+        {
+          "Name": "Win",
+          "TargetState": "Win"
+        },
+        {
+          "Name": "Lose",
+          "TargetState": "Lose"
         }
       ],
       "Rect": {
-        "x": 390,
-        "y": 170,
-        "w": 72.0,
+        "x": 290,
+        "y": 380,
+        "w": 71.0,
+        "h": 108.0
+      }
+    },
+    {
+      "Name": "Win",
+      "Transitions": [
+        {
+          "Name": "Restart",
+          "TargetState": "Init"
+        },
+        {
+          "Name": "Finish",
+          "TargetState": "End"
+        }
+      ],
+      "Rect": {
+        "x": 540,
+        "y": 400,
+        "w": 64.0,
+        "h": 82.0
+      }
+    },
+    {
+      "Name": "Lose",
+      "Transitions": [
+        {
+          "Name": "Restart",
+          "TargetState": "Init"
+        },
+        {
+          "Name": "Finish",
+          "TargetState": "End"
+        }
+      ],
+      "Rect": {
+        "x": 540,
+        "y": 500,
+        "w": 64.0,
+        "h": 82.0
+      }
+    },
+    {
+      "Name": "Pause",
+      "Transitions": [
+        {
+          "Name": "Resume",
+          "TargetState": "Running"
+        },
+        {
+          "Name": "Restart",
+          "TargetState": "Init"
+        },
+        {
+          "Name": "Finish",
+          "TargetState": "End"
+        }
+      ],
+      "Rect": {
+        "x": 490,
+        "y": 250,
+        "w": 68.0,
+        "h": 108.0
+      }
+    },
+    {
+      "Name": "Init",
+      "Transitions": [
+        {
+          "Name": "InitOK",
+          "TargetState": "Ready"
+        }
+      ],
+      "Rect": {
+        "x": 320,
+        "y": 250,
+        "w": 59.0,
         "h": 56.0
       }
     },
     {
-      "Name": "SB",
+      "Name": "Ready",
       "Transitions": [
         {
-          "Name": "ToA",
-          "TargetState": "SA_State"
+          "Name": "Start",
+          "TargetState": "Running"
         },
         {
-          "Name": "ToStateD",
-          "TargetState": "ThisIsMyLongestStateD"
-        },
-        {
-          "Name": "ToD",
-          "TargetState": "ThisIsMyLongestStateD"
-        },
-        {
-          "Name": "ToC",
-          "TargetState": "SC"
+          "Name": "Restart",
+          "TargetState": "Init"
         }
       ],
       "Rect": {
-        "x": 180,
-        "y": 230,
-        "w": 74.0,
-        "h": 134.0
+        "x": 150,
+        "y": 310,
+        "w": 64.0,
+        "h": 82.0
       }
     },
     {
-      "Name": "SC",
+      "Name": "InitOnce",
+      "Transitions": [
+        {
+          "Name": "InitOnceOK",
+          "TargetState": "Init"
+        }
+      ],
+      "Rect": {
+        "x": 230,
+        "y": 90,
+        "w": 87.0,
+        "h": 56.0
+      }
+    },
+    {
+      "Name": "End",
       "Transitions": [],
       "Rect": {
-        "x": 340,
-        "y": 380,
+        "x": 670,
+        "y": 300,
         "w": 122.0,
         "h": 59.0
-      }
-    },
-    {
-      "Name": "ThisIsMyLongestStateD",
-      "Transitions": [
-        {
-          "Name": "ToStateA",
-          "TargetState": "SA_State"
-        },
-        {
-          "Name": "ToC",
-          "TargetState": "SC"
-        }
-      ],
-      "Rect": {
-        "x": 570,
-        "y": 260,
-        "w": 150.0,
-        "h": 82.0
       }
     }
   ]
