@@ -3,6 +3,7 @@ using UnityEditor;
 using UnityEditor.Graphs;
 using UnityEditorInternal;
 using System.Collections;
+using System.Linq;
 using PogoTools;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -264,15 +265,22 @@ namespace PGFrame
 			JObject jo_state = ja_states [windowID] as JObject;
 
 			GenericMenu menu = new GenericMenu ();
-			menu.AddItem (new GUIContent ("Add Transitions"), false, () => {
-				
-			});
 
-//			foreach (DocType dt in Enum.GetValues (typeof(DocType))) {  
-//				menu.AddItem (new GUIContent (dt.ToString ()), false, (object userData) => {
-//					NeedShowPopupWindowDocType = (DocType)userData;
-//				}, dt);
-//			}
+			JArray ja_transitions = jElement.jo ["Transition"] as JArray;
+			for (int i = 0; i < ja_transitions.Count; i++) {
+				JObject jo_transition = ja_transitions [i] as JObject;
+				string transition_name = jo_transition ["Name"].Value<string> ();
+					
+				menu.AddItem (new GUIContent (transition_name), false, () => {
+					JArray ja_state_transitions = jo_state ["Transitions"] as JArray;
+					if (ja_state_transitions.FirstOrDefault (_ => _ ["Name"].Value<string> () == transition_name) == null) {
+						JObject jo_new_transitions = new JObject ();
+						jo_new_transitions.Add ("Name", transition_name);
+						jo_new_transitions.Add ("TargetState", null);
+						ja_state_transitions.Add (jo_new_transitions);
+					}
+				});
+			}
 			menu.ShowAsContext ();
 		}
 

@@ -55,7 +55,7 @@
         },
         {
           "Name": "ToStateD",
-          "TargetState": "SD"
+          "TargetState": null
         }
       ],
       "Rect": {
