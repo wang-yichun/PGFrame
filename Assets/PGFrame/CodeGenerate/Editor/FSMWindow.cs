@@ -60,7 +60,11 @@ namespace PGFrame
 					r.x = (rect.width - 25f) * split [split_idx] + 25f;
 					r.width = (rect.width - 25f) * (split [split_idx + 1] - split [split_idx]);
 					JObject jo_element = ja_elements [index] as JObject;
-					jo_element ["Name"] = GUI.TextField (r, jo_element ["Name"].Value<string> ());
+					string ori_element_name = jo_element ["Name"].Value<string> ();
+					string new_element_name = EditorGUI.DelayedTextField (r, ori_element_name);
+					if (new_element_name != ori_element_name) {
+						RenameTransition (ori_element_name, new_element_name);
+					}
 				};
 
 				TransitionsList.onAddCallback += (ReorderableList list) => {
@@ -76,9 +80,6 @@ namespace PGFrame
 				};
 			}
 		}
-
-		//		Rect windowRect = new Rect (400 + 100, 100, 100, 100);
-		//		Rect windowRect2 = new Rect (400, 100, 100, 100);
 
 		Vector2 scrollPosition;
 
@@ -491,6 +492,33 @@ namespace PGFrame
 				}
 			} else {
 				PRDebug.TagLog (lt, lcr, "输入的状态名字已经被占用");
+			}
+		}
+
+		public void RenameTransition (string ori_name, string new_name)
+		{
+			JArray ja_transitions = jElement.jo ["Transition"] as JArray;
+			JArray ja_states = jElement.jo ["State"] as JArray;
+
+			if (ja_transitions.FirstOrDefault (_ => _ ["Name"].Value<string> () == new_name) == null) {
+
+				for (int i = 0; i < ja_transitions.Count; i++) {
+					JObject jo_transition = ja_transitions [i] as JObject;
+					if (jo_transition ["Name"].Value<string> () == ori_name) {
+						jo_transition ["Name"] = new_name;
+					}
+				}
+
+				for (int i = 0; i < ja_states.Count; i++) {
+					JObject jo_state = ja_states [i] as JObject;
+					JArray ja_state_transitions = jo_state ["Transitions"] as JArray;
+					for (int j = 0; j < ja_state_transitions.Count; j++) {
+						JObject jo_state_transition = ja_state_transitions [j] as JObject;
+						if (jo_state_transition ["Name"].Value<string> () == ori_name) {
+							jo_state_transition ["Name"] = new_name;
+						}
+					}
+				}
 			}
 		}
 	}
