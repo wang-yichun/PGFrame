@@ -77,8 +77,8 @@ namespace PGFrame
 			}
 		}
 
-		Rect windowRect = new Rect (400 + 100, 100, 100, 100);
-		Rect windowRect2 = new Rect (400, 100, 100, 100);
+		//		Rect windowRect = new Rect (400 + 100, 100, 100, 100);
+		//		Rect windowRect2 = new Rect (400, 100, 100, 100);
 
 		Vector2 scrollPosition;
 
@@ -105,6 +105,12 @@ namespace PGFrame
 			TransitionsList.DoLayoutList ();
 
 			GUILayout.FlexibleSpace ();
+			if (in_state_transition_target_selecting_jo_state_transition != null) {
+				if (GUILayout.Button ("Cancel Transition To")) {
+					in_state_transition_target_selecting_jo_state_transition = null;
+					in_state_transition_target_selecting_window_id = -1;
+				}
+			}
 			if (GUILayout.Button ("JElement")) {
 				PRDebug.TagLog (lt, lc, JsonConvert.SerializeObject (jElement, Formatting.Indented));
 			}
@@ -189,8 +195,15 @@ namespace PGFrame
 					GUILayout.BeginHorizontal ();
 					string transition_name = jo_transition ["Name"].Value<string> ();
 
-					GUIStyle style = GUI.skin.label;
+					GUIStyle style = new GUIStyle (GUI.skin.label);
 					style.alignment = TextAnchor.MiddleCenter;
+
+					if (in_state_transition_target_selecting_window_id == windowID
+					    && in_state_transition_target_selecting_jo_state_transition ["Name"].Value<string> () == transition_name) {
+						style.normal.textColor = Color.green;
+						style.fontStyle = FontStyle.Bold;
+					}
+
 					GUIContent content = new GUIContent (transition_name);
 					Vector2 size = style.CalcSize (content);
 					maxWidth = Mathf.Max (maxWidth, size.x + 22f);
