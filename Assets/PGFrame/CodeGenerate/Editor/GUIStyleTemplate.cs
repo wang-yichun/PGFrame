@@ -8,6 +8,7 @@ public static class GUIStyleTemplate
 		GUIStyle s = new GUIStyle (GUI.skin.label);
 		s.fontSize = 20;
 		s.fontStyle = FontStyle.Bold;
+		s.alignment = TextAnchor.MiddleLeft;
 		return s;
 	}
 

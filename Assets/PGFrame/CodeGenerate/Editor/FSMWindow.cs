@@ -179,21 +179,23 @@ namespace PGFrame
 				GUIStyle style_cal = GUI.skin.label;
 				GUIContent title_content = new GUIContent (state_name);
 				Vector2 title_size = style_cal.CalcSize (title_content);
-				maxWidth = Mathf.Max (maxWidth, title_size.x + 11f);
+				maxWidth = Mathf.Max (maxWidth, title_size.x + 22f);
 
 				for (int i = 0; i < ja_transitions.Count; i++) {
 					JObject jo_transition = ja_transitions [i] as JObject;
 					GUILayout.BeginHorizontal ();
 					string transition_name = jo_transition ["Name"].Value<string> ();
 
-					GUIStyle style = GUI.skin.box;
+					GUIStyle style = GUI.skin.label;
 					style.alignment = TextAnchor.MiddleCenter;
 					GUIContent content = new GUIContent (transition_name);
 					Vector2 size = style.CalcSize (content);
-					maxWidth = Mathf.Max (maxWidth, size.x + 11f);
-					maxHeight += size.y + 4f;
+					maxWidth = Mathf.Max (maxWidth, size.x + 22f);
+					maxHeight += size.y + 10f;
 
-					GUILayout.Label (content, style, GUILayout.Width (jo_rect ["w"].Value<float> () - 11f));
+					GUILayout.BeginHorizontal ("box");
+					GUILayout.Label (content, style, GUILayout.Width (jo_rect ["w"].Value<float> () - 19f));
+					GUILayout.EndHorizontal ();
 
 					GUILayout.EndHorizontal ();
 				}
@@ -204,7 +206,7 @@ namespace PGFrame
 				GUIContent content = new GUIContent ("No Transitions Out.");
 				Vector2 size = style.CalcSize (content);
 				maxWidth = Mathf.Max (maxWidth, size.x + 11f);
-				maxHeight += size.y + 4f;
+				maxHeight += size.y + 10f;
 
 				GUILayout.Label (content, style);
 			}
@@ -275,10 +277,10 @@ namespace PGFrame
 					bool hasTargetState = GetStatePT (target_stage_name, out endPostion, out endTangent, out targetCenter, rect.center);
 
 					if (rect.center.x < targetCenter.x) {
-						startPosition = new Vector2 (rect.x + rect.width, rect.y + j * 23f + 1.8f * EditorGUIUtility.singleLineHeight);
+						startPosition = new Vector2 (rect.x + rect.width, rect.y + j * 28f + 1.8f * EditorGUIUtility.singleLineHeight);
 						startTangent = startPosition + Vector2.right * 50f;
 					} else {
-						startPosition = new Vector2 (rect.x, rect.y + j * 23f + 1.8f * EditorGUIUtility.singleLineHeight);
+						startPosition = new Vector2 (rect.x, rect.y + j * 28f + 1.8f * EditorGUIUtility.singleLineHeight);
 						startTangent = startPosition + Vector2.left * 50f;
 					}
 
