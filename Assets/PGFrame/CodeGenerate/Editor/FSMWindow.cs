@@ -388,7 +388,13 @@ namespace PGFrame
 					if (hasTargetState) {
 						Handles.BeginGUI ();
 
-						Color color = focused ? Color.green : Color.gray;
+						Color color = Color.gray;
+						if (target_stage_name == focused_state_name) {
+							color = Color.yellow;
+						} else if (focused) {
+							color = Color.green;
+						}
+//						Color color = focused ? Color.green : Color.gray;
 
 						Handles.DrawBezier (startPosition, endPostion, startTangent, endTangent, color, null, 4f);
 						Vector2 arr0 = (endTangent - endPostion).normalized * 10f + endPostion + new Vector2 (0f, 5f);
