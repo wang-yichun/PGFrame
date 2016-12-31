@@ -75,8 +75,7 @@ namespace PGFrame
 
 				TransitionsList.onRemoveCallback += (ReorderableList list) => {
 					JObject jo = ja_elements [list.index] as JObject;
-					// PR_TODO: 删除所有使用了该 Transition 的地方
-					ja_elements.RemoveAt (list.index);
+					DeleteTransition (jo ["Name"].Value<string> ());
 				};
 			}
 		}
@@ -248,7 +247,7 @@ namespace PGFrame
 
 				GUIStyle style = GUI.skin.box;
 				style.alignment = TextAnchor.MiddleCenter;
-				GUIContent content = new GUIContent ("No Transitions Out.");
+				GUIContent content = new GUIContent ("<Empty>");
 				Vector2 size = style.CalcSize (content);
 				maxWidth = Mathf.Max (maxWidth, size.x + 11f);
 				maxHeight += size.y + 10f;
@@ -538,6 +537,32 @@ namespace PGFrame
 			jo_state.Add ("Rect", new JObject (){ { "x", 150 }, { "y" , 100 }, { "w" , 100 }, { "h" , 50 } });
 
 			ja_states.Add (jo_state);
+		}
+
+		public void DeleteTransition (string name)
+		{
+			JArray ja_transitions = jElement.jo ["Transition"] as JArray;
+			JArray ja_states = jElement.jo ["State"] as JArray;
+
+			for (int i = 0; i < ja_transitions.Count; i++) {
+				JObject jo_transition = ja_transitions [i] as JObject;
+				if (jo_transition ["Name"].Value<string> () == name) {
+					ja_transitions.RemoveAt (i);
+					break;
+				}
+			}
+
+			for (int i = 0; i < ja_states.Count; i++) {
+				JObject jo_state = ja_states [i] as JObject;
+				JArray ja_state_transitions = jo_state ["Transitions"] as JArray;
+				for (int j = 0; j < ja_state_transitions.Count; j++) {
+					JObject jo_state_transition = ja_state_transitions [j] as JObject;
+					if (jo_state_transition ["Name"].Value<string> () == name) {
+						ja_state_transitions.RemoveAt (j);
+						break;
+					}
+				}
+			}
 		}
 	}
 }
