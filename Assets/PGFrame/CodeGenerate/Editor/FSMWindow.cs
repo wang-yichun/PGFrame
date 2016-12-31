@@ -173,6 +173,8 @@ namespace PGFrame
 
 			JObject jo_rect = jo_state ["Rect"] as JObject;
 
+			bool right_click_transition_box = false;
+
 			if (ja_transitions.Count > 0) {
 
 				// title size
@@ -195,6 +197,14 @@ namespace PGFrame
 
 					GUILayout.BeginHorizontal ("box");
 					GUILayout.Label (content, style, GUILayout.Width (jo_rect ["w"].Value<float> () - 19f));
+
+					if (Event.current.type == EventType.mouseDown && GUILayoutUtility.GetLastRect ().Contains (Event.current.mousePosition)) {
+						if (Event.current.button == 1) {
+							right_click_transition_box = true;
+							Debug.Log ("OK - " + windowID + " : " + i);
+							ShowStateTransitionContextMenu (windowID, i);
+						}
+					}
 					GUILayout.EndHorizontal ();
 
 					GUILayout.EndHorizontal ();
@@ -217,12 +227,53 @@ namespace PGFrame
 
 			GUILayout.EndVertical ();
 
-			if (Event.current.type == EventType.mouseDown/* && rect.Contains (Event.current.mousePosition)*/) {
-//				Debug.Log ("Click " + windowID + " -- " + Event.current.mousePosition.ToString ());
+			if (Event.current.type == EventType.mouseDown && right_click_transition_box == false) {
 				focused_state_name = state_name;
+				if (Event.current.button == 1) {
+					ShowStateContextMenu_Add (windowID);
+				}
 			}
 
-			GUI.DragWindow ();
+			if (Event.current.button == 0)
+				GUI.DragWindow ();
+		}
+
+		// 显示状态节点右键菜单
+		public void ShowStateTransitionContextMenu (int windowID, int transition_idx)
+		{
+			GenericMenu menu = new GenericMenu ();
+			menu.AddItem (new GUIContent ("Transition To"), false, () => {
+
+			});
+			menu.AddItem (new GUIContent ("Up"), false, () => {
+
+			});
+			menu.AddItem (new GUIContent ("Down"), false, () => {
+
+			});
+			menu.AddItem (new GUIContent ("Delete"), false, () => {
+
+			});
+
+			menu.ShowAsContext ();
+		}
+
+		public void ShowStateContextMenu_Add (int windowID)
+		{
+			JArray ja_states = jElement.jo ["State"] as JArray;
+			JObject jo_state = ja_states [windowID] as JObject;
+
+			GenericMenu menu = new GenericMenu ();
+			menu.AddItem (new GUIContent ("Add Transitions"), false, () => {
+				
+			});
+
+//			foreach (DocType dt in Enum.GetValues (typeof(DocType))) {  
+//				menu.AddItem (new GUIContent (dt.ToString ()), false, (object userData) => {
+//					NeedShowPopupWindowDocType = (DocType)userData;
+//				}, dt);
+//			}
+			menu.ShowAsContext ();
 		}
 
 		public void SaveJsonFile ()
