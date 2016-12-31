@@ -242,18 +242,31 @@ namespace PGFrame
 		// 显示状态节点右键菜单
 		public void ShowStateTransitionContextMenu (int windowID, int transition_idx)
 		{
+			JArray ja_states = jElement.jo ["State"] as JArray;
+			JObject jo_state = ja_states [windowID] as JObject;
+			JArray jo_state_transitions = jo_state ["Transitions"] as JArray;
+
 			GenericMenu menu = new GenericMenu ();
 			menu.AddItem (new GUIContent ("Transition To"), false, () => {
-
+				JObject jo_state_transition = jo_state_transitions [transition_idx] as JObject;
+				// PR_TODO:
 			});
 			menu.AddItem (new GUIContent ("Up"), false, () => {
-
+				if (transition_idx > 0) {
+					JObject jo_temp = jo_state_transitions [transition_idx - 1] as JObject;
+					jo_state_transitions [transition_idx - 1] = jo_state_transitions [transition_idx];
+					jo_state_transitions [transition_idx] = jo_temp;
+				}
 			});
 			menu.AddItem (new GUIContent ("Down"), false, () => {
-
+				if (transition_idx < jo_state_transitions.Count - 1) {
+					JObject jo_temp = jo_state_transitions [transition_idx + 1] as JObject;
+					jo_state_transitions [transition_idx + 1] = jo_state_transitions [transition_idx];
+					jo_state_transitions [transition_idx] = jo_temp;
+				}
 			});
 			menu.AddItem (new GUIContent ("Delete"), false, () => {
-
+				jo_state_transitions.RemoveAt (transition_idx);
 			});
 
 			menu.ShowAsContext ();
