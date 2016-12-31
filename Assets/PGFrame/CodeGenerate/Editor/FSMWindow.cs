@@ -234,6 +234,7 @@ namespace PGFrame
 				if (in_state_transition_target_selecting_jo_state_transition != null) {
 					in_state_transition_target_selecting_jo_state_transition ["TargetState"] = state_name;
 					in_state_transition_target_selecting_jo_state_transition = null;
+					in_state_transition_target_selecting_window_id = -1;
 				}
 
 				if (Event.current.button == 1) {
@@ -247,6 +248,7 @@ namespace PGFrame
 
 		//		bool in_state_transition_target_selecting_mode = false;
 		JObject in_state_transition_target_selecting_jo_state_transition = null;
+		int in_state_transition_target_selecting_window_id = -1;
 
 		// 显示状态节点右键菜单
 		public void ShowStateTransitionContextMenu (int windowID, int transition_idx)
@@ -259,6 +261,7 @@ namespace PGFrame
 			menu.AddItem (new GUIContent ("Transition To..."), false, () => {
 				JObject jo_state_transition = jo_state_transitions [transition_idx] as JObject;
 				in_state_transition_target_selecting_jo_state_transition = jo_state_transition;
+				in_state_transition_target_selecting_window_id = windowID;
 			});
 			menu.AddItem (new GUIContent ("Transition To Null"), false, () => {
 				JObject jo_state_transition = jo_state_transitions [transition_idx] as JObject;
@@ -362,10 +365,10 @@ namespace PGFrame
 					bool hasTargetState = GetStatePT (target_stage_name, out endPostion, out endTangent, out targetCenter, rect.center);
 
 					if (rect.center.x < targetCenter.x) {
-						startPosition = new Vector2 (rect.x + rect.width, rect.y + j * 28f + 1.8f * EditorGUIUtility.singleLineHeight);
+						startPosition = new Vector2 (rect.x + rect.width, rect.y + j * 26f + 1.9f * EditorGUIUtility.singleLineHeight);
 						startTangent = startPosition + Vector2.right * 50f;
 					} else {
-						startPosition = new Vector2 (rect.x, rect.y + j * 28f + 1.8f * EditorGUIUtility.singleLineHeight);
+						startPosition = new Vector2 (rect.x, rect.y + j * 26f + 1.9f * EditorGUIUtility.singleLineHeight);
 						startTangent = startPosition + Vector2.left * 50f;
 					}
 

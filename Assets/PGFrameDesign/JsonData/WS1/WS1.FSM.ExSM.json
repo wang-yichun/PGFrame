@@ -36,8 +36,8 @@
         }
       ],
       "Rect": {
-        "x": 90,
-        "y": 280,
+        "x": 390,
+        "y": 170,
         "w": 50.0,
         "h": 56.0
       }
@@ -50,20 +50,20 @@
           "TargetState": "SA"
         },
         {
-          "Name": "ToC",
-          "TargetState": "SC"
-        },
-        {
           "Name": "ToStateD",
           "TargetState": "ThisIsMyLongestStateD"
         },
         {
           "Name": "ToD",
-          "TargetState": null
+          "TargetState": "ThisIsMyLongestStateD"
+        },
+        {
+          "Name": "ToC",
+          "TargetState": "SC"
         }
       ],
       "Rect": {
-        "x": 240,
+        "x": 190,
         "y": 230,
         "w": 74.0,
         "h": 134.0
@@ -73,8 +73,8 @@
       "Name": "SC",
       "Transitions": [],
       "Rect": {
-        "x": 400,
-        "y": 350,
+        "x": 350,
+        "y": 380,
         "w": 122.0,
         "h": 59.0
       }
@@ -83,15 +83,19 @@
       "Name": "ThisIsMyLongestStateD",
       "Transitions": [
         {
+          "Name": "ToStateA",
+          "TargetState": "SA"
+        },
+        {
           "Name": "ToC",
           "TargetState": "SC"
         }
       ],
       "Rect": {
         "x": 580,
-        "y": 260,
+        "y": 270,
         "w": 150.0,
-        "h": 56.0
+        "h": 82.0
       }
     }
   ]
