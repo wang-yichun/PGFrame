@@ -230,6 +230,12 @@ namespace PGFrame
 
 			if (Event.current.type == EventType.mouseDown && right_click_transition_box == false) {
 				focused_state_name = state_name;
+
+				if (in_state_transition_target_selecting_jo_state_transition != null) {
+					in_state_transition_target_selecting_jo_state_transition ["TargetState"] = state_name;
+					in_state_transition_target_selecting_jo_state_transition = null;
+				}
+
 				if (Event.current.button == 1) {
 					ShowStateContextMenu_Add (windowID);
 				}
@@ -239,6 +245,9 @@ namespace PGFrame
 				GUI.DragWindow ();
 		}
 
+		//		bool in_state_transition_target_selecting_mode = false;
+		JObject in_state_transition_target_selecting_jo_state_transition = null;
+
 		// 显示状态节点右键菜单
 		public void ShowStateTransitionContextMenu (int windowID, int transition_idx)
 		{
@@ -247,9 +256,13 @@ namespace PGFrame
 			JArray jo_state_transitions = jo_state ["Transitions"] as JArray;
 
 			GenericMenu menu = new GenericMenu ();
-			menu.AddItem (new GUIContent ("Transition To"), false, () => {
+			menu.AddItem (new GUIContent ("Transition To..."), false, () => {
 				JObject jo_state_transition = jo_state_transitions [transition_idx] as JObject;
-				// PR_TODO:
+				in_state_transition_target_selecting_jo_state_transition = jo_state_transition;
+			});
+			menu.AddItem (new GUIContent ("Transition To Null"), false, () => {
+				JObject jo_state_transition = jo_state_transitions [transition_idx] as JObject;
+				jo_state_transition ["TargetState"] = null;
 			});
 			menu.AddItem (new GUIContent ("Up"), false, () => {
 				if (transition_idx > 0) {
