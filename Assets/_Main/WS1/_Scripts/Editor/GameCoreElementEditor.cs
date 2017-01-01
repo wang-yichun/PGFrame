@@ -53,13 +53,13 @@ namespace WS1
 
 			
 
-			string vmk;
+		string vmk;
 
-			vmk = "GameID";
-			string tempGameID = EditorGUILayout.DelayedTextField (vmk, VM.GameID);
-			if (tempGameID != VM.GameID) {
-				VM.GameID = tempGameID;
-			}
+		vmk = "GameID";
+		string tempGameID = EditorGUILayout.DelayedTextField (vmk, VM.GameID);
+		if (tempGameID != VM.GameID) {
+			VM.GameID = tempGameID;
+		}
 
 			vmk = "MyInfo";
 			ViewBase MyInfoView = (target as IGameCoreView).MyInfoView as ViewBase;
@@ -79,40 +79,40 @@ namespace WS1
 				}
 			}
 
-			vmk = "CurrentBullets";
-			EditorGUILayout.BeginHorizontal ();
-			string CurrentBulletsJson = JsonConvert.SerializeObject (VM.CurrentBullets);
-			string tempCurrentBulletsJson = EditorGUILayout.DelayedTextField (vmk, CurrentBulletsJson);
-			if (tempCurrentBulletsJson != CurrentBulletsJson) {
-				if (string.IsNullOrEmpty (tempCurrentBulletsJson)) {
-					VM.CurrentBullets = null;
-				} else {
-					VM.CurrentBullets = JsonConvert.DeserializeObject<ReactiveCollection<BulletViewModel>> (tempCurrentBulletsJson);
-				}
+		vmk = "CurrentBullets";
+		EditorGUILayout.BeginHorizontal ();
+		string CurrentBulletsJson = JsonConvert.SerializeObject (VM.CurrentBullets);
+		string tempCurrentBulletsJson = EditorGUILayout.DelayedTextField (vmk, CurrentBulletsJson);
+		if (tempCurrentBulletsJson != CurrentBulletsJson) {
+			if (string.IsNullOrEmpty (tempCurrentBulletsJson)) {
+				VM.CurrentBullets = null;
+			} else {
+				VM.CurrentBullets = JsonConvert.DeserializeObject<ReactiveCollection<BulletViewModel>> (tempCurrentBulletsJson);
 			}
-			if (GUILayout.Button ("...", GUILayout.MaxWidth (20))) {
-				PopupWindow.Show (
-					new Rect (Event.current.mousePosition.x, Event.current.mousePosition.y, 0f, 0f), 
-					new ReactiveCollectionEditorPopupWindow<BulletViewModel> (this, VM.CurrentBullets)
-				);
-			}
-			EditorGUILayout.EndHorizontal ();
+		}
+		if (GUILayout.Button ("...", GUILayout.MaxWidth (20))) {
+			PopupWindow.Show (
+				new Rect (Event.current.mousePosition.x, Event.current.mousePosition.y, 0f, 0f), 
+				new ReactiveCollectionEditorPopupWindow<BulletViewModel> (this, VM.CurrentBullets)
+			);
+		}
+		EditorGUILayout.EndHorizontal ();
 
-			vmk = "AddSomeBullet";
-			EditorGUILayout.BeginHorizontal ();
-			EditorGUILayout.PrefixLabel (vmk);
-			if (GUILayout.Button ("Invoke")) {
-				VM.RC_AddSomeBullet.Execute ();
-			}
-			EditorGUILayout.EndHorizontal ();
+		vmk = "AddSomeBullet";
+		EditorGUILayout.BeginHorizontal ();
+		EditorGUILayout.PrefixLabel (vmk);
+		if (GUILayout.Button ("Invoke")) {
+			VM.RC_AddSomeBullet.Execute ();
+		}
+		EditorGUILayout.EndHorizontal ();
 
-			vmk = "RemoveSomeBullet";
-			EditorGUILayout.BeginHorizontal ();
-			EditorGUILayout.PrefixLabel (vmk);
-			if (GUILayout.Button ("Invoke")) {
-				VM.RC_RemoveSomeBullet.Execute ();
-			}
-			EditorGUILayout.EndHorizontal ();
+		vmk = "RemoveSomeBullet";
+		EditorGUILayout.BeginHorizontal ();
+		EditorGUILayout.PrefixLabel (vmk);
+		if (GUILayout.Button ("Invoke")) {
+			VM.RC_RemoveSomeBullet.Execute ();
+		}
+		EditorGUILayout.EndHorizontal ();
 
 			vmk = "MyWS2Ball";
 			ViewBase MyWS2BallView = (target as IGameCoreView).MyWS2BallView as ViewBase;
@@ -132,22 +132,23 @@ namespace WS1
 				}
 			}
 
-			vmk = "GameState";
-			EditorGUILayout.BeginHorizontal ();
-			EditorGUILayout.PrefixLabel (vmk);
-			VM.GameState = (GameCoreFSM.State)EditorGUILayout.EnumPopup (VM.GameState);
+		vmk = "GameState";
+		EditorGUILayout.BeginHorizontal ();
+		EditorGUILayout.PrefixLabel (vmk);
+		VM.GameState = (GameCoreFSM.State)EditorGUILayout.EnumPopup (VM.GameState);
 
-			if (GUILayout.Button ("Transition To...")) {
-				GenericMenu menu = new GenericMenu ();
-				menu.AddItem (new GUIContent ("InitOnceOK"), false, () => {
-					VM.FSM_GameState.InitOnceOKTransition.Execute ();
-				});
-				menu.AddItem (new GUIContent ("InitOK"), false, () => {
-					VM.FSM_GameState.InitOKTransition.Execute ();
-				});
-				menu.ShowAsContext ();
-			}
-			EditorGUILayout.EndHorizontal ();
+		if (GUILayout.Button ("Transition To...")) {
+			GenericMenu menu = new GenericMenu ();
+//			PR_TODO:
+//			menu.AddItem (new GUIContent ("InitOnceOK"), false, () => {
+//				VM.FSM_GameState.InitOnceOKTransition.Execute ();
+//			});
+//			menu.AddItem (new GUIContent ("InitOK"), false, () => {
+//				VM.FSM_GameState.InitOKTransition.Execute ();
+//			});
+			menu.ShowAsContext ();
+		}
+		EditorGUILayout.EndHorizontal ();
 
 			EditorGUILayout.EndVertical ();
 			EditorGUI.indentLevel--;

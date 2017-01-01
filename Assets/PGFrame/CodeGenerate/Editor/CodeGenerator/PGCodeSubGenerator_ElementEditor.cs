@@ -95,11 +95,16 @@ namespace PGFrame
 			case "Command":
 				result = jom.GenEditorGUICommand ();
 				break;
+			case "FSM":
+				result = jom.GenEditorGUIFSM ();
+				break;
 			default:
 				break;
 			}
 			return result;
 		}
+
+
 
 		public static string GenEditorGUIProperty (this JObject jom, JObject jo)
 		{
@@ -488,5 +493,36 @@ namespace PGFrame
 
 			return result;
 		}
+
+		public static string GenEditorGUIFSM (this JObject jom)
+		{
+			string name = jom ["Name"].Value<string> ();
+			string type = jom ["Type"].Value<string> ();
+
+			string result = string.Format (@"
+
+		vmk = ""{0}"";
+		EditorGUILayout.BeginHorizontal ();
+		EditorGUILayout.PrefixLabel (vmk);
+		VM.{0} = ({1}.State)EditorGUILayout.EnumPopup (VM.{0});
+
+		if (GUILayout.Button (""Transition To..."")) {{
+			GenericMenu menu = new GenericMenu ();
+//			PR_TODO:
+//			menu.AddItem (new GUIContent (""InitOnceOK""), false, () => {{
+//				VM.FSM_{0}.InitOnceOKTransition.Execute ();
+//			}});
+//			menu.AddItem (new GUIContent (""InitOK""), false, () => {{
+//				VM.FSM_{0}.InitOKTransition.Execute ();
+//			}});
+			menu.ShowAsContext ();
+		}}
+		EditorGUILayout.EndHorizontal ();", name, type);
+			return result;
+		}
+
+
+
+
 	}
 }
