@@ -112,7 +112,7 @@ namespace WS1
 	{
 	
 	}
-
+	
 	public class RemoveSomeBulletCommand : ViewModelCommandBase
 	{
 	

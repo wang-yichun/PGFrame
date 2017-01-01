@@ -71,15 +71,15 @@ namespace PGFrame
 					JArray jap = (JArray)jom ["Params"];
 					if (jap != null && jap.Count > 0) {
 						template = @"
-			vm.RC_{NAME}.Subscribe<{NAME}Command> (command => {{
+			vm.RC_{NAME}.Subscribe<{NAME}Command> (command => {
 				command.Sender = viewModel;
 				{NAME} (({ELEMENTNAME}ViewModel)viewModel, command);
-			}}).AddTo (viewModel.baseAttachDisposables);";
+			}).AddTo (viewModel.baseAttachDisposables);";
 					} else {
 						template = @"
-			vm.RC_{NAME}.Subscribe (_ => {{
+			vm.RC_{NAME}.Subscribe (_ => {
 				{NAME} (({ELEMENTNAME}ViewModel)viewModel);
-			}}).AddTo (viewModel.baseAttachDisposables);";
+			}).AddTo (viewModel.baseAttachDisposables);";
 					}
 					template = template.Replace ("{ELEMENTNAME}", elementName);
 					template = template.Replace ("{NAME}", jom ["Name"].Value<string> ());

@@ -44,7 +44,7 @@ namespace WS1
 		public virtual void RemoveSomeBullet (GameCoreViewModel viewModel)
 		{
 		}
-
+					
 		public virtual void GameStateChanged (GameCoreViewModel viewModel, GameCoreFSM.State newState, GameCoreFSM.State oldState)
 		{
 		}
