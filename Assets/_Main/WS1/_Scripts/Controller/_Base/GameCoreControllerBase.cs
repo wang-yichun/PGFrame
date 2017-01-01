@@ -23,6 +23,11 @@ namespace WS1
 			vm.RC_RemoveSomeBullet.Subscribe (_ => {
 				RemoveSomeBullet ((GameCoreViewModel)viewModel);
 			}).AddTo (viewModel.baseAttachDisposables);
+
+			vm.FSM_GameState.Attach ();
+			vm.FSM_GameState.CurrentState.Pairwise ().Subscribe (_ => {
+				GameStateChanged ((GameCoreViewModel)viewModel, _.Current, _.Previous);
+			});
 		}
 
 		public override void Detach (ViewModelBase viewModel)
@@ -37,6 +42,10 @@ namespace WS1
 		}
 		/*  */
 		public virtual void RemoveSomeBullet (GameCoreViewModel viewModel)
+		{
+		}
+
+		public virtual void GameStateChanged (GameCoreViewModel viewModel, GameCoreFSM.State newState, GameCoreFSM.State oldState)
 		{
 		}
 	}

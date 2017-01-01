@@ -185,10 +185,39 @@ namespace PGFrame
 				result [0] = GenBindCodeReactiveMemberCommand (jo_member, jo_view);
 				result [1] = GenFuncCodeReactiveMemberCommand (jo_member, jo_view);
 				break;
+			case RxType.FSM:
+				
+				break;
 			default:
 				break;
 			}
 
+			return result;
+		}
+
+		public static string GenBindCodeFSMMemberProperty (JObject jo_member, JObject jo_view)
+		{
+			string member_name = jo_member ["Name"].Value<string> ();
+			string result = "";
+			if (jo_view ["Members"] [member_name] ["Bind"] ["Changed"].Value<bool> ()) {
+				result = string.Format (@"
+			VM.FSM_{0}.CurrentState.Pairwise ().Subscribe (OnChanged_{0}).AddTo (baseBindDisposables);", member_name);
+			}
+			return result;
+		}
+
+		public static string GenFuncCodeFSMMemberProperty (JObject jo_member, JObject jo_view)
+		{
+			string member_name = jo_member ["Name"].Value<string> ();
+			string member_type = jo_member ["Type"].Value<string> ();
+			string result = "";
+			if (jo_view ["Members"] [member_name] ["Bind"] ["Changed"].Value<bool> ()) {
+				result = string.Format (@"
+
+			public virtual void OnChanged_{0} (Pair<{1}.State> pair)
+			{{
+			}}", member_name, member_type);
+			}
 			return result;
 		}
 
@@ -211,9 +240,9 @@ namespace PGFrame
 			if (jo_view ["Members"] [member_name] ["Bind"] ["Changed"].Value<bool> ()) {
 				result = string.Format (@"
 
-		public virtual void OnChanged_{0} ({1} value)
-		{{
-		}}", member_name, member_type);
+			public virtual void OnChanged_{0} ({1} value)
+			{{
+			}}", member_name, member_type);
 			}
 			return result;
 		}

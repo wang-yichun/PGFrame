@@ -40,6 +40,12 @@
       "Name": "MyWS2Ball",
       "Type": "WS2.BallViewModel",
       "Desc": ""
+    },
+    {
+      "RxType": "FSM",
+      "Name": "GameState",
+      "Type": "GameCoreFSM",
+      "Desc": ""
     }
   ],
   "Views": [
@@ -81,6 +87,11 @@
         "MyWS2Ball": {
           "Bind": {
             "Changed": false
+          }
+        },
+        "GameState": {
+          "Bind": {
+            "Changed": true
           }
         }
       }

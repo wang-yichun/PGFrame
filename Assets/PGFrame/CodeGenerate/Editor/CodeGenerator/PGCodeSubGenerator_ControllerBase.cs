@@ -71,19 +71,32 @@ namespace PGFrame
 					JArray jap = (JArray)jom ["Params"];
 					if (jap != null && jap.Count > 0) {
 						template = @"
-			vm.RC_{NAME}.Subscribe<{NAME}Command> (command => {
+			vm.RC_{NAME}.Subscribe<{NAME}Command> (command => {{
 				command.Sender = viewModel;
 				{NAME} (({ELEMENTNAME}ViewModel)viewModel, command);
-			}).AddTo (viewModel.baseAttachDisposables);";
+			}}).AddTo (viewModel.baseAttachDisposables);";
 					} else {
 						template = @"
-			vm.RC_{NAME}.Subscribe (_ => {
+			vm.RC_{NAME}.Subscribe (_ => {{
 				{NAME} (({ELEMENTNAME}ViewModel)viewModel);
-			}).AddTo (viewModel.baseAttachDisposables);";
+			}}).AddTo (viewModel.baseAttachDisposables);";
 					}
 					template = template.Replace ("{ELEMENTNAME}", elementName);
 					template = template.Replace ("{NAME}", jom ["Name"].Value<string> ());
 					sb.Append (template);
+				} else if (jom ["RxType"].Value<string> () == "FSM") {
+
+					if (sb.Length == 0) {
+						sb.AppendFormat ("{0}ViewModel vm = ({0}ViewModel)viewModel;", elementName);
+					}
+
+					sb.AppendFormat (@"
+
+			vm.FSM_{1}.Attach ();
+			vm.FSM_{1}.CurrentState.Pairwise ().Subscribe (_ => {{
+				{1}Changed (({0}ViewModel)viewModel, _.Current, _.Previous);
+			}});", elementName, jom ["Name"].Value<string> ());
+
 				}
 			}
 			return sb.ToString ();
@@ -108,6 +121,8 @@ namespace PGFrame
 					template = template.Replace ("{NAME}", jom ["Name"].Value<string> ());
 					template = template.Replace ("{DESC}", jom ["Desc"].Value<string> ());
 					sb.Append (template);
+				} else if (jom ["RxType"].Value<string> () == "FSM") {
+					sb.AppendFormat ("\n\t\t\t\t\t\n\t\tpublic virtual void {1}Changed ({0}ViewModel viewModel, {2}.State newState, {2}.State oldState)\n\t\t{{\n\t\t}}", elementName, jom ["Name"].Value<string> (), jom ["Type"].Value<string> ());
 				}
 			}
 			return sb.ToString ();

@@ -109,6 +109,9 @@ namespace PGFrame
 			case RxType.Command:
 				jo.Add ("Executed", false);
 				break;
+			case RxType.FSM:
+				jo.Add ("Changed", false);
+				break;
 			default:
 				break;
 			}

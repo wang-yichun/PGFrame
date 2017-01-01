@@ -190,6 +190,10 @@ namespace PGFrame
 		VM.{0} = ({1})EditorGUILayout.EnumPopup (vmk, VM.{0});", name, type);
 							is_ese = true;
 							break;
+
+						case DocType.FSM:
+							is_ese = false;
+							break;
 						default:
 							throw new System.ArgumentOutOfRangeException ();
 						}

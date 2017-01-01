@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditorInternal;
 
 namespace WS1
 {
@@ -38,7 +39,7 @@ namespace WS1
 		{
 			return VM;
 		}
-		
+
 		public override void SetViewModel (ViewModelBase viewModel)
 		{
 			VM = (GameCoreViewModel)viewModel;
@@ -87,13 +88,15 @@ namespace WS1
 		{
 			base.BeforeBind ();
 		}
-		
+
 		public override void Bind ()
 		{
 			base.Bind ();
 			
-			VM.CurrentBullets.ObserveAdd ().Subscribe (OnAdd_CurrentBullets).AddTo(baseBindDisposables);
-			VM.CurrentBullets.ObserveRemove ().Subscribe (OnRemove_CurrentBullets).AddTo(baseBindDisposables);
+			VM.CurrentBullets.ObserveAdd ().Subscribe (OnAdd_CurrentBullets).AddTo (baseBindDisposables);
+			VM.CurrentBullets.ObserveRemove ().Subscribe (OnRemove_CurrentBullets).AddTo (baseBindDisposables);
+
+			VM.FSM_GameState.CurrentState.Pairwise ().Subscribe (OnChanged_GameState).AddTo (baseBindDisposables);
 		}
 
 		public override void AfterBind ()
@@ -111,8 +114,10 @@ namespace WS1
 		{
 		}
 
-		
-	
+		public virtual void OnChanged_GameState (Pair<GameCoreFSM.State> pair)
+		{
+		}
+
 		[SerializeField, HideInInspector]
 		public ViewBase _MyInfoView;
 
@@ -124,7 +129,7 @@ namespace WS1
 				_MyInfoView = (ViewBase)value;
 			}
 		}
-	
+
 		[SerializeField, HideInInspector]
 		public ViewBase _MyWS2BallView;
 
