@@ -173,10 +173,6 @@ namespace PGFrame
 					float h = jo_state ["Rect"] ["h"].Value<float> ();
 
 					Rect rect = GUI.Window (i, new Rect (x, y, w, h), WindowFunction, state_name);
-//
-//					if (state_name == jo_common ["EntryState"].Value<string> ()) {
-//						GUI.Label (new Rect (x - 10, y - 10, w, 10), "Entry");
-//					}
 
 					rect = SnapRect (rect);
 					jo_state ["Rect"] ["x"] = (int)rect.x;
@@ -254,9 +250,9 @@ namespace PGFrame
 				GUIContent content = new GUIContent ("<Empty>");
 				Vector2 size = style.CalcSize (content);
 				maxWidth = Mathf.Max (maxWidth, size.x + 11f);
-				maxHeight += size.y + 10f;
+				maxHeight += size.y + 4f;
 
-				GUILayout.Label (content, style);
+				GUILayout.Label (content, style, GUILayout.Width (jo_rect ["w"].Value<float> () - 11f));
 			}
 
 
@@ -266,9 +262,9 @@ namespace PGFrame
 				GUIContent content = new GUIContent ("<Entry>");
 				Vector2 size = style.CalcSize (content);
 				maxWidth = Mathf.Max (maxWidth, size.x + 11f);
-				maxHeight += size.y + 10f;
+				maxHeight += size.y + 4f;
 
-				GUILayout.Label (content, style);
+				GUILayout.Label (content, style, GUILayout.Width (jo_rect ["w"].Value<float> () - 11f));
 			}
 
 			jo_rect ["w"] = maxWidth;
@@ -364,14 +360,16 @@ namespace PGFrame
 			}
 
 			menu.AddSeparator ("");
+			menu.AddItem (new GUIContent ("Rename State"), false, () => {
+				in_state_rename_jo_state = jo_state;
+			});
+
+			menu.AddSeparator ("");
 			if (jElement.jo ["Common"] ["EntryState"].Value<string> () != state_name) {
 				menu.AddItem (new GUIContent ("Set Entry"), false, () => {
 					jElement.jo ["Common"] ["EntryState"] = state_name;
 				});
 			}
-			menu.AddItem (new GUIContent ("Rename State"), false, () => {
-				in_state_rename_jo_state = jo_state;
-			});
 
 			menu.AddSeparator ("");
 			menu.AddItem (new GUIContent ("Delete State"), false, () => {
