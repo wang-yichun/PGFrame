@@ -438,6 +438,9 @@ namespace PGFrame
 						case DocType.Enum:
 							cjf = new EnumJsonFileCreater (this, value);
 							break;
+						case DocType.FSM:
+							cjf = new FSMJsonFileCreater (this, value);
+							break;
 						default:
 							throw new ArgumentOutOfRangeException ();
 						}

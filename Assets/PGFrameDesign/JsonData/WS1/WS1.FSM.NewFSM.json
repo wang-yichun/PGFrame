@@ -1,0 +1,22 @@
+{
+  "Workspace": "WS1",
+  "DocType": "FSM",
+  "Common": {
+    "Name": "NewFSM",
+    "Desc": "",
+    "EntryState": "DefaultState"
+  },
+  "Transition": [],
+  "State": [
+    {
+      "Name": "DefaultState",
+      "Transitions": [],
+      "Rect": {
+        "x": 150,
+        "y": 100,
+        "w": 100,
+        "h": 50
+      }
+    }
+  ]
+}
