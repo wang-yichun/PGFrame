@@ -4,7 +4,7 @@
   "Common": {
     "Name": "GameCoreFSM",
     "Desc": "描述一个游戏核心的状态",
-    "EntryState": "SA"
+    "EntryState": "InitOnce"
   },
   "Transition": [
     {

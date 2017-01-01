@@ -173,6 +173,10 @@ namespace PGFrame
 					float h = jo_state ["Rect"] ["h"].Value<float> ();
 
 					Rect rect = GUI.Window (i, new Rect (x, y, w, h), WindowFunction, state_name);
+//
+//					if (state_name == jo_common ["EntryState"].Value<string> ()) {
+//						GUI.Label (new Rect (x - 10, y - 10, w, 10), "Entry");
+//					}
 
 					rect = SnapRect (rect);
 					jo_state ["Rect"] ["x"] = (int)rect.x;
@@ -187,6 +191,7 @@ namespace PGFrame
 
 		void WindowFunction (int windowID)
 		{
+			string entry_state = jElement.jo ["Common"] ["EntryState"].Value<string> ();
 			JArray ja_states = jElement.jo ["State"] as JArray;
 			JObject jo_state = ja_states [windowID] as JObject;
 			string state_name = jo_state ["Name"].Value<string> ();
@@ -202,13 +207,13 @@ namespace PGFrame
 
 			bool right_click_transition_box = false;
 
-			if (ja_transitions.Count > 0) {
+			// title size
+			GUIStyle style_cal = GUI.skin.label;
+			GUIContent title_content = new GUIContent (state_name);
+			Vector2 title_size = style_cal.CalcSize (title_content);
+			maxWidth = Mathf.Max (maxWidth, title_size.x + 22f);
 
-				// title size
-				GUIStyle style_cal = GUI.skin.label;
-				GUIContent title_content = new GUIContent (state_name);
-				Vector2 title_size = style_cal.CalcSize (title_content);
-				maxWidth = Mathf.Max (maxWidth, title_size.x + 22f);
+			if (ja_transitions.Count > 0) {
 
 				for (int i = 0; i < ja_transitions.Count; i++) {
 					JObject jo_transition = ja_transitions [i] as JObject;
@@ -245,7 +250,7 @@ namespace PGFrame
 				}
 			} else {
 
-				GUIStyle style = GUI.skin.box;
+				GUIStyle style = new GUIStyle (GUI.skin.box);
 				style.alignment = TextAnchor.MiddleCenter;
 				GUIContent content = new GUIContent ("<Empty>");
 				Vector2 size = style.CalcSize (content);
@@ -255,6 +260,17 @@ namespace PGFrame
 				GUILayout.Label (content, style);
 			}
 
+
+			if (state_name == entry_state) {
+				GUIStyle style = new GUIStyle (GUI.skin.box);
+				style.alignment = TextAnchor.MiddleCenter;
+				GUIContent content = new GUIContent ("<Entry>");
+				Vector2 size = style.CalcSize (content);
+				maxWidth = Mathf.Max (maxWidth, size.x + 11f);
+				maxHeight += size.y + 10f;
+
+				GUILayout.Label (content, style);
+			}
 
 			jo_rect ["w"] = maxWidth;
 			jo_rect ["h"] = maxHeight;
