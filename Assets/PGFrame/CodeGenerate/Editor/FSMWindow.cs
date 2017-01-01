@@ -240,7 +240,6 @@ namespace PGFrame
 					if (Event.current.type == EventType.mouseDown && GUILayoutUtility.GetLastRect ().Contains (Event.current.mousePosition)) {
 						if (Event.current.button == 1) {
 							right_click_transition_box = true;
-							Debug.Log ("OK - " + windowID + " : " + i);
 							ShowStateTransitionContextMenu (windowID, i);
 						}
 					}
@@ -365,13 +364,18 @@ namespace PGFrame
 			}
 
 			menu.AddSeparator ("");
-			menu.AddItem (new GUIContent ("Delete State"), false, () => {
-				ja_states.RemoveAt (windowID);
-			});
-				
-			menu.AddSeparator ("");
+			if (jElement.jo ["Common"] ["EntryState"].Value<string> () != state_name) {
+				menu.AddItem (new GUIContent ("Set Entry"), false, () => {
+					jElement.jo ["Common"] ["EntryState"] = state_name;
+				});
+			}
 			menu.AddItem (new GUIContent ("Rename State"), false, () => {
 				in_state_rename_jo_state = jo_state;
+			});
+
+			menu.AddSeparator ("");
+			menu.AddItem (new GUIContent ("Delete State"), false, () => {
+				ja_states.RemoveAt (windowID);
 			});
 
 			menu.ShowAsContext ();
@@ -417,7 +421,7 @@ namespace PGFrame
 				JArray ja_transitions = jo_state ["Transitions"] as JArray;
 				for (int j = 0; j < ja_transitions.Count; j++) {
 					JObject jo_transition = ja_transitions [j] as JObject;
-					string transition_name = jo_transition ["Name"].Value<string> ();
+//					string transition_name = jo_transition ["Name"].Value<string> ();
 					string target_stage_name = jo_transition ["TargetState"].Value<string> ();
 
 					Vector2 startPosition;
