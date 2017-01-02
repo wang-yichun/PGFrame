@@ -111,6 +111,7 @@ namespace PGFrame
 				break;
 			case RxType.FSM:
 				jo.Add ("Changed", false);
+				jo.Add ("AdvancedChanged", false);
 				break;
 			default:
 				break;
