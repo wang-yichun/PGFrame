@@ -1,0 +1,45 @@
+﻿using System.Linq;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+namespace __WWW__
+{
+
+	using PGFrame;
+	using Newtonsoft.Json;
+	using Newtonsoft.Json.Linq;
+	using UniRx;
+
+	public class __XXX__ : FSMBase<__XXX__.State>
+	{
+		public enum State
+		{
+			/****STATES****/
+		}
+
+		public override void Initialize ()
+		{
+			CurrentState = new ReactiveProperty<State> (__ZZZ__);
+
+			/****INITIALIZE_REACTIVECOMMAND****/
+
+			base.Initialize ();
+		}
+
+		public override void Attach ()
+		{
+			base.Attach ();
+
+			/****ATTACH_REACTIVECOMMAND****/
+		}
+
+		public override void Detach ()
+		{
+			base.Detach ();
+		}
+
+		/****DECLARE_REACTIVECOMMAND****/
+	}
+
+}
