@@ -118,16 +118,21 @@ namespace PGFrame
 				StringBuilder sb_inner = new StringBuilder ();
 
 				JArray ja_states = jo ["State"] as JArray;
-				ja_states.ToObservable ().Subscribe (_s => {
-					string state_name = (_s as JObject) ["Name"].Value<string> ();
-					JArray ja_state_transitions = _s ["Transitions"] as JArray;
-					ja_state_transitions.ToObservable ().Where (_t => (_t as JObject) ["Name"].Value<string> () == transition_name).Subscribe (_t => {
-						string target_state_name = (_t as JObject) ["TargetState"].Value<string> ();
-						sb_inner.AppendFormat (@"				
-				if (CurrentState.Value == State.{0})
-					CurrentState.Value = State.{1};", state_name, target_state_name);
-					});
-				});
+				for (int j = 0; j < ja_states.Count; j++) {
+					JObject jo_state = ja_states [j] as JObject;
+					string state_name = jo_state ["Name"].Value<string> ();
+					JArray ja_state_transitions = jo_state ["Transitions"] as JArray;
+					for (int k = 0; k < ja_state_transitions.Count; k++) {
+						JObject jo_state_transition = ja_state_transitions [k] as JObject;
+						string target_state_name = jo_state_transition ["TargetState"].Value<string> ();
+
+						if (jo_state_transition ["Name"].Value<string> () == transition_name) {
+							sb_inner.AppendFormat (@"
+				{2}if (CurrentState.Value == State.{0})
+					CurrentState.Value = State.{1};", state_name, target_state_name, sb_inner.Length == 0 ? string.Empty : "else ");
+						}
+					}
+				}
 
 				sb.AppendFormat (@"
 			

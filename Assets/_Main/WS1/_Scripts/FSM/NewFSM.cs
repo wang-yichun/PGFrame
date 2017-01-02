@@ -1,9 +1,9 @@
-﻿using System.Linq;
+using System.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace __WWW__
+namespace WS1
 {
 
 	using PGFrame;
@@ -11,17 +11,17 @@ namespace __WWW__
 	using Newtonsoft.Json.Linq;
 	using UniRx;
 
-	public class __XXX__ : FSMBase<__XXX__.State>
+	public class NewFSM : FSMBase<NewFSM.State>
 	{
 		public enum State
 		{
-/****STATES****/
+			DefaultState
 		}
 
 		public override void Initialize ()
 		{
-			CurrentState = new ReactiveProperty<State> (__ZZZ__);
-			/****INITIALIZE_REACTIVECOMMAND****/
+			CurrentState = new ReactiveProperty<State> (State.DefaultState);
+			
 
 			base.Initialize ();
 		}
@@ -29,14 +29,14 @@ namespace __WWW__
 		public override void Attach ()
 		{
 			base.Attach ();
-			/****ATTACH_REACTIVECOMMAND****/
+			
 		}
 
 		public override void Detach ()
 		{
 			base.Detach ();
 		}
-		/****DECLARE_REACTIVECOMMAND****/
+		
 	}
 
 }

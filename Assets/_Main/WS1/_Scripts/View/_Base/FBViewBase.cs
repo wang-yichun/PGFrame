@@ -72,8 +72,8 @@ namespace WS1
 		{
 			base.Bind ();
 			
-			VM.RP_Count.Subscribe (OnChanged_Count).AddTo(baseBindDisposables);
-			VM.RC_FBTestCMD.Subscribe (OnExecuted_FBTestCMD).AddTo(baseBindDisposables);
+			VM.RP_Count.Subscribe (OnChanged_Count).AddTo (baseBindDisposables);
+			VM.RC_FBTestCMD.Subscribe (OnExecuted_FBTestCMD).AddTo (baseBindDisposables);
 		}
 
 		public override void AfterBind ()
@@ -87,9 +87,9 @@ namespace WS1
 		{
 		}
 
-			public virtual void OnExecuted_FBTestCMD (Unit unit)
-			{
-			}
+		public virtual void OnExecuted_FBTestCMD (Unit unit)
+		{
+		}
 
 		
 	}

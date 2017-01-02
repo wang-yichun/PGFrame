@@ -28,7 +28,6 @@ namespace WS1
 		public override void Initialize ()
 		{
 			CurrentState = new ReactiveProperty<State> (State.InitOnce);
-
 			
 			InitOnceOKTransition = CurrentState.Select (_ => _ == State.InitOnce).ToReactiveCommand ();
 			InitOKTransition = CurrentState.Select (_ => _ == State.Init).ToReactiveCommand ();
@@ -47,68 +46,67 @@ namespace WS1
 		public override void Attach ()
 		{
 			base.Attach ();
-
+			
 			
 			InitOnceOKTransition.Subscribe (_ => {
-								
 				if (CurrentState.Value == State.InitOnce)
 					CurrentState.Value = State.Init;
 			}).AddTo (this.baseAttachDisposables);
+			
 			InitOKTransition.Subscribe (_ => {
-								
 				if (CurrentState.Value == State.Init)
 					CurrentState.Value = State.Ready;
 			}).AddTo (this.baseAttachDisposables);
+			
 			StartTransition.Subscribe (_ => {
-								
 				if (CurrentState.Value == State.Ready)
 					CurrentState.Value = State.Running;
 			}).AddTo (this.baseAttachDisposables);
+			
 			RestartTransition.Subscribe (_ => {
-								
 				if (CurrentState.Value == State.Ready)
-					CurrentState.Value = State.Init;				
-				if (CurrentState.Value == State.Pause)
-					CurrentState.Value = State.Init;				
-				if (CurrentState.Value == State.Win)
-					CurrentState.Value = State.Init;				
-				if (CurrentState.Value == State.Lose)
+					CurrentState.Value = State.Init;
+				else if (CurrentState.Value == State.Pause)
+					CurrentState.Value = State.Init;
+				else if (CurrentState.Value == State.Win)
+					CurrentState.Value = State.Init;
+				else if (CurrentState.Value == State.Lose)
 					CurrentState.Value = State.Init;
 			}).AddTo (this.baseAttachDisposables);
+			
 			PauseTransition.Subscribe (_ => {
-								
-				if (CurrentState.Value == State.Running)
-					CurrentState.Value = State.Pause;				
 				if (CurrentState.Value == State.Ready)
 					CurrentState.Value = State.Pause;
+				else if (CurrentState.Value == State.Running)
+					CurrentState.Value = State.Pause;
 			}).AddTo (this.baseAttachDisposables);
+			
 			ResumeTransition.Subscribe (_ => {
-								
 				if (CurrentState.Value == State.Pause)
 					CurrentState.Value = State.Running;
 			}).AddTo (this.baseAttachDisposables);
+			
 			ResumeToReadyTransition.Subscribe (_ => {
-								
 				if (CurrentState.Value == State.Pause)
 					CurrentState.Value = State.Ready;
 			}).AddTo (this.baseAttachDisposables);
+			
 			WinTransition.Subscribe (_ => {
-								
 				if (CurrentState.Value == State.Running)
 					CurrentState.Value = State.Win;
 			}).AddTo (this.baseAttachDisposables);
+			
 			LoseTransition.Subscribe (_ => {
-								
 				if (CurrentState.Value == State.Running)
 					CurrentState.Value = State.Lose;
 			}).AddTo (this.baseAttachDisposables);
+			
 			FinishTransition.Subscribe (_ => {
-								
-				if (CurrentState.Value == State.Win)
-					CurrentState.Value = State.End;				
 				if (CurrentState.Value == State.Pause)
-					CurrentState.Value = State.End;				
-				if (CurrentState.Value == State.Lose)
+					CurrentState.Value = State.End;
+				else if (CurrentState.Value == State.Win)
+					CurrentState.Value = State.End;
+				else if (CurrentState.Value == State.Lose)
 					CurrentState.Value = State.End;
 			}).AddTo (this.baseAttachDisposables);
 		}
@@ -117,7 +115,6 @@ namespace WS1
 		{
 			base.Detach ();
 		}
-
 		
 		public ReactiveCommand InitOnceOKTransition;
 		public ReactiveCommand InitOKTransition;

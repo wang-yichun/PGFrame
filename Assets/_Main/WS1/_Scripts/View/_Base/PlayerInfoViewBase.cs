@@ -72,7 +72,7 @@ namespace WS1
 		{
 			base.Bind ();
 			
-			VM.RP_Name.Subscribe (OnChanged_Name).AddTo(baseBindDisposables);
+			VM.RP_Name.Subscribe (OnChanged_Name).AddTo (baseBindDisposables);
 		}
 
 		public override void AfterBind ()
