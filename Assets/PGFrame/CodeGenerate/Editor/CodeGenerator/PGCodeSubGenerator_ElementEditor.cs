@@ -501,23 +501,32 @@ namespace PGFrame
 
 			string result = string.Format (@"
 
-		vmk = ""{0}"";
-		EditorGUILayout.BeginHorizontal ();
-		EditorGUILayout.PrefixLabel (vmk);
-		VM.{0} = ({1}.State)EditorGUILayout.EnumPopup (VM.{0});
+			vmk = ""{0}"";
+			EditorGUILayout.BeginHorizontal ();
+			EditorGUILayout.PrefixLabel (vmk);
+			VM.{0} = ({1}.State)EditorGUILayout.EnumPopup (VM.{0});
+			if (GUILayout.Button (""Transition..."")) {{
+				GenericMenu menu = new GenericMenu ();
 
-		if (GUILayout.Button (""Transition To..."")) {{
-			GenericMenu menu = new GenericMenu ();
-//			PR_TODO:
-//			menu.AddItem (new GUIContent (""InitOnceOK""), false, () => {{
-//				VM.FSM_{0}.InitOnceOKTransition.Execute ();
-//			}});
-//			menu.AddItem (new GUIContent (""InitOK""), false, () => {{
-//				VM.FSM_{0}.InitOKTransition.Execute ();
-//			}});
-			menu.ShowAsContext ();
-		}}
-		EditorGUILayout.EndHorizontal ();", name, type);
+				Type FSMType = typeof(WS1.{1});
+				FieldInfo[] fis = FSMType.GetFields ();
+				fis.ToObservable ().Where (_ => {{
+					return _.FieldType == typeof(UniRx.ReactiveCommand) &&
+					_.Name.ToString ().EndsWith (""Transition"");
+				}}).Select ((_, idx) => {{
+					int lio = _.Name.ToString ().LastIndexOf (""Transition"");
+					return new {{_ = _, idx = idx, name = _.Name.ToString ().Substring (0, lio)}};
+				}}).Subscribe (_ => {{
+					menu.AddItem (new GUIContent (_.idx + "". "" + _.name), false, () => {{
+						Type t = VM.FSM_{0}.GetType ();
+						FieldInfo fi = t.GetField (_._.Name);
+						ReactiveCommand rc = fi.GetValue (VM.FSM_{0}) as ReactiveCommand;
+						rc.Execute ();
+					}});
+				}});
+				menu.ShowAsContext ();
+			}}
+			EditorGUILayout.EndHorizontal ();", name, type);
 			return result;
 		}
 
