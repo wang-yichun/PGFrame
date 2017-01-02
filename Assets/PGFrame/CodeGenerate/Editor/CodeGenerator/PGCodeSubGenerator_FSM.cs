@@ -33,11 +33,12 @@ namespace PGFrame
 		{
 			string workspaceName = jo ["Workspace"].Value<string> ();
 			string elementName = jo ["Common"] ["Name"].Value<string> ();
-			string baseName = jo ["Common"] ["Type"].Value<string> ();
+			string entryStateName = jo ["Common"] ["EntryState"].Value<string> ();
 			string targetPath = Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/FSM");
 			string code = File.ReadAllText (templateFileInfo.FullName);
 			code = code.Replace ("__XXX__", elementName);
 			code = code.Replace ("__WWW__", workspaceName);
+			code = code.Replace ("__ZZZ__", "State." + entryStateName);
 
 			code = code.Replace (FSM_STATES, GetStatesCode (jo));
 			code = code.Replace (FSM_INITIALIZE, GetInitializeCode (jo));
@@ -80,18 +81,23 @@ namespace PGFrame
 			StringBuilder sb = new StringBuilder ();
 			JArray ja_transitions = jo ["Transition"] as JArray;
 			for (int i = 0; i < ja_transitions.Count; i++) {
-				string transition_name = ja_transitions [i].Value<string> ();
+				string transition_name = ja_transitions [i] ["Name"].Value<string> ();
 
 				List<string> state_names = new List<string> ();
 
-				JArray ja_states = jo ["States"] as JArray;
-				ja_states.ToObservable ().Subscribe (_s => {
-					string state_name = _s ["Name"].Value<string> ();
-					JArray ja_state_transitions = _s ["Transitions"] as JArray;
-					ja_state_transitions.ToObservable ().Where (_t => _t ["Name"].Value<string> () == transition_name).Subscribe (_t => {
-						state_names.Add (state_name);
-					});
-				});
+				JArray ja_states = jo ["State"] as JArray;
+				for (int j = 0; j < ja_states.Count; j++) {
+					JObject jo_state = ja_states [j] as JObject;
+					string state_name = jo_state ["Name"].Value<string> ();
+					JArray ja_state_transitions = jo_state ["Transitions"] as JArray;
+
+					for (int k = 0; k < ja_state_transitions.Count; k++) {
+						JObject jo_state_transition = ja_state_transitions [k] as JObject;
+						if (jo_state_transition ["Name"].Value<string> () == transition_name) {
+							state_names.Add (string.Format ("_ == State.{0}", state_name));
+						}
+					}
+				}
 
 				string state_names_joined = string.Join (" || ", state_names.ToArray ());
 				string template = string.Format (@"
@@ -107,29 +113,29 @@ namespace PGFrame
 			StringBuilder sb = new StringBuilder ();
 			JArray ja_transitions = jo ["Transition"] as JArray;
 			for (int i = 0; i < ja_transitions.Count; i++) {
-				string transition_name = ja_transitions [i].Value<string> ();
+				string transition_name = ja_transitions [i] ["Name"].Value<string> ();
 
 				StringBuilder sb_inner = new StringBuilder ();
 
-				JArray ja_states = jo ["States"] as JArray;
+				JArray ja_states = jo ["State"] as JArray;
 				ja_states.ToObservable ().Subscribe (_s => {
-					string state_name = _s ["Name"].Value<string> ();
+					string state_name = (_s as JObject) ["Name"].Value<string> ();
 					JArray ja_state_transitions = _s ["Transitions"] as JArray;
-					ja_state_transitions.ToObservable ().Where (_t => _t ["Name"].Value<string> () == transition_name).Subscribe (_t => {
-						string target_state_name = _t ["TargetState"].Value<string> ();
+					ja_state_transitions.ToObservable ().Where (_t => (_t as JObject) ["Name"].Value<string> () == transition_name).Subscribe (_t => {
+						string target_state_name = (_t as JObject) ["TargetState"].Value<string> ();
 						sb_inner.AppendFormat (@"				
 				if (CurrentState.Value == State.{0})
 					CurrentState.Value = State.{1};", state_name, target_state_name);
 					});
 				});
 
-				string template = string.Format (@"
-			{0}Transition.Subscribe (_ => {{
-				{1}
+				sb.AppendFormat (@"
+			
+			{0}Transition.Subscribe (_ => {{{1}
 			}}).AddTo (this.baseAttachDisposables);", transition_name, sb_inner.ToString ());
 
 			}
-			return "";
+			return sb.ToString ();
 		}
 
 		public string GetDeclareCode (JObject jo)
@@ -137,7 +143,7 @@ namespace PGFrame
 			StringBuilder sb = new StringBuilder ();
 			JArray ja_transitions = jo ["Transition"] as JArray;
 			for (int i = 0; i < ja_transitions.Count; i++) {
-				string transition_name = ja_transitions [i].Value<string> ();
+				string transition_name = ja_transitions [i] ["Name"].Value<string> ();
 				string template = string.Format (@"
 		public ReactiveCommand {0}Transition;", transition_name);
 

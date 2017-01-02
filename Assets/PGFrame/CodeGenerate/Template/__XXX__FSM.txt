@@ -15,7 +15,7 @@ namespace __WWW__
 	{
 		public enum State
 		{
-			/****STATES****/
+/****STATES****/
 		}
 
 		public override void Initialize ()

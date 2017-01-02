@@ -184,6 +184,10 @@ namespace PGFrame
 			if (GUILayout.Button ("Save")) {
 				SaveJsonFile ();
 			}
+			if (GUILayout.Button ("Save & Generate")) {
+				SaveJsonFile ();
+				PGFrameWindow.Current.Generator.GenerateCode (jElement.jo);
+			}
 			if (GUILayout.Button ("Save & Close")) {
 				SaveJsonFile ();
 				this.Close ();
@@ -435,6 +439,12 @@ namespace PGFrame
 				this.jElement = null;
 			}
 			this.TransitionsList = null;
+
+			if (PGFrameWindow.Current != null) {
+				PGFrameWindow.Current.SelectedJsonElement = null;
+			}
+			PGFrameWindow.AutoSelected.SelectedJsonFileName = string.Empty;
+			PGFrameWindow.AutoSelected.Save ();
 		}
 
 		public Rect SnapRect (Rect rect)

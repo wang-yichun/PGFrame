@@ -88,8 +88,8 @@ namespace PGFrame
 					sg_Enum.GenerateCode (jo, filesGenerated);
 				break;
 			case DocType.FSM:
-				if (sg_Enum.CanGenerate (jo))
-					sg_Enum.GenerateCode (jo, filesGenerated);
+				if (sg_FSM.CanGenerate (jo))
+					sg_FSM.GenerateCode (jo, filesGenerated);
 				break;
 			default:
 				throw new ArgumentOutOfRangeException ();
