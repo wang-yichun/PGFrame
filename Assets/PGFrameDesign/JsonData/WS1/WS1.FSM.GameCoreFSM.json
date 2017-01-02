@@ -40,6 +40,59 @@
   ],
   "State": [
     {
+      "Name": "InitOnce",
+      "Transitions": [
+        {
+          "Name": "InitOnceOK",
+          "TargetState": "Init"
+        }
+      ],
+      "Rect": {
+        "x": 200,
+        "y": 50,
+        "w": 87.0,
+        "h": 79.0
+      }
+    },
+    {
+      "Name": "Init",
+      "Transitions": [
+        {
+          "Name": "InitOK",
+          "TargetState": "Ready"
+        }
+      ],
+      "Rect": {
+        "x": 350,
+        "y": 140,
+        "w": 59.0,
+        "h": 56.0
+      }
+    },
+    {
+      "Name": "Ready",
+      "Transitions": [
+        {
+          "Name": "Start",
+          "TargetState": "Running"
+        },
+        {
+          "Name": "Restart",
+          "TargetState": "Init"
+        },
+        {
+          "Name": "Pause",
+          "TargetState": "Pause"
+        }
+      ],
+      "Rect": {
+        "x": 200,
+        "y": 240,
+        "w": 64.0,
+        "h": 108.0
+      }
+    },
+    {
       "Name": "Running",
       "Transitions": [
         {
@@ -56,48 +109,10 @@
         }
       ],
       "Rect": {
-        "x": 270,
-        "y": 420,
+        "x": 330,
+        "y": 380,
         "w": 71.0,
         "h": 108.0
-      }
-    },
-    {
-      "Name": "Win",
-      "Transitions": [
-        {
-          "Name": "Restart",
-          "TargetState": "Init"
-        },
-        {
-          "Name": "Finish",
-          "TargetState": "End"
-        }
-      ],
-      "Rect": {
-        "x": 540,
-        "y": 400,
-        "w": 64.0,
-        "h": 82.0
-      }
-    },
-    {
-      "Name": "Lose",
-      "Transitions": [
-        {
-          "Name": "Restart",
-          "TargetState": "Init"
-        },
-        {
-          "Name": "Finish",
-          "TargetState": "End"
-        }
-      ],
-      "Rect": {
-        "x": 540,
-        "y": 500,
-        "w": 64.0,
-        "h": 82.0
       }
     },
     {
@@ -121,73 +136,58 @@
         }
       ],
       "Rect": {
-        "x": 480,
-        "y": 250,
+        "x": 500,
+        "y": 220,
         "w": 114.0,
         "h": 134.0
       }
     },
     {
-      "Name": "Init",
+      "Name": "Win",
       "Transitions": [
-        {
-          "Name": "InitOK",
-          "TargetState": "Ready"
-        }
-      ],
-      "Rect": {
-        "x": 340,
-        "y": 190,
-        "w": 59.0,
-        "h": 56.0
-      }
-    },
-    {
-      "Name": "Ready",
-      "Transitions": [
-        {
-          "Name": "Start",
-          "TargetState": "Running"
-        },
         {
           "Name": "Restart",
           "TargetState": "Init"
         },
         {
-          "Name": "Pause",
-          "TargetState": "Pause"
+          "Name": "Finish",
+          "TargetState": "End"
         }
       ],
       "Rect": {
-        "x": 150,
-        "y": 290,
+        "x": 500,
+        "y": 390,
         "w": 64.0,
-        "h": 108.0
+        "h": 82.0
       }
     },
     {
-      "Name": "InitOnce",
+      "Name": "Lose",
       "Transitions": [
         {
-          "Name": "InitOnceOK",
+          "Name": "Restart",
           "TargetState": "Init"
+        },
+        {
+          "Name": "Finish",
+          "TargetState": "End"
         }
       ],
       "Rect": {
-        "x": 230,
-        "y": 80,
-        "w": 87.0,
-        "h": 85.0
+        "x": 500,
+        "y": 480,
+        "w": 64.0,
+        "h": 82.0
       }
     },
     {
       "Name": "End",
       "Transitions": [],
       "Rect": {
-        "x": 700,
-        "y": 310,
+        "x": 690,
+        "y": 400,
         "w": 68.0,
-        "h": 59.0
+        "h": 53.0
       }
     }
   ]

@@ -7,6 +7,7 @@ using System.Linq;
 using PogoTools;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
 
 namespace PGFrame
 {
@@ -42,7 +43,7 @@ namespace PGFrame
 
 		public ReorderableList TransitionsList;
 
-		void ResetReorderableList ()
+		void ResetReorderableTransitionsList ()
 		{
 			if (jElement != null) {
 				JArray ja_elements = jElement.jo ["Transition"] as JArray;
@@ -80,7 +81,35 @@ namespace PGFrame
 			}
 		}
 
+		public ReorderableList StatesList;
+
+		void ResetReorderableStatesList ()
+		{
+			if (jElement != null) {
+				JArray ja_elements = jElement.jo ["State"] as JArray;
+				StatesList = new ReorderableList (ja_elements, typeof(JToken));
+				StatesList.drawHeaderCallback += (Rect rect) => {
+					GUI.Label (rect, "States");
+				};
+				float[] split = new float[]{ 0f, 1f };
+				StatesList.drawElementCallback += (Rect rect, int index, bool isActive, bool isFocused) => {
+					Rect r = new Rect (rect);
+					r.y -= 1;
+					r.height -= 2;
+					int split_idx = 0;
+					r.x = (rect.width - 25f) * split [split_idx] + 25f;
+					r.width = (rect.width - 25f) * (split [split_idx + 1] - split [split_idx]);
+					JObject jo_element = ja_elements [index] as JObject;
+					string ori_element_name = jo_element ["Name"].Value<string> ();
+					EditorGUI.LabelField (r, ori_element_name);
+				};
+				StatesList.displayAdd = false;
+				StatesList.displayRemove = false;
+			}
+		}
+
 		Vector2 scrollPosition;
+		Vector2 scrollStatesPosition;
 
 		static readonly float tab_width = 200f;
 
@@ -91,7 +120,15 @@ namespace PGFrame
 					this.Close ();
 					return;
 				}
-				ResetReorderableList ();
+				ResetReorderableTransitionsList ();
+			}
+
+			if (StatesList == null) {
+				if (jElement == null) {
+					this.Close ();
+					return;
+				}
+				ResetReorderableStatesList ();
 			}
 
 			JObject jo_common = jElement.jo ["Common"] as JObject;
@@ -101,10 +138,15 @@ namespace PGFrame
 
 			// tab
 			GUILayout.BeginVertical (GUILayout.MaxWidth (tab_width));
+			scrollStatesPosition = GUILayout.BeginScrollView (scrollStatesPosition);
 
 			TransitionsList.DoLayoutList ();
+			EditorGUILayout.Space ();
+			StatesList.DoLayoutList ();
 
 			GUILayout.FlexibleSpace ();
+
+			GUILayout.EndScrollView ();
 
 			if (in_state_rename_jo_state != null) {
 				GUILayout.BeginVertical ("box");
@@ -136,6 +178,7 @@ namespace PGFrame
 			}
 			if (GUILayout.Button ("Reset")) {
 				TransitionsList = null;
+				StatesList = null;
 				jElement.Load ();
 			}
 			if (GUILayout.Button ("Save")) {
@@ -174,6 +217,8 @@ namespace PGFrame
 
 					Rect rect = GUI.Window (i, new Rect (x, y, w, h), WindowFunction, state_name);
 
+					rect.x = Math.Max ((int)tab_width, (int)rect.x);
+					rect.y = Math.Max (50, (int)rect.y);
 					rect = SnapRect (rect);
 					jo_state ["Rect"] ["x"] = (int)rect.x;
 					jo_state ["Rect"] ["y"] = (int)rect.y;
@@ -510,6 +555,8 @@ namespace PGFrame
 			} else {
 				PRDebug.TagLog (lt, lcr, "输入的状态名字已经被占用");
 			}
+
+			StatesList = null;
 		}
 
 		public void RenameTransition (string ori_name, string new_name)
@@ -555,6 +602,8 @@ namespace PGFrame
 			jo_state.Add ("Rect", new JObject (){ { "x", 150 }, { "y" , 100 }, { "w" , 100 }, { "h" , 50 } });
 
 			ja_states.Add (jo_state);
+
+			StatesList = null;
 		}
 
 		public void DeleteTransition (string name)
