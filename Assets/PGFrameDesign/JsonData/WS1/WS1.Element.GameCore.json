@@ -56,12 +56,14 @@
       "Members": {
         "GameID": {
           "Bind": {
-            "Changed": false
+            "Changed": true,
+            "PairChanged": true
           }
         },
         "MyInfo": {
           "Bind": {
-            "Changed": false
+            "Changed": true,
+            "PairChanged": true
           }
         },
         "CurrentBullets": {
@@ -86,13 +88,14 @@
         },
         "MyWS2Ball": {
           "Bind": {
-            "Changed": false
+            "Changed": false,
+            "PairChanged": true
           }
         },
         "GameState": {
           "Bind": {
-            "Changed": true,
-            "AdvancedChanged": true
+            "PairChanged": true,
+            "ExtraCode": false
           }
         }
       }

@@ -111,7 +111,8 @@
       "Members": {
         "IntValue": {
           "Bind": {
-            "Changed": false
+            "Changed": false,
+            "PairChanged": false
           }
         },
         "IntList": {
@@ -135,17 +136,20 @@
         },
         "LongValue": {
           "Bind": {
-            "Changed": false
+            "Changed": false,
+            "PairChanged": false
           }
         },
         "FloatValue": {
           "Bind": {
-            "Changed": false
+            "Changed": false,
+            "PairChanged": false
           }
         },
         "DoubleValue": {
           "Bind": {
-            "Changed": false
+            "Changed": false,
+            "PairChanged": false
           }
         },
         "LongList": {
@@ -221,7 +225,8 @@
       "Members": {
         "IntValue": {
           "Bind": {
-            "Changed": true
+            "Changed": true,
+            "PairChanged": false
           }
         },
         "IntList": {
@@ -245,17 +250,20 @@
         },
         "LongValue": {
           "Bind": {
-            "Changed": false
+            "Changed": false,
+            "PairChanged": false
           }
         },
         "FloatValue": {
           "Bind": {
-            "Changed": false
+            "Changed": false,
+            "PairChanged": false
           }
         },
         "DoubleValue": {
           "Bind": {
-            "Changed": false
+            "Changed": false,
+            "PairChanged": false
           }
         },
         "LongList": {

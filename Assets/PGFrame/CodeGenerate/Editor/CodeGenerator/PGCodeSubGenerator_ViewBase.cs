@@ -200,9 +200,9 @@ namespace PGFrame
 		{
 			string member_name = jo_member ["Name"].Value<string> ();
 			string result = "";
-			if (jo_view ["Members"] [member_name] ["Bind"] ["Changed"].Value<bool> ()) {
+			if (jo_view ["Members"] [member_name] ["Bind"] ["PairChanged"].Value<bool> ()) {
 				result = string.Format (@"
-			VM.FSM_{0}.CurrentState.Pairwise ().Subscribe (OnChanged_{0}).AddTo (baseBindDisposables);", member_name);
+			VM.FSM_{0}.CurrentState.Pairwise ().Subscribe (OnPairChanged_{0}).AddTo (baseBindDisposables);", member_name);
 			}
 			return result;
 		}
@@ -211,13 +211,32 @@ namespace PGFrame
 		{
 			string member_name = jo_member ["Name"].Value<string> ();
 			string member_type = jo_member ["Type"].Value<string> ();
-			string result = "";
-			if (jo_view ["Members"] [member_name] ["Bind"] ["Changed"].Value<bool> ()) {
-				result = string.Format (@"
+			StringBuilder result = new StringBuilder ();
+			if (jo_view ["Members"] [member_name] ["Bind"] ["PairChanged"].Value<bool> ()) {
+				result.AppendFormat (@"
 
-		public virtual void OnChanged_{0} (Pair<{1}.State> pair)
+		public virtual void OnPairChanged_{0} (Pair<{1}.State> pair)
 		{{
 		}}", member_name, member_type);
+			}
+			return result.ToString ();
+		}
+
+		/// <summary>
+		/// Gets the bind property value.
+		/// </summary>
+		/// <returns><c>true</c>, if bind property value was gotten, <c>false</c> otherwise.</returns>
+		/// <param name="jo">Jo.</param>
+		/// <param name="propertyName">Property name.</param>
+		public static bool GetBindPropertyValue (JObject jo, string propertyName)
+		{
+			bool result;
+			JToken jt;
+			if (jo.TryGetValue (propertyName, out jt)) {
+				result = jt.Value<bool> ();
+			} else {
+				jo.Add (propertyName, false);
+				result = false;
 			}
 			return result;
 		}
@@ -225,27 +244,38 @@ namespace PGFrame
 		public static string GenBindCodeReactiveMemberProperty (JObject jo_member, JObject jo_view)
 		{
 			string member_name = jo_member ["Name"].Value<string> ();
-			string result = "";
+			StringBuilder result = new StringBuilder ();
 			if (jo_view ["Members"] [member_name] ["Bind"] ["Changed"].Value<bool> ()) {
-				result = string.Format (@"
+				result.AppendFormat (@"
 			VM.RP_{0}.Subscribe (OnChanged_{0}).AddTo (baseBindDisposables);", member_name);
 			}
-			return result;
+			if (GetBindPropertyValue (jo_view ["Members"] [member_name] ["Bind"] as JObject, "PairChanged")) {
+				result.AppendFormat (@"
+			VM.RP_{0}.Pairwise ().Subscribe (OnPairChanged_{0}).AddTo (baseBindDisposables);", member_name);
+			}
+			return result.ToString ();
 		}
 
 		public static string GenFuncCodeReactiveMemberProperty (JObject jo_member, JObject jo_view)
 		{
 			string member_name = jo_member ["Name"].Value<string> ();
 			string member_type = jo_member ["Type"].Value<string> ();
-			string result = "";
+			StringBuilder result = new StringBuilder ();
 			if (jo_view ["Members"] [member_name] ["Bind"] ["Changed"].Value<bool> ()) {
-				result = string.Format (@"
+				result.AppendFormat (@"
 
 		public virtual void OnChanged_{0} ({1} value)
 		{{
 		}}", member_name, member_type);
 			}
-			return result;
+			if (GetBindPropertyValue (jo_view ["Members"] [member_name] ["Bind"] as JObject, "PairChanged")) {
+				result.AppendFormat (@"
+
+		public virtual void OnPairChanged_{0} (Pair<{1}> pair)
+		{{
+		}}", member_name, member_type);
+			}
+			return result.ToString ();
 		}
 
 		public static string GenBindCodeReactiveMemberCollection (JObject jo_member, JObject jo_view)

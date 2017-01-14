@@ -92,9 +92,14 @@ namespace WS1
 		{
 			base.Bind ();
 			
+			VM.RP_GameID.Subscribe (OnChanged_GameID).AddTo (baseBindDisposables);
+			VM.RP_GameID.Pairwise ().Subscribe (OnPairChanged_GameID).AddTo (baseBindDisposables);
+			VM.RP_MyInfo.Subscribe (OnChanged_MyInfo).AddTo (baseBindDisposables);
+			VM.RP_MyInfo.Pairwise ().Subscribe (OnPairChanged_MyInfo).AddTo (baseBindDisposables);
 			VM.CurrentBullets.ObserveAdd ().Subscribe (OnAdd_CurrentBullets).AddTo (baseBindDisposables);
 			VM.CurrentBullets.ObserveRemove ().Subscribe (OnRemove_CurrentBullets).AddTo (baseBindDisposables);
-			VM.FSM_GameState.CurrentState.Pairwise ().Subscribe (OnChanged_GameState).AddTo (baseBindDisposables);
+			VM.RP_MyWS2Ball.Pairwise ().Subscribe (OnPairChanged_MyWS2Ball).AddTo (baseBindDisposables);
+			VM.FSM_GameState.CurrentState.Pairwise ().Subscribe (OnPairChanged_GameState).AddTo (baseBindDisposables);
 		}
 
 		public override void AfterBind ()
@@ -104,6 +109,22 @@ namespace WS1
 
 		
 
+		public virtual void OnChanged_GameID (string value)
+		{
+		}
+
+		public virtual void OnPairChanged_GameID (Pair<string> pair)
+		{
+		}
+
+		public virtual void OnChanged_MyInfo (PlayerInfoViewModel value)
+		{
+		}
+
+		public virtual void OnPairChanged_MyInfo (Pair<PlayerInfoViewModel> pair)
+		{
+		}
+
 		public virtual void OnAdd_CurrentBullets (CollectionAddEvent<BulletViewModel> e)
 		{
 		}
@@ -112,7 +133,11 @@ namespace WS1
 		{
 		}
 
-		public virtual void OnChanged_GameState (Pair<GameCoreFSM.State> pair)
+		public virtual void OnPairChanged_MyWS2Ball (Pair<WS2.BallViewModel> pair)
+		{
+		}
+
+		public virtual void OnPairChanged_GameState (Pair<GameCoreFSM.State> pair)
 		{
 		}
 

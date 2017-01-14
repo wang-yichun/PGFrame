@@ -90,6 +90,7 @@ namespace PGFrame
 			switch (rt) {
 			case RxType.Property:
 				jo.Add ("Changed", false);
+				jo.Add ("PairChanged", false);
 				break;
 			case RxType.Collection:
 				jo.Add ("Add", false);
@@ -111,7 +112,7 @@ namespace PGFrame
 				break;
 			case RxType.FSM:
 				jo.Add ("Changed", false);
-				jo.Add ("AdvancedChanged", false);
+				jo.Add ("PairChanged", false);
 				break;
 			default:
 				break;
