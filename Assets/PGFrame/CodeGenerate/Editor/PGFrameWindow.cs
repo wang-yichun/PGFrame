@@ -185,6 +185,8 @@ namespace PGFrame
 			}
 
 			GUILayout.EndVertical ();
+
+//			if (Event.current.type == EventType.KeyDown && Event.current.)
 		}
 
 		public JSONElement[] jElements;

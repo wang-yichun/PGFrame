@@ -160,6 +160,12 @@
       "Name": "SCA_a",
       "Type": "SCA",
       "Desc": ""
+    },
+    {
+      "RxType": "Property",
+      "Name": "MyBooleanValue",
+      "Type": "bool",
+      "Desc": ""
     }
   ],
   "Views": [
@@ -331,6 +337,12 @@
             "Changed": true,
             "PairChanged": false
           }
+        },
+        "MyBooleanValue": {
+          "Bind": {
+            "Changed": true,
+            "PairChanged": false
+          }
         }
       }
     },
@@ -497,6 +509,12 @@
           }
         },
         "SCA_a": {
+          "Bind": {
+            "Changed": false,
+            "PairChanged": false
+          }
+        },
+        "MyBooleanValue": {
           "Bind": {
             "Changed": false,
             "PairChanged": false

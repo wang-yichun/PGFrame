@@ -79,6 +79,7 @@ namespace WS1
 			VM.MyDictionary.ObserveRemove ().Subscribe (OnRemove_MyDictionary).AddTo (baseBindDisposables);
 			VM.RC_DefaultCommand.Subscribe (OnExecuted_DefaultCommand).AddTo (baseBindDisposables);
 			VM.RP_SCA_a.Subscribe (OnChanged_SCA_a).AddTo (baseBindDisposables);
+			VM.RP_MyBooleanValue.Subscribe (OnChanged_MyBooleanValue).AddTo (baseBindDisposables);
 		}
 
 		public override void AfterBind ()
@@ -113,6 +114,10 @@ namespace WS1
 		}
 
 		public virtual void OnChanged_SCA_a (SCA value)
+		{
+		}
+
+		public virtual void OnChanged_MyBooleanValue (bool value)
 		{
 		}
 

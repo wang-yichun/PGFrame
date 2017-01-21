@@ -306,6 +306,9 @@ namespace WS1
 		}
 		EditorGUILayout.EndHorizontal ();
 
+		vmk = "MyBooleanValue";
+		EditorGUILayout.DelayedTextField (vmk, VM.MyBooleanValue != null ? VM.MyBooleanValue.ToString () : "null (bool)");
+
 			EditorGUILayout.EndVertical ();
 			EditorGUI.indentLevel--;
 

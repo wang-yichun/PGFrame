@@ -49,6 +49,7 @@ namespace WS1
 			RectList = new ReactiveCollection<UnityEngine.Rect> ();
 			RP_MyEA = new ReactiveProperty<EA> ();
 			RP_SCA_a = new ReactiveProperty<SCA> ();
+			RP_MyBooleanValue = new ReactiveProperty<bool> ();
 			
 			base.Initialize ();
 		}
@@ -306,6 +307,19 @@ namespace WS1
 			}
 			set {
 				RP_SCA_a.Value = value;
+			}
+		}
+
+		/*  */
+		public ReactiveProperty<bool> RP_MyBooleanValue;
+
+		[JsonProperty]
+		public bool MyBooleanValue {
+			get {
+				return RP_MyBooleanValue.Value;
+			}
+			set {
+				RP_MyBooleanValue.Value = value;
 			}
 		}
 	}
