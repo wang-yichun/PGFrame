@@ -53,13 +53,13 @@ namespace WS1
 			EditorGUILayout.EndHorizontal ();
 
 			
-		EditorGUILayout.BeginVertical ("box");
-		FBElementEditor baseElementEditor = new FBElementEditor ();
-		baseElementEditor.VM = VM as FBViewModel;
-		baseElementEditor.InspectorGUI_ViewModel ();
-		EditorGUILayout.EndVertical ();
+			EditorGUILayout.BeginVertical ("box");
+			FBElementEditor baseElementEditor = new FBElementEditor ();
+			baseElementEditor.VM = VM as FBViewModel;
+			baseElementEditor.InspectorGUI_ViewModel ();
+			EditorGUILayout.EndVertical ();
 
-		string vmk;
+			string vmk;
 
 			vmk = "LabelTextNum";
 			int tempLabelTextNum = EditorGUILayout.DelayedIntField (vmk, VM.LabelTextNum);
