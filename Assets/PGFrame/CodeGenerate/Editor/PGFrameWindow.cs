@@ -212,6 +212,10 @@ namespace PGFrame
 		{
 			NeedRefresh = false;
 			string JsonRootFull = Path.Combine (Application.dataPath, JsonRoot);
+
+			if (!Directory.Exists (JsonRootFull))
+				Directory.CreateDirectory (JsonRootFull);
+			
 			if (SelectedWorkspace == null) {
 				DirectoryInfo di = new DirectoryInfo (JsonRootFull);
 				WorkspaceDirectoryInfos = di.GetDirectories ();
