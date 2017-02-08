@@ -54,6 +54,11 @@ namespace PGFrame
 					string file = string.Format ("Assets/_Main/{0}/_Scripts/Enum/{1}.cs", workspace, name);
 					UnityEditorInternal.InternalEditorUtility.OpenFileAtLineExternal (file, 1);
 				});
+			} else if (docType == "FSM") {
+				menu.AddItem (new GUIContent (string.Format ("{0}.cs", name)), false, () => {
+					string file = string.Format ("Assets/_Main/{0}/_Scripts/FSM/{1}.cs", workspace, name);
+					UnityEditorInternal.InternalEditorUtility.OpenFileAtLineExternal (file, 1);
+				});
 			}
 
 			menu.AddSeparator ("");

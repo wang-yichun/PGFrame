@@ -38,7 +38,7 @@ namespace PGFrame
 			DocType = jo ["DocType"].Value<string> ();
 			FileName = fileInfo.Name;
 			
-			if (DocType == "Element" || DocType == "SimpleClass" || DocType == "Enum") {
+			if (DocType == "Element" || DocType == "SimpleClass" || DocType == "Enum" || DocType == "FSM") {
 				Name = jo ["Common"] ["Name"].Value<string> ();
 			}
 //		Debug.Log (fileInfo.FullName + "\n" + jo ["Workspace"].Value<string> ());
