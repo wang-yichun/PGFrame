@@ -5,6 +5,7 @@
 		Property,
 		Collection,
 		Dictionary,
-		Command
+		Command,
+		FSM
 	}
 }

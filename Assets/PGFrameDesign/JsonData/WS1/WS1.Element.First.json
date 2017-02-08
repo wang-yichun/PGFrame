@@ -160,6 +160,12 @@
       "Name": "SCA_a",
       "Type": "SCA",
       "Desc": ""
+    },
+    {
+      "RxType": "Property",
+      "Name": "MyBooleanValue",
+      "Type": "bool",
+      "Desc": ""
     }
   ],
   "Views": [
@@ -170,7 +176,8 @@
       "Members": {
         "LabelTextNum": {
           "Bind": {
-            "Changed": true
+            "Changed": true,
+            "PairChanged": false
           }
         },
         "Numbers": {
@@ -207,7 +214,8 @@
         },
         "MyNewProperty": {
           "Bind": {
-            "Changed": false
+            "Changed": false,
+            "PairChanged": false
           }
         },
         "DefaultCommand": {
@@ -217,7 +225,8 @@
         },
         "DefaultProperty": {
           "Bind": {
-            "Changed": false
+            "Changed": false,
+            "PairChanged": false
           }
         },
         "AddNum": {
@@ -227,62 +236,74 @@
         },
         "CurrentVector3": {
           "Bind": {
-            "Changed": false
+            "Changed": false,
+            "PairChanged": false
           }
         },
         "CurrentRect": {
           "Bind": {
-            "Changed": false
+            "Changed": false,
+            "PairChanged": false
           }
         },
         "CurrentQuaternion": {
           "Bind": {
-            "Changed": false
+            "Changed": false,
+            "PairChanged": false
           }
         },
         "CurrentVector2": {
           "Bind": {
-            "Changed": false
+            "Changed": false,
+            "PairChanged": false
           }
         },
         "CurrentVector4": {
           "Bind": {
-            "Changed": false
+            "Changed": false,
+            "PairChanged": false
           }
         },
         "CurrentBounds": {
           "Bind": {
-            "Changed": false
+            "Changed": false,
+            "PairChanged": false
           }
         },
         "CurrentColor": {
           "Bind": {
-            "Changed": false
+            "Changed": false,
+            "PairChanged": false
           }
         },
         "CurrentDateTime": {
           "Bind": {
-            "Changed": false
+            "Changed": false,
+            "PairChanged": false
           }
         },
         "CurrentTimeSpan": {
           "Bind": {
-            "Changed": false
+            "Changed": false,
+            "PairChanged": false
           }
         },
         "CurrentJObject": {
           "Bind": {
-            "Changed": false
+            "Changed": false,
+            "PairChanged": false
           }
         },
         "CurrentJArray": {
           "Bind": {
-            "Changed": false
+            "Changed": false,
+            "PairChanged": false
           }
         },
         "CurrentAC": {
           "Bind": {
-            "Changed": false
+            "Changed": false,
+            "PairChanged": false
           }
         },
         "V3List": {
@@ -307,12 +328,20 @@
         },
         "MyEA": {
           "Bind": {
-            "Changed": false
+            "Changed": false,
+            "PairChanged": false
           }
         },
         "SCA_a": {
           "Bind": {
-            "Changed": true
+            "Changed": true,
+            "PairChanged": false
+          }
+        },
+        "MyBooleanValue": {
+          "Bind": {
+            "Changed": true,
+            "PairChanged": false
           }
         }
       }
@@ -323,7 +352,8 @@
       "Members": {
         "LabelTextNum": {
           "Bind": {
-            "Changed": true
+            "Changed": true,
+            "PairChanged": false
           }
         },
         "Numbers": {
@@ -360,7 +390,8 @@
         },
         "MyNewProperty": {
           "Bind": {
-            "Changed": false
+            "Changed": false,
+            "PairChanged": false
           }
         },
         "DefaultCommand": {
@@ -370,7 +401,8 @@
         },
         "DefaultProperty": {
           "Bind": {
-            "Changed": false
+            "Changed": false,
+            "PairChanged": false
           }
         },
         "AddNum": {
@@ -380,62 +412,74 @@
         },
         "CurrentVector3": {
           "Bind": {
-            "Changed": false
+            "Changed": false,
+            "PairChanged": false
           }
         },
         "CurrentRect": {
           "Bind": {
-            "Changed": false
+            "Changed": false,
+            "PairChanged": false
           }
         },
         "CurrentQuaternion": {
           "Bind": {
-            "Changed": false
+            "Changed": false,
+            "PairChanged": false
           }
         },
         "CurrentVector2": {
           "Bind": {
-            "Changed": false
+            "Changed": false,
+            "PairChanged": false
           }
         },
         "CurrentVector4": {
           "Bind": {
-            "Changed": false
+            "Changed": false,
+            "PairChanged": false
           }
         },
         "CurrentBounds": {
           "Bind": {
-            "Changed": false
+            "Changed": false,
+            "PairChanged": false
           }
         },
         "CurrentColor": {
           "Bind": {
-            "Changed": false
+            "Changed": false,
+            "PairChanged": false
           }
         },
         "CurrentDateTime": {
           "Bind": {
-            "Changed": false
+            "Changed": false,
+            "PairChanged": false
           }
         },
         "CurrentTimeSpan": {
           "Bind": {
-            "Changed": false
+            "Changed": false,
+            "PairChanged": false
           }
         },
         "CurrentJObject": {
           "Bind": {
-            "Changed": false
+            "Changed": false,
+            "PairChanged": false
           }
         },
         "CurrentJArray": {
           "Bind": {
-            "Changed": false
+            "Changed": false,
+            "PairChanged": false
           }
         },
         "CurrentAC": {
           "Bind": {
-            "Changed": false
+            "Changed": false,
+            "PairChanged": false
           }
         },
         "V3List": {
@@ -460,12 +504,20 @@
         },
         "MyEA": {
           "Bind": {
-            "Changed": false
+            "Changed": false,
+            "PairChanged": false
           }
         },
         "SCA_a": {
           "Bind": {
-            "Changed": false
+            "Changed": false,
+            "PairChanged": false
+          }
+        },
+        "MyBooleanValue": {
+          "Bind": {
+            "Changed": false,
+            "PairChanged": false
           }
         }
       },

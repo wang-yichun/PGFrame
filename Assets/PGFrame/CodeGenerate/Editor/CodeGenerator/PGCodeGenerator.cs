@@ -31,6 +31,7 @@ namespace PGFrame
 		IPGCodeSubGenerator sg_SimpleClassBase;
 		IPGCodeSubGenerator sg_SimpleClass;
 		IPGCodeSubGenerator sg_Enum;
+		IPGCodeSubGenerator sg_FSM;
 
 		public void Init ()
 		{
@@ -46,6 +47,7 @@ namespace PGFrame
 			sg_SimpleClassBase = new PGCodeSubGenerator_SimpleClassBase (Path.Combine (Application.dataPath, "PGFrame/CodeGenerate/Template/__XXX__SimpleClassBase.txt"));
 			sg_SimpleClass = new PGCodeSubGenerator_SimpleClass (Path.Combine (Application.dataPath, "PGFrame/CodeGenerate/Template/__XXX__SimpleClass.txt"));
 			sg_Enum = new PGCodeSubGenerator_Enum (Path.Combine (Application.dataPath, "PGFrame/CodeGenerate/Template/__XXX__Enum.txt"));
+			sg_FSM = new PGCodeSubGenerator_FSM (Path.Combine (Application.dataPath, "PGFrame/CodeGenerate/Template/__XXX__FSM.txt"));
 		}
 
 		public void GenerateCode (JObject jo)
@@ -84,6 +86,10 @@ namespace PGFrame
 			case DocType.Enum:
 				if (sg_Enum.CanGenerate (jo))
 					sg_Enum.GenerateCode (jo, filesGenerated);
+				break;
+			case DocType.FSM:
+				if (sg_FSM.CanGenerate (jo))
+					sg_FSM.GenerateCode (jo, filesGenerated);
 				break;
 			default:
 				throw new ArgumentOutOfRangeException ();
@@ -127,11 +133,12 @@ namespace PGFrame
 			case DocType.Enum:
 				targetPaths.Add (Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/Enum/" + string.Format ("{0}.cs", elementName)));
 				break;
+			case DocType.FSM:
+				targetPaths.Add (Path.Combine (Application.dataPath, "_Main/" + workspaceName + "/_Scripts/FSM/" + string.Format ("{0}.cs", elementName)));
+				break;
 			default:
 				throw new ArgumentOutOfRangeException ();
 			}
-
-
 
 			List<string> fileDeleted = new List<string> ();
 

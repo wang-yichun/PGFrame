@@ -22,7 +22,8 @@
       "Members": {
         "BType": {
           "Bind": {
-            "Changed": false
+            "Changed": false,
+            "PairChanged": false
           }
         }
       }

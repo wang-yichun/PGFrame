@@ -69,8 +69,13 @@
     },
     {
       "DocType": "FSM",
-      "Name": "ExSM",
-      "File": "WS1.FSM.ExSM.json"
+      "Name": "GameCoreFSM",
+      "File": "WS1.FSM.GameCoreFSM.json"
+    },
+    {
+      "DocType": "FSM",
+      "Name": "NewFSM",
+      "File": "WS1.FSM.NewFSM.json"
     }
   ]
 }

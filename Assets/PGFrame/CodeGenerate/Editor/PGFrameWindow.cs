@@ -54,6 +54,7 @@ namespace PGFrame
 			pgf_doctype_short_icons.Add (DocType.Element, Resources.Load<Texture2D> ("pgf_element_short_icon"));
 			pgf_doctype_short_icons.Add (DocType.SimpleClass, Resources.Load<Texture2D> ("pgf_simple_class_short_icon"));
 			pgf_doctype_short_icons.Add (DocType.Enum, Resources.Load<Texture2D> ("pgf_enum_short_icon"));
+			pgf_doctype_short_icons.Add (DocType.FSM, Resources.Load<Texture2D> ("pgf_fsm_short_icon"));
 
 			pgf_typetype_short_icons = new Dictionary<TypeType, Texture2D> ();
 			pgf_typetype_short_icons.Add (TypeType.System, Resources.Load<Texture2D> ("pgf_system_short_icon"));
@@ -119,24 +120,24 @@ namespace PGFrame
 				RefreshFiles ();
 			}
 
-			if (GUILayout.Button ("添加 Workspace")) {
 
-			
-				PopupWindow.Show (buttonRect, new TextFieldPopupDialog ("请输入 Workspace 的名字:", (string value) => {
-					JsonWorkspaceManager manager = new JsonWorkspaceManager (Path.Combine (Application.dataPath, JsonRoot));
-					manager.CreateWorkspace (value);
-					AssetDatabase.Refresh ();
-					NeedRefresh = true;
-				}));
-
-				if (Event.current.type == EventType.Repaint)
-					buttonRect = GUILayoutUtility.GetLastRect ();
-			}
 
 			ApplySelected ();
 
 			if (NeedRefresh == false) {
 				if (SelectedJsonElement == null) {
+					if (GUILayout.Button ("添加 Workspace")) {
+						PopupWindow.Show (buttonRect, new TextFieldPopupDialog ("请输入 Workspace 的名字:", (string value) => {
+							JsonWorkspaceManager manager = new JsonWorkspaceManager (Path.Combine (Application.dataPath, JsonRoot));
+							manager.CreateWorkspace (value);
+							CommonManager.Load ();
+							AssetDatabase.Refresh ();
+							NeedRefresh = true;
+							return;
+						}));
+						if (Event.current.type == EventType.Repaint)
+							buttonRect = GUILayoutUtility.GetLastRect ();
+					}
 					DesignList ();
 				} else {
 					switch ((DocType)Enum.Parse (typeof(DocType), SelectedJsonElement.DocType)) {
@@ -154,6 +155,9 @@ namespace PGFrame
 						break;
 					default:
 						throw new ArgumentOutOfRangeException ();
+					}
+					if (GUILayout.Button ("打开相关文件...")) {
+						PGFrameOpenFileTools.OpenContentMenu (SelectedJsonElement);
 					}
 				}
 			} else {
@@ -184,6 +188,8 @@ namespace PGFrame
 			}
 
 			GUILayout.EndVertical ();
+
+//			if (Event.current.type == EventType.KeyDown && Event.current.)
 		}
 
 		public JSONElement[] jElements;
@@ -207,6 +213,10 @@ namespace PGFrame
 		{
 			NeedRefresh = false;
 			string JsonRootFull = Path.Combine (Application.dataPath, JsonRoot);
+
+			if (!Directory.Exists (JsonRootFull))
+				Directory.CreateDirectory (JsonRootFull);
+			
 			if (SelectedWorkspace == null) {
 				DirectoryInfo di = new DirectoryInfo (JsonRootFull);
 				WorkspaceDirectoryInfos = di.GetDirectories ();
@@ -289,15 +299,23 @@ namespace PGFrame
 
 				GUIContent content = new GUIContent (jo_element_filename, icon);
 				if (GUI.Button (r, content, GUIStyleTemplate.ButtonStyleAlignmentLeft ())) {
-					SelectedJsonElement = jElements.Single (je => je.FileName == jo_element_filename);
 
-					if (dt == DocType.FSM) {
-						FSMWindow.Init ();
-						FSMWindow.Current.jElement = SelectedJsonElement;
+					if (Event.current.button == 1) {
+						JSONElement jsonElement = jElements.Single (je => je.FileName == jo_element_filename);
+
+						PGFrameOpenFileTools.OpenContentMenu (jsonElement);
+					} else {
+
+						SelectedJsonElement = jElements.Single (je => je.FileName == jo_element_filename);
+
+						if (dt == DocType.FSM) {
+							FSMWindow.Init ();
+							FSMWindow.Current.jElement = SelectedJsonElement;
+						}
+
+						AutoSelected.SelectedJsonFileName = jo_element_filename;
+						AutoSelected.Save ();
 					}
-
-					AutoSelected.SelectedJsonFileName = jo_element_filename;
-					AutoSelected.Save ();
 				}
 			};
 
@@ -437,6 +455,9 @@ namespace PGFrame
 							break;
 						case DocType.Enum:
 							cjf = new EnumJsonFileCreater (this, value);
+							break;
+						case DocType.FSM:
+							cjf = new FSMJsonFileCreater (this, value);
 							break;
 						default:
 							throw new ArgumentOutOfRangeException ();

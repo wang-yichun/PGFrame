@@ -90,6 +90,7 @@ namespace PGFrame
 			switch (rt) {
 			case RxType.Property:
 				jo.Add ("Changed", false);
+				jo.Add ("PairChanged", false);
 				break;
 			case RxType.Collection:
 				jo.Add ("Add", false);
@@ -109,10 +110,33 @@ namespace PGFrame
 			case RxType.Command:
 				jo.Add ("Executed", false);
 				break;
+			case RxType.FSM:
+				jo.Add ("Changed", false);
+				jo.Add ("PairChanged", false);
+				break;
 			default:
 				break;
 			}
 			return jo;
+		}
+
+		/// <summary>
+		/// 在Generator ViewBase生成 代码时,一个新开发的绑定在旧的文档中没有描述,则自动加入false值并返回
+		/// </summary>
+		/// <returns><c>true</c>选定该绑定方式<c>false</c> otherwise.</returns>
+		/// <param name="jo">view/members/member_name/bind 级别的 JObject</param>
+		/// <param name="propertyName">绑定名称</param>
+		public static bool GetBindPropertyValue (JObject jo, string propertyName)
+		{
+			bool result;
+			JToken jt;
+			if (jo.TryGetValue (propertyName, out jt)) {
+				result = jt.Value<bool> ();
+			} else {
+				jo.Add (propertyName, false);
+				result = false;
+			}
+			return result;
 		}
 	}
 }

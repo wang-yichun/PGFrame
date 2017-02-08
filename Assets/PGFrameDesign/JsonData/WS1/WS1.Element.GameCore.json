@@ -40,6 +40,12 @@
       "Name": "MyWS2Ball",
       "Type": "WS2.BallViewModel",
       "Desc": ""
+    },
+    {
+      "RxType": "FSM",
+      "Name": "GameState",
+      "Type": "GameCoreFSM",
+      "Desc": ""
     }
   ],
   "Views": [
@@ -50,12 +56,14 @@
       "Members": {
         "GameID": {
           "Bind": {
-            "Changed": false
+            "Changed": true,
+            "PairChanged": true
           }
         },
         "MyInfo": {
           "Bind": {
-            "Changed": false
+            "Changed": true,
+            "PairChanged": true
           }
         },
         "CurrentBullets": {
@@ -80,7 +88,14 @@
         },
         "MyWS2Ball": {
           "Bind": {
-            "Changed": false
+            "Changed": false,
+            "PairChanged": true
+          }
+        },
+        "GameState": {
+          "Bind": {
+            "PairChanged": true,
+            "ExtraCode": false
           }
         }
       }

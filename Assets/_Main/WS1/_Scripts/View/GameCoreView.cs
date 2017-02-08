@@ -31,6 +31,23 @@ namespace WS1
 			base.AfterBind ();
 			Debug.Log (string.Format ("GameCoreView in {0} AfterBind.", gameObject.name));
 		}
+
+		public override void OnPairChanged_GameState (Pair<GameCoreFSM.State> pair)
+		{
+			base.OnPairChanged_GameState (pair);
+
+			PRDebug.TagLog ("GameCoreView", Color.blue, string.Format ("{0} -> {1}", pair.Previous.ToString (), pair.Current.ToString ()));
+		}
+
+		public override void OnChanged_GameID (string value)
+		{
+			base.OnChanged_GameID (value);
+		}
+
+		public override void OnPairChanged_GameID (Pair<string> pair)
+		{
+			base.OnPairChanged_GameID (pair);
+		}
 	}
 
 }

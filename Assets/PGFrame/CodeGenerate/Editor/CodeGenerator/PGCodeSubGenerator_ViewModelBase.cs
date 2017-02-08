@@ -140,6 +140,9 @@ namespace PGFrame
 			case "Command":
 				result = jom.GenReactiveMemberCommand ();
 				break;
+			case "FSM":
+				result = jom.GenFSMMember ();
+				break;
 			default:
 				break;
 			}
@@ -259,6 +262,29 @@ namespace PGFrame
 			return template;
 		}
 
+		public static string GenFSMMember (this JObject jom)
+		{
+			string template = @"
+		/* {DESC} */
+		public {TYPE} FSM_{NAME};
+
+		[JsonProperty]
+		public {TYPE}.State {NAME} {
+			get {
+				return FSM_{NAME}.CurrentState.Value;
+			}
+			set {
+				FSM_{NAME}.CurrentState.Value = value;
+			}
+		}";
+
+			template = template.Replace ("{NAME}", jom ["Name"].Value<string> ());
+			template = template.Replace ("{TYPE}", jom ["Type"].Value<string> ());
+			template = template.Replace ("{DESC}", jom ["Desc"].Value<string> ());
+
+			return template;
+		}
+
 		public static string GenInitializeCode (this JObject jom)
 		{
 			string result = string.Empty;
@@ -274,6 +300,9 @@ namespace PGFrame
 				break;
 			case "Command":
 				result = jom.GenInitializeCodeCommand ();
+				break;
+			case "FSM":
+				result = jom.GenInitializeCodeFSM ();
 				break;
 			default:
 				break;
@@ -327,6 +356,12 @@ namespace PGFrame
 				template = template.Replace ("{NAME}", jom ["Name"].Value<string> ());
 			}
 			return template;
+		}
+
+		public static string GenInitializeCodeFSM (this JObject jom)
+		{
+			return string.Format (@"
+			FSM_{0} = new {1} ();", jom ["Name"].Value<string> (), jom ["Type"].Value<string> ());
 		}
 	}
 }

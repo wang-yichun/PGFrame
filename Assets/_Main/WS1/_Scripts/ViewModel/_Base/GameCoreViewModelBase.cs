@@ -30,6 +30,7 @@ namespace WS1
 			RC_AddSomeBullet = new ReactiveCommand ();
 			RC_RemoveSomeBullet = new ReactiveCommand ();
 			RP_MyWS2Ball = new ReactiveProperty<WS2.BallViewModel> ();
+			FSM_GameState = new GameCoreFSM ();
 			
 			base.Initialize ();
 		}
@@ -89,6 +90,19 @@ namespace WS1
 			}
 			set {
 				RP_MyWS2Ball.Value = value;
+			}
+		}
+
+		/*  */
+		public GameCoreFSM FSM_GameState;
+
+		[JsonProperty]
+		public GameCoreFSM.State GameState {
+			get {
+				return FSM_GameState.CurrentState.Value;
+			}
+			set {
+				FSM_GameState.CurrentState.Value = value;
 			}
 		}
 	}

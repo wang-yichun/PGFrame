@@ -58,14 +58,14 @@ namespace PGFrame
 
 			if (string.IsNullOrEmpty (baseType) == false) {
 				sb.Append (string.Format (@"
-		EditorGUILayout.BeginVertical (""box"");
-		{0}ElementEditor baseElementEditor = new {0}ElementEditor ();
-		baseElementEditor.VM = VM as {0}ViewModel;
-		baseElementEditor.InspectorGUI_ViewModel ();
-		EditorGUILayout.EndVertical ();", baseType));
+			EditorGUILayout.BeginVertical (""box"");
+			{0}ElementEditor baseElementEditor = new {0}ElementEditor ();
+			baseElementEditor.VM = VM as {0}ViewModel;
+			baseElementEditor.InspectorGUI_ViewModel ();
+			EditorGUILayout.EndVertical ();", baseType));
 			}
 
-			sb.Append ("\n\n\t\tstring vmk;");
+			sb.Append ("\n\n\t\t\tstring vmk;");
 
 			JArray ja = (JArray)jo ["Member"];
 			for (int i = 0; i < ja.Count; i++) {
@@ -95,11 +95,16 @@ namespace PGFrame
 			case "Command":
 				result = jom.GenEditorGUICommand ();
 				break;
+			case "FSM":
+				result = jom.GenEditorGUIFSM ();
+				break;
 			default:
 				break;
 			}
 			return result;
 		}
+
+
 
 		public static string GenEditorGUIProperty (this JObject jom, JObject jo)
 		{
@@ -156,39 +161,43 @@ namespace PGFrame
 						case DocType.SimpleClass:
 							result = string.Format (@"
 						
-		vmk = ""{0}"";
-		EditorGUILayout.BeginHorizontal ();
-		if (VM.{0} == null) {{
-			EditorGUILayout.PrefixLabel (vmk);
-			if (GUILayout.Button (""Create"")) {{
-				VM.{0} = new {1} ();
-			}}
-		}} else {{
-			string {0} = JsonConvert.SerializeObject (VM.{0});
-			string temp{0} = EditorGUILayout.DelayedTextField (vmk, {0});
-			if (temp{0} != {0}) {{
-				if (string.IsNullOrEmpty (temp{0})) {{
-					VM.{0} = null;
-				}} else {{
-					VM.{0} = JsonConvert.DeserializeObject<{1}> ({0});
+			vmk = ""{0}"";
+			EditorGUILayout.BeginHorizontal ();
+			if (VM.{0} == null) {{
+				EditorGUILayout.PrefixLabel (vmk);
+				if (GUILayout.Button (""Create"")) {{
+					VM.{0} = new {1} ();
+				}}
+			}} else {{
+				string {0} = JsonConvert.SerializeObject (VM.{0});
+				string temp{0} = EditorGUILayout.DelayedTextField (vmk, {0});
+				if (temp{0} != {0}) {{
+					if (string.IsNullOrEmpty (temp{0})) {{
+						VM.{0} = null;
+					}} else {{
+						VM.{0} = JsonConvert.DeserializeObject<{1}> ({0});
+					}}
+				}}
+				if (GUILayout.Button (""..."", GUILayout.MaxWidth (20))) {{
+					PopupWindow.Show (
+						new Rect (Event.current.mousePosition.x, Event.current.mousePosition.y, 0f, 0f), 
+						new SimpleClassReactivePropertyEditorPopupWindow<{1}> (this, VM.RP_{0})
+					);
 				}}
 			}}
-			if (GUILayout.Button (""..."", GUILayout.MaxWidth (20))) {{
-				PopupWindow.Show (
-					new Rect (Event.current.mousePosition.x, Event.current.mousePosition.y, 0f, 0f), 
-					new SimpleClassReactivePropertyEditorPopupWindow<{1}> (this, VM.RP_{0})
-				);
-			}}
-		}}
-		EditorGUILayout.EndHorizontal ();", name, type);
+			EditorGUILayout.EndHorizontal ();", name, type);
 							is_ese = true;
 							break;
 						case DocType.Enum:
 							result = string.Format (@"
 
-		vmk = ""{0}"";
-		VM.{0} = ({1})EditorGUILayout.EnumPopup (vmk, VM.{0});", name, type);
+			vmk = ""{0}"";
+			VM.{0} = ({1})EditorGUILayout.EnumPopup (vmk, VM.{0});", name, type);
 							is_ese = true;
+							break;
+
+						case DocType.FSM:
+							is_ese = false;
 							break;
 						default:
 							throw new System.ArgumentOutOfRangeException ();
@@ -199,178 +208,185 @@ namespace PGFrame
 
 			if (is_ese == false) {
 				switch (type) {
+				case "bool":
+				case "Boolean":
+					result = string.Format (@"
+
+			vmk = ""{0}"";
+			VM.{0} = EditorGUILayout.Toggle (vmk, VM.{0});", name);
+					break;
 				case "int":
 					result = string.Format (@"
 
-		vmk = ""{0}"";
-		int temp{0} = EditorGUILayout.DelayedIntField (vmk, VM.{0});
-		if (temp{0} != VM.{0}) {{
-			VM.{0} = temp{0};
-		}}", name);
+			vmk = ""{0}"";
+			int temp{0} = EditorGUILayout.DelayedIntField (vmk, VM.{0});
+			if (temp{0} != VM.{0}) {{
+				VM.{0} = temp{0};
+			}}", name);
 					break;
 				case "long":
 					result = string.Format (@"
 
-		vmk = ""{0}"";
-		int temp{0} = EditorGUILayout.DelayedIntField (vmk, (int)VM.{0});
-		if ((long)temp{0} != VM.{0}) {{
-			VM.{0} = (long)temp{0};
-		}}", name);
+			vmk = ""{0}"";
+			int temp{0} = EditorGUILayout.DelayedIntField (vmk, (int)VM.{0});
+			if ((long)temp{0} != VM.{0}) {{
+				VM.{0} = (long)temp{0};
+			}}", name);
 					break;
 				case "float":
 					result = string.Format (@"
 
-		vmk = ""{0}"";
-		float temp{0} = EditorGUILayout.DelayedFloatField (vmk, VM.{0});
-		if (temp{0} != VM.{0}) {{
-			VM.{0} = temp{0};
-		}}", name);
+			vmk = ""{0}"";
+			float temp{0} = EditorGUILayout.DelayedFloatField (vmk, VM.{0});
+			if (temp{0} != VM.{0}) {{
+				VM.{0} = temp{0};
+			}}", name);
 					break;
 				case "double":
 					result = string.Format (@"
 
-		vmk = ""{0}"";
-		double temp{0} = EditorGUILayout.DelayedDoubleField (vmk, VM.{0});
-		if (temp{0} != VM.{0}) {{
-			VM.{0} = temp{0};
-		}}", name);
+			vmk = ""{0}"";
+			double temp{0} = EditorGUILayout.DelayedDoubleField (vmk, VM.{0});
+			if (temp{0} != VM.{0}) {{
+				VM.{0} = temp{0};
+			}}", name);
 					break;
 				case "string":
 					result = string.Format (@"
 
-		vmk = ""{0}"";
-		string temp{0} = EditorGUILayout.DelayedTextField (vmk, VM.{0});
-		if (temp{0} != VM.{0}) {{
-			VM.{0} = temp{0};
-		}}", name);
+			vmk = ""{0}"";
+			string temp{0} = EditorGUILayout.DelayedTextField (vmk, VM.{0});
+			if (temp{0} != VM.{0}) {{
+				VM.{0} = temp{0};
+			}}", name);
 					break;
 				case "UnityEngine.Vector2":
 					result = string.Format (@"
 
-		vmk = ""{0}"";
-		VM.{0} = EditorGUILayout.Vector2Field (vmk, VM.{0});", name);
+			vmk = ""{0}"";
+			VM.{0} = EditorGUILayout.Vector2Field (vmk, VM.{0});", name);
 					break;
 				case "UnityEngine.Vector3":
 					result = string.Format (@"
 
-		vmk = ""{0}"";
-		VM.{0} = EditorGUILayout.Vector3Field (vmk, VM.{0});", name);
+			vmk = ""{0}"";
+			VM.{0} = EditorGUILayout.Vector3Field (vmk, VM.{0});", name);
 					break;
 				case "UnityEngine.Vector4":
 					result = string.Format (@"
 
-		vmk = ""{0}"";
-		VM.{0} = EditorGUILayout.Vector4Field (vmk, VM.{0});", name);
+			vmk = ""{0}"";
+			VM.{0} = EditorGUILayout.Vector4Field (vmk, VM.{0});", name);
 					break;
 
 				case "UnityEngine.Quaternion":
 					result = string.Format (@"
 
-		vmk = ""{0}"";
-		Vector3 temp{0}Vector3 = VM.{0}.eulerAngles;
-		temp{0}Vector3 = EditorGUILayout.Vector3Field (vmk, temp{0}Vector3);
-		VM.{0} = Quaternion.Euler (temp{0}Vector3);", name);
+			vmk = ""{0}"";
+			Vector3 temp{0}Vector3 = VM.{0}.eulerAngles;
+			temp{0}Vector3 = EditorGUILayout.Vector3Field (vmk, temp{0}Vector3);
+			VM.{0} = Quaternion.Euler (temp{0}Vector3);", name);
 					break;
 
 				case "UnityEngine.Rect":
 					result = string.Format (@"
 
-		vmk = ""{0}"";
-		VM.{0} = EditorGUILayout.RectField (vmk, VM.{0});", name);
+			vmk = ""{0}"";
+			VM.{0} = EditorGUILayout.RectField (vmk, VM.{0});", name);
 					break;
 
 				case "UnityEngine.Bounds":
 					result = string.Format (@"
 
-		vmk = ""{0}"";
-		VM.{0} = EditorGUILayout.BoundsField (vmk, VM.{0});", name);
+			vmk = ""{0}"";
+			VM.{0} = EditorGUILayout.BoundsField (vmk, VM.{0});", name);
 					break;
 
 				case "UnityEngine.Color":
 					result = string.Format (@"
 
-		vmk = ""{0}"";
-		VM.{0} = EditorGUILayout.ColorField (vmk, VM.{0});", name);
+			vmk = ""{0}"";
+			VM.{0} = EditorGUILayout.ColorField (vmk, VM.{0});", name);
 					break;
 
 				case "UnityEngine.AnimationCurve":
 					result = string.Format (@"
-			
-		vmk = ""{0}"";
-		EditorGUILayout.BeginHorizontal ();
-		if (VM.{0} == null) {{
-			EditorGUILayout.PrefixLabel (vmk);
-			if (GUILayout.Button (""Create"")) {{
-				VM.{0} = AnimationCurve.Linear (0f, 0f, 1f, 1f);
+				
+			vmk = ""{0}"";
+			EditorGUILayout.BeginHorizontal ();
+			if (VM.{0} == null) {{
+				EditorGUILayout.PrefixLabel (vmk);
+				if (GUILayout.Button (""Create"")) {{
+					VM.{0} = AnimationCurve.Linear (0f, 0f, 1f, 1f);
+				}}
+			}} else {{
+				VM.{0} = EditorGUILayout.CurveField (vmk, VM.{0});
+				if (GUILayout.Button (""-"", GUILayout.MaxWidth (20f))) {{
+					VM.{0} = null;
+				}}
 			}}
-		}} else {{
-			VM.{0} = EditorGUILayout.CurveField (vmk, VM.{0});
-			if (GUILayout.Button (""-"", GUILayout.MaxWidth (20f))) {{
-				VM.{0} = null;
-			}}
-		}}
-		EditorGUILayout.EndHorizontal ();", name);
+			EditorGUILayout.EndHorizontal ();", name);
 					break;
 
 				case "DateTime":
 					result = string.Format (@"
 
-		vmk = ""{0}"";
-		DateTime temp{0};
-		if (DateTime.TryParse (EditorGUILayout.DelayedTextField (vmk, VM.{0}.ToString ()), out temp{0})) {{
-			if (VM.{0} != temp{0}) {{
-				VM.{0} = temp{0};
-			}}
-		}}", name);
+			vmk = ""{0}"";
+			DateTime temp{0};
+			if (DateTime.TryParse (EditorGUILayout.DelayedTextField (vmk, VM.{0}.ToString ()), out temp{0})) {{
+				if (VM.{0} != temp{0}) {{
+					VM.{0} = temp{0};
+				}}
+			}}", name);
 					break;
 
 				case "TimeSpan":
 					result = string.Format (@"
 
-		vmk = ""{0}"";
-		TimeSpan temp{0};
-		if (TimeSpan.TryParse (EditorGUILayout.DelayedTextField (vmk, VM.{0}.ToString ()), out temp{0})) {{
-			if (VM.{0} != temp{0}) {{
-				VM.{0} = temp{0};
-			}}
-		}}", name);
+			vmk = ""{0}"";
+			TimeSpan temp{0};
+			if (TimeSpan.TryParse (EditorGUILayout.DelayedTextField (vmk, VM.{0}.ToString ()), out temp{0})) {{
+				if (VM.{0} != temp{0}) {{
+					VM.{0} = temp{0};
+				}}
+			}}", name);
 					break;
 
 				case "JObject":
 					result = string.Format (@"
 
-		vmk = ""{0}"";
-		string temp{0}String = JsonConvert.SerializeObject (VM.{0});
-		string temp2{0}String = EditorGUILayout.DelayedTextField (vmk, temp{0}String);
-		if (temp{0}String != temp2{0}String) {{
-			try {{
-				VM.{0} = JsonConvert.DeserializeObject<JObject> (temp2{0}String);
-			}} catch {{
-				VM.{0} = JsonConvert.DeserializeObject<JObject> (temp{0}String);
-			}}
-		}}", name);
+			vmk = ""{0}"";
+			string temp{0}String = JsonConvert.SerializeObject (VM.{0});
+			string temp2{0}String = EditorGUILayout.DelayedTextField (vmk, temp{0}String);
+			if (temp{0}String != temp2{0}String) {{
+				try {{
+					VM.{0} = JsonConvert.DeserializeObject<JObject> (temp2{0}String);
+				}} catch {{
+					VM.{0} = JsonConvert.DeserializeObject<JObject> (temp{0}String);
+				}}
+			}}", name);
 					break;
 
 				case "JArray":
 					result = string.Format (@"
 
-		vmk = ""{0}"";
-		string temp{0}String = JsonConvert.SerializeObject (VM.{0});
-		string temp2{0}String = EditorGUILayout.DelayedTextField (vmk, temp{0}String);
-		if (temp{0}String != temp2{0}String) {{
-			try {{
-				VM.{0} = JsonConvert.DeserializeObject<JArray> (temp2{0}String);
-			}} catch {{
-				VM.{0} = JsonConvert.DeserializeObject<JArray> (temp{0}String);
-			}}
-		}}", name);
+			vmk = ""{0}"";
+			string temp{0}String = JsonConvert.SerializeObject (VM.{0});
+			string temp2{0}String = EditorGUILayout.DelayedTextField (vmk, temp{0}String);
+			if (temp{0}String != temp2{0}String) {{
+				try {{
+					VM.{0} = JsonConvert.DeserializeObject<JArray> (temp2{0}String);
+				}} catch {{
+					VM.{0} = JsonConvert.DeserializeObject<JArray> (temp{0}String);
+				}}
+			}}", name);
 					break;
 
 				default:
 					result = string.Format (@"
 
-		vmk = ""{0}"";
-		EditorGUILayout.DelayedTextField (vmk, VM.{0} != null ? VM.{0}.ToString () : ""null ({1})"");", name, type);
+			vmk = ""{0}"";
+			EditorGUILayout.DelayedTextField (vmk, VM.{0} != null ? VM.{0}.ToString () : ""null ({1})"");", name, type);
 					break;
 				}
 			}
@@ -384,24 +400,24 @@ namespace PGFrame
 
 			string result = string.Format (@"
 
-		vmk = ""{0}"";
-		EditorGUILayout.BeginHorizontal ();
-		string {0}Json = JsonConvert.SerializeObject (VM.{0});
-		string temp{0}Json = EditorGUILayout.DelayedTextField (vmk, {0}Json);
-		if (temp{0}Json != {0}Json) {{
-			if (string.IsNullOrEmpty (temp{0}Json)) {{
-				VM.{0} = null;
-			}} else {{
-				VM.{0} = JsonConvert.DeserializeObject<ReactiveCollection<{1}>> (temp{0}Json);
+			vmk = ""{0}"";
+			EditorGUILayout.BeginHorizontal ();
+			string {0}Json = JsonConvert.SerializeObject (VM.{0});
+			string temp{0}Json = EditorGUILayout.DelayedTextField (vmk, {0}Json);
+			if (temp{0}Json != {0}Json) {{
+				if (string.IsNullOrEmpty (temp{0}Json)) {{
+					VM.{0} = null;
+				}} else {{
+					VM.{0} = JsonConvert.DeserializeObject<ReactiveCollection<{1}>> (temp{0}Json);
+				}}
 			}}
-		}}
-		if (GUILayout.Button (""..."", GUILayout.MaxWidth (20))) {{
-			PopupWindow.Show (
-				new Rect (Event.current.mousePosition.x, Event.current.mousePosition.y, 0f, 0f), 
-				new ReactiveCollectionEditorPopupWindow<{1}> (this, VM.{0})
-			);
-		}}
-		EditorGUILayout.EndHorizontal ();", name, type);
+			if (GUILayout.Button (""..."", GUILayout.MaxWidth (20))) {{
+				PopupWindow.Show (
+					new Rect (Event.current.mousePosition.x, Event.current.mousePosition.y, 0f, 0f), 
+					new ReactiveCollectionEditorPopupWindow<{1}> (this, VM.{0})
+				);
+			}}
+			EditorGUILayout.EndHorizontal ();", name, type);
 
 			return result;
 		}
@@ -414,24 +430,24 @@ namespace PGFrame
 
 			string result = string.Format (@"
 
-		vmk = ""{0}"";
-		EditorGUILayout.BeginHorizontal ();
-		string {0} = JsonConvert.SerializeObject (VM.{0});
-		string temp{0} = EditorGUILayout.DelayedTextField (vmk, {0});
-		if (temp{0} != {0}) {{
-			if (string.IsNullOrEmpty (temp{0})) {{
-				VM.{0} = null;
-			}} else {{
-				VM.{0} = JsonConvert.DeserializeObject<ReactiveDictionary<{1},{2}>> (temp{0});
+			vmk = ""{0}"";
+			EditorGUILayout.BeginHorizontal ();
+			string {0} = JsonConvert.SerializeObject (VM.{0});
+			string temp{0} = EditorGUILayout.DelayedTextField (vmk, {0});
+			if (temp{0} != {0}) {{
+				if (string.IsNullOrEmpty (temp{0})) {{
+					VM.{0} = null;
+				}} else {{
+					VM.{0} = JsonConvert.DeserializeObject<ReactiveDictionary<{1},{2}>> (temp{0});
+				}}
 			}}
-		}}
-		if (GUILayout.Button (""..."", GUILayout.MaxWidth (20))) {{
-			PopupWindow.Show (
-				new Rect (Event.current.mousePosition.x, Event.current.mousePosition.y, 0f, 0f), 
-				new ReactiveDictionaryEditorPopupWindow<{1},{2}> (this, VM.{0})
-			);
-		}}
-		EditorGUILayout.EndHorizontal ();", name, types [0], types [1]);
+			if (GUILayout.Button (""..."", GUILayout.MaxWidth (20))) {{
+				PopupWindow.Show (
+					new Rect (Event.current.mousePosition.x, Event.current.mousePosition.y, 0f, 0f), 
+					new ReactiveDictionaryEditorPopupWindow<{1},{2}> (this, VM.{0})
+				);
+			}}
+			EditorGUILayout.EndHorizontal ();", name, types [0], types [1]);
 
 			return result;
 		}
@@ -446,43 +462,83 @@ namespace PGFrame
 			if (para != null && para.Count > 0) {
 				result = string.Format (@"
 
-		vmk = ""{0}"";
-		EditorGUILayout.BeginHorizontal ();
-		EditorGUILayout.PrefixLabel (vmk);
-		if (GUILayout.Button (""Params"")) {{
+			vmk = ""{0}"";
+			EditorGUILayout.BeginHorizontal ();
+			EditorGUILayout.PrefixLabel (vmk);
+			if (GUILayout.Button (""Params"")) {{
+				if (CommandParams.ContainsKey (vmk)) {{
+					CommandParams.Remove (vmk);
+				}} else {{
+					CommandParams [vmk] = JsonConvert.SerializeObject (new {0}Command (), Formatting.Indented);
+				}}
+			}}
+			if (GUILayout.Button (""Invoke"")) {{
+				if (CommandParams.ContainsKey (vmk) == false) {{
+					VM.RC_{0}.Execute (new {0}Command () {{ Sender = VM }});
+				}} else {{
+					{0}Command command = JsonConvert.DeserializeObject<{0}Command> (CommandParams [vmk]);
+					command.Sender = VM;
+					VM.RC_{0}.Execute (command);
+				}}
+			}}
+			EditorGUILayout.EndHorizontal ();
 			if (CommandParams.ContainsKey (vmk)) {{
-				CommandParams.Remove (vmk);
-			}} else {{
-				CommandParams [vmk] = JsonConvert.SerializeObject (new {0}Command (), Formatting.Indented);
-			}}
-		}}
-		if (GUILayout.Button (""Invoke"")) {{
-			if (CommandParams.ContainsKey (vmk) == false) {{
-				VM.RC_{0}.Execute (new {0}Command () {{ Sender = VM }});
-			}} else {{
-				{0}Command command = JsonConvert.DeserializeObject<{0}Command> (CommandParams [vmk]);
-				command.Sender = VM;
-				VM.RC_{0}.Execute (command);
-			}}
-		}}
-		EditorGUILayout.EndHorizontal ();
-		if (CommandParams.ContainsKey (vmk)) {{
-			CommandParams [vmk] = EditorGUILayout.TextArea (CommandParams [vmk]);
-			EditorGUILayout.Space ();
-		}}", name);
+				CommandParams [vmk] = EditorGUILayout.TextArea (CommandParams [vmk]);
+				EditorGUILayout.Space ();
+			}}", name);
 			} else {
 				result = string.Format (@"
 
-		vmk = ""{0}"";
-		EditorGUILayout.BeginHorizontal ();
-		EditorGUILayout.PrefixLabel (vmk);
-		if (GUILayout.Button (""Invoke"")) {{
-			VM.RC_{0}.Execute ();
-		}}
-		EditorGUILayout.EndHorizontal ();", name);
+			vmk = ""{0}"";
+			EditorGUILayout.BeginHorizontal ();
+			EditorGUILayout.PrefixLabel (vmk);
+			if (GUILayout.Button (""Invoke"")) {{
+				VM.RC_{0}.Execute ();
+			}}
+			EditorGUILayout.EndHorizontal ();", name);
 			}
 
 			return result;
 		}
+
+		public static string GenEditorGUIFSM (this JObject jom)
+		{
+			string name = jom ["Name"].Value<string> ();
+			string type = jom ["Type"].Value<string> ();
+
+			string result = string.Format (@"
+
+			vmk = ""{0}"";
+			EditorGUILayout.BeginHorizontal ();
+			EditorGUILayout.PrefixLabel (vmk);
+			VM.{0} = ({1}.State)EditorGUILayout.EnumPopup (VM.{0});
+			if (GUILayout.Button (""Transition..."")) {{
+				GenericMenu menu = new GenericMenu ();
+
+				Type FSMType = typeof(WS1.{1});
+				FieldInfo[] fis = FSMType.GetFields ();
+				fis.ToObservable ().Where (_ => {{
+					return _.FieldType == typeof(UniRx.ReactiveCommand) &&
+					_.Name.ToString ().EndsWith (""Transition"");
+				}}).Select ((_, idx) => {{
+					int lio = _.Name.ToString ().LastIndexOf (""Transition"");
+					return new {{_ = _, idx = idx, name = _.Name.ToString ().Substring (0, lio)}};
+				}}).Subscribe (_ => {{
+					menu.AddItem (new GUIContent (_.idx + "". "" + _.name), false, () => {{
+						Type t = VM.FSM_{0}.GetType ();
+						FieldInfo fi = t.GetField (_._.Name);
+						ReactiveCommand rc = fi.GetValue (VM.FSM_{0}) as ReactiveCommand;
+						rc.Execute ();
+					}});
+				}});
+				menu.ShowAsContext ();
+			}}
+			EditorGUILayout.EndHorizontal ();", name, type);
+			return result;
+		}
+
+
+
+
 	}
 }

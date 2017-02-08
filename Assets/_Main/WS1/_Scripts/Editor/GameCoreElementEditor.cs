@@ -3,6 +3,7 @@ using UnityEditor;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace WS1
 {
@@ -131,6 +132,33 @@ namespace WS1
 					Debug.Log ("类型不匹配, 需要一个: Ball");
 				}
 			}
+
+			vmk = "GameState";
+			EditorGUILayout.BeginHorizontal ();
+			EditorGUILayout.PrefixLabel (vmk);
+			VM.GameState = (GameCoreFSM.State)EditorGUILayout.EnumPopup (VM.GameState);
+			if (GUILayout.Button ("Transition...")) {
+				GenericMenu menu = new GenericMenu ();
+
+				Type FSMType = typeof(WS1.GameCoreFSM);
+				FieldInfo[] fis = FSMType.GetFields ();
+				fis.ToObservable ().Where (_ => {
+					return _.FieldType == typeof(UniRx.ReactiveCommand) &&
+					_.Name.ToString ().EndsWith ("Transition");
+				}).Select ((_, idx) => {
+					int lio = _.Name.ToString ().LastIndexOf ("Transition");
+					return new {_ = _, idx = idx, name = _.Name.ToString ().Substring (0, lio)};
+				}).Subscribe (_ => {
+					menu.AddItem (new GUIContent (_.idx + ". " + _.name), false, () => {
+						Type t = VM.FSM_GameState.GetType ();
+						FieldInfo fi = t.GetField (_._.Name);
+						ReactiveCommand rc = fi.GetValue (VM.FSM_GameState) as ReactiveCommand;
+						rc.Execute ();
+					});
+				});
+				menu.ShowAsContext ();
+			}
+			EditorGUILayout.EndHorizontal ();
 
 			EditorGUILayout.EndVertical ();
 			EditorGUI.indentLevel--;

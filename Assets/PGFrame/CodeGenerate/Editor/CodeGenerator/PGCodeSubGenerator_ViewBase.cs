@@ -185,6 +185,10 @@ namespace PGFrame
 				result [0] = GenBindCodeReactiveMemberCommand (jo_member, jo_view);
 				result [1] = GenFuncCodeReactiveMemberCommand (jo_member, jo_view);
 				break;
+			case RxType.FSM:
+				result [0] = GenBindCodeFSMMemberProperty (jo_member, jo_view);
+				result [1] = GenFuncCodeFSMMemberProperty (jo_member, jo_view);
+				break;
 			default:
 				break;
 			}
@@ -192,30 +196,69 @@ namespace PGFrame
 			return result;
 		}
 
-		public static string GenBindCodeReactiveMemberProperty (JObject jo_member, JObject jo_view)
+		public static string GenBindCodeFSMMemberProperty (JObject jo_member, JObject jo_view)
 		{
 			string member_name = jo_member ["Name"].Value<string> ();
 			string result = "";
-			if (jo_view ["Members"] [member_name] ["Bind"] ["Changed"].Value<bool> ()) {
+			if (jo_view ["Members"] [member_name] ["Bind"] ["PairChanged"].Value<bool> ()) {
 				result = string.Format (@"
-			VM.RP_{0}.Subscribe (OnChanged_{0}).AddTo(baseBindDisposables);", member_name);
+			VM.FSM_{0}.CurrentState.Pairwise ().Subscribe (OnPairChanged_{0}).AddTo (baseBindDisposables);", member_name);
 			}
 			return result;
+		}
+
+		public static string GenFuncCodeFSMMemberProperty (JObject jo_member, JObject jo_view)
+		{
+			string member_name = jo_member ["Name"].Value<string> ();
+			string member_type = jo_member ["Type"].Value<string> ();
+			StringBuilder result = new StringBuilder ();
+			if (jo_view ["Members"] [member_name] ["Bind"] ["PairChanged"].Value<bool> ()) {
+				result.AppendFormat (@"
+
+		public virtual void OnPairChanged_{0} (Pair<{1}.State> pair)
+		{{
+		}}", member_name, member_type);
+			}
+			return result.ToString ();
+		}
+
+
+
+		public static string GenBindCodeReactiveMemberProperty (JObject jo_member, JObject jo_view)
+		{
+			string member_name = jo_member ["Name"].Value<string> ();
+			StringBuilder result = new StringBuilder ();
+			if (jo_view ["Members"] [member_name] ["Bind"] ["Changed"].Value<bool> ()) {
+				result.AppendFormat (@"
+			VM.RP_{0}.Subscribe (OnChanged_{0}).AddTo (baseBindDisposables);", member_name);
+			}
+			if (ElementViewTools.GetBindPropertyValue (jo_view ["Members"] [member_name] ["Bind"] as JObject, "PairChanged")) {
+				result.AppendFormat (@"
+			VM.RP_{0}.Pairwise ().Subscribe (OnPairChanged_{0}).AddTo (baseBindDisposables);", member_name);
+			}
+			return result.ToString ();
 		}
 
 		public static string GenFuncCodeReactiveMemberProperty (JObject jo_member, JObject jo_view)
 		{
 			string member_name = jo_member ["Name"].Value<string> ();
 			string member_type = jo_member ["Type"].Value<string> ();
-			string result = "";
+			StringBuilder result = new StringBuilder ();
 			if (jo_view ["Members"] [member_name] ["Bind"] ["Changed"].Value<bool> ()) {
-				result = string.Format (@"
+				result.AppendFormat (@"
 
 		public virtual void OnChanged_{0} ({1} value)
 		{{
 		}}", member_name, member_type);
 			}
-			return result;
+			if (ElementViewTools.GetBindPropertyValue (jo_view ["Members"] [member_name] ["Bind"] as JObject, "PairChanged")) {
+				result.AppendFormat (@"
+
+		public virtual void OnPairChanged_{0} (Pair<{1}> pair)
+		{{
+		}}", member_name, member_type);
+			}
+			return result.ToString ();
 		}
 
 		public static string GenBindCodeReactiveMemberCollection (JObject jo_member, JObject jo_view)
@@ -226,27 +269,27 @@ namespace PGFrame
 
 			if (jo_bind ["Add"].Value<bool> ()) {
 				sb.AppendFormat (@"
-			VM.{0}.ObserveAdd ().Subscribe (OnAdd_{0}).AddTo(baseBindDisposables);", member_name);
+			VM.{0}.ObserveAdd ().Subscribe (OnAdd_{0}).AddTo (baseBindDisposables);", member_name);
 			}
 			if (jo_bind ["CountChanged"].Value<bool> ()) {
 				sb.AppendFormat (@"
-			VM.{0}.ObserveCountChanged ().Subscribe (OnCountChanged_{0}).AddTo(baseBindDisposables);", member_name);
+			VM.{0}.ObserveCountChanged ().Subscribe (OnCountChanged_{0}).AddTo (baseBindDisposables);", member_name);
 			}
 			if (jo_bind ["Move"].Value<bool> ()) {
 				sb.AppendFormat (@"
-			VM.{0}.ObserveMove ().Subscribe (OnMove_{0}).AddTo(baseBindDisposables);", member_name);
+			VM.{0}.ObserveMove ().Subscribe (OnMove_{0}).AddTo (baseBindDisposables);", member_name);
 			}
 			if (jo_bind ["Remove"].Value<bool> ()) {
 				sb.AppendFormat (@"
-			VM.{0}.ObserveRemove ().Subscribe (OnRemove_{0}).AddTo(baseBindDisposables);", member_name);
+			VM.{0}.ObserveRemove ().Subscribe (OnRemove_{0}).AddTo (baseBindDisposables);", member_name);
 			}
 			if (jo_bind ["Replace"].Value<bool> ()) {
 				sb.AppendFormat (@"
-			VM.{0}.ObserveReplace ().Subscribe (OnReplace_{0}).AddTo(baseBindDisposables);", member_name);
+			VM.{0}.ObserveReplace ().Subscribe (OnReplace_{0}).AddTo (baseBindDisposables);", member_name);
 			}
 			if (jo_bind ["Reset"].Value<bool> ()) {
 				sb.AppendFormat (@"
-			VM.{0}.ObserveReset ().Subscribe (OnReset_{0}).AddTo(baseBindDisposables);", member_name);
+			VM.{0}.ObserveReset ().Subscribe (OnReset_{0}).AddTo (baseBindDisposables);", member_name);
 			}
 
 			return sb.ToString ();
@@ -314,23 +357,23 @@ namespace PGFrame
 
 			if (jo_bind ["Add"].Value<bool> ()) {
 				sb.AppendFormat (@"
-			VM.{0}.ObserveAdd ().Subscribe (OnAdd_{0}).AddTo(baseBindDisposables);", member_name);
+			VM.{0}.ObserveAdd ().Subscribe (OnAdd_{0}).AddTo (baseBindDisposables);", member_name);
 			}
 			if (jo_bind ["CountChanged"].Value<bool> ()) {
 				sb.AppendFormat (@"
-			VM.{0}.ObserveCountChanged ().Subscribe (OnCountChanged_{0}).AddTo(baseBindDisposables);", member_name);
+			VM.{0}.ObserveCountChanged ().Subscribe (OnCountChanged_{0}).AddTo (baseBindDisposables);", member_name);
 			}
 			if (jo_bind ["Remove"].Value<bool> ()) {
 				sb.AppendFormat (@"
-			VM.{0}.ObserveRemove ().Subscribe (OnRemove_{0}).AddTo(baseBindDisposables);", member_name);
+			VM.{0}.ObserveRemove ().Subscribe (OnRemove_{0}).AddTo (baseBindDisposables);", member_name);
 			}
 			if (jo_bind ["Replace"].Value<bool> ()) {
 				sb.AppendFormat (@"
-			VM.{0}.ObserveReplace ().Subscribe (OnReplace_{0}).AddTo(baseBindDisposables);", member_name);
+			VM.{0}.ObserveReplace ().Subscribe (OnReplace_{0}).AddTo (baseBindDisposables);", member_name);
 			}
 			if (jo_bind ["Reset"].Value<bool> ()) {
 				sb.AppendFormat (@"
-			VM.{0}.ObserveReset ().Subscribe (OnReset_{0}).AddTo(baseBindDisposables);", member_name);
+			VM.{0}.ObserveReset ().Subscribe (OnReset_{0}).AddTo (baseBindDisposables);", member_name);
 			}
 
 			return sb.ToString ();
@@ -393,12 +436,12 @@ namespace PGFrame
 			if (jo_member ["Params"] == null || (jo_member ["Params"] as JArray).Count == 0) {
 				if (jo_bind ["Executed"].Value<bool> ()) {
 					sb.AppendFormat (@"
-			VM.RC_{0}.Subscribe (OnExecuted_{0}).AddTo(baseBindDisposables);", member_name);
+			VM.RC_{0}.Subscribe (OnExecuted_{0}).AddTo (baseBindDisposables);", member_name);
 				}
 			} else {
 				if (jo_bind ["Executed"].Value<bool> ()) {
 					sb.AppendFormat (@"
-			VM.RC_{0}.Subscribe<{0}Command> (OnExecuted_{0}).AddTo(baseBindDisposables);", member_name);
+			VM.RC_{0}.Subscribe<{0}Command> (OnExecuted_{0}).AddTo (baseBindDisposables);", member_name);
 				}				
 			}
 
@@ -415,17 +458,17 @@ namespace PGFrame
 				if (jo_bind ["Executed"].Value<bool> ()) {
 					sb.AppendFormat (@"
 
-			public virtual void OnExecuted_{0} (Unit unit)
-			{{
-			}}", member_name);
+		public virtual void OnExecuted_{0} (Unit unit)
+		{{
+		}}", member_name);
 				}
 			} else {
 				if (jo_bind ["Executed"].Value<bool> ()) {
 					sb.AppendFormat (@"
 
-			public virtual void OnExecuted_{0} ({0}Command command)
-			{{
-			}}", member_name);
+		public virtual void OnExecuted_{0} ({0}Command command)
+		{{
+		}}", member_name);
 				}
 			}
 

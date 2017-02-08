@@ -3,9 +3,11 @@ using UnityEditor;
 using UnityEditor.Graphs;
 using UnityEditorInternal;
 using System.Collections;
+using System.Linq;
 using PogoTools;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
 
 namespace PGFrame
 {
@@ -41,7 +43,7 @@ namespace PGFrame
 
 		public ReorderableList TransitionsList;
 
-		void ResetReorderableList ()
+		void ResetReorderableTransitionsList ()
 		{
 			if (jElement != null) {
 				JArray ja_elements = jElement.jo ["Transition"] as JArray;
@@ -59,7 +61,11 @@ namespace PGFrame
 					r.x = (rect.width - 25f) * split [split_idx] + 25f;
 					r.width = (rect.width - 25f) * (split [split_idx + 1] - split [split_idx]);
 					JObject jo_element = ja_elements [index] as JObject;
-					jo_element ["Name"] = GUI.TextField (r, jo_element ["Name"].Value<string> ());
+					string ori_element_name = jo_element ["Name"].Value<string> ();
+					string new_element_name = EditorGUI.DelayedTextField (r, ori_element_name);
+					if (new_element_name != ori_element_name) {
+						RenameTransition (ori_element_name, new_element_name);
+					}
 				};
 
 				TransitionsList.onAddCallback += (ReorderableList list) => {
@@ -70,16 +76,40 @@ namespace PGFrame
 
 				TransitionsList.onRemoveCallback += (ReorderableList list) => {
 					JObject jo = ja_elements [list.index] as JObject;
-					// PR_TODO: 删除所有使用了该 Transition 的地方
-					ja_elements.RemoveAt (list.index);
+					DeleteTransition (jo ["Name"].Value<string> ());
 				};
 			}
 		}
 
-		Rect windowRect = new Rect (400 + 100, 100, 100, 100);
-		Rect windowRect2 = new Rect (400, 100, 100, 100);
+		public ReorderableList StatesList;
+
+		void ResetReorderableStatesList ()
+		{
+			if (jElement != null) {
+				JArray ja_elements = jElement.jo ["State"] as JArray;
+				StatesList = new ReorderableList (ja_elements, typeof(JToken));
+				StatesList.drawHeaderCallback += (Rect rect) => {
+					GUI.Label (rect, "States");
+				};
+				float[] split = new float[]{ 0f, 1f };
+				StatesList.drawElementCallback += (Rect rect, int index, bool isActive, bool isFocused) => {
+					Rect r = new Rect (rect);
+					r.y -= 1;
+					r.height -= 2;
+					int split_idx = 0;
+					r.x = (rect.width - 25f) * split [split_idx] + 25f;
+					r.width = (rect.width - 25f) * (split [split_idx + 1] - split [split_idx]);
+					JObject jo_element = ja_elements [index] as JObject;
+					string ori_element_name = jo_element ["Name"].Value<string> ();
+					EditorGUI.LabelField (r, ori_element_name);
+				};
+				StatesList.displayAdd = false;
+				StatesList.displayRemove = false;
+			}
+		}
 
 		Vector2 scrollPosition;
+		Vector2 scrollStatesPosition;
 
 		static readonly float tab_width = 200f;
 
@@ -90,7 +120,15 @@ namespace PGFrame
 					this.Close ();
 					return;
 				}
-				ResetReorderableList ();
+				ResetReorderableTransitionsList ();
+			}
+
+			if (StatesList == null) {
+				if (jElement == null) {
+					this.Close ();
+					return;
+				}
+				ResetReorderableStatesList ();
 			}
 
 			JObject jo_common = jElement.jo ["Common"] as JObject;
@@ -100,19 +138,55 @@ namespace PGFrame
 
 			// tab
 			GUILayout.BeginVertical (GUILayout.MaxWidth (tab_width));
+			scrollStatesPosition = GUILayout.BeginScrollView (scrollStatesPosition);
 
 			TransitionsList.DoLayoutList ();
+			EditorGUILayout.Space ();
+			StatesList.DoLayoutList ();
 
 			GUILayout.FlexibleSpace ();
+
+			GUILayout.EndScrollView ();
+
+			if (in_state_rename_jo_state != null) {
+				GUILayout.BeginVertical ("box");
+				GUILayout.Label (string.Format ("Rename State({0}) To:", in_state_rename_jo_state ["Name"].Value<string> ()));
+				in_state_rename_target_name = GUILayout.TextField (in_state_rename_target_name);
+				if (GUILayout.Button ("Confirm Rename")) {
+					RenameState ();
+					in_state_rename_jo_state = null;
+					in_state_rename_target_name = "";
+				}
+				if (GUILayout.Button ("Cancel Rename State")) {
+					in_state_rename_jo_state = null;
+					in_state_rename_target_name = "";
+				}
+				GUILayout.EndVertical ();
+			}
+
+			if (in_state_transition_target_selecting_jo_state_transition != null) {
+				if (GUILayout.Button ("Cancel Transition To")) {
+					in_state_transition_target_selecting_jo_state_transition = null;
+					in_state_transition_target_selecting_window_id = -1;
+				}
+			}
+			if (GUILayout.Button ("Create New State")) {
+				CreateNewState ();
+			}
 			if (GUILayout.Button ("JElement")) {
 				PRDebug.TagLog (lt, lc, JsonConvert.SerializeObject (jElement, Formatting.Indented));
 			}
 			if (GUILayout.Button ("Reset")) {
 				TransitionsList = null;
+				StatesList = null;
 				jElement.Load ();
 			}
 			if (GUILayout.Button ("Save")) {
 				SaveJsonFile ();
+			}
+			if (GUILayout.Button ("Save & Generate")) {
+				SaveJsonFile ();
+				PGFrameWindow.Current.Generator.GenerateCode (jElement.jo);
 			}
 			if (GUILayout.Button ("Save & Close")) {
 				SaveJsonFile ();
@@ -147,6 +221,8 @@ namespace PGFrame
 
 					Rect rect = GUI.Window (i, new Rect (x, y, w, h), WindowFunction, state_name);
 
+					rect.x = Math.Max ((int)tab_width, (int)rect.x);
+					rect.y = Math.Max (50, (int)rect.y);
 					rect = SnapRect (rect);
 					jo_state ["Rect"] ["x"] = (int)rect.x;
 					jo_state ["Rect"] ["y"] = (int)rect.y;
@@ -160,6 +236,7 @@ namespace PGFrame
 
 		void WindowFunction (int windowID)
 		{
+			string entry_state = jElement.jo ["Common"] ["EntryState"].Value<string> ();
 			JArray ja_states = jElement.jo ["State"] as JArray;
 			JObject jo_state = ja_states [windowID] as JObject;
 			string state_name = jo_state ["Name"].Value<string> ();
@@ -173,54 +250,182 @@ namespace PGFrame
 
 			JObject jo_rect = jo_state ["Rect"] as JObject;
 
-			if (ja_transitions.Count > 0) {
+			bool right_click_transition_box = false;
 
-				// title size
-				GUIStyle style_cal = GUI.skin.label;
-				GUIContent title_content = new GUIContent (state_name);
-				Vector2 title_size = style_cal.CalcSize (title_content);
-				maxWidth = Mathf.Max (maxWidth, title_size.x + 11f);
+			// title size
+			GUIStyle style_cal = GUI.skin.label;
+			GUIContent title_content = new GUIContent (state_name);
+			Vector2 title_size = style_cal.CalcSize (title_content);
+			maxWidth = Mathf.Max (maxWidth, title_size.x + 22f);
+
+			if (ja_transitions.Count > 0) {
 
 				for (int i = 0; i < ja_transitions.Count; i++) {
 					JObject jo_transition = ja_transitions [i] as JObject;
 					GUILayout.BeginHorizontal ();
 					string transition_name = jo_transition ["Name"].Value<string> ();
 
-					GUIStyle style = GUI.skin.box;
+					GUIStyle style = new GUIStyle (GUI.skin.label);
 					style.alignment = TextAnchor.MiddleCenter;
+
+					if (in_state_transition_target_selecting_window_id == windowID
+					    && in_state_transition_target_selecting_jo_state_transition ["Name"].Value<string> () == transition_name) {
+						style.normal.textColor = Color.green;
+						style.fontStyle = FontStyle.Bold;
+					}
+
 					GUIContent content = new GUIContent (transition_name);
 					Vector2 size = style.CalcSize (content);
-					maxWidth = Mathf.Max (maxWidth, size.x + 11f);
-					maxHeight += size.y + 4f;
+					maxWidth = Mathf.Max (maxWidth, size.x + 22f);
+					maxHeight += size.y + 10f;
 
-					GUILayout.Label (content, style, GUILayout.Width (jo_rect ["w"].Value<float> () - 11f));
+					GUILayout.BeginHorizontal ("box");
+					GUILayout.Label (content, style, GUILayout.Width (jo_rect ["w"].Value<float> () - 19f));
+
+					if (Event.current.type == EventType.mouseDown && GUILayoutUtility.GetLastRect ().Contains (Event.current.mousePosition)) {
+						if (Event.current.button == 1) {
+							right_click_transition_box = true;
+							ShowStateTransitionContextMenu (windowID, i);
+						}
+					}
+					GUILayout.EndHorizontal ();
 
 					GUILayout.EndHorizontal ();
 				}
 			} else {
 
-				GUIStyle style = GUI.skin.box;
+				GUIStyle style = new GUIStyle (GUI.skin.box);
 				style.alignment = TextAnchor.MiddleCenter;
-				GUIContent content = new GUIContent ("No Transitions Out.");
+				GUIContent content = new GUIContent ("<Empty>");
 				Vector2 size = style.CalcSize (content);
 				maxWidth = Mathf.Max (maxWidth, size.x + 11f);
 				maxHeight += size.y + 4f;
 
-				GUILayout.Label (content, style);
+				GUILayout.Label (content, style, GUILayout.Width (jo_rect ["w"].Value<float> () - 11f));
 			}
 
+
+			if (state_name == entry_state) {
+				GUIStyle style = new GUIStyle (GUI.skin.box);
+				style.alignment = TextAnchor.MiddleCenter;
+				GUIContent content = new GUIContent ("<Entry>");
+				Vector2 size = style.CalcSize (content);
+				maxWidth = Mathf.Max (maxWidth, size.x + 11f);
+				maxHeight += size.y + 4f;
+
+				GUILayout.Label (content, style, GUILayout.Width (jo_rect ["w"].Value<float> () - 11f));
+			}
 
 			jo_rect ["w"] = maxWidth;
 			jo_rect ["h"] = maxHeight;
 
 			GUILayout.EndVertical ();
 
-			if (Event.current.type == EventType.mouseDown/* && rect.Contains (Event.current.mousePosition)*/) {
-//				Debug.Log ("Click " + windowID + " -- " + Event.current.mousePosition.ToString ());
+			if (Event.current.type == EventType.mouseDown && right_click_transition_box == false) {
 				focused_state_name = state_name;
+
+				if (in_state_transition_target_selecting_jo_state_transition != null) {
+					in_state_transition_target_selecting_jo_state_transition ["TargetState"] = state_name;
+					in_state_transition_target_selecting_jo_state_transition = null;
+					in_state_transition_target_selecting_window_id = -1;
+				}
+
+				if (Event.current.button == 1) {
+					ShowStateContextMenu_Add (windowID);
+				}
 			}
 
-			GUI.DragWindow ();
+			if (Event.current.button == 0)
+				GUI.DragWindow ();
+		}
+
+		//		bool in_state_transition_target_selecting_mode = false;
+		JObject in_state_transition_target_selecting_jo_state_transition = null;
+		int in_state_transition_target_selecting_window_id = -1;
+
+		// 显示状态节点右键菜单
+		public void ShowStateTransitionContextMenu (int windowID, int transition_idx)
+		{
+			JArray ja_states = jElement.jo ["State"] as JArray;
+			JObject jo_state = ja_states [windowID] as JObject;
+			JArray jo_state_transitions = jo_state ["Transitions"] as JArray;
+
+			GenericMenu menu = new GenericMenu ();
+			menu.AddItem (new GUIContent ("Transition To..."), false, () => {
+				JObject jo_state_transition = jo_state_transitions [transition_idx] as JObject;
+				in_state_transition_target_selecting_jo_state_transition = jo_state_transition;
+				in_state_transition_target_selecting_window_id = windowID;
+			});
+			menu.AddItem (new GUIContent ("Transition To Null"), false, () => {
+				JObject jo_state_transition = jo_state_transitions [transition_idx] as JObject;
+				jo_state_transition ["TargetState"] = null;
+			});
+			menu.AddItem (new GUIContent ("Up"), false, () => {
+				if (transition_idx > 0) {
+					JObject jo_temp = jo_state_transitions [transition_idx - 1] as JObject;
+					jo_state_transitions [transition_idx - 1] = jo_state_transitions [transition_idx];
+					jo_state_transitions [transition_idx] = jo_temp;
+				}
+			});
+			menu.AddItem (new GUIContent ("Down"), false, () => {
+				if (transition_idx < jo_state_transitions.Count - 1) {
+					JObject jo_temp = jo_state_transitions [transition_idx + 1] as JObject;
+					jo_state_transitions [transition_idx + 1] = jo_state_transitions [transition_idx];
+					jo_state_transitions [transition_idx] = jo_temp;
+				}
+			});
+			menu.AddItem (new GUIContent ("Delete"), false, () => {
+				jo_state_transitions.RemoveAt (transition_idx);
+			});
+
+			menu.ShowAsContext ();
+		}
+
+		JObject in_state_rename_jo_state = null;
+		string in_state_rename_target_name = "";
+
+		public void ShowStateContextMenu_Add (int windowID)
+		{
+			JArray ja_states = jElement.jo ["State"] as JArray;
+			JObject jo_state = ja_states [windowID] as JObject;
+			string state_name = jo_state ["Name"].Value<string> ();
+
+			GenericMenu menu = new GenericMenu ();
+
+			JArray ja_transitions = jElement.jo ["Transition"] as JArray;
+			for (int i = 0; i < ja_transitions.Count; i++) {
+				JObject jo_transition = ja_transitions [i] as JObject;
+				string transition_name = jo_transition ["Name"].Value<string> ();
+					
+				menu.AddItem (new GUIContent ("Add: " + transition_name), false, () => {
+					JArray ja_state_transitions = jo_state ["Transitions"] as JArray;
+					if (ja_state_transitions.FirstOrDefault (_ => _ ["Name"].Value<string> () == transition_name) == null) {
+						JObject jo_new_transitions = new JObject ();
+						jo_new_transitions.Add ("Name", transition_name);
+						jo_new_transitions.Add ("TargetState", null);
+						ja_state_transitions.Add (jo_new_transitions);
+					}
+				});
+			}
+
+			menu.AddSeparator ("");
+			menu.AddItem (new GUIContent ("Rename State"), false, () => {
+				in_state_rename_jo_state = jo_state;
+			});
+
+			menu.AddSeparator ("");
+			if (jElement.jo ["Common"] ["EntryState"].Value<string> () != state_name) {
+				menu.AddItem (new GUIContent ("Set Entry"), false, () => {
+					jElement.jo ["Common"] ["EntryState"] = state_name;
+				});
+			}
+
+			menu.AddSeparator ("");
+			menu.AddItem (new GUIContent ("Delete State"), false, () => {
+				ja_states.RemoveAt (windowID);
+			});
+
+			menu.ShowAsContext ();
 		}
 
 		public void SaveJsonFile ()
@@ -234,6 +439,12 @@ namespace PGFrame
 				this.jElement = null;
 			}
 			this.TransitionsList = null;
+
+			if (PGFrameWindow.Current != null) {
+				PGFrameWindow.Current.SelectedJsonElement = null;
+			}
+			PGFrameWindow.AutoSelected.SelectedJsonFileName = string.Empty;
+			PGFrameWindow.AutoSelected.Save ();
 		}
 
 		public Rect SnapRect (Rect rect)
@@ -263,7 +474,7 @@ namespace PGFrame
 				JArray ja_transitions = jo_state ["Transitions"] as JArray;
 				for (int j = 0; j < ja_transitions.Count; j++) {
 					JObject jo_transition = ja_transitions [j] as JObject;
-					string transition_name = jo_transition ["Name"].Value<string> ();
+//					string transition_name = jo_transition ["Name"].Value<string> ();
 					string target_stage_name = jo_transition ["TargetState"].Value<string> ();
 
 					Vector2 startPosition;
@@ -275,17 +486,23 @@ namespace PGFrame
 					bool hasTargetState = GetStatePT (target_stage_name, out endPostion, out endTangent, out targetCenter, rect.center);
 
 					if (rect.center.x < targetCenter.x) {
-						startPosition = new Vector2 (rect.x + rect.width, rect.y + j * 23f + 1.8f * EditorGUIUtility.singleLineHeight);
+						startPosition = new Vector2 (rect.x + rect.width, rect.y + j * 26f + 1.9f * EditorGUIUtility.singleLineHeight);
 						startTangent = startPosition + Vector2.right * 50f;
 					} else {
-						startPosition = new Vector2 (rect.x, rect.y + j * 23f + 1.8f * EditorGUIUtility.singleLineHeight);
+						startPosition = new Vector2 (rect.x, rect.y + j * 26f + 1.9f * EditorGUIUtility.singleLineHeight);
 						startTangent = startPosition + Vector2.left * 50f;
 					}
 
 					if (hasTargetState) {
 						Handles.BeginGUI ();
 
-						Color color = focused ? Color.green : Color.gray;
+						Color color = Color.gray;
+						if (target_stage_name == focused_state_name) {
+							color = Color.yellow;
+						} else if (focused) {
+							color = Color.green;
+						}
+//						Color color = focused ? Color.green : Color.gray;
 
 						Handles.DrawBezier (startPosition, endPostion, startTangent, endTangent, color, null, 4f);
 						Vector2 arr0 = (endTangent - endPostion).normalized * 10f + endPostion + new Vector2 (0f, 5f);
@@ -325,6 +542,104 @@ namespace PGFrame
 				}
 			}
 			return false;
+		}
+
+		public void RenameState ()
+		{
+			JArray ja_states = jElement.jo ["State"] as JArray;
+			if (ja_states.FirstOrDefault (_ => _ ["Name"].Value<string> () == in_state_rename_target_name) == null) {
+
+				string ori_state_name = in_state_rename_jo_state ["Name"].Value<string> ();
+				in_state_rename_jo_state ["Name"] = in_state_rename_target_name;
+
+				for (int i = 0; i < ja_states.Count; i++) {
+					JObject jo_state = ja_states [i] as JObject;
+					JArray ja_state_transitions = jo_state ["Transitions"] as JArray;
+					for (int j = 0; j < ja_state_transitions.Count; j++) {
+						JObject jo_state_transition = ja_state_transitions [j] as JObject;
+						if (jo_state_transition ["TargetState"].Value<string> () == ori_state_name) {
+							jo_state_transition ["TargetState"] = in_state_rename_target_name;
+						}
+					}
+				}
+			} else {
+				PRDebug.TagLog (lt, lcr, "输入的状态名字已经被占用");
+			}
+
+			StatesList = null;
+		}
+
+		public void RenameTransition (string ori_name, string new_name)
+		{
+			JArray ja_transitions = jElement.jo ["Transition"] as JArray;
+			JArray ja_states = jElement.jo ["State"] as JArray;
+
+			if (ja_transitions.FirstOrDefault (_ => _ ["Name"].Value<string> () == new_name) == null) {
+
+				for (int i = 0; i < ja_transitions.Count; i++) {
+					JObject jo_transition = ja_transitions [i] as JObject;
+					if (jo_transition ["Name"].Value<string> () == ori_name) {
+						jo_transition ["Name"] = new_name;
+					}
+				}
+
+				for (int i = 0; i < ja_states.Count; i++) {
+					JObject jo_state = ja_states [i] as JObject;
+					JArray ja_state_transitions = jo_state ["Transitions"] as JArray;
+					for (int j = 0; j < ja_state_transitions.Count; j++) {
+						JObject jo_state_transition = ja_state_transitions [j] as JObject;
+						if (jo_state_transition ["Name"].Value<string> () == ori_name) {
+							jo_state_transition ["Name"] = new_name;
+						}
+					}
+				}
+			}
+		}
+
+		public void CreateNewState ()
+		{
+			JArray ja_states = jElement.jo ["State"] as JArray;
+			string target_name = "NewState";
+			int digital_suffix = 0;
+			while (ja_states.FirstOrDefault (_ => _ ["Name"].Value<string> () == target_name) != null) {
+				digital_suffix++;
+				target_name = string.Format ("{0}{1}", target_name, digital_suffix);
+			}
+
+			JObject jo_state = new JObject ();
+			jo_state.Add ("Name", target_name);
+			jo_state.Add ("Transitions", new JArray ());
+			jo_state.Add ("Rect", new JObject (){ { "x", 150 }, { "y" , 100 }, { "w" , 100 }, { "h" , 50 } });
+
+			ja_states.Add (jo_state);
+
+			StatesList = null;
+		}
+
+		public void DeleteTransition (string name)
+		{
+			JArray ja_transitions = jElement.jo ["Transition"] as JArray;
+			JArray ja_states = jElement.jo ["State"] as JArray;
+
+			for (int i = 0; i < ja_transitions.Count; i++) {
+				JObject jo_transition = ja_transitions [i] as JObject;
+				if (jo_transition ["Name"].Value<string> () == name) {
+					ja_transitions.RemoveAt (i);
+					break;
+				}
+			}
+
+			for (int i = 0; i < ja_states.Count; i++) {
+				JObject jo_state = ja_states [i] as JObject;
+				JArray ja_state_transitions = jo_state ["Transitions"] as JArray;
+				for (int j = 0; j < ja_state_transitions.Count; j++) {
+					JObject jo_state_transition = ja_state_transitions [j] as JObject;
+					if (jo_state_transition ["Name"].Value<string> () == name) {
+						ja_state_transitions.RemoveAt (j);
+						break;
+					}
+				}
+			}
 		}
 	}
 }

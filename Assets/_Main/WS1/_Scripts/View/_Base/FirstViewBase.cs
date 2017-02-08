@@ -72,13 +72,14 @@ namespace WS1
 		{
 			base.Bind ();
 			
-			VM.RP_LabelTextNum.Subscribe (OnChanged_LabelTextNum).AddTo(baseBindDisposables);
-			VM.Numbers.ObserveAdd ().Subscribe (OnAdd_Numbers).AddTo(baseBindDisposables);
-			VM.Numbers.ObserveRemove ().Subscribe (OnRemove_Numbers).AddTo(baseBindDisposables);
-			VM.MyDictionary.ObserveAdd ().Subscribe (OnAdd_MyDictionary).AddTo(baseBindDisposables);
-			VM.MyDictionary.ObserveRemove ().Subscribe (OnRemove_MyDictionary).AddTo(baseBindDisposables);
-			VM.RC_DefaultCommand.Subscribe (OnExecuted_DefaultCommand).AddTo(baseBindDisposables);
-			VM.RP_SCA_a.Subscribe (OnChanged_SCA_a).AddTo(baseBindDisposables);
+			VM.RP_LabelTextNum.Subscribe (OnChanged_LabelTextNum).AddTo (baseBindDisposables);
+			VM.Numbers.ObserveAdd ().Subscribe (OnAdd_Numbers).AddTo (baseBindDisposables);
+			VM.Numbers.ObserveRemove ().Subscribe (OnRemove_Numbers).AddTo (baseBindDisposables);
+			VM.MyDictionary.ObserveAdd ().Subscribe (OnAdd_MyDictionary).AddTo (baseBindDisposables);
+			VM.MyDictionary.ObserveRemove ().Subscribe (OnRemove_MyDictionary).AddTo (baseBindDisposables);
+			VM.RC_DefaultCommand.Subscribe (OnExecuted_DefaultCommand).AddTo (baseBindDisposables);
+			VM.RP_SCA_a.Subscribe (OnChanged_SCA_a).AddTo (baseBindDisposables);
+			VM.RP_MyBooleanValue.Subscribe (OnChanged_MyBooleanValue).AddTo (baseBindDisposables);
 		}
 
 		public override void AfterBind ()
@@ -108,11 +109,15 @@ namespace WS1
 		{
 		}
 
-			public virtual void OnExecuted_DefaultCommand (Unit unit)
-			{
-			}
+		public virtual void OnExecuted_DefaultCommand (Unit unit)
+		{
+		}
 
 		public virtual void OnChanged_SCA_a (SCA value)
+		{
+		}
+
+		public virtual void OnChanged_MyBooleanValue (bool value)
 		{
 		}
 
