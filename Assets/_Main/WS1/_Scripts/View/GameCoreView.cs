@@ -38,6 +38,16 @@ namespace WS1
 
 			PRDebug.TagLog ("GameCoreView", Color.blue, string.Format ("{0} -> {1}", pair.Previous.ToString (), pair.Current.ToString ()));
 		}
+
+		public override void OnChanged_GameID (string value)
+		{
+			base.OnChanged_GameID (value);
+		}
+
+		public override void OnPairChanged_GameID (Pair<string> pair)
+		{
+			base.OnPairChanged_GameID (pair);
+		}
 	}
 
 }

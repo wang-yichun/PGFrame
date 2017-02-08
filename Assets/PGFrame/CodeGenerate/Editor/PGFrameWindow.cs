@@ -120,26 +120,24 @@ namespace PGFrame
 				RefreshFiles ();
 			}
 
-			if (GUILayout.Button ("添加 Workspace")) {
 
-			
-				PopupWindow.Show (buttonRect, new TextFieldPopupDialog ("请输入 Workspace 的名字:", (string value) => {
-					JsonWorkspaceManager manager = new JsonWorkspaceManager (Path.Combine (Application.dataPath, JsonRoot));
-					manager.CreateWorkspace (value);
-					CommonManager.Load ();
-					AssetDatabase.Refresh ();
-					NeedRefresh = true;
-					return;
-				}));
-
-				if (Event.current.type == EventType.Repaint)
-					buttonRect = GUILayoutUtility.GetLastRect ();
-			}
 
 			ApplySelected ();
 
 			if (NeedRefresh == false) {
 				if (SelectedJsonElement == null) {
+					if (GUILayout.Button ("添加 Workspace")) {
+						PopupWindow.Show (buttonRect, new TextFieldPopupDialog ("请输入 Workspace 的名字:", (string value) => {
+							JsonWorkspaceManager manager = new JsonWorkspaceManager (Path.Combine (Application.dataPath, JsonRoot));
+							manager.CreateWorkspace (value);
+							CommonManager.Load ();
+							AssetDatabase.Refresh ();
+							NeedRefresh = true;
+							return;
+						}));
+						if (Event.current.type == EventType.Repaint)
+							buttonRect = GUILayoutUtility.GetLastRect ();
+					}
 					DesignList ();
 				} else {
 					switch ((DocType)Enum.Parse (typeof(DocType), SelectedJsonElement.DocType)) {
@@ -157,6 +155,9 @@ namespace PGFrame
 						break;
 					default:
 						throw new ArgumentOutOfRangeException ();
+					}
+					if (GUILayout.Button ("打开相关文件...")) {
+						PGFrameOpenFileTools.OpenContentMenu (SelectedJsonElement);
 					}
 				}
 			} else {
@@ -298,15 +299,23 @@ namespace PGFrame
 
 				GUIContent content = new GUIContent (jo_element_filename, icon);
 				if (GUI.Button (r, content, GUIStyleTemplate.ButtonStyleAlignmentLeft ())) {
-					SelectedJsonElement = jElements.Single (je => je.FileName == jo_element_filename);
 
-					if (dt == DocType.FSM) {
-						FSMWindow.Init ();
-						FSMWindow.Current.jElement = SelectedJsonElement;
+					if (Event.current.button == 1) {
+						JSONElement jsonElement = jElements.Single (je => je.FileName == jo_element_filename);
+
+						PGFrameOpenFileTools.OpenContentMenu (jsonElement);
+					} else {
+
+						SelectedJsonElement = jElements.Single (je => je.FileName == jo_element_filename);
+
+						if (dt == DocType.FSM) {
+							FSMWindow.Init ();
+							FSMWindow.Current.jElement = SelectedJsonElement;
+						}
+
+						AutoSelected.SelectedJsonFileName = jo_element_filename;
+						AutoSelected.Save ();
 					}
-
-					AutoSelected.SelectedJsonFileName = jo_element_filename;
-					AutoSelected.Save ();
 				}
 			};
 
