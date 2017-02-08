@@ -126,8 +126,10 @@ namespace PGFrame
 				PopupWindow.Show (buttonRect, new TextFieldPopupDialog ("请输入 Workspace 的名字:", (string value) => {
 					JsonWorkspaceManager manager = new JsonWorkspaceManager (Path.Combine (Application.dataPath, JsonRoot));
 					manager.CreateWorkspace (value);
+					CommonManager.Load ();
 					AssetDatabase.Refresh ();
 					NeedRefresh = true;
+					return;
 				}));
 
 				if (Event.current.type == EventType.Repaint)
