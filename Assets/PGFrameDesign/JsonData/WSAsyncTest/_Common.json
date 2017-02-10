@@ -1,0 +1,11 @@
+{
+  "Workspace": "WSAsyncTest",
+  "DocType": "Workspace",
+  "ElementFiles": [
+    {
+      "DocType": "Element",
+      "Name": "Tester",
+      "File": "WSAsyncTest.Element.Tester.json"
+    }
+  ]
+}

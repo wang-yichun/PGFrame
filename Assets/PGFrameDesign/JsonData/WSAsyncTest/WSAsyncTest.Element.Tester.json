@@ -1,0 +1,55 @@
+{
+  "Workspace": "WSAsyncTest",
+  "DocType": "Element",
+  "Common": {
+    "Name": "Tester",
+    "Desc": "",
+    "Type": ""
+  },
+  "Member": [
+    {
+      "RxType": "Property",
+      "Name": "CounterEnable",
+      "Type": "bool",
+      "Desc": ""
+    },
+    {
+      "RxType": "Property",
+      "Name": "CountValue",
+      "Type": "int",
+      "Desc": ""
+    },
+    {
+      "RxType": "Command",
+      "Name": "SwitchCounter",
+      "Desc": "",
+      "Params": []
+    }
+  ],
+  "Views": [
+    {
+      "Name": "TesterView",
+      "Type": "",
+      "Desc": "",
+      "Members": {
+        "CounterEnable": {
+          "Bind": {
+            "Changed": false,
+            "PairChanged": false
+          }
+        },
+        "CountValue": {
+          "Bind": {
+            "Changed": true,
+            "PairChanged": false
+          }
+        },
+        "SwitchCounter": {
+          "Bind": {
+            "Executed": false
+          }
+        }
+      }
+    }
+  ]
+}
